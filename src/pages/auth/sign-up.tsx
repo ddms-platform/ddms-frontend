@@ -1,32 +1,53 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useFormValidation, rules } from '@/hooks/use-form-validation';
+import FormField from '@/components/shared/form-field';
 import logo from '@/assets/logo.png';
 
 export default function SignUpPage() {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [termsError, setTermsError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+
+  const { values, getFieldProps, validateAll } = useFormValidation(
+    { fullName: '', email: '', password: '', confirmPassword: '' },
+    {
+      fullName: [rules.required(t('auth.signUp.fullName')), rules.minLength(2)],
+      email: [rules.required(t('auth.signUp.email')), rules.email()],
+      password: [rules.required(t('auth.signUp.password')), rules.minLength(8)],
+      confirmPassword: [
+        rules.required(t('auth.signUp.confirmPassword')),
+        rules.match('password', 'auth.signUp.passwordsDoNotMatch'),
+      ],
+    },
+    t
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
+    const isValid = validateAll();
+    if (!agreeTerms) {
+      setTermsError(t('validation.termsRequired'));
+      if (!isValid) return;
       return;
     }
+    if (!isValid) return;
+
     setIsLoading(true);
     // TODO: Implement sign-up logic
     setTimeout(() => setIsLoading(false), 2000);
   };
 
-  const passwordsMatch = confirmPassword === '' || password === confirmPassword;
+  const fullNameProps = getFieldProps('fullName');
+  const emailProps = getFieldProps('email');
+  const passwordProps = getFieldProps('password');
+  const confirmPasswordProps = getFieldProps('confirmPassword');
 
   return (
     <div className="flex flex-col gap-8">
@@ -40,10 +61,10 @@ export default function SignUpPage() {
             className="text-[28px] font-bold leading-[1.43]"
             style={{ color: '#222222', letterSpacing: '-0.44px' }}
           >
-            Create your account
+            {t('auth.signUp.title')}
           </h1>
           <p className="text-sm leading-[1.43]" style={{ color: '#6a6a6a' }}>
-            Start your journey with DDMS today
+            {t('auth.signUp.description')}
           </p>
         </div>
       </div>
@@ -91,93 +112,57 @@ export default function SignUpPage() {
       <div className="relative flex items-center">
         <div className="flex-1" style={{ borderTop: '1px solid #e0e0e0' }} />
         <span className="px-4 text-xs font-medium" style={{ color: '#6a6a6a' }}>
-          or sign up with email
+          {t('auth.signUp.orSignUpWithEmail')}
         </span>
         <div className="flex-1" style={{ borderTop: '1px solid #e0e0e0' }} />
       </div>
 
       {/* Sign-up Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {/* Full Name Field */}
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="fullName" className="text-sm font-medium" style={{ color: '#222222' }}>
-            Full name
-          </Label>
-          <Input
-            id="fullName"
-            type="text"
-            placeholder="John Doe"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-            autoComplete="name"
-            autoFocus
-            className="h-12 rounded-lg border px-4 text-sm"
-            style={{
-              borderColor: '#c1c1c1',
-              color: '#222222',
-            }}
-          />
-        </div>
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        <FormField
+          id="fullName"
+          label={t('auth.signUp.fullName')}
+          placeholder={t('auth.signUp.fullNamePlaceholder')}
+          autoComplete="name"
+          autoFocus
+          {...fullNameProps}
+        />
 
-        {/* Email Field */}
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-sm font-medium" style={{ color: '#222222' }}>
-            Email address
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            className="h-12 rounded-lg border px-4 text-sm"
-            style={{
-              borderColor: '#c1c1c1',
-              color: '#222222',
-            }}
-          />
-        </div>
+        <FormField
+          id="email"
+          label={t('auth.signUp.email')}
+          type="email"
+          placeholder={t('auth.signUp.emailPlaceholder')}
+          autoComplete="email"
+          {...emailProps}
+        />
 
-        {/* Password Field */}
         <div className="flex flex-col gap-2">
-          <Label htmlFor="password" className="text-sm font-medium" style={{ color: '#222222' }}>
-            Password
-          </Label>
-          <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="new-password"
-              minLength={8}
-              className="h-12 rounded-lg border px-4 pr-12 text-sm"
-              style={{
-                borderColor: '#c1c1c1',
-                color: '#222222',
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
-              style={{ color: '#6a6a6a' }}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
+          <FormField
+            id="password"
+            label={t('auth.signUp.password')}
+            type={showPassword ? 'text' : 'password'}
+            placeholder={t('auth.signUp.passwordPlaceholder')}
+            autoComplete="new-password"
+            {...passwordProps}
+            endAdornment={
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
+                style={{ color: '#6a6a6a' }}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            }
+          />
 
           {/* Password strength indicator */}
-          {password && (
+          {values.password && (
             <div className="flex gap-1.5">
               {[1, 2, 3, 4].map((level) => {
-                const strength = getPasswordStrength(password);
+                const strength = getPasswordStrength(values.password);
                 return (
                   <div
                     key={level}
@@ -199,30 +184,14 @@ export default function SignUpPage() {
           )}
         </div>
 
-        {/* Confirm Password Field */}
-        <div className="flex flex-col gap-2">
-          <Label
-            htmlFor="confirmPassword"
-            className="text-sm font-medium"
-            style={{ color: '#222222' }}
-          >
-            Confirm password
-          </Label>
-          <div className="relative">
-            <Input
-              id="confirmPassword"
-              type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              autoComplete="new-password"
-              className="h-12 rounded-lg border px-4 pr-12 text-sm"
-              style={{
-                borderColor: !passwordsMatch ? '#c13515' : '#c1c1c1',
-                color: '#222222',
-              }}
-            />
+        <FormField
+          id="confirmPassword"
+          label={t('auth.signUp.confirmPassword')}
+          type={showConfirmPassword ? 'text' : 'password'}
+          placeholder={t('auth.signUp.confirmPasswordPlaceholder')}
+          autoComplete="new-password"
+          {...confirmPasswordProps}
+          endAdornment={
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -232,79 +201,79 @@ export default function SignUpPage() {
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-          </div>
-          {!passwordsMatch && (
-            <p className="text-xs" style={{ color: '#c13515' }}>
-              Passwords do not match
-            </p>
-          )}
-        </div>
+          }
+        />
 
         {/* Terms Checkbox */}
-        <div className="flex items-start gap-3">
-          <input
-            id="terms"
-            type="checkbox"
-            checked={agreeTerms}
-            onChange={(e) => setAgreeTerms(e.target.checked)}
-            required
-            className="mt-0.5 h-4 w-4 cursor-pointer rounded accent-[#ff385c]"
-          />
-          <label
-            htmlFor="terms"
-            className="cursor-pointer text-sm leading-relaxed"
-            style={{ color: '#6a6a6a' }}
-          >
-            I agree to the{' '}
-            <Link
-              to="/terms"
-              className="font-medium underline underline-offset-4 transition-colors"
-              style={{ color: '#222222' }}
+        <div className="flex flex-col gap-1">
+          <div className="flex items-start gap-3">
+            <input
+              id="terms"
+              type="checkbox"
+              checked={agreeTerms}
+              onChange={(e) => {
+                setAgreeTerms(e.target.checked);
+                setTermsError(e.target.checked ? undefined : t('validation.termsRequired'));
+              }}
+              className="mt-0.5 h-4 w-4 cursor-pointer rounded accent-[#ff385c]"
+            />
+            <label
+              htmlFor="terms"
+              className="cursor-pointer text-sm leading-relaxed"
+              style={{ color: '#6a6a6a' }}
             >
-              Terms of Service
-            </Link>{' '}
-            and{' '}
-            <Link
-              to="/privacy"
-              className="font-medium underline underline-offset-4 transition-colors"
-              style={{ color: '#222222' }}
-            >
-              Privacy Policy
-            </Link>
-          </label>
+              {t('auth.signUp.agreeToTerms')}{' '}
+              <Link
+                to="/terms"
+                className="font-medium underline underline-offset-4 transition-colors"
+                style={{ color: '#222222' }}
+              >
+                {t('auth.signUp.termsOfService')}
+              </Link>{' '}
+              {t('auth.signUp.and')}{' '}
+              <Link
+                to="/privacy"
+                className="font-medium underline underline-offset-4 transition-colors"
+                style={{ color: '#222222' }}
+              >
+                {t('auth.signUp.privacyPolicy')}
+              </Link>
+            </label>
+          </div>
+          {termsError && (
+            <p className="text-xs" style={{ color: '#c13515' }}>
+              {termsError}
+            </p>
+          )}
         </div>
 
         {/* Submit Button */}
         <Button
           type="submit"
-          disabled={isLoading || !agreeTerms || !passwordsMatch}
+          disabled={isLoading}
           className="mt-2 h-12 w-full rounded-lg text-base font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-          style={{
-            backgroundColor: '#ff385c',
-            color: '#ffffff',
-            border: 'none',
-          }}
+          style={{ backgroundColor: '#ff385c', color: '#ffffff', border: 'none' }}
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Creating account...</span>
+              <span>{t('auth.signUp.creatingAccount')}</span>
             </div>
           ) : (
-            'Create account'
+            t('auth.signUp.createAccount')
           )}
         </Button>
       </form>
 
       {/* Sign-in Link */}
       <p className="text-center text-sm" style={{ color: '#6a6a6a' }}>
-        Already have an account?{' '}
+        {t('auth.signUp.alreadyHaveAccount')}?{' '}
         <Link
           to="/sign-in"
           className="font-semibold transition-colors hover:underline"
           style={{ color: '#ff385c' }}
         >
-          Sign in
+          {t('auth.signUp.signInLink')}
         </Link>
       </p>
     </div>

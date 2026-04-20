@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
+import TranslationToggle from '@/components/shared/translation-toggle';
 
 export default function AuthLayout() {
+  const { t } = useTranslation();
   return (
     <div className="flex min-h-screen">
       {/* Left side - Branding / Decorative */}
@@ -35,19 +38,18 @@ export default function AuthLayout() {
               className="text-4xl font-bold tracking-tight"
               style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
             >
-              Welcome to DDMS
+              {t('auth.layout.welcomeTitle')}
             </h1>
             <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>
-              Hệ thống quản lý và hỗ trợ đặt tour du lịch đường thủy tại thành phố Đà Nẵng. Trải
-              nghiệm sông nước tuyệt vời chỉ với vài thao tác đơn giản.
+              {t('auth.layout.welcomeDescription')}
             </p>
 
             {/* Feature highlights */}
             <div className="mt-12 space-y-4">
               {[
-                { icon: '🚢', text: 'Quản lý tour đường thủy dễ dàng' },
-                { icon: '📅', text: 'Đặt lịch & theo dõi chuyến đi realtime' },
-                { icon: '🌊', text: 'Khám phá vẻ đẹp sông Hàn, Đà Nẵng' },
+                { icon: '🚢', text: t('auth.layout.feature1') },
+                { icon: '📅', text: t('auth.layout.feature2') },
+                { icon: '🌊', text: t('auth.layout.feature3') },
               ].map((feature) => (
                 <div
                   key={feature.text}
@@ -66,7 +68,11 @@ export default function AuthLayout() {
       </div>
 
       {/* Right side - Form area */}
-      <div className="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <div className="relative flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        {/* Language Toggle */}
+        <div className="absolute right-6 top-6">
+          <TranslationToggle />
+        </div>
         <div className="w-full max-w-105">
           <Outlet />
         </div>

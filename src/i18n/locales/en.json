@@ -1,0 +1,65 @@
+{
+  "auth": {
+    "signIn": {
+      "title": "Welcome back",
+      "description": "Sign in to your account to continue",
+      "email": "Email address",
+      "emailPlaceholder": "name@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign in",
+      "signingIn": "Signing in...",
+      "orContinueWith": "or continue with",
+      "dontHaveAccount": "Don't have an account",
+      "signUpLink": "Sign up"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "description": "Start your journey with DDMS today",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "John Doe",
+      "email": "Email address",
+      "emailPlaceholder": "name@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Create a password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "orSignUpWithEmail": "or sign up with email",
+      "agreeToTerms": "I agree to the",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy",
+      "createAccount": "Create account",
+      "creatingAccount": "Creating account...",
+      "alreadyHaveAccount": "Already have an account",
+      "signInLink": "Sign in"
+    },
+    "layout": {
+      "welcomeTitle": "Welcome to DDMS",
+      "welcomeDescription": "A management system and support platform for booking waterway tours in Da Nang city. Enjoy a wonderful river experience with just a few simple steps.",
+      "feature1": "Easy waterway tour management",
+      "feature2": "Schedule & track trips in realtime",
+      "feature3": "Discover the beauty of Han River, Da Nang"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to DDMS Dashboard"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "tryAgain": "Try Again",
+    "somethingWentWrong": "Something went wrong",
+    "unexpectedError": "An unexpected error occurred"
+  },
+  "validation": {
+    "required": "{{field}} is required",
+    "invalidEmail": "Please enter a valid email address",
+    "minLength": "Must be at least {{count}} characters",
+    "termsRequired": "You must agree to the terms and conditions"
+  }
+}

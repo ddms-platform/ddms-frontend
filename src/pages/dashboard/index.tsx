@@ -1,4 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 export default function DashboardPage() {
+  const { t } = useTranslation();
   return (
     <div
       className="flex min-h-screen items-center justify-center"
@@ -9,10 +12,10 @@ export default function DashboardPage() {
           className="text-[28px] font-bold leading-[1.43]"
           style={{ color: '#222222', letterSpacing: '-0.44px' }}
         >
-          Dashboard
+          {t('dashboard.title')}
         </h1>
         <p className="mt-2 text-sm" style={{ color: '#6a6a6a' }}>
-          Welcome to DDMS Dashboard
+          {t('dashboard.welcome')}
         </p>
       </div>
     </div>
