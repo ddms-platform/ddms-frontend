@@ -1,30 +1,44 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useFormValidation, rules } from '@/hooks/use-form-validation';
+import FormField from '@/components/shared/form-field';
 import logo from '@/assets/logo.png';
 
 export default function SignInPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // TODO: Implement sign-in logic
-    setTimeout(() => setIsLoading(false), 2000);
-  };
-
   const navigate = useNavigate();
   const location = useLocation();
-
   const from = location.state?.from?.pathname || '/dashboard';
 
-  navigate(from, { replace: true });
+  const { getFieldProps, validateAll } = useFormValidation(
+    { email: '', password: '' },
+    {
+      email: [rules.required(t('auth.signIn.email')), rules.email()],
+      password: [rules.required(t('auth.signIn.password')), rules.minLength(6)],
+    },
+    t
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateAll()) return;
+
+    setIsLoading(true);
+    // TODO: Implement sign-in logic
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate(from, { replace: true });
+    }, 2000);
+  };
+
+  const emailProps = getFieldProps('email');
+  const passwordProps = getFieldProps('password');
 
   return (
     <div className="flex flex-col gap-8">
@@ -38,67 +52,43 @@ export default function SignInPage() {
             className="text-[28px] font-bold leading-[1.43]"
             style={{ color: '#222222', letterSpacing: '-0.44px' }}
           >
-            Welcome back
+            {t('auth.signIn.title')}
           </h1>
           <p className="text-sm leading-[1.43]" style={{ color: '#6a6a6a' }}>
-            Sign in to your account to continue
+            {t('auth.signIn.description')}
           </p>
         </div>
       </div>
 
       {/* Sign-in Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {/* Email Field */}
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="email" className="text-sm font-medium" style={{ color: '#222222' }}>
-            Email address
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="name@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            autoFocus
-            className="h-12 rounded-lg border px-4 text-sm"
-            style={{
-              borderColor: '#c1c1c1',
-              color: '#222222',
-            }}
-          />
-        </div>
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        <FormField
+          id="email"
+          label={t('auth.signIn.email')}
+          type="email"
+          placeholder={t('auth.signIn.emailPlaceholder')}
+          autoComplete="email"
+          autoFocus
+          {...emailProps}
+        />
 
-        {/* Password Field */}
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-sm font-medium" style={{ color: '#222222' }}>
-              Password
-            </Label>
+        <FormField
+          id="password"
+          label={t('auth.signIn.password')}
+          type={showPassword ? 'text' : 'password'}
+          placeholder={t('auth.signIn.passwordPlaceholder')}
+          autoComplete="current-password"
+          {...passwordProps}
+          labelExtra={
             <Link
               to="/forgot-password"
               className="text-sm font-medium transition-colors hover:underline"
               style={{ color: '#ff385c' }}
             >
-              Forgot password?
+              {t('auth.signIn.forgotPassword')}
             </Link>
-          </div>
-          <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              className="h-12 rounded-lg border px-4 pr-12 text-sm"
-              style={{
-                borderColor: '#c1c1c1',
-                color: '#222222',
-              }}
-            />
+          }
+          endAdornment={
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -108,27 +98,23 @@ export default function SignInPage() {
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-          </div>
-        </div>
+          }
+        />
 
         {/* Submit Button */}
         <Button
           type="submit"
           disabled={isLoading}
           className="mt-2 h-12 w-full rounded-lg text-base font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-          style={{
-            backgroundColor: '#ff385c',
-            color: '#ffffff',
-            border: 'none',
-          }}
+          style={{ backgroundColor: '#ff385c', color: '#ffffff', border: 'none' }}
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Signing in...</span>
+              <span>{t('auth.signIn.signingIn')}</span>
             </div>
           ) : (
-            'Sign in'
+            t('auth.signIn.signIn')
           )}
         </Button>
       </form>
@@ -137,7 +123,7 @@ export default function SignInPage() {
       <div className="relative flex items-center">
         <div className="flex-1" style={{ borderTop: '1px solid #e0e0e0' }} />
         <span className="px-4 text-xs font-medium" style={{ color: '#6a6a6a' }}>
-          or continue with
+          {t('auth.signIn.orContinueWith')}
         </span>
         <div className="flex-1" style={{ borderTop: '1px solid #e0e0e0' }} />
       </div>
@@ -183,13 +169,13 @@ export default function SignInPage() {
 
       {/* Sign-up Link */}
       <p className="text-center text-sm" style={{ color: '#6a6a6a' }}>
-        Don't have an account?{' '}
+        {t('auth.signIn.dontHaveAccount')}?{' '}
         <Link
           to="/sign-up"
           className="font-semibold transition-colors hover:underline"
           style={{ color: '#ff385c' }}
         >
-          Sign up
+          {t('auth.signIn.signUpLink')}
         </Link>
       </p>
     </div>
