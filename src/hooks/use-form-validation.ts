@@ -33,8 +33,8 @@ interface UseFormValidationReturn<T> {
 
 export const rules = {
   required: (fieldLabel: string): ValidationRule<Record<string, string>> => {
-    return (value, _allValues) => {
-      if (!value || !value.trim()) return `${fieldLabel} is required`;
+    return (value) => {
+      if (!value || !value.trim()) return `required:${fieldLabel}`;
       return undefined;
     };
   },
@@ -83,17 +83,21 @@ export function useFormValidation<T extends Record<string, string>>(
       for (const rule of fieldValidators) {
         const rawError = rule(currentValues[field], currentValues);
         if (rawError) {
-          // Translate error messages
-          if (rawError === 'invalidEmail') return t('validation.invalidEmail');
+          // Parse structured markers and translate
+          if (rawError.startsWith('required:')) {
+            const fieldLabel = rawError.substring(9);
+            return t('validation.required', { field: fieldLabel });
+          }
+          if (rawError === 'invalidEmail') {
+            return t('validation.invalidEmail');
+          }
           if (rawError.startsWith('minLength:')) {
             const count = rawError.split(':')[1];
             return t('validation.minLength', { count });
           }
-          // Check if it's a translation key
+          // Try as a direct translation key (e.g. 'auth.signUp.passwordsDoNotMatch')
           const translated = t(rawError);
-          return translated !== rawError
-            ? translated
-            : t('validation.required', { field: rawError });
+          return translated !== rawError ? translated : rawError;
         }
       }
       return undefined;

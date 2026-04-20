@@ -61,11 +61,14 @@ export default function FormField({
         />
         {endAdornment}
       </div>
-      {hasError && error && (
-        <p className="text-xs" style={{ color: '#c13515' }}>
-          {error}
-        </p>
-      )}
+      {/* Always reserve space for error to prevent layout shift */}
+      <div className="min-h-4.5">
+        {hasError && error && (
+          <p className="text-xs" style={{ color: '#c13515' }}>
+            {error}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
