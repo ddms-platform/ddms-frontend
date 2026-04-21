@@ -142,5 +142,35 @@
         "link3": "Chính sách huỷ tour"
       }
     }
+  },
+  "profile": {
+    "title": "Hồ sơ cá nhân",
+    "uploadAvatar": "Thay đổi ảnh đại diện",
+    "personalInfo": "Thông tin cá nhân",
+    "edit": "Chỉnh sửa",
+    "cancel": "Huỷ",
+    "save": "Lưu thay đổi",
+    "saving": "Đang lưu...",
+    "fields": {
+      "fullName": "Họ và tên",
+      "email": "Địa chỉ email",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ"
+    },
+    "changePassword": {
+      "title": "Đổi mật khẩu",
+      "description": "Đảm bảo tài khoản của bạn luôn an toàn",
+      "change": "Đổi mật khẩu",
+      "current": "Mật khẩu hiện tại",
+      "new": "Mật khẩu mới",
+      "confirm": "Xác nhận mật khẩu mới",
+      "update": "Cập nhật mật khẩu",
+      "errors": {
+        "currentRequired": "Vui lòng nhập mật khẩu hiện tại",
+        "newRequired": "Vui lòng nhập mật khẩu mới",
+        "minLength": "Mật khẩu phải có ít nhất 6 ký tự",
+        "mismatch": "Mật khẩu xác nhận không khớp"
+      }
+    }
   }
 }

@@ -142,5 +142,35 @@
         "link3": "Cancellation Policy"
       }
     }
+  },
+  "profile": {
+    "title": "My Profile",
+    "uploadAvatar": "Change avatar",
+    "personalInfo": "Personal Information",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "fields": {
+      "fullName": "Full name",
+      "email": "Email address",
+      "phone": "Phone number",
+      "address": "Address"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "description": "Keep your account secure",
+      "change": "Change password",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "update": "Update password",
+      "errors": {
+        "currentRequired": "Please enter your current password",
+        "newRequired": "Please enter a new password",
+        "minLength": "Password must be at least 6 characters",
+        "mismatch": "Passwords do not match"
+      }
+    }
   }
 }
