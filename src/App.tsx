@@ -11,6 +11,7 @@ const SignInPage = lazy(() => import('@/pages/auth/sign-in'));
 const SignUpPage = lazy(() => import('@/pages/auth/sign-up'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/index'));
 const HomePage = lazy(() => import('@/pages/home/index'));
+const ProfilePage = lazy(() => import('@/pages/profile/index'));
 
 function PageLoader() {
   return <LoadingSpinner fullScreen />;
@@ -50,6 +51,14 @@ function App() {
                 element={
                   <Suspense fallback={<PageLoader />}>
                     <HomePage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <ProfilePage />
                   </Suspense>
                 }
               />
