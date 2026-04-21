@@ -1,13 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from '@/components/layouts/auth-layout';
+import MainLayout from '@/components/layouts/main-layout';
 import { ErrorBoundary } from './components/shared/error-boundary';
 import ProtectedRoute from './components/routes/ProtectedRoute';
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { LoadingSpinner } from './components/common/LoadingSpinner';
 
 const SignInPage = lazy(() => import('@/pages/auth/sign-in'));
 const SignUpPage = lazy(() => import('@/pages/auth/sign-up'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/index'));
+const HomePage = lazy(() => import('@/pages/home/index'));
+
+function PageLoader() {
+  return <LoadingSpinner fullScreen />;
+}
 
 function App() {
   const isAuthenticated = !!localStorage.getItem('token');
@@ -16,21 +23,54 @@ function App() {
       <BrowserRouter>
         <LanguageProvider>
           <Routes>
-            {/* Auth Routes */}
+            {/* Auth Routes - own layout, no header/footer */}
             <Route element={<AuthLayout />}>
-              <Route path="/sign-in" element={<SignInPage />} />
-              <Route path="/sign-up" element={<SignUpPage />} />
+              <Route
+                path="/sign-in"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <SignInPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/sign-up"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <SignUpPage />
+                  </Suspense>
+                }
+              />
             </Route>
 
+            {/* Public pages - with GlobalHeader + GlobalFooter */}
+            <Route element={<MainLayout />}>
+              <Route
+                path="/"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <HomePage />
+                  </Suspense>
+                }
+              />
+            </Route>
+
+            {/* Protected pages - with GlobalHeader (no auth btn) + GlobalFooter */}
             <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route element={<MainLayout showAuth={false} />}>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <DashboardPage />
+                    </Suspense>
+                  }
+                />
+              </Route>
             </Route>
-
-            {/* Redirect root to sign-in */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
             {/* Catch-all */}
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </LanguageProvider>
       </BrowserRouter>
