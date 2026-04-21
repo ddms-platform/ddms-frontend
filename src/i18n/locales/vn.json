@@ -45,8 +45,26 @@
     }
   },
   "dashboard": {
-    "title": "Bảng điều khiển",
-    "welcome": "Chào mừng đến với DDMS"
+    "title": "Chuyến đi của bạn",
+    "welcome": "Quản lý các chuyến đi và lịch trình của bạn",
+    "tabs": {
+      "all": "Tất cả",
+      "upcoming": "Sắp khởi hành",
+      "completed": "Đã đi"
+    },
+    "status": {
+      "UPCOMING": "Sắp khởi hành",
+      "COMPLETED": "Hoàn tất",
+      "CANCELLED": "Đã huỷ"
+    },
+    "bookingRef": "Mã đặt chỗ",
+    "guests": "khách",
+    "cancelBooking": "Huỷ chuyến",
+    "writeReview": "Đánh giá",
+    "viewDetails": "Xem chi tiết",
+    "emptyTitle": "Chưa có chuyến đi nào được đặt... cả!",
+    "emptyDescription": "Đã đến lúc phủi bụi hành lý và bắt đầu lên kế hoạch cho chuyến phiêu lưu tiếp theo.",
+    "exploreBtn": "Bắt đầu tìm kiếm"
   },
   "common": {
     "loading": "Đang tải...",

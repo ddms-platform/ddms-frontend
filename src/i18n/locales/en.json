@@ -46,7 +46,25 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome to DDMS Dashboard"
+    "welcome": "Welcome to DDMS Dashboard",
+    "tabs": {
+      "all": "All trips",
+      "upcoming": "Upcoming",
+      "completed": "Completed"
+    },
+    "status": {
+      "UPCOMING": "Upcoming",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "bookingRef": "Booking ID",
+    "guests": "guest(s)",
+    "cancelBooking": "Cancel booking",
+    "writeReview": "Write review",
+    "viewDetails": "View details",
+    "emptyTitle": "No trips booked... yet!",
+    "emptyDescription": "Time to dust off your bags and start planning your next adventure.",
+    "exploreBtn": "Start searching"
   },
   "common": {
     "loading": "Loading...",

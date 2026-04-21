@@ -9,7 +9,7 @@ import { LoadingSpinner } from './components/common/LoadingSpinner';
 
 const SignInPage = lazy(() => import('@/pages/auth/sign-in'));
 const SignUpPage = lazy(() => import('@/pages/auth/sign-up'));
-const DashboardPage = lazy(() => import('@/pages/dashboard/index'));
+const MyToursPage = lazy(() => import('@/pages/my-tours/index'));
 const HomePage = lazy(() => import('@/pages/home/index'));
 const ProfilePage = lazy(() => import('@/pages/profile/index'));
 const TourDetailPage = lazy(() => import('@/pages/tours/tour-detail'));
@@ -89,20 +89,19 @@ function App() {
                   </Suspense>
                 }
               />
+              <Route
+                path="/my-tours"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <MyToursPage />
+                  </Suspense>
+                }
+              />
             </Route>
 
             {/* Protected pages - with GlobalHeader (no auth btn) + GlobalFooter */}
             <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-              <Route element={<MainLayout showAuth={false} />}>
-                <Route
-                  path="/dashboard"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <DashboardPage />
-                    </Suspense>
-                  }
-                />
-              </Route>
+              <Route element={<MainLayout showAuth={false} />}></Route>
             </Route>
 
             {/* Catch-all */}
