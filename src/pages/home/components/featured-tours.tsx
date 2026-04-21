@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Star, ChevronRight, Heart } from 'lucide-react';
+import { formatPrice } from '@/lib/utils';
 
 const FEATURED_TOURS = [
   {
@@ -45,10 +46,6 @@ const FEATURED_TOURS = [
     duration: '1.5 giờ',
   },
 ];
-
-function formatPrice(price: number) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
-}
 
 export default function FeaturedTours() {
   const { t } = useTranslation();

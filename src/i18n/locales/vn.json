@@ -172,5 +172,103 @@
         "mismatch": "Mật khẩu xác nhận không khớp"
       }
     }
+  },
+  "tour": {
+    "backToHome": "Quay lại trang chủ",
+    "gallery": {
+      "photo": "Ảnh"
+    },
+    "info": {
+      "duration": "Thời gian",
+      "maxGuests": "Số khách tối đa",
+      "people": "người",
+      "boat": "Tàu",
+      "about": "Giới thiệu về tour"
+    },
+    "reviews": {
+      "title": "đánh giá"
+    },
+    "booking": {
+      "perPerson": "người",
+      "availability": "Tình trạng",
+      "available": "Còn chỗ",
+      "cancellation": "Chính sách huỷ",
+      "freeCancellation": "Miễn phí huỷ",
+      "bookNow": "Đặt ngay",
+      "addWishlist": "Thêm vào yêu thích",
+      "noChargeYet": "Bạn chưa bị tính phí"
+    }
+  },
+  "booking": {
+    "title": "Đặt tour",
+    "backToTour": "Quay lại chi tiết tour",
+    "next": "Tiếp theo",
+    "back": "Quay lại",
+    "steps": {
+      "date": "Ngày giờ",
+      "guests": "Số khách",
+      "confirm": "Xác nhận"
+    },
+    "dateTime": {
+      "title": "Chọn ngày và giờ",
+      "subtitle": "Chọn ngày và khung giờ phù hợp với bạn",
+      "selectDate": "Chọn ngày",
+      "selectTime": "Chọn giờ khởi hành"
+    },
+    "guests": {
+      "title": "Số lượng hành khách",
+      "subtitle": "Tối đa {{max}} khách mỗi chuyến",
+      "people": "người"
+    },
+    "confirm": {
+      "title": "Xác nhận đặt tour",
+      "subtitle": "Kiểm tra lại thông tin trước khi thanh toán",
+      "pay": "Thanh toán & Xác nhận",
+      "processing": "Đang xử lý..."
+    },
+    "summary": {
+      "tour": "Tour",
+      "date": "Ngày",
+      "time": "Giờ",
+      "guests": "Số khách",
+      "total": "Tổng cộng"
+    },
+    "success": {
+      "title": "Đặt tour thành công!",
+      "description": "Cảm ơn bạn đã đặt tour. Chúng tôi sẽ gửi email xác nhận cho bạn.",
+      "viewBookings": "Xem đặt tour của tôi",
+      "backHome": "Về trang chủ"
+    }
+  },
+  "tourList": {
+    "title": "Khám phá tour",
+    "subtitle": "Tìm thấy {{count}} chuyến du thuyền",
+    "searchPlaceholder": "Tìm kiếm tour, địa điểm...",
+    "filters": "Bộ lọc",
+    "reviews": "đánh giá",
+    "perPerson": "người",
+    "categories": {
+      "all": "Tất cả",
+      "cruise": "Du thuyền",
+      "sunset": "Hoàng hôn",
+      "party": "Tiệc",
+      "family": "Gia đình",
+      "sightseeing": "Ngắm cảnh",
+      "dinner": "Ăn tối"
+    },
+    "sort": {
+      "rating": "Đánh giá cao nhất",
+      "priceAsc": "Giá thấp → cao",
+      "priceDesc": "Giá cao → thấp"
+    },
+    "empty": {
+      "title": "Không tìm thấy tour nào",
+      "description": "Thử thay đổi từ khoá hoặc bộ lọc để tìm chuyến phù hợp.",
+      "reset": "Xoá bộ lọc"
+    }
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "tours": "Tours"
   }
 }

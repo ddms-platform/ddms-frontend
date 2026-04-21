@@ -172,5 +172,103 @@
         "mismatch": "Passwords do not match"
       }
     }
+  },
+  "tour": {
+    "backToHome": "Back to home",
+    "gallery": {
+      "photo": "Photo"
+    },
+    "info": {
+      "duration": "Duration",
+      "maxGuests": "Max guests",
+      "people": "people",
+      "boat": "Boat",
+      "about": "About this tour"
+    },
+    "reviews": {
+      "title": "reviews"
+    },
+    "booking": {
+      "perPerson": "person",
+      "availability": "Availability",
+      "available": "Available",
+      "cancellation": "Cancellation",
+      "freeCancellation": "Free cancellation",
+      "bookNow": "Book Now",
+      "addWishlist": "Add to wishlist",
+      "noChargeYet": "You won't be charged yet"
+    }
+  },
+  "booking": {
+    "title": "Book Tour",
+    "backToTour": "Back to tour details",
+    "next": "Next",
+    "back": "Back",
+    "steps": {
+      "date": "Date & Time",
+      "guests": "Guests",
+      "confirm": "Confirm"
+    },
+    "dateTime": {
+      "title": "Select date and time",
+      "subtitle": "Choose a date and time slot that works for you",
+      "selectDate": "Select a date",
+      "selectTime": "Select departure time"
+    },
+    "guests": {
+      "title": "Number of guests",
+      "subtitle": "Maximum {{max}} guests per trip",
+      "people": "people"
+    },
+    "confirm": {
+      "title": "Confirm your booking",
+      "subtitle": "Review your details before payment",
+      "pay": "Pay & Confirm",
+      "processing": "Processing..."
+    },
+    "summary": {
+      "tour": "Tour",
+      "date": "Date",
+      "time": "Time",
+      "guests": "Guests",
+      "total": "Total"
+    },
+    "success": {
+      "title": "Booking Confirmed!",
+      "description": "Thank you for your booking. We'll send a confirmation email to you.",
+      "viewBookings": "View my bookings",
+      "backHome": "Back to home"
+    }
+  },
+  "tourList": {
+    "title": "Explore Tours",
+    "subtitle": "Found {{count}} cruise trips",
+    "searchPlaceholder": "Search tours, locations...",
+    "filters": "Filters",
+    "reviews": "reviews",
+    "perPerson": "person",
+    "categories": {
+      "all": "All",
+      "cruise": "Cruise",
+      "sunset": "Sunset",
+      "party": "Party",
+      "family": "Family",
+      "sightseeing": "Sightseeing",
+      "dinner": "Dinner"
+    },
+    "sort": {
+      "rating": "Highest rated",
+      "priceAsc": "Price: low → high",
+      "priceDesc": "Price: high → low"
+    },
+    "empty": {
+      "title": "No tours found",
+      "description": "Try changing your search or filters to find a matching trip.",
+      "reset": "Clear filters"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "tours": "Tours"
   }
 }
