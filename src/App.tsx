@@ -12,6 +12,9 @@ const SignUpPage = lazy(() => import('@/pages/auth/sign-up'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/index'));
 const HomePage = lazy(() => import('@/pages/home/index'));
 const ProfilePage = lazy(() => import('@/pages/profile/index'));
+const TourDetailPage = lazy(() => import('@/pages/tours/tour-detail'));
+const TourListPage = lazy(() => import('@/pages/tours/tour-list'));
+const BookingPage = lazy(() => import('@/pages/tours/booking'));
 
 function PageLoader() {
   return <LoadingSpinner fullScreen />;
@@ -51,6 +54,30 @@ function App() {
                 element={
                   <Suspense fallback={<PageLoader />}>
                     <HomePage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/tours"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <TourListPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/tours/:id"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <TourDetailPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/tours/:id/booking"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <BookingPage />
                   </Suspense>
                 }
               />
