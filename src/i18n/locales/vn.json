@@ -4,7 +4,7 @@
       "title": "Chào mừng trở lại",
       "description": "Đăng nhập vào tài khoản của bạn để tiếp tục",
       "email": "Địa chỉ email",
-      "emailPlaceholder": "ten@example.com",
+      "emailPlaceholder": "Nhập email của bạn",
       "password": "Mật khẩu",
       "passwordPlaceholder": "Nhập mật khẩu của bạn",
       "forgotPassword": "Quên mật khẩu?",
@@ -61,5 +61,86 @@
     "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
     "minLength": "Phải có ít nhất {{count}} ký tự",
     "termsRequired": "Bạn phải đồng ý với các điều khoản và điều kiện"
+  },
+  "home": {
+    "nav": {
+      "tours": "Tour",
+      "howItWorks": "Cách hoạt động",
+      "destinations": "Điểm đến",
+      "signIn": "Đăng nhập"
+    },
+    "hero": {
+      "title": "Khám phá vẻ đẹp đường thủy Đà Nẵng",
+      "description": "Đặt tour du thuyền sông Hàn, ngắm cầu Rồng phun lửa và trải nghiệm hành trình sông nước tuyệt vời.",
+      "searchPlaceholder": "Tìm kiếm tour, địa điểm...",
+      "searchButton": "Tìm kiếm",
+      "stat1": "Chuyến đi",
+      "stat2": "Khách hàng",
+      "stat3": "Đánh giá"
+    },
+    "categories": {
+      "cruise": "Du thuyền",
+      "sunset": "Hoàng hôn",
+      "party": "Tiệc trên thuyền",
+      "family": "Gia đình",
+      "sightseeing": "Ngắm cảnh",
+      "dinner": "Ăn tối"
+    },
+    "tours": {
+      "title": "Tour nổi bật",
+      "subtitle": "Những trải nghiệm đường thủy được yêu thích nhất tại Đà Nẵng",
+      "viewAll": "Xem tất cả",
+      "reviews": "đánh giá",
+      "perPerson": "người"
+    },
+    "howItWorks": {
+      "title": "Đặt tour chỉ 4 bước",
+      "subtitle": "Dễ dàng, nhanh chóng, đáng tin cậy",
+      "stepLabel": "Bước {{step}}",
+      "step1Title": "Tìm kiếm",
+      "step1Desc": "Khám phá các tour đường thủy theo vị trí, giá cả hoặc ngày khởi hành.",
+      "step2Title": "Đặt lịch",
+      "step2Desc": "Chọn ngày, giờ và số lượng hành khách phù hợp.",
+      "step3Title": "Lên thuyền",
+      "step3Desc": "Đến bến tàu và bắt đầu hành trình tuyệt vời trên sông.",
+      "step4Title": "Đánh giá",
+      "step4Desc": "Chia sẻ trải nghiệm của bạn để giúp các du khách khác."
+    },
+    "destinations": {
+      "title": "Điểm đến phổ biến",
+      "hanRiver": "Sông Hàn",
+      "marbleMountains": "Ngũ Hành Sơn",
+      "bachDang": "Bến Bạch Đằng",
+      "toursAvailable": "tour có sẵn"
+    },
+    "cta": {
+      "title": "Sẵn sàng cho hành trình trên sông?",
+      "description": "Đăng ký ngay hôm nay và nhận ưu đãi đặc biệt cho lần đặt tour đầu tiên.",
+      "signUp": "Đăng ký miễn phí",
+      "explore": "Khám phá tour"
+    },
+    "footer": {
+      "description": "Hệ thống quản lý và đặt tour du lịch đường thủy tại thành phố Đà Nẵng.",
+      "rights": "Mọi quyền được bảo lưu.",
+      "madeIn": "Made with ❤️ in Đà Nẵng",
+      "explore": {
+        "title": "Khám phá",
+        "link1": "Tour du thuyền",
+        "link2": "Tour hoàng hôn",
+        "link3": "Tour gia đình"
+      },
+      "support": {
+        "title": "Hỗ trợ",
+        "link1": "Trung tâm trợ giúp",
+        "link2": "Liên hệ",
+        "link3": "Câu hỏi thường gặp"
+      },
+      "legal": {
+        "title": "Pháp lý",
+        "link1": "Điều khoản dịch vụ",
+        "link2": "Chính sách bảo mật",
+        "link3": "Chính sách huỷ tour"
+      }
+    }
   }
 }
