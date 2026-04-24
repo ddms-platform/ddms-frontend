@@ -10,17 +10,17 @@ export default function HeroSection() {
     <section
       className="relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #ff385c 0%, #e00b41 40%, #bd1e59 70%, #460479 100%)',
+        background: 'linear-gradient(135deg, #0A192F 0%, #112240 40%, #0d2847 70%, #0A192F 100%)',
       }}
     >
       {/* Decorative circles */}
       <div
         className="absolute -right-20 -top-20 h-96 w-96 rounded-full opacity-10"
-        style={{ backgroundColor: '#ffffff' }}
+        style={{ backgroundColor: '#00F0FF' }}
       />
       <div
         className="absolute -bottom-16 left-20 h-72 w-72 rounded-full opacity-8"
-        style={{ backgroundColor: '#ffffff' }}
+        style={{ backgroundColor: '#00F0FF' }}
       />
 
       <div className="relative mx-auto max-w-7xl px-6 py-20 md:py-28">
@@ -42,25 +42,25 @@ export default function HeroSection() {
           <div
             className="mt-10 flex items-center gap-3 rounded-2xl p-2"
             style={{
-              backgroundColor: '#ffffff',
+              backgroundColor: '#0A192F',
               boxShadow:
                 'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
             }}
           >
             <div className="flex flex-1 items-center gap-3 px-4">
-              <MapPin size={20} style={{ color: '#6a6a6a' }} />
+              <MapPin size={20} style={{ color: '#ecf0ff' }} />
               <input
                 type="text"
                 placeholder={t('home.hero.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full border-none bg-transparent py-3 text-sm font-medium outline-none"
-                style={{ color: '#222222' }}
+                style={{ color: '#ffffff' }}
               />
             </div>
             <button
-              className="flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98]"
-              style={{ backgroundColor: '#ff385c' }}
+              className="flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ backgroundColor: '#00F0FF' }}
             >
               <Search size={18} />
               <span className="hidden sm:inline">{t('home.hero.searchButton')}</span>

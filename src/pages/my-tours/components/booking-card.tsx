@@ -37,7 +37,11 @@ export default function BookingCard({ booking }: BookingCardProps) {
       case 'COMPLETED':
         return { bg: '#eef2ff', text: '#4338ca', label: t('dashboard.status.COMPLETED') };
       case 'CANCELLED':
-        return { bg: '#f2f2f2', text: '#6a6a6a', label: t('dashboard.status.CANCELLED') };
+        return {
+          bg: 'rgba(255,255,255,0.1)',
+          text: '#ecf0ff',
+          label: t('dashboard.status.CANCELLED'),
+        };
     }
   };
 
@@ -56,7 +60,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
   return (
     <div
       className="flex flex-col gap-4 rounded-2xl border p-4 transition-all hover:shadow-md sm:flex-row sm:gap-6 sm:p-5"
-      style={{ borderColor: '#e0e0e0', backgroundColor: '#ffffff' }}
+      style={{ borderColor: 'rgba(255,255,255,0.1)', backgroundColor: '#112240' }}
     >
       {/* Thumbnail */}
       <div className="relative aspect-4/3 w-full shrink-0 overflow-hidden rounded-xl sm:h-32 sm:w-40 sm:aspect-square">
@@ -87,7 +91,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
             <div className="mb-1 flex items-center gap-2">
               <span
                 className="text-xs font-medium uppercase tracking-wider"
-                style={{ color: '#6a6a6a' }}
+                style={{ color: '#ecf0ff' }}
               >
                 {t('dashboard.bookingRef')}: #DDMS-{booking.id}
               </span>
@@ -100,7 +104,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
             </div>
             <h3
               className="text-lg font-bold leading-tight line-clamp-2"
-              style={{ color: '#222222' }}
+              style={{ color: '#ffffff' }}
             >
               {getLocalizedField(
                 { title_vn: booking.tourTitle_vn, title_en: booking.tourTitle_en },
@@ -108,7 +112,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
                 lang
               )}
             </h3>
-            <p className="mt-1 flex items-center gap-1 text-sm" style={{ color: '#6a6a6a' }}>
+            <p className="mt-1 flex items-center gap-1 text-sm" style={{ color: '#ecf0ff' }}>
               <MapPin size={14} />
               {getLocalizedField(
                 { location_vn: booking.location_vn, location_en: booking.location_en },
@@ -119,10 +123,10 @@ export default function BookingCard({ booking }: BookingCardProps) {
           </div>
 
           <div className="hidden text-right sm:block">
-            <span className="block text-lg font-bold" style={{ color: '#222222' }}>
+            <span className="block text-lg font-bold" style={{ color: '#ffffff' }}>
               {formatPrice(booking.totalPrice)}
             </span>
-            <span className="text-sm" style={{ color: '#6a6a6a' }}>
+            <span className="text-sm" style={{ color: '#ecf0ff' }}>
               {booking.guests} {t('dashboard.guests')}
             </span>
           </div>
@@ -130,19 +134,19 @@ export default function BookingCard({ booking }: BookingCardProps) {
 
         {/* Date & Time */}
         <div className="mt-4 flex flex-wrap gap-4 text-sm sm:mt-auto">
-          <div className="flex items-center gap-1.5 font-medium" style={{ color: '#222222' }}>
-            <Calendar size={16} style={{ color: '#6a6a6a' }} />
+          <div className="flex items-center gap-1.5 font-medium" style={{ color: '#ffffff' }}>
+            <Calendar size={16} style={{ color: '#ecf0ff' }} />
             {formatDate(booking.date)}
           </div>
-          <div className="flex items-center gap-1.5 font-medium" style={{ color: '#222222' }}>
-            <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#6a6a6a' }} />
+          <div className="flex items-center gap-1.5 font-medium" style={{ color: '#ffffff' }}>
+            <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#ecf0ff' }} />
             {booking.time}
           </div>
           <div
             className="flex items-center gap-1.5 font-medium sm:hidden"
-            style={{ color: '#222222' }}
+            style={{ color: '#ffffff' }}
           >
-            <Users size={16} style={{ color: '#6a6a6a' }} />
+            <Users size={16} style={{ color: '#ecf0ff' }} />
             {booking.guests}
           </div>
         </div>
@@ -151,10 +155,10 @@ export default function BookingCard({ booking }: BookingCardProps) {
       {/* Actions & Mobile Price */}
       <div
         className="mt-2 flex items-center justify-between border-t pt-4 sm:hidden"
-        style={{ borderColor: '#f2f2f2' }}
+        style={{ borderColor: 'rgba(255,255,255,0.08)' }}
       >
         <div>
-          <span className="block text-lg font-bold" style={{ color: '#222222' }}>
+          <span className="block text-lg font-bold" style={{ color: '#ffffff' }}>
             {formatPrice(booking.totalPrice)}
           </span>
         </div>
@@ -162,7 +166,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
           {booking.status === 'UPCOMING' && (
             <button
               className="rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-gray-50 active:scale-95"
-              style={{ color: '#222222', border: '1px solid #c1c1c1' }}
+              style={{ color: '#ffffff', border: '1px solid rgba(255,255,255,0.15)' }}
             >
               {t('dashboard.cancelBooking')}
             </button>
@@ -170,7 +174,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
           {booking.status === 'COMPLETED' && (
             <button
               className="rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-gray-50 active:scale-95"
-              style={{ color: '#222222', border: '1px solid #c1c1c1' }}
+              style={{ color: '#ffffff', border: '1px solid rgba(255,255,255,0.15)' }}
             >
               {t('dashboard.writeReview')}
             </button>
@@ -183,7 +187,11 @@ export default function BookingCard({ booking }: BookingCardProps) {
         {booking.status === 'UPCOMING' && (
           <button
             className="w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-all hover:shadow-sm active:scale-[0.98]"
-            style={{ color: '#222222', border: '1px solid #c1c1c1', backgroundColor: '#ffffff' }}
+            style={{
+              color: '#ffffff',
+              border: '1px solid rgba(255,255,255,0.15)',
+              backgroundColor: '#0A192F',
+            }}
           >
             {t('dashboard.cancelBooking')}
           </button>
@@ -191,7 +199,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
         {booking.status === 'COMPLETED' && (
           <button
             className="w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-all hover:shadow-sm active:scale-[0.98]"
-            style={{ color: '#ffffff', backgroundColor: '#222222' }}
+            style={{ color: '#0A192F', backgroundColor: '#00F0FF' }}
           >
             {t('dashboard.writeReview')}
           </button>
@@ -200,7 +208,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
           <Link
             to={`/tours/${booking.tourId}`}
             className="block w-full rounded-xl px-4 py-2.5 text-center text-sm font-semibold transition-all hover:bg-gray-50 active:scale-[0.98]"
-            style={{ color: '#222222', backgroundColor: '#f7f7f7' }}
+            style={{ color: '#ffffff', backgroundColor: '#112240' }}
           >
             {t('dashboard.viewDetails')}
           </Link>

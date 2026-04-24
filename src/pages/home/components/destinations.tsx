@@ -26,7 +26,7 @@ export default function Destinations() {
     <section id="destinations" className="mx-auto max-w-7xl px-6 py-16">
       <h2
         className="mb-10 text-[28px] font-bold leading-[1.43]"
-        style={{ color: '#222222', letterSpacing: '-0.44px' }}
+        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
       >
         {t('home.destinations.title')}
       </h2>

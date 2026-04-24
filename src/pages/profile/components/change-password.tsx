@@ -53,7 +53,7 @@ export default function ChangePassword() {
     <div
       className="rounded-2xl p-6 sm:p-8"
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: '#0A192F',
         boxShadow:
           'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
       }}
@@ -63,18 +63,18 @@ export default function ChangePassword() {
         <div className="flex items-center gap-3">
           <div
             className="flex h-10 w-10 items-center justify-center rounded-xl"
-            style={{ background: 'linear-gradient(135deg, #ff385c, #e00b41)' }}
+            style={{ background: 'linear-gradient(135deg, #00F0FF, #00d4e0)' }}
           >
             <ShieldCheck size={20} color="#ffffff" />
           </div>
           <div>
             <h3
               className="text-lg font-semibold"
-              style={{ color: '#222222', letterSpacing: '-0.18px' }}
+              style={{ color: '#ffffff', letterSpacing: '-0.18px' }}
             >
               {t('profile.changePassword.title')}
             </h3>
-            <p className="text-sm" style={{ color: '#6a6a6a' }}>
+            <p className="text-sm" style={{ color: '#ecf0ff' }}>
               {t('profile.changePassword.description')}
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function ChangePassword() {
           <button
             onClick={() => setIsOpen(true)}
             className="rounded-lg px-4 py-2 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-            style={{ backgroundColor: '#f2f2f2', color: '#222222' }}
+            style={{ backgroundColor: '#112240', color: '#ffffff' }}
           >
             {t('profile.changePassword.change')}
           </button>
@@ -95,13 +95,13 @@ export default function ChangePassword() {
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {passwordFields.map(({ key, label }) => (
             <div key={key}>
-              <label className="mb-1.5 block text-sm font-medium" style={{ color: '#222222' }}>
+              <label className="mb-1.5 block text-sm font-medium" style={{ color: '#ffffff' }}>
                 {label}
               </label>
               <div className="relative">
                 <div
                   className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
-                  style={{ color: '#6a6a6a' }}
+                  style={{ color: '#ecf0ff' }}
                 >
                   <Lock size={18} />
                 </div>
@@ -111,22 +111,22 @@ export default function ChangePassword() {
                   onChange={(e) => setValues((prev) => ({ ...prev, [key]: e.target.value }))}
                   className="w-full rounded-lg border py-3 pl-11 pr-12 text-sm font-medium outline-none transition-all focus:ring-2"
                   style={{
-                    borderColor: errors[key] ? '#c13515' : '#c1c1c1',
-                    color: '#222222',
+                    borderColor: errors[key] ? '#ff6b6b' : 'rgba(255,255,255,0.15)',
+                    color: '#ffffff',
                   }}
                 />
                 <button
                   type="button"
                   onClick={() => toggleShow(key)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
-                  style={{ color: '#6a6a6a' }}
+                  style={{ color: '#ecf0ff' }}
                 >
                   {showPasswords[key] ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
               <div className="min-h-4.5">
                 {errors[key] && (
-                  <p className="mt-1 text-xs" style={{ color: '#c13515' }}>
+                  <p className="mt-1 text-xs" style={{ color: '#ff6b6b' }}>
                     {errors[key]}
                   </p>
                 )}
@@ -143,14 +143,14 @@ export default function ChangePassword() {
                 setValues({ current: '', new: '', confirm: '' });
               }}
               className="flex-1 rounded-lg border py-3 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-              style={{ borderColor: '#c1c1c1', color: '#6a6a6a' }}
+              style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ecf0ff' }}
             >
               {t('profile.cancel')}
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="flex-1 rounded-lg py-3 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+              className="flex-1 rounded-lg py-3 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
               style={{ backgroundColor: '#222222' }}
             >
               {isSaving ? t('profile.saving') : t('profile.changePassword.update')}

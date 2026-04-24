@@ -13,22 +13,22 @@ export default function AuthLayout() {
           className="absolute inset-0"
           style={{
             background:
-              'linear-gradient(135deg, #ff385c 0%, #e00b41 40%, #bd1e59 70%, #460479 100%)',
+              'linear-gradient(135deg, #0A192F 0%, #112240 40%, #0d2847 70%, #001a3a 100%)',
           }}
         />
 
         {/* Decorative circles */}
         <div
           className="absolute -left-20 -top-20 h-80 w-80 rounded-full opacity-15"
-          style={{ backgroundColor: '#ffffff' }}
+          style={{ backgroundColor: '#00F0FF' }}
         />
         <div
           className="absolute -bottom-10 right-10 h-60 w-60 rounded-full opacity-10"
-          style={{ backgroundColor: '#ffffff' }}
+          style={{ backgroundColor: '#00F0FF' }}
         />
         <div
           className="absolute left-1/2 top-1/3 h-40 w-40 -translate-x-1/2 rounded-full opacity-8"
-          style={{ backgroundColor: '#ffffff' }}
+          style={{ backgroundColor: '#00F0FF' }}
         />
 
         {/* Content */}
@@ -68,7 +68,10 @@ export default function AuthLayout() {
       </div>
 
       {/* Right side - Form area */}
-      <div className="relative flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <div
+        className="relative flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8"
+        style={{ backgroundColor: '#0A192F' }}
+      >
         {/* Language Toggle */}
         <div className="absolute right-6 top-6">
           <TranslationToggle />

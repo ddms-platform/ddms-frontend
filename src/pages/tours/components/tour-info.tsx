@@ -41,11 +41,11 @@ export default function TourInfo({
         <div>
           <h1
             className="text-[28px] font-bold leading-[1.43]"
-            style={{ color: '#222222', letterSpacing: '-0.44px' }}
+            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
           >
             {title}
           </h1>
-          <p className="mt-2 flex items-center gap-1.5 text-sm" style={{ color: '#6a6a6a' }}>
+          <p className="mt-2 flex items-center gap-1.5 text-sm" style={{ color: '#ecf0ff' }}>
             <MapPin size={15} />
             {location}
           </p>
@@ -53,21 +53,21 @@ export default function TourInfo({
         <div
           className="flex shrink-0 items-center gap-2 rounded-xl px-4 py-2"
           style={{
-            backgroundColor: '#f7f7f7',
+            backgroundColor: '#112240',
           }}
         >
-          <Star size={16} fill="#222222" style={{ color: '#222222' }} />
-          <span className="text-base font-bold" style={{ color: '#222222' }}>
+          <Star size={16} fill="#ffffff" style={{ color: '#ffffff' }} />
+          <span className="text-base font-bold" style={{ color: '#ffffff' }}>
             {rating}
           </span>
-          <span className="text-sm" style={{ color: '#6a6a6a' }}>
+          <span className="text-sm" style={{ color: '#ecf0ff' }}>
             ({reviews})
           </span>
         </div>
       </div>
 
       {/* Divider */}
-      <div className="my-6 h-px" style={{ backgroundColor: '#f2f2f2' }} />
+      <div className="my-6 h-px" style={{ backgroundColor: '#112240' }} />
 
       {/* Quick Details */}
       <div className="grid grid-cols-3 gap-4">
@@ -75,13 +75,13 @@ export default function TourInfo({
           <div
             key={label}
             className="flex flex-col items-center rounded-xl p-4 text-center"
-            style={{ backgroundColor: '#f7f7f7' }}
+            style={{ backgroundColor: '#112240' }}
           >
-            <Icon size={22} style={{ color: '#ff385c' }} />
-            <span className="mt-2 text-xs font-medium" style={{ color: '#6a6a6a' }}>
+            <Icon size={22} style={{ color: '#00F0FF' }} />
+            <span className="mt-2 text-xs font-medium" style={{ color: '#ecf0ff' }}>
               {label}
             </span>
-            <span className="mt-0.5 text-sm font-semibold" style={{ color: '#222222' }}>
+            <span className="mt-0.5 text-sm font-semibold" style={{ color: '#ffffff' }}>
               {value}
             </span>
           </div>
@@ -89,17 +89,17 @@ export default function TourInfo({
       </div>
 
       {/* Divider */}
-      <div className="my-6 h-px" style={{ backgroundColor: '#f2f2f2' }} />
+      <div className="my-6 h-px" style={{ backgroundColor: '#112240' }} />
 
       {/* Description */}
       <div>
         <h2
           className="text-lg font-semibold"
-          style={{ color: '#222222', letterSpacing: '-0.18px' }}
+          style={{ color: '#ffffff', letterSpacing: '-0.18px' }}
         >
           {t('tour.info.about')}
         </h2>
-        <p className="mt-3 text-sm leading-relaxed" style={{ color: '#6a6a6a' }}>
+        <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
           {description}
         </p>
       </div>

@@ -38,7 +38,7 @@ export default function FormField({
   return (
     <div className="flex flex-col gap-2">
       <div className={labelExtra ? 'flex items-center justify-between' : undefined}>
-        <Label htmlFor={id} className="text-sm font-medium" style={{ color: '#222222' }}>
+        <Label htmlFor={id} className="text-sm font-medium" style={{ color: '#ffffff' }}>
           {label}
         </Label>
         {labelExtra}
@@ -55,8 +55,9 @@ export default function FormField({
           autoFocus={autoFocus}
           className={`h-12 rounded-lg border px-4 text-sm ${endAdornment ? 'pr-12' : ''}`}
           style={{
-            borderColor: hasError ? '#c13515' : '#c1c1c1',
-            color: '#222222',
+            borderColor: hasError ? '#ff6b6b' : 'rgba(255,255,255,0.15)',
+            color: '#ffffff',
+            backgroundColor: '#112240',
           }}
         />
         {endAdornment}
@@ -64,7 +65,7 @@ export default function FormField({
       {/* Always reserve space for error to prevent layout shift */}
       <div className="min-h-4.5">
         {hasError && error && (
-          <p className="text-xs" style={{ color: '#c13515' }}>
+          <p className="text-xs" style={{ color: '#ff6b6b' }}>
             {error}
           </p>
         )}

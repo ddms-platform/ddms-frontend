@@ -23,7 +23,7 @@ export default function MainLayout({ showAuth = true }: MainLayoutProps) {
     : [];
 
   return (
-    <div className="flex min-h-screen flex-col" style={{ backgroundColor: '#ffffff' }}>
+    <div className="flex min-h-screen flex-col" style={{ backgroundColor: '#0A192F' }}>
       <GlobalHeader navLinks={navLinks} showAuth={showAuth} />
       <main className="flex-1">
         <Outlet />

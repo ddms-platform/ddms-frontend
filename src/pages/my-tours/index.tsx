@@ -72,10 +72,10 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-8 sm:py-12">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: '#222222' }}>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: '#ffffff' }}>
           {t('dashboard.title')}
         </h1>
-        <p className="mt-2 text-base" style={{ color: '#6a6a6a' }}>
+        <p className="mt-2 text-base" style={{ color: '#ecf0ff' }}>
           {t('dashboard.welcome')}
         </p>
       </div>
@@ -83,7 +83,7 @@ export default function DashboardPage() {
       {/* Tabs */}
       <div
         className="mb-6 flex gap-6 overflow-x-auto border-b no-scrollbar"
-        style={{ borderColor: '#e0e0e0' }}
+        style={{ borderColor: 'rgba(255,255,255,0.1)' }}
       >
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -93,14 +93,14 @@ export default function DashboardPage() {
               onClick={() => setActiveTab(tab.id)}
               className="relative shrink-0 pb-3 text-sm font-semibold transition-colors"
               style={{
-                color: isActive ? '#222222' : '#6a6a6a',
+                color: isActive ? '#ffffff' : '#ecf0ff',
               }}
             >
               {tab.label}
               {isActive && (
                 <span
                   className="absolute bottom-0 left-0 h-0.5 w-full rounded-t-full"
-                  style={{ backgroundColor: '#222222' }}
+                  style={{ backgroundColor: '#ffffff' }}
                 />
               )}
             </button>
@@ -116,24 +116,24 @@ export default function DashboardPage() {
           /* Empty State */
           <div
             className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed py-20 text-center"
-            style={{ borderColor: '#e0e0e0', backgroundColor: '#fafafa' }}
+            style={{ borderColor: 'rgba(255,255,255,0.1)', backgroundColor: '#fafafa' }}
           >
             <div
               className="flex h-16 w-16 items-center justify-center rounded-full"
-              style={{ backgroundColor: '#f2f2f2' }}
+              style={{ backgroundColor: '#112240' }}
             >
-              <Briefcase size={28} style={{ color: '#6a6a6a' }} />
+              <Briefcase size={28} style={{ color: '#ecf0ff' }} />
             </div>
-            <h3 className="mt-4 text-lg font-bold" style={{ color: '#222222' }}>
+            <h3 className="mt-4 text-lg font-bold" style={{ color: '#ffffff' }}>
               {t('dashboard.emptyTitle')}
             </h3>
-            <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: '#6a6a6a' }}>
+            <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
               {t('dashboard.emptyDescription')}
             </p>
             <Link
               to="/tours"
               className="mt-6 rounded-xl px-6 py-3 font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
-              style={{ backgroundColor: '#ff385c' }}
+              style={{ backgroundColor: '#00F0FF' }}
             >
               {t('dashboard.exploreBtn')}
             </Link>

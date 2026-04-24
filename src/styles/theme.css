@@ -19,6 +19,13 @@
   --input: transparent;
   --ring: oklch(0.708 0 0);
   --radius: 0.625rem;
+
+  /* === DDMS Design System Colors === */
+  --ddms-primary: #0a192f;
+  --ddms-secondary: #00f0ff;
+  --ddms-tertiary: #ffffff;
+  --ddms-neutral: #112240;
+  --ddms-label: #ecf0ff;
   /* thêm các biến khác tùy project */
 }
 

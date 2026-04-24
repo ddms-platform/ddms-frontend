@@ -28,10 +28,8 @@ export default function GlobalHeader({
     <header
       className="sticky top-0 z-50"
       style={{
-        backgroundColor: transparent ? 'transparent' : '#ffffff',
-        boxShadow: transparent
-          ? 'none'
-          : 'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px',
+        backgroundColor: transparent ? 'transparent' : '#0A192F',
+        boxShadow: transparent ? 'none' : '0 1px 0 rgba(255,255,255,0.08)',
       }}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -47,8 +45,8 @@ export default function GlobalHeader({
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium transition-colors hover:text-[#ff385c]"
-                style={{ color: transparent ? '#ffffff' : '#222222' }}
+                className="text-sm font-medium transition-colors hover:text-[#00F0FF]"
+                style={{ color: '#ecf0ff' }}
               >
                 {link.label}
               </a>
@@ -63,7 +61,7 @@ export default function GlobalHeader({
             <Link
               to="/sign-in"
               className="rounded-lg px-5 py-2.5 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-              style={{ backgroundColor: '#222222', color: '#ffffff' }}
+              style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
             >
               {t('home.nav.signIn')}
             </Link>
