@@ -6,13 +6,13 @@ export default function GlobalFooter() {
   const { t } = useTranslation();
 
   return (
-    <footer style={{ backgroundColor: '#f7f7f7' }}>
+    <footer style={{ backgroundColor: '#112240' }}>
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
             <img src={logo} alt="DDMS" className="mb-4 h-10 w-auto" />
-            <p className="text-sm leading-relaxed" style={{ color: '#6a6a6a' }}>
+            <p className="text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
               {t('home.footer.description')}
             </p>
           </div>
@@ -21,7 +21,7 @@ export default function GlobalFooter() {
             <div key={section}>
               <h4
                 className="mb-4 text-sm font-semibold"
-                style={{ color: '#222222', textTransform: 'uppercase', letterSpacing: '0.32px' }}
+                style={{ color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.32px' }}
               >
                 {t(`home.footer.${section}.title`)}
               </h4>
@@ -30,8 +30,8 @@ export default function GlobalFooter() {
                   <li key={i}>
                     <a
                       href="#"
-                      className="text-sm transition-colors hover:text-[#ff385c]"
-                      style={{ color: '#6a6a6a' }}
+                      className="text-sm transition-colors hover:text-[#00F0FF]"
+                      style={{ color: '#ecf0ff' }}
                     >
                       {t(`home.footer.${section}.link${i}`)}
                     </a>
@@ -42,14 +42,14 @@ export default function GlobalFooter() {
           ))}
         </div>
 
-        <div className="mt-10 border-t pt-6" style={{ borderColor: '#e0e0e0' }}>
+        <div className="mt-10 border-t pt-6" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm" style={{ color: '#6a6a6a' }}>
+            <p className="text-sm" style={{ color: '#ecf0ff' }}>
               © {new Date().getFullYear()} DDMS. {t('home.footer.rights')}
             </p>
             <div className="flex items-center gap-3">
-              <Anchor size={16} style={{ color: '#6a6a6a' }} />
-              <span className="text-sm" style={{ color: '#6a6a6a' }}>
+              <Anchor size={16} style={{ color: '#ecf0ff' }} />
+              <span className="text-sm" style={{ color: '#ecf0ff' }}>
                 {t('home.footer.madeIn')}
               </span>
             </div>

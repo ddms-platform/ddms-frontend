@@ -45,7 +45,7 @@ export default function Pagination({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage <= 1}
         className="flex h-10 w-10 items-center justify-center rounded-lg transition-all hover:shadow-md active:scale-[0.96] disabled:pointer-events-none disabled:opacity-30"
-        style={{ color: '#222222' }}
+        style={{ color: '#ffffff' }}
         aria-label="Previous page"
       >
         <ChevronLeft size={18} />
@@ -56,7 +56,7 @@ export default function Pagination({
           <span
             key={`ellipsis-${index}`}
             className="flex h-10 w-10 items-center justify-center text-sm"
-            style={{ color: '#6a6a6a' }}
+            style={{ color: '#ecf0ff' }}
           >
             ···
           </span>
@@ -66,8 +66,8 @@ export default function Pagination({
             onClick={() => onPageChange(page)}
             className="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold transition-all hover:shadow-md active:scale-[0.96]"
             style={{
-              backgroundColor: page === currentPage ? '#222222' : 'transparent',
-              color: page === currentPage ? '#ffffff' : '#222222',
+              backgroundColor: page === currentPage ? '#00F0FF' : 'transparent',
+              color: page === currentPage ? '#0A192F' : '#ecf0ff',
             }}
             aria-label={`Page ${page}`}
             aria-current={page === currentPage ? 'page' : undefined}
@@ -81,7 +81,7 @@ export default function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
         className="flex h-10 w-10 items-center justify-center rounded-lg transition-all hover:shadow-md active:scale-[0.96] disabled:pointer-events-none disabled:opacity-30"
-        style={{ color: '#222222' }}
+        style={{ color: '#ffffff' }}
         aria-label="Next page"
       >
         <ChevronRight size={18} />

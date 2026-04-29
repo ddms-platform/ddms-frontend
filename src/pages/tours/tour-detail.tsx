@@ -115,24 +115,24 @@ export default function TourDetailPage() {
       <div
         className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between border-t px-6 py-4 lg:hidden"
         style={{
-          backgroundColor: '#ffffff',
-          borderColor: '#f2f2f2',
-          boxShadow: 'rgba(0,0,0,0.1) 0px -2px 10px',
+          backgroundColor: '#0A192F',
+          borderColor: 'rgba(255,255,255,0.08)',
+          boxShadow: '0 -2px 10px rgba(0,0,0,0.4)',
         }}
       >
         <div>
-          <span className="text-lg font-bold" style={{ color: '#222222' }}>
+          <span className="text-lg font-bold" style={{ color: '#ffffff' }}>
             {formatPrice(tour.price)}
           </span>
-          <span className="text-sm" style={{ color: '#6a6a6a' }}>
+          <span className="text-sm" style={{ color: '#ecf0ff' }}>
             {' '}
             / {t('tour.booking.perPerson')}
           </span>
         </div>
         <Link
           to={`/tours/${tour.id}/booking`}
-          className="rounded-lg px-6 py-3 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98]"
-          style={{ backgroundColor: '#ff385c' }}
+          className="rounded-lg px-6 py-3 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98]"
+          style={{ backgroundColor: '#00F0FF' }}
         >
           {t('tour.booking.bookNow')}
         </Link>

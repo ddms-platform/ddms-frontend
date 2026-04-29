@@ -59,11 +59,11 @@ export default function SignUpPage() {
         <div className="space-y-2 text-center">
           <h1
             className="text-[28px] font-bold leading-[1.43]"
-            style={{ color: '#222222', letterSpacing: '-0.44px' }}
+            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
           >
             {t('auth.signUp.title')}
           </h1>
-          <p className="text-sm leading-[1.43]" style={{ color: '#6a6a6a' }}>
+          <p className="text-sm leading-[1.43]" style={{ color: '#ecf0ff' }}>
             {t('auth.signUp.description')}
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function SignUpPage() {
         <button
           type="button"
           className="flex h-11 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-          style={{ borderColor: '#c1c1c1', color: '#222222' }}
+          style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24">
             <path
@@ -99,7 +99,7 @@ export default function SignUpPage() {
         <button
           type="button"
           className="flex h-11 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-          style={{ borderColor: '#c1c1c1', color: '#222222' }}
+          style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -110,11 +110,11 @@ export default function SignUpPage() {
 
       {/* Divider */}
       <div className="relative flex items-center">
-        <div className="flex-1" style={{ borderTop: '1px solid #e0e0e0' }} />
-        <span className="px-4 text-xs font-medium" style={{ color: '#6a6a6a' }}>
+        <div className="flex-1" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }} />
+        <span className="px-4 text-xs font-medium" style={{ color: '#ecf0ff' }}>
           {t('auth.signUp.orSignUpWithEmail')}
         </span>
-        <div className="flex-1" style={{ borderTop: '1px solid #e0e0e0' }} />
+        <div className="flex-1" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }} />
       </div>
 
       {/* Sign-up Form */}
@@ -150,7 +150,7 @@ export default function SignUpPage() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
-                style={{ color: '#6a6a6a' }}
+                style={{ color: '#ecf0ff' }}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -196,7 +196,7 @@ export default function SignUpPage() {
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
-              style={{ color: '#6a6a6a' }}
+              style={{ color: '#ecf0ff' }}
               aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -215,18 +215,18 @@ export default function SignUpPage() {
                 setAgreeTerms(e.target.checked);
                 setTermsError(e.target.checked ? undefined : t('validation.termsRequired'));
               }}
-              className="mt-0.5 h-4 w-4 cursor-pointer rounded accent-[#ff385c]"
+              className="mt-0.5 h-4 w-4 cursor-pointer rounded accent-[#00F0FF]"
             />
             <label
               htmlFor="terms"
               className="cursor-pointer text-sm leading-relaxed"
-              style={{ color: '#6a6a6a' }}
+              style={{ color: '#ecf0ff' }}
             >
               {t('auth.signUp.agreeToTerms')}{' '}
               <Link
                 to="/terms"
                 className="font-medium underline underline-offset-4 transition-colors"
-                style={{ color: '#222222' }}
+                style={{ color: '#ffffff' }}
               >
                 {t('auth.signUp.termsOfService')}
               </Link>{' '}
@@ -234,7 +234,7 @@ export default function SignUpPage() {
               <Link
                 to="/privacy"
                 className="font-medium underline underline-offset-4 transition-colors"
-                style={{ color: '#222222' }}
+                style={{ color: '#ffffff' }}
               >
                 {t('auth.signUp.privacyPolicy')}
               </Link>
@@ -252,7 +252,7 @@ export default function SignUpPage() {
           type="submit"
           disabled={isLoading}
           className="mt-2 h-12 w-full rounded-lg text-base font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-          style={{ backgroundColor: '#ff385c', color: '#ffffff', border: 'none' }}
+          style={{ backgroundColor: '#00F0FF', color: '#0A192F', border: 'none' }}
         >
           {isLoading ? (
             <div className="flex items-center gap-2">
@@ -266,12 +266,12 @@ export default function SignUpPage() {
       </form>
 
       {/* Sign-in Link */}
-      <p className="text-center text-sm" style={{ color: '#6a6a6a' }}>
+      <p className="text-center text-sm" style={{ color: '#ecf0ff' }}>
         {t('auth.signUp.alreadyHaveAccount')}?{' '}
         <Link
           to="/sign-in"
           className="font-semibold transition-colors hover:underline"
-          style={{ color: '#ff385c' }}
+          style={{ color: '#00F0FF' }}
         >
           {t('auth.signUp.signInLink')}
         </Link>

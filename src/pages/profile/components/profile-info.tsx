@@ -45,7 +45,7 @@ export default function ProfileInfo() {
     <div
       className="rounded-2xl p-6 sm:p-8"
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: '#0A192F',
         boxShadow:
           'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
       }}
@@ -54,7 +54,7 @@ export default function ProfileInfo() {
       <div className="mb-6 flex items-center justify-between">
         <h3
           className="text-lg font-semibold"
-          style={{ color: '#222222', letterSpacing: '-0.18px' }}
+          style={{ color: '#ffffff', letterSpacing: '-0.18px' }}
         >
           {t('profile.personalInfo')}
         </h3>
@@ -62,7 +62,7 @@ export default function ProfileInfo() {
           <button
             onClick={handleEdit}
             className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-            style={{ backgroundColor: '#f2f2f2', color: '#222222' }}
+            style={{ backgroundColor: '#112240', color: '#ffffff' }}
           >
             <Pencil size={14} />
             {t('profile.edit')}
@@ -72,7 +72,7 @@ export default function ProfileInfo() {
             <button
               onClick={handleCancel}
               className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-              style={{ borderColor: '#c1c1c1', color: '#6a6a6a' }}
+              style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ecf0ff' }}
             >
               <X size={14} />
               {t('profile.cancel')}
@@ -80,7 +80,7 @@ export default function ProfileInfo() {
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
               style={{ backgroundColor: '#222222' }}
             >
               <Save size={14} />
@@ -96,13 +96,13 @@ export default function ProfileInfo() {
           const Icon = field.icon;
           return (
             <div key={field.key}>
-              <label className="mb-1.5 block text-sm font-medium" style={{ color: '#222222' }}>
+              <label className="mb-1.5 block text-sm font-medium" style={{ color: '#ffffff' }}>
                 {t(`profile.fields.${field.key}`)}
               </label>
               <div className="relative">
                 <div
                   className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
-                  style={{ color: '#6a6a6a' }}
+                  style={{ color: '#ecf0ff' }}
                 >
                   <Icon size={18} />
                 </div>
@@ -119,14 +119,14 @@ export default function ProfileInfo() {
                     }
                     className="w-full rounded-lg border py-3 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:ring-2"
                     style={{
-                      borderColor: '#c1c1c1',
-                      color: '#222222',
+                      borderColor: 'rgba(255,255,255,0.15)',
+                      color: '#ffffff',
                     }}
                   />
                 ) : (
                   <div
                     className="w-full rounded-lg py-3 pl-11 pr-4 text-sm font-medium"
-                    style={{ backgroundColor: '#f7f7f7', color: '#222222' }}
+                    style={{ backgroundColor: '#112240', color: '#ffffff' }}
                   >
                     {field.value}
                   </div>

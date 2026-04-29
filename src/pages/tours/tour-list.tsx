@@ -351,11 +351,11 @@ export default function TourListPage() {
       <div className="mb-8">
         <h1
           className="text-[28px] font-bold leading-[1.43]"
-          style={{ color: '#222222', letterSpacing: '-0.44px' }}
+          style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
         >
           {t('tourList.title')}
         </h1>
-        <p className="mt-2 text-sm" style={{ color: '#6a6a6a' }}>
+        <p className="mt-2 text-sm" style={{ color: '#ecf0ff' }}>
           {t('tourList.subtitle', { count: filtered.length })}
         </p>
       </div>
@@ -365,20 +365,20 @@ export default function TourListPage() {
         {/* Search */}
         <div
           className="flex flex-1 items-center gap-3 rounded-xl border px-4"
-          style={{ borderColor: '#c1c1c1' }}
+          style={{ borderColor: 'rgba(255,255,255,0.15)' }}
         >
-          <Search size={18} style={{ color: '#6a6a6a' }} />
+          <Search size={18} style={{ color: '#ecf0ff' }} />
           <input
             type="text"
             placeholder={t('tourList.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="w-full border-none bg-transparent py-3 text-sm font-medium outline-none"
-            style={{ color: '#222222' }}
+            style={{ color: '#ffffff' }}
           />
           {searchQuery && (
             <button onClick={() => handleSearchChange('')}>
-              <X size={16} style={{ color: '#6a6a6a' }} />
+              <X size={16} style={{ color: '#ecf0ff' }} />
             </button>
           )}
         </div>
@@ -389,7 +389,7 @@ export default function TourListPage() {
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
             className="rounded-xl border px-4 py-3 text-sm font-medium outline-none"
-            style={{ borderColor: '#c1c1c1', color: '#222222' }}
+            style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt} value={opt}>
@@ -400,7 +400,7 @@ export default function TourListPage() {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="flex items-center gap-2 rounded-xl border px-4 py-3 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98] sm:hidden"
-            style={{ borderColor: '#c1c1c1', color: '#222222' }}
+            style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
           >
             <SlidersHorizontal size={16} />
             {t('tourList.filters')}
@@ -418,9 +418,9 @@ export default function TourListPage() {
             onClick={() => handleCategoryChange(cat.key)}
             className="flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
             style={{
-              borderColor: activeCategory === cat.key ? '#ff385c' : '#c1c1c1',
-              backgroundColor: activeCategory === cat.key ? '#fff0f3' : '#ffffff',
-              color: activeCategory === cat.key ? '#ff385c' : '#222222',
+              borderColor: activeCategory === cat.key ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+              backgroundColor: activeCategory === cat.key ? 'rgba(0,240,255,0.08)' : '#112240',
+              color: activeCategory === cat.key ? '#00F0FF' : '#ffffff',
             }}
           >
             <span className="text-base">{cat.icon}</span>
@@ -439,8 +439,8 @@ export default function TourListPage() {
                 to={`/tours/${tour.id}`}
                 className="group overflow-hidden rounded-2xl transition-all hover:shadow-lg"
                 style={{
-                  boxShadow:
-                    'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
+                  backgroundColor: '#112240',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
                 }}
               >
                 <div className="relative aspect-16/11 overflow-hidden">
@@ -455,39 +455,39 @@ export default function TourListPage() {
                       toggleWishlist(tour.id);
                     }}
                     className="absolute right-3 top-3 rounded-full p-2 transition-all hover:scale-110"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
+                    style={{ backgroundColor: 'rgba(0,240,255,0.15)', backdropFilter: 'blur(8px)' }}
                   >
                     <Heart
                       size={18}
-                      fill={wishlist.includes(tour.id) ? '#ff385c' : 'none'}
-                      style={{ color: wishlist.includes(tour.id) ? '#ff385c' : '#222222' }}
+                      fill={wishlist.includes(tour.id) ? '#00F0FF' : 'none'}
+                      style={{ color: wishlist.includes(tour.id) ? '#00F0FF' : '#ffffff' }}
                     />
                   </button>
                 </div>
 
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-base font-semibold" style={{ color: '#222222' }}>
+                    <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
                       {getLocalizedField(tour, 'title', lang)}
                     </h3>
                     <div className="flex shrink-0 items-center gap-1">
-                      <Star size={14} fill="#222222" style={{ color: '#222222' }} />
-                      <span className="text-sm font-medium" style={{ color: '#222222' }}>
+                      <Star size={14} fill="#ffc107" style={{ color: '#ffc107' }} />
+                      <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
                         {tour.rating}
                       </span>
                     </div>
                   </div>
-                  <p className="mt-1 flex items-center gap-1 text-sm" style={{ color: '#6a6a6a' }}>
+                  <p className="mt-1 flex items-center gap-1 text-sm" style={{ color: '#ecf0ff' }}>
                     <MapPin size={13} />
                     {getLocalizedField(tour, 'location', lang)}
                   </p>
-                  <p className="mt-1 text-sm" style={{ color: '#6a6a6a' }}>
+                  <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
                     {getLocalizedField(tour, 'duration', lang)} · {tour.reviews}{' '}
                     {t('tourList.reviews')}
                   </p>
-                  <p className="mt-3 text-base font-semibold" style={{ color: '#222222' }}>
+                  <p className="mt-3 text-base font-semibold" style={{ color: '#00F0FF' }}>
                     {formatPrice(tour.price)}
-                    <span className="text-sm font-normal" style={{ color: '#6a6a6a' }}>
+                    <span className="text-sm font-normal" style={{ color: '#ecf0ff' }}>
                       {' '}
                       / {t('tourList.perPerson')}
                     </span>
@@ -506,14 +506,14 @@ export default function TourListPage() {
         <div className="flex flex-col items-center py-20 text-center">
           <div
             className="mb-4 flex h-16 w-16 items-center justify-center rounded-full"
-            style={{ backgroundColor: '#f2f2f2' }}
+            style={{ backgroundColor: '#112240' }}
           >
-            <Search size={28} style={{ color: '#6a6a6a' }} />
+            <Search size={28} style={{ color: '#ecf0ff' }} />
           </div>
-          <h3 className="text-lg font-semibold" style={{ color: '#222222' }}>
+          <h3 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
             {t('tourList.empty.title')}
           </h3>
-          <p className="mt-2 max-w-sm text-sm" style={{ color: '#6a6a6a' }}>
+          <p className="mt-2 max-w-sm text-sm" style={{ color: '#ecf0ff' }}>
             {t('tourList.empty.description')}
           </p>
           <button
@@ -522,7 +522,7 @@ export default function TourListPage() {
               handleCategoryChange('all');
             }}
             className="mt-6 rounded-lg px-6 py-2.5 text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-            style={{ backgroundColor: '#222222', color: '#ffffff' }}
+            style={{ backgroundColor: '#00F0FF', color: '#ffffff' }}
           >
             {t('tourList.empty.reset')}
           </button>

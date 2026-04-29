@@ -11,7 +11,7 @@ export default function ProfilePage() {
       {/* Page Title */}
       <h1
         className="mb-8 text-[28px] font-bold leading-[1.43]"
-        style={{ color: '#222222', letterSpacing: '-0.44px' }}
+        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
       >
         {t('profile.title')}
       </h1>
@@ -21,7 +21,7 @@ export default function ProfilePage() {
         <div
           className="rounded-2xl p-8"
           style={{
-            backgroundColor: '#ffffff',
+            backgroundColor: '#0A192F',
             boxShadow:
               'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
           }}

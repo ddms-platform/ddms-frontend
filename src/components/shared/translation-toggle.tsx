@@ -13,16 +13,16 @@ export default function TranslationToggle() {
       onClick={toggleLanguage}
       className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition-all hover:shadow-md active:scale-95"
       style={{
-        borderColor: '#c1c1c1',
-        color: '#222222',
-        backgroundColor: '#ffffff',
+        borderColor: 'rgba(255,255,255,0.15)',
+        color: '#ffffff',
+        backgroundColor: '#112240',
       }}
       aria-label="Toggle language"
     >
       <Globe size={16} />
       <span>{language === 'VN' ? 'VI' : 'EN'}</span>
-      <span className="h-4 w-px" style={{ backgroundColor: '#c1c1c1' }} />
-      <span className="text-xs" style={{ color: '#6a6a6a' }}>
+      <span className="h-4 w-px" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} />
+      <span className="text-xs" style={{ color: '#ecf0ff' }}>
         {language === 'VN' ? 'English' : 'Tiếng Việt'}
       </span>
     </button>

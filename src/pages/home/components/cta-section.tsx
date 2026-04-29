@@ -8,7 +8,7 @@ export default function CtaSection() {
     <section
       className="py-20"
       style={{
-        background: 'linear-gradient(135deg, #ff385c 0%, #e00b41 50%, #bd1e59 100%)',
+        background: 'linear-gradient(135deg, #112240 0%, #0A192F 50%, #0d2847 100%)',
       }}
     >
       <div className="mx-auto max-w-3xl px-6 text-center">
@@ -25,7 +25,7 @@ export default function CtaSection() {
           <Link
             to="/sign-up"
             className="rounded-lg px-8 py-3.5 text-base font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-            style={{ backgroundColor: '#ffffff', color: '#ff385c' }}
+            style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
           >
             {t('home.cta.signUp')}
           </Link>

@@ -76,51 +76,51 @@ export default function BookingPage() {
         </div>
         <h1
           className="text-[28px] font-bold"
-          style={{ color: '#222222', letterSpacing: '-0.44px' }}
+          style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
         >
           {t('booking.success.title')}
         </h1>
-        <p className="mt-3 text-sm leading-relaxed" style={{ color: '#6a6a6a' }}>
+        <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
           {t('booking.success.description')}
         </p>
 
         <div
           className="mt-8 rounded-2xl p-6 text-left"
           style={{
-            backgroundColor: '#f7f7f7',
+            backgroundColor: '#112240',
           }}
         >
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span style={{ color: '#6a6a6a' }}>{t('booking.summary.tour')}</span>
-              <span className="font-medium" style={{ color: '#222222' }}>
+              <span style={{ color: '#ecf0ff' }}>{t('booking.summary.tour')}</span>
+              <span className="font-medium" style={{ color: '#ffffff' }}>
                 {MOCK_TOUR.title}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span style={{ color: '#6a6a6a' }}>{t('booking.summary.date')}</span>
-              <span className="font-medium" style={{ color: '#222222' }}>
+              <span style={{ color: '#ecf0ff' }}>{t('booking.summary.date')}</span>
+              <span className="font-medium" style={{ color: '#ffffff' }}>
                 {formatDate(selectedDate)}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span style={{ color: '#6a6a6a' }}>{t('booking.summary.time')}</span>
-              <span className="font-medium" style={{ color: '#222222' }}>
+              <span style={{ color: '#ecf0ff' }}>{t('booking.summary.time')}</span>
+              <span className="font-medium" style={{ color: '#ffffff' }}>
                 {selectedTime}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span style={{ color: '#6a6a6a' }}>{t('booking.summary.guests')}</span>
-              <span className="font-medium" style={{ color: '#222222' }}>
+              <span style={{ color: '#ecf0ff' }}>{t('booking.summary.guests')}</span>
+              <span className="font-medium" style={{ color: '#ffffff' }}>
                 {guests}
               </span>
             </div>
-            <div className="h-px" style={{ backgroundColor: '#e0e0e0' }} />
+            <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
             <div className="flex justify-between">
-              <span className="font-semibold" style={{ color: '#222222' }}>
+              <span className="font-semibold" style={{ color: '#ffffff' }}>
                 {t('booking.summary.total')}
               </span>
-              <span className="font-bold" style={{ color: '#ff385c' }}>
+              <span className="font-bold" style={{ color: '#00F0FF' }}>
                 {formatPrice(totalPrice)}
               </span>
             </div>
@@ -130,15 +130,15 @@ export default function BookingPage() {
         <div className="mt-8 flex flex-col gap-3">
           <Link
             to="/dashboard"
-            className="rounded-lg py-3 text-center text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98]"
-            style={{ backgroundColor: '#222222' }}
+            className="rounded-lg py-3 text-center text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98]"
+            style={{ backgroundColor: '#112240' }}
           >
             {t('booking.success.viewBookings')}
           </Link>
           <Link
             to="/"
             className="rounded-lg border py-3 text-center text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-            style={{ borderColor: '#c1c1c1', color: '#222222' }}
+            style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
           >
             {t('booking.success.backHome')}
           </Link>
@@ -160,10 +160,10 @@ export default function BookingPage() {
       />
 
       {/* Title */}
-      <h1 className="text-[28px] font-bold" style={{ color: '#222222', letterSpacing: '-0.44px' }}>
+      <h1 className="text-[28px] font-bold" style={{ color: '#ffffff', letterSpacing: '-0.44px' }}>
         {t('booking.title')}
       </h1>
-      <p className="mt-1 text-sm" style={{ color: '#6a6a6a' }}>
+      <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
         {MOCK_TOUR.title}
       </p>
 
@@ -179,15 +179,15 @@ export default function BookingPage() {
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold transition-all"
                 style={{
-                  backgroundColor: step >= num ? '#ff385c' : '#f2f2f2',
-                  color: step >= num ? '#ffffff' : '#6a6a6a',
+                  backgroundColor: step >= num ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+                  color: step >= num ? '#112240' : '#ecf0ff',
                 }}
               >
                 <Icon size={18} />
               </div>
               <span
                 className="text-xs font-medium"
-                style={{ color: step >= num ? '#222222' : '#6a6a6a' }}
+                style={{ color: step >= num ? '#ffffff' : '#ecf0ff' }}
               >
                 {label}
               </span>
@@ -195,7 +195,7 @@ export default function BookingPage() {
             {i < 2 && (
               <div
                 className="mb-5 h-0.5 flex-1"
-                style={{ backgroundColor: step > num ? '#ff385c' : '#f2f2f2' }}
+                style={{ backgroundColor: step > num ? '#00F0FF' : 'rgba(255,255,255,0.15)' }}
               />
             )}
           </div>
@@ -206,7 +206,7 @@ export default function BookingPage() {
       <div
         className="mt-8 rounded-2xl p-6 sm:p-8"
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: '#112240',
           boxShadow:
             'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
         }}
@@ -214,16 +214,16 @@ export default function BookingPage() {
         {/* Step 1: Date & Time */}
         {step === 1 && (
           <div>
-            <h2 className="text-lg font-semibold" style={{ color: '#222222' }}>
+            <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
               {t('booking.dateTime.title')}
             </h2>
-            <p className="mt-1 text-sm" style={{ color: '#6a6a6a' }}>
+            <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
               {t('booking.dateTime.subtitle')}
             </p>
 
             {/* Date Grid */}
             <div className="mt-6">
-              <label className="mb-3 block text-sm font-medium" style={{ color: '#222222' }}>
+              <label className="mb-3 block text-sm font-medium" style={{ color: '#ffffff' }}>
                 {t('booking.dateTime.selectDate')}
               </label>
               <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
@@ -233,9 +233,9 @@ export default function BookingPage() {
                     onClick={() => setSelectedDate(date)}
                     className="rounded-xl border p-3 text-center text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
                     style={{
-                      borderColor: selectedDate === date ? '#ff385c' : '#c1c1c1',
-                      backgroundColor: selectedDate === date ? '#fff0f3' : '#ffffff',
-                      color: selectedDate === date ? '#ff385c' : '#222222',
+                      borderColor: selectedDate === date ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+                      backgroundColor: selectedDate === date ? 'rgba(0,240,255,0.08)' : '#112240',
+                      color: selectedDate === date ? '#00F0FF' : '#ffffff',
                     }}
                   >
                     {formatDate(date)}
@@ -246,7 +246,7 @@ export default function BookingPage() {
 
             {/* Time Slots */}
             <div className="mt-6">
-              <label className="mb-3 block text-sm font-medium" style={{ color: '#222222' }}>
+              <label className="mb-3 block text-sm font-medium" style={{ color: '#ffffff' }}>
                 {t('booking.dateTime.selectTime')}
               </label>
               <div className="flex gap-3">
@@ -256,9 +256,9 @@ export default function BookingPage() {
                     onClick={() => setSelectedTime(time)}
                     className="flex-1 rounded-xl border py-3 text-center text-sm font-semibold transition-all hover:shadow-md active:scale-[0.98]"
                     style={{
-                      borderColor: selectedTime === time ? '#ff385c' : '#c1c1c1',
-                      backgroundColor: selectedTime === time ? '#fff0f3' : '#ffffff',
-                      color: selectedTime === time ? '#ff385c' : '#222222',
+                      borderColor: selectedTime === time ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+                      backgroundColor: selectedTime === time ? 'rgba(0,240,255,0.08)' : '#112240',
+                      color: selectedTime === time ? '#00F0FF' : '#ffffff',
                     }}
                   >
                     {time}
@@ -272,10 +272,10 @@ export default function BookingPage() {
         {/* Step 2: Guests */}
         {step === 2 && (
           <div>
-            <h2 className="text-lg font-semibold" style={{ color: '#222222' }}>
+            <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
               {t('booking.guests.title')}
             </h2>
-            <p className="mt-1 text-sm" style={{ color: '#6a6a6a' }}>
+            <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
               {t('booking.guests.subtitle', { max: MOCK_TOUR.maxGuests })}
             </p>
 
@@ -284,18 +284,18 @@ export default function BookingPage() {
                 onClick={() => setGuests((g) => Math.max(1, g - 1))}
                 disabled={guests <= 1}
                 className="flex h-12 w-12 items-center justify-center rounded-full border text-xl font-bold transition-all hover:shadow-md active:scale-[0.98] disabled:opacity-30"
-                style={{ borderColor: '#c1c1c1', color: '#222222' }}
+                style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
               >
                 −
               </button>
-              <span className="w-16 text-center text-3xl font-bold" style={{ color: '#222222' }}>
+              <span className="w-16 text-center text-3xl font-bold" style={{ color: '#ffffff' }}>
                 {guests}
               </span>
               <button
                 onClick={() => setGuests((g) => Math.min(MOCK_TOUR.maxGuests, g + 1))}
                 disabled={guests >= MOCK_TOUR.maxGuests}
                 className="flex h-12 w-12 items-center justify-center rounded-full border text-xl font-bold transition-all hover:shadow-md active:scale-[0.98] disabled:opacity-30"
-                style={{ borderColor: '#c1c1c1', color: '#222222' }}
+                style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
               >
                 +
               </button>
@@ -304,22 +304,22 @@ export default function BookingPage() {
             {/* Price Breakdown */}
             <div
               className="mx-auto mt-8 max-w-sm space-y-2 rounded-xl p-4"
-              style={{ backgroundColor: '#f7f7f7' }}
+              style={{ backgroundColor: '#112240' }}
             >
               <div className="flex justify-between text-sm">
-                <span style={{ color: '#6a6a6a' }}>
+                <span style={{ color: '#ecf0ff' }}>
                   {formatPrice(MOCK_TOUR.price)} × {guests} {t('booking.guests.people')}
                 </span>
-                <span className="font-medium" style={{ color: '#222222' }}>
+                <span className="font-medium" style={{ color: '#ffffff' }}>
                   {formatPrice(totalPrice)}
                 </span>
               </div>
-              <div className="h-px" style={{ backgroundColor: '#e0e0e0' }} />
+              <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
               <div className="flex justify-between">
-                <span className="font-semibold" style={{ color: '#222222' }}>
+                <span className="font-semibold" style={{ color: '#ffffff' }}>
                   {t('booking.summary.total')}
                 </span>
-                <span className="font-bold" style={{ color: '#ff385c' }}>
+                <span className="font-bold" style={{ color: '#00F0FF' }}>
                   {formatPrice(totalPrice)}
                 </span>
               </div>
@@ -330,10 +330,10 @@ export default function BookingPage() {
         {/* Step 3: Confirm */}
         {step === 3 && (
           <div>
-            <h2 className="text-lg font-semibold" style={{ color: '#222222' }}>
+            <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
               {t('booking.confirm.title')}
             </h2>
-            <p className="mt-1 text-sm" style={{ color: '#6a6a6a' }}>
+            <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
               {t('booking.confirm.subtitle')}
             </p>
 
@@ -341,50 +341,53 @@ export default function BookingPage() {
               {/* Tour Info */}
               <div
                 className="flex items-center gap-4 rounded-xl p-4"
-                style={{ backgroundColor: '#f7f7f7' }}
+                style={{ backgroundColor: '#112240' }}
               >
                 <div
                   className="flex h-12 w-12 items-center justify-center rounded-xl"
-                  style={{ background: 'linear-gradient(135deg, #ff385c, #e00b41)' }}
+                  style={{ background: 'linear-gradient(135deg, #00F0FF, #00d4e0)' }}
                 >
                   <Ship size={22} color="#ffffff" />
                 </div>
                 <div>
-                  <p className="font-semibold" style={{ color: '#222222' }}>
+                  <p className="font-semibold" style={{ color: '#ffffff' }}>
                     {MOCK_TOUR.title}
                   </p>
-                  <p className="text-sm" style={{ color: '#6a6a6a' }}>
+                  <p className="text-sm" style={{ color: '#ecf0ff' }}>
                     {MOCK_TOUR.duration}
                   </p>
                 </div>
               </div>
 
               {/* Details */}
-              <div className="space-y-3 rounded-xl border p-4" style={{ borderColor: '#f2f2f2' }}>
+              <div
+                className="space-y-3 rounded-xl border p-4"
+                style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+              >
                 <div className="flex justify-between text-sm">
-                  <span style={{ color: '#6a6a6a' }}>{t('booking.summary.date')}</span>
-                  <span className="font-medium" style={{ color: '#222222' }}>
+                  <span style={{ color: '#ecf0ff' }}>{t('booking.summary.date')}</span>
+                  <span className="font-medium" style={{ color: '#ffffff' }}>
                     {formatDate(selectedDate)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span style={{ color: '#6a6a6a' }}>{t('booking.summary.time')}</span>
-                  <span className="font-medium" style={{ color: '#222222' }}>
+                  <span style={{ color: '#ecf0ff' }}>{t('booking.summary.time')}</span>
+                  <span className="font-medium" style={{ color: '#ffffff' }}>
                     {selectedTime}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span style={{ color: '#6a6a6a' }}>{t('booking.summary.guests')}</span>
-                  <span className="font-medium" style={{ color: '#222222' }}>
+                  <span style={{ color: '#ecf0ff' }}>{t('booking.summary.guests')}</span>
+                  <span className="font-medium" style={{ color: '#ffffff' }}>
                     {guests} {t('booking.guests.people')}
                   </span>
                 </div>
-                <div className="h-px" style={{ backgroundColor: '#f2f2f2' }} />
+                <div className="h-px" style={{ backgroundColor: '#112240' }} />
                 <div className="flex justify-between">
-                  <span className="font-semibold" style={{ color: '#222222' }}>
+                  <span className="font-semibold" style={{ color: '#ffffff' }}>
                     {t('booking.summary.total')}
                   </span>
-                  <span className="text-lg font-bold" style={{ color: '#ff385c' }}>
+                  <span className="text-lg font-bold" style={{ color: '#00F0FF' }}>
                     {formatPrice(totalPrice)}
                   </span>
                 </div>
@@ -400,7 +403,7 @@ export default function BookingPage() {
           <button
             onClick={handleBack}
             className="flex-1 rounded-lg border py-3.5 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-            style={{ borderColor: '#c1c1c1', color: '#222222' }}
+            style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
           >
             {t('booking.back')}
           </button>
@@ -409,8 +412,8 @@ export default function BookingPage() {
           <button
             onClick={handleNext}
             disabled={!canProceed()}
-            className="flex-1 rounded-lg py-3.5 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40"
-            style={{ backgroundColor: '#ff385c' }}
+            className="flex-1 rounded-lg py-3.5 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40"
+            style={{ backgroundColor: '#00F0FF' }}
           >
             {t('booking.next')}
           </button>
@@ -418,8 +421,8 @@ export default function BookingPage() {
           <button
             onClick={handleConfirm}
             disabled={isSubmitting}
-            className="flex-1 rounded-lg py-3.5 text-sm font-medium text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
-            style={{ backgroundColor: '#ff385c' }}
+            className="flex-1 rounded-lg py-3.5 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+            style={{ backgroundColor: '#00F0FF' }}
           >
             {isSubmitting ? t('booking.confirm.processing') : t('booking.confirm.pay')}
           </button>
