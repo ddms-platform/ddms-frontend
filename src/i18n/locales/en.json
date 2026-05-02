@@ -224,8 +224,24 @@
     "back": "Back",
     "steps": {
       "date": "Date & Time",
+      "boat": "Select Boat",
+      "rooms": "View Rooms",
       "guests": "Guests",
       "confirm": "Confirm"
+    },
+    "boat": {
+      "title": "Select a boat",
+      "subtitle": "Choose a boat for your trip. Some boats may be unavailable.",
+      "available": "Available",
+      "unavailable": "Unavailable",
+      "capacity": "Capacity",
+      "types": {
+        "cruise": "Cruise",
+        "luxury": "Luxury",
+        "standard": "Standard",
+        "party": "Party",
+        "speedboat": "Speedboat"
+      }
     },
     "dateTime": {
       "title": "Select date and time",
@@ -244,11 +260,25 @@
       "pay": "Pay & Confirm",
       "processing": "Processing..."
     },
+    "rooms": {
+      "title": "View rooms & cabins",
+      "subtitle": "Rooms available on {{boat}}. You may select a room or skip.",
+      "selected": "Selected",
+      "viewDetail": "View details",
+      "amenitiesLabel": "Amenities",
+      "ratingOverview": "Rating overview",
+      "reviewsLabel": "Guest reviews",
+      "closeModal": "Close",
+      "selectRoom": "Select this room",
+      "unselectRoom": "Unselect"
+    },
     "summary": {
       "tour": "Tour",
       "date": "Date",
       "time": "Time",
       "guests": "Guests",
+      "boat": "Boat",
+      "room": "Room",
       "total": "Total"
     },
     "success": {
@@ -282,6 +312,70 @@
     "empty": {
       "title": "No tours found",
       "description": "Try changing your search or filters to find a matching trip.",
+      "reset": "Clear filters"
+    }
+  },
+  "boatDetail": {
+    "viewDetails": "View details",
+    "notFound": "Boat not found",
+    "notFoundDesc": "The boat you're looking for doesn't exist or has been removed.",
+    "backToTours": "Back to tours",
+    "about": "About this boat",
+    "amenities": "Amenities & Facilities",
+    "schedule": "Operating Schedule",
+    "captain": "Captain",
+    "safety": "Safety Certified",
+    "safetyDesc": "Meets all maritime safety standards",
+    "trips": "trips",
+    "totalTrips": "Total trips",
+    "rating": "Rating",
+    "bookWithBoat": "Book a tour with this boat",
+    "viewRooms": "View rooms & cabins",
+    "currentlyUnavailable": "Currently unavailable",
+    "specs": {
+      "capacity": "Capacity",
+      "speed": "Max Speed",
+      "length": "Length",
+      "yearBuilt": "Year Built"
+    }
+  },
+  "rooms": {
+    "title": "Rooms & Cabins",
+    "subtitle": "{{count}} rooms available on this boat",
+    "searchPlaceholder": "Search rooms...",
+    "available": "available",
+    "soldOut": "Sold out",
+    "reviews": "reviews",
+    "perNight": "night",
+    "adults": "adults",
+    "children": "children",
+    "showReviews": "Reviews",
+    "bookRoom": "Book this room",
+    "found": "{{count}} rooms match your search",
+    "roomsMatch": "rooms match",
+    "steps": {
+      "guests": "Guests",
+      "selectRoom": "Select Room",
+      "guestsTitle": "How many guests?",
+      "guestsSubtitle": "Tell us who's coming so we can find the right room.",
+      "selectRoomTitle": "Choose your room",
+      "selectRoomSubtitle": "Showing rooms for {{rooms}} room(s), {{adults}} adult(s), {{children}} child(ren)",
+      "viewRooms": "View available rooms"
+    },
+    "filter": {
+      "rooms": "Rooms",
+      "adults": "Adults",
+      "children": "Children",
+      "sortBy": "Sort by"
+    },
+    "sort": {
+      "rating": "Highest rated",
+      "priceAsc": "Price: low → high",
+      "priceDesc": "Price: high → low"
+    },
+    "empty": {
+      "title": "No rooms found",
+      "description": "Try adjusting your filters to find available rooms.",
       "reset": "Clear filters"
     }
   },

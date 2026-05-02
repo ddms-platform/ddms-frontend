@@ -15,6 +15,7 @@ const ProfilePage = lazy(() => import('@/pages/profile/index'));
 const TourDetailPage = lazy(() => import('@/pages/tours/tour-detail'));
 const TourListPage = lazy(() => import('@/pages/tours/tour-list'));
 const BookingPage = lazy(() => import('@/pages/tours/booking'));
+const BoatDetailPage = lazy(() => import('@/pages/boats/boat-detail'));
 
 function PageLoader() {
   return <LoadingSpinner fullScreen />;
@@ -78,6 +79,14 @@ function App() {
                 element={
                   <Suspense fallback={<PageLoader />}>
                     <BookingPage />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/boats/:boatId"
+                element={
+                  <Suspense fallback={<PageLoader />}>
+                    <BoatDetailPage />
                   </Suspense>
                 }
               />

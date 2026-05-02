@@ -224,8 +224,24 @@
     "back": "Quay lại",
     "steps": {
       "date": "Ngày giờ",
+      "boat": "Chọn thuyền",
+      "rooms": "Xem phòng",
       "guests": "Số khách",
       "confirm": "Xác nhận"
+    },
+    "boat": {
+      "title": "Chọn thuyền",
+      "subtitle": "Chọn thuyền cho chuyến đi của bạn. Một số thuyền có thể không khả dụng.",
+      "available": "Còn trống",
+      "unavailable": "Không khả dụng",
+      "capacity": "Sức chứa",
+      "types": {
+        "cruise": "Du thuyền",
+        "luxury": "Hạng sang",
+        "standard": "Tiêu chuẩn",
+        "party": "Tiệc",
+        "speedboat": "Ca nô"
+      }
     },
     "dateTime": {
       "title": "Chọn ngày và giờ",
@@ -244,11 +260,25 @@
       "pay": "Thanh toán & Xác nhận",
       "processing": "Đang xử lý..."
     },
+    "rooms": {
+      "title": "Xem phòng & cabin",
+      "subtitle": "Danh sách phòng trên thuyền {{boat}}. Bạn có thể chọn phòng hoặc bỏ qua.",
+      "selected": "Đã chọn",
+      "viewDetail": "Xem chi tiết",
+      "amenitiesLabel": "Tiện nghi",
+      "ratingOverview": "Tổng quan đánh giá",
+      "reviewsLabel": "Đánh giá từ khách hàng",
+      "closeModal": "Đóng",
+      "selectRoom": "Chọn phòng này",
+      "unselectRoom": "Bỏ chọn"
+    },
     "summary": {
       "tour": "Tour",
       "date": "Ngày",
       "time": "Giờ",
       "guests": "Số khách",
+      "boat": "Thuyền",
+      "room": "Phòng",
       "total": "Tổng cộng"
     },
     "success": {
@@ -282,6 +312,70 @@
     "empty": {
       "title": "Không tìm thấy tour nào",
       "description": "Thử thay đổi từ khoá hoặc bộ lọc để tìm chuyến phù hợp.",
+      "reset": "Xoá bộ lọc"
+    }
+  },
+  "boatDetail": {
+    "viewDetails": "Xem chi tiết",
+    "notFound": "Không tìm thấy thuyền",
+    "notFoundDesc": "Thuyền bạn đang tìm không tồn tại hoặc đã bị xóa.",
+    "backToTours": "Quay lại tour",
+    "about": "Giới thiệu về thuyền",
+    "amenities": "Tiện nghi & Cơ sở vật chất",
+    "schedule": "Lịch hoạt động",
+    "captain": "Thuyền trưởng",
+    "safety": "Chứng nhận an toàn",
+    "safetyDesc": "Đáp ứng tất cả tiêu chuẩn an toàn hàng hải",
+    "trips": "chuyến",
+    "totalTrips": "Tổng chuyến",
+    "rating": "Đánh giá",
+    "bookWithBoat": "Đặt tour với thuyền này",
+    "viewRooms": "Xem phòng & cabin",
+    "currentlyUnavailable": "Hiện không khả dụng",
+    "specs": {
+      "capacity": "Sức chứa",
+      "speed": "Tốc độ tối đa",
+      "length": "Chiều dài",
+      "yearBuilt": "Năm đóng"
+    }
+  },
+  "rooms": {
+    "title": "Phòng & Cabin",
+    "subtitle": "{{count}} phòng có sẵn trên thuyền",
+    "searchPlaceholder": "Tìm phòng...",
+    "available": "còn trống",
+    "soldOut": "Hết phòng",
+    "reviews": "đánh giá",
+    "perNight": "đêm",
+    "adults": "người lớn",
+    "children": "trẻ em",
+    "showReviews": "Đánh giá",
+    "bookRoom": "Đặt phòng này",
+    "found": "{{count}} phòng phù hợp",
+    "roomsMatch": "phòng phù hợp",
+    "steps": {
+      "guests": "Số khách",
+      "selectRoom": "Chọn phòng",
+      "guestsTitle": "Bao nhiêu khách?",
+      "guestsSubtitle": "Cho chúng tôi biết ai sẽ đi để tìm phòng phù hợp.",
+      "selectRoomTitle": "Chọn phòng của bạn",
+      "selectRoomSubtitle": "Hiển thị phòng cho {{rooms}} phòng, {{adults}} người lớn, {{children}} trẻ em",
+      "viewRooms": "Xem phòng phù hợp"
+    },
+    "filter": {
+      "rooms": "Số phòng",
+      "adults": "Người lớn",
+      "children": "Trẻ em",
+      "sortBy": "Sắp xếp"
+    },
+    "sort": {
+      "rating": "Đánh giá cao nhất",
+      "priceAsc": "Giá thấp → cao",
+      "priceDesc": "Giá cao → thấp"
+    },
+    "empty": {
+      "title": "Không tìm thấy phòng",
+      "description": "Thử thay đổi bộ lọc để tìm phòng phù hợp.",
       "reset": "Xoá bộ lọc"
     }
   },
