@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Heart } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface BookingSidebarProps {
   tourId: number;
@@ -49,21 +50,14 @@ export default function BookingSidebar({ tourId, price }: BookingSidebarProps) {
 
       <div className="my-5 h-px" style={{ backgroundColor: '#112240' }} />
 
-      <Link
-        to={`/tours/${tourId}/booking`}
-        className="block w-full rounded-lg py-3.5 text-center text-base font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98]"
-        style={{ backgroundColor: '#00F0FF' }}
-      >
-        {t('tour.booking.bookNow')}
-      </Link>
+      <Button variant="cyan" size="action-lg" className="w-full" asChild>
+        <Link to={`/tours/${tourId}/booking`}>{t('tour.booking.bookNow')}</Link>
+      </Button>
 
-      <button
-        className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border py-3 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-        style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
-      >
+      <Button variant="dark-outline" size="action" className="mt-3 w-full gap-2">
         <Heart size={16} />
         {t('tour.booking.addWishlist')}
-      </button>
+      </Button>
 
       <p className="mt-4 text-center text-xs" style={{ color: '#ecf0ff' }}>
         {t('tour.booking.noChargeYet')}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Mail, Phone, MapPin, Save, X, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ProfileField {
   key: string;
@@ -59,33 +60,32 @@ export default function ProfileInfo() {
           {t('profile.personalInfo')}
         </h3>
         {!isEditing ? (
-          <button
+          <Button
+            variant="dark-outline"
+            size="action"
+            className="gap-2"
             onClick={handleEdit}
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-            style={{ backgroundColor: '#112240', color: '#ffffff' }}
+            style={{ backgroundColor: '#112240' }}
           >
             <Pencil size={14} />
             {t('profile.edit')}
-          </button>
+          </Button>
         ) : (
           <div className="flex gap-2">
-            <button
-              onClick={handleCancel}
-              className="flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-              style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ecf0ff' }}
-            >
+            <Button variant="dark-outline" size="action" className="gap-1.5" onClick={handleCancel}>
               <X size={14} />
               {t('profile.cancel')}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="cyan"
+              size="action"
+              className="gap-1.5"
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
-              style={{ backgroundColor: '#222222' }}
             >
               <Save size={14} />
               {isSaving ? t('profile.saving') : t('profile.save')}
-            </button>
+            </Button>
           </div>
         )}
       </div>

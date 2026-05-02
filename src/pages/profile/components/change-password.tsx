@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function ChangePassword() {
   const { t } = useTranslation();
@@ -80,13 +81,14 @@ export default function ChangePassword() {
           </div>
         </div>
         {!isOpen && (
-          <button
+          <Button
+            variant="dark-outline"
+            size="action"
             onClick={() => setIsOpen(true)}
-            className="rounded-lg px-4 py-2 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-            style={{ backgroundColor: '#112240', color: '#ffffff' }}
+            style={{ backgroundColor: '#112240' }}
           >
             {t('profile.changePassword.change')}
-          </button>
+          </Button>
         )}
       </div>
 
@@ -135,26 +137,28 @@ export default function ChangePassword() {
           ))}
 
           <div className="flex gap-3 pt-2">
-            <button
+            <Button
+              variant="dark-outline"
+              size="action"
+              className="flex-1"
               type="button"
               onClick={() => {
                 setIsOpen(false);
                 setErrors({});
                 setValues({ current: '', new: '', confirm: '' });
               }}
-              className="flex-1 rounded-lg border py-3 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-              style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ecf0ff' }}
             >
               {t('profile.cancel')}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="cyan"
+              size="action"
+              className="flex-1"
               type="submit"
               disabled={isSaving}
-              className="flex-1 rounded-lg py-3 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
-              style={{ backgroundColor: '#222222' }}
             >
               {isSaving ? t('profile.saving') : t('profile.changePassword.update')}
-            </button>
+            </Button>
           </div>
         </form>
       )}

@@ -17,6 +17,7 @@ import {
 import Breadcrumb from '@/components/shared/breadcrumb';
 import { StatusBadge } from '@/components/badges';
 import ImageCarousel from '@/components/shared/image-carousel';
+import { Button } from '@/components/ui/button';
 
 interface BoatSpec {
   icon: React.ElementType;
@@ -270,14 +271,12 @@ export default function BoatDetailPage() {
         <p className="mt-2 text-sm" style={{ color: '#ecf0ff' }}>
           {t('boatDetail.notFoundDesc')}
         </p>
-        <Link
-          to="/tours"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-medium transition-all hover:opacity-90"
-          style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
-        >
-          <ArrowLeft size={16} />
-          {t('boatDetail.backToTours')}
-        </Link>
+        <Button variant="cyan" size="action" className="mt-6 gap-2" asChild>
+          <Link to="/tours">
+            <ArrowLeft size={16} />
+            {t('boatDetail.backToTours')}
+          </Link>
+        </Button>
       </div>
     );
   }
@@ -550,22 +549,18 @@ export default function BoatDetailPage() {
             {/* CTA */}
             {boat.available ? (
               <div className="space-y-3">
-                <Link
-                  to={`/boats/${boat.id}/rooms`}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg py-3.5 text-center text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-                  style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
-                >
-                  <DoorOpen size={16} />
-                  {t('boatDetail.viewRooms')}
-                </Link>
-                <Link
-                  to="/tours"
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border py-3.5 text-center text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-                  style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
-                >
-                  {t('boatDetail.bookWithBoat')}
-                  <ChevronRight size={16} />
-                </Link>
+                <Button variant="cyan" size="action-lg" className="w-full gap-2" asChild>
+                  <Link to={`/boats/${boat.id}/rooms`}>
+                    <DoorOpen size={16} />
+                    {t('boatDetail.viewRooms')}
+                  </Link>
+                </Button>
+                <Button variant="dark-outline" size="action-lg" className="w-full gap-2" asChild>
+                  <Link to="/tours">
+                    {t('boatDetail.bookWithBoat')}
+                    <ChevronRight size={16} />
+                  </Link>
+                </Button>
               </div>
             ) : (
               <div

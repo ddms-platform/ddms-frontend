@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Camera } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function ProfileAvatar() {
   const { t } = useTranslation();
@@ -69,13 +70,9 @@ export default function ProfileAvatar() {
         </p>
       </div>
 
-      <button
-        onClick={() => fileInputRef.current?.click()}
-        className="rounded-lg border px-4 py-2 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-        style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
-      >
+      <Button variant="dark-outline" size="action" onClick={() => fileInputRef.current?.click()}>
         {t('profile.uploadAvatar')}
-      </button>
+      </Button>
     </div>
   );
 }

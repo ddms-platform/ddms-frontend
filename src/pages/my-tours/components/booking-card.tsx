@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Calendar, Users, MapPin } from 'lucide-react';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 export type BookingStatus = 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
 
@@ -164,54 +165,39 @@ export default function BookingCard({ booking }: BookingCardProps) {
         </div>
         <div className="flex gap-2">
           {booking.status === 'UPCOMING' && (
-            <button
-              className="rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-gray-50 active:scale-95"
-              style={{ color: '#ffffff', border: '1px solid rgba(255,255,255,0.15)' }}
-            >
+            <Button variant="dark-outline" size="action">
               {t('dashboard.cancelBooking')}
-            </button>
+            </Button>
           )}
           {booking.status === 'COMPLETED' && (
-            <button
-              className="rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-gray-50 active:scale-95"
-              style={{ color: '#ffffff', border: '1px solid rgba(255,255,255,0.15)' }}
-            >
+            <Button variant="dark-outline" size="action">
               {t('dashboard.writeReview')}
-            </button>
+            </Button>
           )}
         </div>
       </div>
 
-      {/* Desktop Actions */}
       <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30">
         {booking.status === 'UPCOMING' && (
-          <button
-            className="w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-all hover:shadow-sm active:scale-[0.98]"
-            style={{
-              color: '#ffffff',
-              border: '1px solid rgba(255,255,255,0.15)',
-              backgroundColor: '#0A192F',
-            }}
-          >
+          <Button variant="dark-outline" size="action" className="w-full rounded-xl">
             {t('dashboard.cancelBooking')}
-          </button>
+          </Button>
         )}
         {booking.status === 'COMPLETED' && (
-          <button
-            className="w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-all hover:shadow-sm active:scale-[0.98]"
-            style={{ color: '#0A192F', backgroundColor: '#00F0FF' }}
-          >
+          <Button variant="cyan" size="action" className="w-full rounded-xl">
             {t('dashboard.writeReview')}
-          </button>
+          </Button>
         )}
         {(booking.status === 'CANCELLED' || !booking.status) && (
-          <Link
-            to={`/tours/${booking.tourId}`}
-            className="block w-full rounded-xl px-4 py-2.5 text-center text-sm font-semibold transition-all hover:bg-gray-50 active:scale-[0.98]"
-            style={{ color: '#ffffff', backgroundColor: '#112240' }}
+          <Button
+            variant="dark-outline"
+            size="action"
+            className="w-full rounded-xl"
+            style={{ backgroundColor: '#112240' }}
+            asChild
           >
-            {t('dashboard.viewDetails')}
-          </Link>
+            <Link to={`/tours/${booking.tourId}`}>{t('dashboard.viewDetails')}</Link>
+          </Button>
         )}
       </div>
     </div>

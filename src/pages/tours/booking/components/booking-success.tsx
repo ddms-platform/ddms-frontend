@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { MOCK_TOUR } from '../mock-data';
 import { formatDate } from './step-date-time';
 
@@ -74,20 +75,12 @@ export default function BookingSuccess({
       </div>
 
       <div className="mt-8 flex flex-col gap-3">
-        <Link
-          to="/dashboard"
-          className="rounded-lg py-3 text-center text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98]"
-          style={{ backgroundColor: '#112240' }}
-        >
-          {t('booking.success.viewBookings')}
-        </Link>
-        <Link
-          to="/"
-          className="rounded-lg border py-3 text-center text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-          style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
-        >
-          {t('booking.success.backHome')}
-        </Link>
+        <Button variant="cyan" size="action-lg" asChild>
+          <Link to="/dashboard">{t('booking.success.viewBookings')}</Link>
+        </Button>
+        <Button variant="dark-outline" size="action-lg" asChild>
+          <Link to="/">{t('booking.success.backHome')}</Link>
+        </Button>
       </div>
     </div>
   );

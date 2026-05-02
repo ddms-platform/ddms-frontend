@@ -19,6 +19,10 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
         link: 'text-primary underline-offset-4 hover:underline',
+        // ── Dark-theme variants (cyan accent) ──
+        cyan: 'rounded-lg border-none bg-[#00F0FF] text-[#0A192F] hover:opacity-90 active:scale-[0.98] disabled:opacity-40',
+        'dark-outline':
+          'rounded-lg border border-[rgba(255,255,255,0.15)] bg-transparent text-white hover:shadow-md active:scale-[0.98]',
       },
       size: {
         default:
@@ -30,6 +34,9 @@ const buttonVariants = cva(
         'icon-xs': "size-6 [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': 'size-8',
         'icon-lg': 'size-10',
+        // ── Dark-theme sizes ──
+        action: 'py-3 px-4 text-sm',
+        'action-lg': 'py-3.5 px-4 text-sm',
       },
     },
     defaultVariants: {

@@ -6,6 +6,7 @@ import TourInfo from './components/tour-info';
 import TourReviews from './components/tour-reviews';
 import BookingSidebar from './components/booking-sidebar';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 // Mock tour data
 const MOCK_TOUR = {
@@ -129,13 +130,9 @@ export default function TourDetailPage() {
             / {t('tour.booking.perPerson')}
           </span>
         </div>
-        <Link
-          to={`/tours/${tour.id}/booking`}
-          className="rounded-lg px-6 py-3 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98]"
-          style={{ backgroundColor: '#00F0FF' }}
-        >
-          {t('tour.booking.bookNow')}
-        </Link>
+        <Button variant="cyan" size="action" asChild>
+          <Link to={`/tours/${tour.id}/booking`}>{t('tour.booking.bookNow')}</Link>
+        </Button>
       </div>
     </div>
   );
