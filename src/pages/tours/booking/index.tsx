@@ -2,17 +2,18 @@ import { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Breadcrumb from '@/components/shared/breadcrumb';
+import { Button } from '@/components/ui/button';
 import type { Boat, RoomOption } from './types';
 import { MOCK_TOUR, BOAT_ROOMS, DEFAULT_BOAT_ROOMS } from './mock-data';
 
 // Step components
 import StepIndicator from './components/step-indicator';
 import StepDateTime from './components/step-date-time';
-import StepSelectBoat from './components/step-select-boat';
 import StepViewRooms from './components/step-view-rooms';
 import StepGuests from './components/step-guests';
 import StepConfirm from './components/step-confirm';
 import BookingSuccess from './components/booking-success';
+import StepSelectBoat from './components/step-select-boat';
 
 export default function BookingPage() {
   const { t } = useTranslation();
@@ -160,32 +161,30 @@ export default function BookingPage() {
       {/* Navigation Buttons */}
       <div className="mt-6 flex gap-3">
         {step > 1 && (
-          <button
-            onClick={handleBack}
-            className="flex-1 rounded-lg border py-3.5 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-            style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
-          >
+          <Button variant="dark-outline" size="action-lg" className="flex-1" onClick={handleBack}>
             {t('booking.back')}
-          </button>
+          </Button>
         )}
         {step < 5 ? (
-          <button
+          <Button
+            variant="cyan"
+            size="action-lg"
+            className="flex-1"
             onClick={handleNext}
             disabled={!canProceed()}
-            className="flex-1 rounded-lg py-3.5 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-40"
-            style={{ backgroundColor: '#00F0FF' }}
           >
             {t('booking.next')}
-          </button>
+          </Button>
         ) : (
-          <button
+          <Button
+            variant="cyan"
+            size="action-lg"
+            className="flex-1"
             onClick={handleConfirm}
             disabled={isSubmitting}
-            className="flex-1 rounded-lg py-3.5 text-sm font-medium text-[#0A192F] transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
-            style={{ backgroundColor: '#00F0FF' }}
           >
             {isSubmitting ? t('booking.confirm.processing') : t('booking.confirm.pay')}
-          </button>
+          </Button>
         )}
       </div>
     </div>

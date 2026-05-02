@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Check, Star, Info, X } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import ImageCarousel from '@/components/shared/image-carousel';
+import { Button } from '@/components/ui/button';
 import type { RoomOption } from '../types';
 
 // ── Room Detail Modal ──
@@ -260,26 +261,25 @@ function RoomDetailModal({
 
           {/* Actions */}
           <div className="mt-6 flex gap-3">
-            <button
-              onClick={onClose}
-              className="flex-1 rounded-lg border py-3 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-              style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
-            >
+            <Button variant="dark-outline" size="action" className="flex-1" onClick={onClose}>
               {t('booking.rooms.closeModal')}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="cyan"
+              size="action"
+              className="flex-1"
               onClick={() => {
                 onSelect(room);
                 onClose();
               }}
-              className="flex-1 rounded-lg py-3 text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-              style={{
-                backgroundColor: isSelected ? 'rgba(255,255,255,0.1)' : '#00F0FF',
-                color: isSelected ? '#ffffff' : '#0A192F',
-              }}
+              style={
+                isSelected
+                  ? { backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }
+                  : undefined
+              }
             >
               {isSelected ? t('booking.rooms.unselectRoom') : t('booking.rooms.selectRoom')}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

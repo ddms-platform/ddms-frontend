@@ -5,6 +5,7 @@ import { Search, MapPin, Star, Heart, SlidersHorizontal, X } from 'lucide-react'
 import Pagination from '@/components/shared/pagination';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
 import { usePagination } from '@/hooks/use-pagination';
+import { Button } from '@/components/ui/button';
 
 const ALL_TOURS = [
   {
@@ -516,16 +517,17 @@ export default function TourListPage() {
           <p className="mt-2 max-w-sm text-sm" style={{ color: '#ecf0ff' }}>
             {t('tourList.empty.description')}
           </p>
-          <button
+          <Button
+            variant="cyan"
+            size="action"
             onClick={() => {
               handleSearchChange('');
               handleCategoryChange('all');
             }}
-            className="mt-6 rounded-lg px-6 py-2.5 text-sm font-medium transition-all hover:opacity-90 active:scale-[0.98]"
-            style={{ backgroundColor: '#00F0FF', color: '#ffffff' }}
+            className="mt-6"
           >
             {t('tourList.empty.reset')}
-          </button>
+          </Button>
         </div>
       )}
     </div>

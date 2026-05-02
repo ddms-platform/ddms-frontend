@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TranslationToggle from '@/components/shared/translation-toggle';
+import { Button } from '@/components/ui/button';
 import logo from '@/assets/logo.png';
 
 interface NavLink {
@@ -58,13 +59,9 @@ export default function GlobalHeader({
         <div className="flex items-center gap-4">
           <TranslationToggle />
           {showAuth && (
-            <Link
-              to="/sign-in"
-              className="rounded-lg px-5 py-2.5 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
-              style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
-            >
-              {t('home.nav.signIn')}
-            </Link>
+            <Button variant="cyan" size="action" asChild>
+              <Link to="/sign-in">{t('home.nav.signIn')}</Link>
+            </Button>
           )}
         </div>
       </div>
