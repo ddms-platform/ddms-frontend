@@ -1,14 +1,12 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/use-auth';
 
-type ProtectedRouteProps = {
-  isAuthenticated: boolean;
+interface ProtectedRouteProps {
   redirectPath?: string;
-};
+}
 
-export default function ProtectedRoute({
-  isAuthenticated,
-  redirectPath = '/sign-in',
-}: ProtectedRouteProps) {
+export default function ProtectedRoute({ redirectPath = '/sign-in' }: ProtectedRouteProps) {
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
   if (!isAuthenticated) {

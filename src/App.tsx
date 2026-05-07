@@ -5,6 +5,7 @@ import { ErrorBoundary } from './components/shared/error-boundary';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import { lazy, Suspense } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
 
 const SignInPage = lazy(() => import('@/pages/auth/sign-in'));
@@ -22,101 +23,102 @@ function PageLoader() {
 }
 
 function App() {
-  const isAuthenticated = !!localStorage.getItem('token');
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <LanguageProvider>
-          <Routes>
-            {/* Auth Routes - own layout, no header/footer */}
-            <Route element={<AuthLayout />}>
-              <Route
-                path="/sign-in"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <SignInPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/sign-up"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <SignUpPage />
-                  </Suspense>
-                }
-              />
-            </Route>
+        <AuthProvider>
+          <LanguageProvider>
+            <Routes>
+              {/* Auth Routes - own layout, no header/footer */}
+              <Route element={<AuthLayout />}>
+                <Route
+                  path="/sign-in"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <SignInPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/sign-up"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <SignUpPage />
+                    </Suspense>
+                  }
+                />
+              </Route>
 
-            {/* Public pages - with GlobalHeader + GlobalFooter */}
-            <Route element={<MainLayout />}>
-              <Route
-                path="/"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <HomePage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/tours"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <TourListPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/tours/:id"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <TourDetailPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/tours/:id/booking"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <BookingPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/boats/:boatId"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <BoatDetailPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <ProfilePage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="/my-tours"
-                element={
-                  <Suspense fallback={<PageLoader />}>
-                    <MyToursPage />
-                  </Suspense>
-                }
-              />
-            </Route>
+              {/* Public pages - with GlobalHeader + GlobalFooter */}
+              <Route element={<MainLayout />}>
+                <Route
+                  path="/"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <HomePage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/tours"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <TourListPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/tours/:id"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <TourDetailPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/tours/:id/booking"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <BookingPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/boats/:boatId"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <BoatDetailPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <ProfilePage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="/my-tours"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <MyToursPage />
+                    </Suspense>
+                  }
+                />
+              </Route>
 
-            {/* Protected pages - with GlobalHeader (no auth btn) + GlobalFooter */}
-            <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
-              <Route element={<MainLayout showAuth={false} />}></Route>
-            </Route>
+              {/* Protected pages - with GlobalHeader + GlobalFooter */}
+              <Route element={<ProtectedRoute />}>
+                <Route element={<MainLayout />}></Route>
+              </Route>
 
-            {/* Catch-all */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </LanguageProvider>
+              {/* Catch-all */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </LanguageProvider>
+        </AuthProvider>
       </BrowserRouter>
     </ErrorBoundary>
   );

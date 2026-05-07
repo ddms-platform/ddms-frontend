@@ -382,5 +382,12 @@
   "nav": {
     "home": "Trang chủ",
     "tours": "Tours"
+  },
+  "header": {
+    "user": {
+      "profile": "Hồ sơ cá nhân",
+      "myTours": "Tour của tôi",
+      "logout": "Đăng xuất"
+    }
   }
 }

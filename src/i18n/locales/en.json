@@ -382,5 +382,12 @@
   "nav": {
     "home": "Home",
     "tours": "Tours"
+  },
+  "header": {
+    "user": {
+      "profile": "My Profile",
+      "myTours": "My Tours",
+      "logout": "Sign out"
+    }
   }
 }

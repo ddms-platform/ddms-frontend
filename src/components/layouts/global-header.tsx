@@ -1,7 +1,10 @@
-import { Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { User, LogOut, MapPin, ChevronDown } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/use-auth';
 import logo from '@/assets/logo.png';
 
 interface NavLink {
@@ -12,18 +15,45 @@ interface NavLink {
 interface GlobalHeaderProps {
   /** Navigation links (anchors or routes) */
   navLinks?: NavLink[];
-  /** Show sign-in button (default: true) */
-  showAuth?: boolean;
-  /** Make header transparent (for hero overlay) */
   transparent?: boolean;
 }
 
-export default function GlobalHeader({
-  navLinks,
-  showAuth = true,
-  transparent = false,
-}: GlobalHeaderProps) {
+export default function GlobalHeader({ navLinks, transparent = false }: GlobalHeaderProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [dropdownOpen]);
+
+  const handleLogout = () => {
+    logout();
+    setDropdownOpen(false);
+    navigate('/sign-in');
+  };
+
+  // Avatar initials from user name
+  const initials = user?.name
+    ? user.name
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : '?';
 
   return (
     <header
@@ -58,13 +88,130 @@ export default function GlobalHeader({
         {/* Right Actions */}
         <div className="flex items-center gap-4">
           <TranslationToggle />
-          {showAuth && (
+
+          {isAuthenticated ? (
+            /* ── Logged-in: Avatar + Dropdown ── */
+            <div className="relative" ref={dropdownRef}>
+              <button
+                id="user-menu-button"
+                onClick={() => setDropdownOpen((prev) => !prev)}
+                className="flex items-center gap-2.5 rounded-full py-1.5 pl-1.5 pr-3 transition-all hover:bg-white/5 active:scale-[0.97]"
+                style={{ border: '1px solid rgba(255,255,255,0.12)' }}
+                aria-expanded={dropdownOpen}
+                aria-haspopup="true"
+              >
+                {/* Avatar */}
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
+                    style={{
+                      background: 'linear-gradient(135deg, #00F0FF, #00d4e0)',
+                      color: '#0A192F',
+                    }}
+                  >
+                    {initials}
+                  </div>
+                )}
+
+                {/* Name + chevron (hidden on mobile) */}
+                <span className="hidden text-sm font-medium sm:inline" style={{ color: '#ffffff' }}>
+                  {user?.name || 'User'}
+                </span>
+                <ChevronDown
+                  size={14}
+                  className="transition-transform duration-200"
+                  style={{
+                    color: '#ecf0ff',
+                    transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                  }}
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              {dropdownOpen && (
+                <div
+                  className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl py-1 shadow-xl"
+                  style={{
+                    backgroundColor: '#112240',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    animation: 'fadeInDown 0.15s ease-out',
+                  }}
+                  role="menu"
+                >
+                  {/* User info */}
+                  <div
+                    className="border-b px-4 py-3"
+                    style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+                  >
+                    <p className="text-sm font-semibold" style={{ color: '#ffffff' }}>
+                      {user?.name || 'User'}
+                    </p>
+                    <p className="mt-0.5 truncate text-xs" style={{ color: '#ecf0ff' }}>
+                      {user?.email || ''}
+                    </p>
+                  </div>
+
+                  {/* Menu items */}
+                  <Link
+                    to="/profile"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
+                    style={{ color: '#ecf0ff' }}
+                    role="menuitem"
+                  >
+                    <User size={16} />
+                    {t('header.user.profile')}
+                  </Link>
+                  <Link
+                    to="/my-tours"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
+                    style={{ color: '#ecf0ff' }}
+                    role="menuitem"
+                  >
+                    <MapPin size={16} />
+                    {t('header.user.myTours')}
+                  </Link>
+
+                  <div
+                    className="my-1 h-px"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+                  />
+
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
+                    style={{ color: '#EF4444' }}
+                    role="menuitem"
+                  >
+                    <LogOut size={16} />
+                    {t('header.user.logout')}
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* ── Not logged-in: Sign In button ── */
             <Button variant="cyan" size="action" asChild>
               <Link to="/sign-in">{t('home.nav.signIn')}</Link>
             </Button>
           )}
         </div>
       </div>
+
+      {/* Dropdown animation keyframes */}
+      <style>{`
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </header>
   );
 }
