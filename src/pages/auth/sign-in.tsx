@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useFormValidation, rules } from '@/hooks/use-form-validation';
 import FormField from '@/components/shared/form-field';
+import { useAuth } from '@/hooks/use-auth';
 import logo from '@/assets/logo.png';
 
 export default function SignInPage() {
@@ -14,7 +15,8 @@ export default function SignInPage() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/dashboard';
+  const { login } = useAuth();
+  const from = location.state?.from?.pathname || '/';
 
   const { getFieldProps, validateAll } = useFormValidation(
     { email: '', password: '' },
@@ -30,11 +32,16 @@ export default function SignInPage() {
     if (!validateAll()) return;
 
     setIsLoading(true);
-    // TODO: Implement sign-in logic
+    // TODO: Replace with real API call
     setTimeout(() => {
+      // Mock login — save token + user info via AuthContext
+      login('mock-jwt-token', {
+        name: 'Nguyễn Văn A',
+        email: emailProps.value,
+      });
       setIsLoading(false);
       navigate(from, { replace: true });
-    }, 2000);
+    }, 1500);
   };
 
   const emailProps = getFieldProps('email');

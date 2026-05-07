@@ -3,12 +3,7 @@ import { useTranslation } from 'react-i18next';
 import GlobalHeader from '@/components/layouts/global-header';
 import GlobalFooter from '@/components/layouts/global-footer';
 
-interface MainLayoutProps {
-  /** Show auth button in header (default: true) */
-  showAuth?: boolean;
-}
-
-export default function MainLayout({ showAuth = true }: MainLayoutProps) {
+export default function MainLayout() {
   const { t } = useTranslation();
 
   const location = useLocation();
@@ -24,7 +19,7 @@ export default function MainLayout({ showAuth = true }: MainLayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col" style={{ backgroundColor: '#0A192F' }}>
-      <GlobalHeader navLinks={navLinks} showAuth={showAuth} />
+      <GlobalHeader navLinks={navLinks} />
       <main className="flex-1">
         <Outlet />
       </main>
