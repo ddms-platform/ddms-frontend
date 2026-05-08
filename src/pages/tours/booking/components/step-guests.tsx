@@ -48,9 +48,27 @@ export default function StepGuests({
         >
           −
         </button>
-        <span className="w-16 text-center text-3xl font-bold" style={{ color: '#ffffff' }}>
-          {guests}
-        </span>
+        <input
+          type="number"
+          inputMode="numeric"
+          min={1}
+          max={maxGuests}
+          value={guests}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === '') return onSetGuests(1);
+            const num = parseInt(val, 10);
+            if (!isNaN(num)) onSetGuests(Math.max(1, Math.min(maxGuests, num)));
+          }}
+          onBlur={() => onSetGuests(Math.max(1, Math.min(maxGuests, guests)))}
+          className="w-20 bg-transparent text-center text-3xl font-bold outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          style={{
+            color: '#ffffff',
+            borderBottom: '2px solid rgba(0,240,255,0.4)',
+            caretColor: '#00F0FF',
+          }}
+          aria-label="Number of guests"
+        />
         <button
           onClick={() => onSetGuests(Math.min(maxGuests, guests + 1))}
           disabled={guests >= maxGuests}
