@@ -1,4 +1,4 @@
-import type { User } from '@/data/user';
+import type { User, UserRole } from '@/data/user';
 import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 export interface AuthContextType {
@@ -10,11 +10,32 @@ export interface AuthContextType {
 
 const TOKEN_KEY = 'token';
 const USER_KEY = 'user';
+const USER_ROLES: UserRole[] = ['user', 'owner', 'admin'];
+
+function isUserRole(role: unknown): role is UserRole {
+  return typeof role === 'string' && USER_ROLES.includes(role as UserRole);
+}
+
+function normalizeUser(rawUser: unknown): User | null {
+  if (!rawUser || typeof rawUser !== 'object') return null;
+
+  const user = rawUser as Partial<User>;
+  if (typeof user.name !== 'string' || typeof user.email !== 'string') return null;
+
+  const roles = Array.isArray(user.roles) ? user.roles.filter(isUserRole) : [];
+
+  return {
+    name: user.name,
+    email: user.email,
+    roles: roles.length > 0 ? roles : ['user'],
+    ...(typeof user.avatar === 'string' ? { avatar: user.avatar } : {}),
+  };
+}
 
 function readStoredUser(): User | null {
   try {
     const raw = localStorage.getItem(USER_KEY);
-    return raw ? (JSON.parse(raw) as User) : null;
+    return raw ? normalizeUser(JSON.parse(raw)) : null;
   } catch {
     return null;
   }
@@ -36,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (!e.newValue) setUser(null);
       }
       if (e.key === USER_KEY) {
-        setUser(e.newValue ? (JSON.parse(e.newValue) as User) : null);
+        setUser(e.newValue ? normalizeUser(JSON.parse(e.newValue)) : null);
       }
     };
     window.addEventListener('storage', handleStorage);
@@ -44,10 +65,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback((newToken: string, newUser: User) => {
+    const normalizedUser = normalizeUser(newUser);
+    if (!normalizedUser) return;
+
     localStorage.setItem(TOKEN_KEY, newToken);
-    localStorage.setItem(USER_KEY, JSON.stringify(newUser));
+    localStorage.setItem(USER_KEY, JSON.stringify(normalizedUser));
     setToken(newToken);
-    setUser(newUser);
+    setUser(normalizedUser);
   }, []);
 
   const logout = useCallback(() => {

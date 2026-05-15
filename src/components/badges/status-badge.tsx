@@ -1,6 +1,21 @@
-import { Check, X, type LucideIcon } from 'lucide-react';
+import { AlertTriangle, Check, Clock3, Eye, Ship, Wrench, X, type LucideIcon } from 'lucide-react';
 
-type BadgeVariant = 'available' | 'unavailable' | 'success' | 'error' | 'warning' | 'info';
+export type BadgeVariant =
+  | 'available'
+  | 'unavailable'
+  | 'success'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'ownerBoarding'
+  | 'ownerScheduled'
+  | 'ownerAttention'
+  | 'ownerPending'
+  | 'ownerPaid'
+  | 'ownerReview'
+  | 'ownerRunning'
+  | 'ownerIdle'
+  | 'ownerMaintenance';
 
 const VARIANT_CONFIG: Record<BadgeVariant, { bg: string; color: string; icon: LucideIcon }> = {
   available: {
@@ -32,6 +47,51 @@ const VARIANT_CONFIG: Record<BadgeVariant, { bg: string; color: string; icon: Lu
     bg: 'rgba(59, 130, 246, 0.9)',
     color: '#ffffff',
     icon: Check,
+  },
+  ownerBoarding: {
+    bg: 'rgba(0, 240, 255, 0.1)',
+    color: '#00F0FF',
+    icon: Clock3,
+  },
+  ownerScheduled: {
+    bg: 'rgba(16, 185, 129, 0.14)',
+    color: '#10B981',
+    icon: Check,
+  },
+  ownerAttention: {
+    bg: 'rgba(245, 158, 11, 0.14)',
+    color: '#F59E0B',
+    icon: AlertTriangle,
+  },
+  ownerPending: {
+    bg: 'rgba(245, 158, 11, 0.14)',
+    color: '#F59E0B',
+    icon: Clock3,
+  },
+  ownerPaid: {
+    bg: 'rgba(16, 185, 129, 0.14)',
+    color: '#10B981',
+    icon: Check,
+  },
+  ownerReview: {
+    bg: 'rgba(0, 240, 255, 0.1)',
+    color: '#00F0FF',
+    icon: Eye,
+  },
+  ownerRunning: {
+    bg: 'rgba(0, 240, 255, 0.1)',
+    color: '#00F0FF',
+    icon: Ship,
+  },
+  ownerIdle: {
+    bg: 'rgba(16, 185, 129, 0.14)',
+    color: '#10B981',
+    icon: Check,
+  },
+  ownerMaintenance: {
+    bg: 'rgba(245, 158, 11, 0.14)',
+    color: '#F59E0B',
+    icon: Wrench,
   },
 };
 

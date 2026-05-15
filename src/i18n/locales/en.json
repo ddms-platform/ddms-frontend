@@ -80,6 +80,153 @@
     "minLength": "Must be at least {{count}} characters",
     "termsRequired": "You must agree to the terms and conditions"
   },
+  "becomeOwner": {
+    "navLink": "Become an owner",
+    "hero": {
+      "eyebrow": "DDMS for boat owners",
+      "title": "Grow your waterway tour business",
+      "description": "Bring your boats, tours, schedules, and guest bookings into one operating flow built for Da Nang waterway tourism.",
+      "primaryCta": "Register as an owner",
+      "secondaryCta": "Explore tours"
+    },
+    "benefits": {
+      "title": "Run daily operations from one place",
+      "subtitle": "DDMS gives boat owners a focused workspace for tour listings, departure schedules, and customer demand.",
+      "items": {
+        "manageTours": {
+          "title": "Manage tours",
+          "description": "Create tour listings, update pricing, organize photos, and keep public information ready for booking."
+        },
+        "scheduleBoats": {
+          "title": "Schedule boats",
+          "description": "Attach boats to upcoming departures, track availability, and avoid overlapping operating slots."
+        },
+        "receiveBookings": {
+          "title": "Receive bookings",
+          "description": "View guest reservations, booking status, guest counts, add-ons, and trip notes in one queue."
+        }
+      }
+    },
+    "process": {
+      "title": "A clear path to publish your first tour",
+      "subtitle": "The owner flow is designed around verification first, then reliable tour operations.",
+      "steps": {
+        "profile": {
+          "title": "Create your owner profile",
+          "description": "Add your business name, operating address, and contact information for guest support."
+        },
+        "verify": {
+          "title": "Verify your license",
+          "description": "Submit license details so the platform can review your eligibility before opening bookings."
+        },
+        "publish": {
+          "title": "Publish tours",
+          "description": "Add boats, create tours, set departure schedules, and start receiving reservations."
+        }
+      }
+    },
+    "requirements": {
+      "title": "What you need to prepare",
+      "subtitle": "These details help the platform verify your business and keep trip information accurate for travelers.",
+      "cta": "Start registration",
+      "items": {
+        "license": {
+          "title": "Business or operating license",
+          "description": "Prepare your license number and a clear image of the document for review."
+        },
+        "boatInfo": {
+          "title": "Boat information",
+          "description": "Have boat names, types, passenger capacity, images, cabins, and onboard services ready."
+        },
+        "contact": {
+          "title": "Operating contact",
+          "description": "Provide a business phone number and support address for booking coordination."
+        }
+      }
+    }
+  },
+  "ownerDashboard": {
+    "eyebrow": "Owner workspace",
+    "title": "Today’s operating dashboard",
+    "description": "Track departures, boat readiness, booking queues, and issues that need attention before guests arrive at the dock.",
+    "actions": {
+      "createTour": "Create tour",
+      "viewSchedule": "View schedule"
+    },
+    "metrics": {
+      "todayBookings": {
+        "label": "Bookings today",
+        "helper": "Confirmed and pending reservations for today’s trips."
+      },
+      "todayRevenue": {
+        "label": "Revenue today",
+        "helper": "Paid bookings from schedules departing today."
+      },
+      "departures": {
+        "label": "Departures",
+        "helper": "Scheduled, boarding, and ongoing trips."
+      },
+      "readyBoats": {
+        "label": "Ready boats",
+        "helper": "Boats available outside maintenance windows."
+      }
+    },
+    "departures": {
+      "title": "Today’s departures",
+      "subtitle": "Monitor capacity, dock assignment, and trip status.",
+      "guests": "guests booked"
+    },
+    "fleet": {
+      "title": "Fleet status",
+      "subtitle": "Quick view of boats and upcoming assignments.",
+      "next": "Next"
+    },
+    "bookings": {
+      "title": "Booking queue",
+      "subtitle": "Recent reservations that need owner visibility.",
+      "guests": "guests"
+    },
+    "readiness": {
+      "title": "Operational readiness",
+      "subtitle": "Items to check before opening more capacity.",
+      "review": "Review schedules",
+      "items": {
+        "profile": {
+          "title": "Owner profile verified",
+          "description": "Business information and operating contact are ready."
+        },
+        "boats": {
+          "title": "Core fleet configured",
+          "description": "Boat capacity, images, cabins, and services are available."
+        },
+        "maintenance": {
+          "title": "Maintenance windows pending",
+          "description": "One boat still needs a maintenance window confirmed."
+        },
+        "capacity": {
+          "title": "Capacity review needed",
+          "description": "Weekend trips are close to full and may need another boat."
+        }
+      }
+    },
+    "status": {
+      "schedule": {
+        "boarding": "Boarding",
+        "scheduled": "Scheduled",
+        "attention": "Needs check"
+      },
+      "booking": {
+        "pending": "Pending payment",
+        "paid": "Paid",
+        "review": "Review"
+      },
+      "boat": {
+        "running": "Running",
+        "idle": "Idle",
+        "maintenance": "Maintenance"
+      }
+    }
+  },
   "home": {
     "nav": {
       "tours": "Tours",
@@ -385,6 +532,7 @@
   },
   "header": {
     "user": {
+      "ownerDashboard": "Owner Dashboard",
       "profile": "My Profile",
       "myTours": "My Tours",
       "logout": "Sign out"
