@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { User, LogOut, MapPin, ChevronDown } from 'lucide-react';
+import { User, LogOut, MapPin, ChevronDown, LayoutDashboard } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
@@ -54,6 +54,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
         .slice(0, 2)
         .toUpperCase()
     : '?';
+  const isOwner = user?.roles.includes('owner') ?? false;
 
   return (
     <header
@@ -88,6 +89,16 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
         {/* Right Actions */}
         <div className="flex items-center gap-4">
           <TranslationToggle />
+
+          {!isOwner && (
+            <Link
+              to="/become-owner"
+              className="hidden items-center rounded-full px-3 py-2 text-sm font-semibold transition-colors hover:bg-white/5 hover:text-[#00F0FF] sm:inline-flex"
+              style={{ color: '#ecf0ff' }}
+            >
+              {t('becomeOwner.navLink')}
+            </Link>
+          )}
 
           {isAuthenticated ? (
             /* ── Logged-in: Avatar + Dropdown ── */
@@ -158,6 +169,18 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                   </div>
 
                   {/* Menu items */}
+                  {isOwner && (
+                    <Link
+                      to="/owner/dashboard"
+                      onClick={() => setDropdownOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
+                      style={{ color: '#ecf0ff' }}
+                      role="menuitem"
+                    >
+                      <LayoutDashboard size={16} />
+                      {t('header.user.ownerDashboard')}
+                    </Link>
+                  )}
                   <Link
                     to="/profile"
                     onClick={() => setDropdownOpen(false)}

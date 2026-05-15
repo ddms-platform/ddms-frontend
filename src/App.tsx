@@ -12,6 +12,8 @@ const SignInPage = lazy(() => import('@/pages/auth/sign-in'));
 const SignUpPage = lazy(() => import('@/pages/auth/sign-up'));
 const MyToursPage = lazy(() => import('@/pages/my-tours/index'));
 const HomePage = lazy(() => import('@/pages/home/index'));
+const BecomeOwnerPage = lazy(() => import('@/pages/become-owner/index'));
+const OwnerDashboardPage = lazy(() => import('@/pages/owner/dashboard/index'));
 const ProfilePage = lazy(() => import('@/pages/profile/index'));
 const TourDetailPage = lazy(() => import('@/pages/tours/tour-detail'));
 const TourListPage = lazy(() => import('@/pages/tours/tour-list'));
@@ -92,6 +94,14 @@ function App() {
                   }
                 />
                 <Route
+                  path="/become-owner"
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <BecomeOwnerPage />
+                    </Suspense>
+                  }
+                />
+                <Route
                   path="/profile"
                   element={
                     <Suspense fallback={<PageLoader />}>
@@ -109,9 +119,18 @@ function App() {
                 />
               </Route>
 
-              {/* Protected pages - with GlobalHeader + GlobalFooter */}
-              <Route element={<ProtectedRoute />}>
-                <Route element={<MainLayout />}></Route>
+              {/* Owner pages - with GlobalHeader + GlobalFooter */}
+              <Route element={<ProtectedRoute roles={['owner']} />}>
+                <Route element={<MainLayout />}>
+                  <Route
+                    path="/owner/dashboard"
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <OwnerDashboardPage />
+                      </Suspense>
+                    }
+                  />
+                </Route>
               </Route>
 
               {/* Catch-all */}

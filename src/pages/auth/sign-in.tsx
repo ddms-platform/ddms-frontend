@@ -39,6 +39,7 @@ export default function SignInPage() {
       login('mock-jwt-token', {
         name: 'Nguyễn Văn A',
         email: emailProps.value,
+        roles: ['owner'],
       });
       setIsLoading(false);
       navigate(from, { replace: true });

@@ -80,6 +80,153 @@
     "minLength": "Phải có ít nhất {{count}} ký tự",
     "termsRequired": "Bạn phải đồng ý với các điều khoản và điều kiện"
   },
+  "becomeOwner": {
+    "navLink": "Trở thành chủ thuyền",
+    "hero": {
+      "eyebrow": "DDMS cho chủ thuyền",
+      "title": "Phát triển hoạt động tour đường thủy",
+      "description": "Quản lý tàu, tour, lịch khởi hành và booking của khách trong một quy trình vận hành dành cho du lịch đường thủy Đà Nẵng.",
+      "primaryCta": "Đăng ký làm chủ thuyền",
+      "secondaryCta": "Khám phá tour"
+    },
+    "benefits": {
+      "title": "Vận hành hằng ngày ở một nơi",
+      "subtitle": "DDMS mang đến không gian làm việc tập trung cho chủ thuyền: đăng tour, xếp lịch tàu và theo dõi nhu cầu đặt chỗ.",
+      "items": {
+        "manageTours": {
+          "title": "Quản lý tour",
+          "description": "Tạo tour, cập nhật giá, sắp xếp hình ảnh và giữ thông tin hiển thị luôn sẵn sàng để khách đặt."
+        },
+        "scheduleBoats": {
+          "title": "Xếp lịch tàu",
+          "description": "Gắn tàu vào lịch khởi hành, theo dõi tình trạng sẵn sàng và tránh trùng ca vận hành."
+        },
+        "receiveBookings": {
+          "title": "Nhận booking",
+          "description": "Xem đặt chỗ của khách, trạng thái booking, số khách, dịch vụ đi kèm và ghi chú chuyến đi."
+        }
+      }
+    },
+    "process": {
+      "title": "Quy trình rõ ràng để mở bán tour đầu tiên",
+      "subtitle": "Luồng chủ thuyền ưu tiên xác minh trước, sau đó mới mở các công cụ vận hành tour.",
+      "steps": {
+        "profile": {
+          "title": "Tạo hồ sơ chủ thuyền",
+          "description": "Thêm tên doanh nghiệp, địa chỉ vận hành và thông tin liên hệ để hỗ trợ khách."
+        },
+        "verify": {
+          "title": "Xác minh giấy phép",
+          "description": "Gửi thông tin giấy phép để nền tảng kiểm tra điều kiện trước khi mở booking."
+        },
+        "publish": {
+          "title": "Đăng tour",
+          "description": "Thêm tàu, tạo tour, thiết lập lịch khởi hành và bắt đầu nhận đặt chỗ."
+        }
+      }
+    },
+    "requirements": {
+      "title": "Thông tin cần chuẩn bị",
+      "subtitle": "Các thông tin này giúp nền tảng xác minh hoạt động và hiển thị chuyến đi chính xác cho du khách.",
+      "cta": "Bắt đầu đăng ký",
+      "items": {
+        "license": {
+          "title": "Giấy phép kinh doanh hoặc vận hành",
+          "description": "Chuẩn bị số giấy phép và ảnh giấy tờ rõ ràng để gửi xét duyệt."
+        },
+        "boatInfo": {
+          "title": "Thông tin tàu",
+          "description": "Chuẩn bị tên tàu, loại tàu, sức chứa, hình ảnh, cabin và dịch vụ trên tàu."
+        },
+        "contact": {
+          "title": "Liên hệ vận hành",
+          "description": "Cung cấp số điện thoại kinh doanh và địa chỉ hỗ trợ để phối hợp booking."
+        }
+      }
+    }
+  },
+  "ownerDashboard": {
+    "eyebrow": "Không gian chủ thuyền",
+    "title": "Dashboard vận hành hôm nay",
+    "description": "Theo dõi lịch khởi hành, tình trạng tàu, booking cần xử lý và các vấn đề cần kiểm tra trước khi khách đến bến.",
+    "actions": {
+      "createTour": "Tạo tour",
+      "viewSchedule": "Xem lịch chạy"
+    },
+    "metrics": {
+      "todayBookings": {
+        "label": "Booking hôm nay",
+        "helper": "Bao gồm đặt chỗ đã xác nhận và đang chờ cho chuyến hôm nay."
+      },
+      "todayRevenue": {
+        "label": "Doanh thu hôm nay",
+        "helper": "Tổng thanh toán từ các lịch khởi hành trong ngày."
+      },
+      "departures": {
+        "label": "Lịch khởi hành",
+        "helper": "Các chuyến đã xếp lịch, đang lên tàu hoặc đang chạy."
+      },
+      "readyBoats": {
+        "label": "Tàu sẵn sàng",
+        "helper": "Số tàu có thể vận hành ngoài khung bảo trì."
+      }
+    },
+    "departures": {
+      "title": "Lịch khởi hành hôm nay",
+      "subtitle": "Theo dõi sức chứa, bến tàu và trạng thái từng chuyến.",
+      "guests": "khách đã đặt"
+    },
+    "fleet": {
+      "title": "Trạng thái đội tàu",
+      "subtitle": "Xem nhanh tàu và lịch vận hành kế tiếp.",
+      "next": "Tiếp theo"
+    },
+    "bookings": {
+      "title": "Booking cần theo dõi",
+      "subtitle": "Các đặt chỗ mới nhất cần chủ thuyền nắm tình trạng.",
+      "guests": "khách"
+    },
+    "readiness": {
+      "title": "Mức sẵn sàng vận hành",
+      "subtitle": "Những mục cần kiểm tra trước khi mở thêm sức chứa.",
+      "review": "Kiểm tra lịch chạy",
+      "items": {
+        "profile": {
+          "title": "Hồ sơ chủ thuyền đã xác minh",
+          "description": "Thông tin doanh nghiệp và liên hệ vận hành đã sẵn sàng."
+        },
+        "boats": {
+          "title": "Đội tàu chính đã cấu hình",
+          "description": "Sức chứa, hình ảnh, cabin và dịch vụ trên tàu đã có dữ liệu."
+        },
+        "maintenance": {
+          "title": "Còn lịch bảo trì cần xác nhận",
+          "description": "Một tàu vẫn cần chốt khung bảo trì để tránh trùng lịch."
+        },
+        "capacity": {
+          "title": "Cần rà soát sức chứa",
+          "description": "Các chuyến cuối tuần gần đầy chỗ và có thể cần thêm tàu."
+        }
+      }
+    },
+    "status": {
+      "schedule": {
+        "boarding": "Đang lên tàu",
+        "scheduled": "Đã xếp lịch",
+        "attention": "Cần kiểm tra"
+      },
+      "booking": {
+        "pending": "Chờ thanh toán",
+        "paid": "Đã thanh toán",
+        "review": "Cần rà soát"
+      },
+      "boat": {
+        "running": "Đang chạy",
+        "idle": "Sẵn sàng",
+        "maintenance": "Bảo trì"
+      }
+    }
+  },
   "home": {
     "nav": {
       "tours": "Tour",
@@ -385,6 +532,7 @@
   },
   "header": {
     "user": {
+      "ownerDashboard": "Dashboard chủ thuyền",
       "profile": "Hồ sơ cá nhân",
       "myTours": "Tour của tôi",
       "logout": "Đăng xuất"
