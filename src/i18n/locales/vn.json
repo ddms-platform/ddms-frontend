@@ -537,5 +537,157 @@
       "myTours": "Tour của tôi",
       "logout": "Đăng xuất"
     }
+  },
+  "ownerLayout": {
+    "brand": "OWNER",
+    "nav": {
+      "dashboard": "Dashboard",
+      "boats": "Quản lý Thuyền",
+      "tours": "Quản lý Tour",
+      "bookings": "Booking",
+      "profile": "Hồ sơ doanh nghiệp"
+    },
+    "backHome": "Về trang chủ",
+    "logout": "Đăng xuất",
+    "collapse": "Thu gọn",
+    "role": "Chủ thuyền"
+  },
+  "ownerDash": {
+    "title": "Dashboard",
+    "subtitle": "Tổng quan hoạt động kinh doanh",
+    "stats": {
+      "totalBoats": "Tổng thuyền",
+      "activeTours": "Tour hoạt động",
+      "monthlyBookings": "Booking tháng",
+      "monthlyRevenue": "Doanh thu tháng"
+    },
+    "quickStart": "Bắt đầu nhanh",
+    "links": {
+      "boats": "Quản lý thuyền",
+      "boatsDesc": "Xem và quản lý đội thuyền",
+      "tours": "Quản lý tour",
+      "toursDesc": "Tạo và chỉnh sửa tour",
+      "bookings": "Xem booking",
+      "bookingsDesc": "Theo dõi đặt chỗ"
+    }
+  },
+  "ownerBoats": {
+    "title": "Quản lý Thuyền",
+    "subtitle": "Quản lý toàn bộ đội thuyền của bạn",
+    "addBoat": "Thêm thuyền mới",
+    "stats": {
+      "total": "Tổng thuyền",
+      "running": "Đang hoạt động",
+      "idle": "Đang rỗi",
+      "revenue": "Tổng doanh thu"
+    },
+    "search": "Tìm kiếm thuyền...",
+    "filter": {
+      "all": "Tất cả",
+      "running": "Đang chạy",
+      "idle": "Rỗi",
+      "allTypes": "Tất cả loại"
+    },
+    "view": {
+      "grid": "Lưới",
+      "table": "Bảng"
+    },
+    "empty": {
+      "title": "Không tìm thấy thuyền",
+      "filtered": "Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm",
+      "noBoats": "Bắt đầu bằng cách thêm thuyền đầu tiên của bạn"
+    },
+    "card": {
+      "revenue": "doanh thu",
+      "guests": "Khách",
+      "rooms": "Phòng",
+      "services": "DV",
+      "tours": "Tour",
+      "edit": "Chỉnh sửa",
+      "viewPublic": "Xem trang công khai",
+      "delete": "Xoá thuyền",
+      "maintenance": "Bảo trì"
+    },
+    "table": {
+      "boat": "Thuyền",
+      "type": "Loại",
+      "status": "Trạng thái",
+      "capacity": "Sức chứa",
+      "rooms": "Phòng",
+      "services": "Dịch vụ",
+      "tours": "Tour",
+      "revenue": "Doanh thu",
+      "actions": "Thao tác"
+    },
+    "delete": {
+      "title": "Xoá thuyền \"{{name}}\"?",
+      "description": "Thao tác này không thể hoàn tác. Toàn bộ dữ liệu liên quan (phòng, dịch vụ, hình ảnh) sẽ bị xoá vĩnh viễn.",
+      "cancel": "Huỷ",
+      "confirm": "Xoá"
+    },
+    "status": {
+      "running": "Đang chạy",
+      "idle": "Rỗi"
+    },
+    "types": {
+      "cruise": "Du thuyền",
+      "standard": "Thuyền tiêu chuẩn",
+      "luxury": "Cao cấp",
+      "party": "Thuyền tiệc",
+      "speedboat": "Ca nô cao tốc"
+    },
+    "form": {
+      "createTitle": "Thêm thuyền mới",
+      "editTitle": "Chỉnh sửa: {{name}}",
+      "createSubtitle": "Điền thông tin cho thuyền mới",
+      "editSubtitle": "Cập nhật thông tin thuyền",
+      "save": "Lưu thay đổi",
+      "saving": "Đang lưu...",
+      "tabs": {
+        "basic": "Thông tin",
+        "cabins": "Phòng",
+        "services": "Dịch vụ",
+        "images": "Hình ảnh",
+        "maintenance": "Bảo trì"
+      },
+      "basic": {
+        "title": "Thông tin cơ bản",
+        "name": "Tên thuyền",
+        "namePlaceholder": "VD: Rồng Vàng",
+        "type": "Loại thuyền",
+        "capacity": "Sức chứa tối đa (người)",
+        "capacityPlaceholder": "VD: 40"
+      },
+      "cabins": {
+        "count": "{{count}} phòng / cabin",
+        "add": "Thêm phòng",
+        "empty": "Chưa có phòng nào. Thêm phòng đầu tiên!",
+        "label": "Phòng #{{index}}",
+        "name": "Tên phòng",
+        "capacity": "Sức chứa",
+        "price": "Giá (VNĐ)",
+        "totalRooms": "Số phòng"
+      },
+      "services": {
+        "count": "{{count}} dịch vụ",
+        "add": "Thêm dịch vụ",
+        "empty": "Chưa có dịch vụ nào.",
+        "name": "Tên dịch vụ",
+        "price": "Giá (VNĐ)",
+        "active": "Đang hoạt động"
+      },
+      "images": {
+        "title": "Hình ảnh thuyền",
+        "add": "Thêm ảnh",
+        "dragDrop": "Kéo thả hoặc click để upload ảnh",
+        "select": "Chọn ảnh"
+      },
+      "maintenance": {
+        "title": "Lịch bảo trì",
+        "add": "Thêm lịch",
+        "empty": "Chưa có lịch bảo trì nào.",
+        "default": "Bảo trì"
+      }
+    }
   }
 }

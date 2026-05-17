@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from '@/components/layouts/auth-layout';
 import MainLayout from '@/components/layouts/main-layout';
+import OwnerLayout from '@/components/layouts/owner-layout';
 import { ErrorBoundary } from './components/shared/error-boundary';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import { lazy, Suspense } from 'react';
@@ -13,7 +14,9 @@ const SignUpPage = lazy(() => import('@/pages/auth/sign-up'));
 const MyToursPage = lazy(() => import('@/pages/my-tours/index'));
 const HomePage = lazy(() => import('@/pages/home/index'));
 const BecomeOwnerPage = lazy(() => import('@/pages/become-owner/index'));
-const OwnerDashboardPage = lazy(() => import('@/pages/owner/dashboard/index'));
+const OwnerDashboard = lazy(() => import('@/pages/owner/index'));
+const OwnerBoatList = lazy(() => import('@/pages/owner/boats/index'));
+const OwnerBoatForm = lazy(() => import('@/pages/owner/boats/boat-form'));
 const ProfilePage = lazy(() => import('@/pages/profile/index'));
 const TourDetailPage = lazy(() => import('@/pages/tours/tour-detail'));
 const TourListPage = lazy(() => import('@/pages/tours/tour-list'));
@@ -119,14 +122,38 @@ function App() {
                 />
               </Route>
 
-              {/* Owner pages - with GlobalHeader + GlobalFooter */}
+              {/* Owner pages - sidebar layout, role-gated */}
               <Route element={<ProtectedRoute roles={['owner']} />}>
-                <Route element={<MainLayout />}>
+                <Route element={<OwnerLayout />}>
                   <Route
-                    path="/owner/dashboard"
+                    path="/owner"
                     element={
                       <Suspense fallback={<PageLoader />}>
-                        <OwnerDashboardPage />
+                        <OwnerDashboard />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path="/owner/boats"
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <OwnerBoatList />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path="/owner/boats/new"
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <OwnerBoatForm />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path="/owner/boats/:boatId/edit"
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <OwnerBoatForm />
                       </Suspense>
                     }
                   />

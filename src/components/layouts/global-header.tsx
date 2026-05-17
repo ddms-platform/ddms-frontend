@@ -171,7 +171,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                   {/* Menu items */}
                   {isOwner && (
                     <Link
-                      to="/owner/dashboard"
+                      to="/owner"
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
                       style={{ color: '#ecf0ff' }}

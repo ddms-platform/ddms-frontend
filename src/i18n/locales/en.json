@@ -537,5 +537,157 @@
       "myTours": "My Tours",
       "logout": "Sign out"
     }
+  },
+  "ownerLayout": {
+    "brand": "OWNER",
+    "nav": {
+      "dashboard": "Dashboard",
+      "boats": "Boat Management",
+      "tours": "Tour Management",
+      "bookings": "Bookings",
+      "profile": "Business Profile"
+    },
+    "backHome": "Back to home",
+    "logout": "Sign out",
+    "collapse": "Collapse",
+    "role": "Boat Owner"
+  },
+  "ownerDash": {
+    "title": "Dashboard",
+    "subtitle": "Business operations overview",
+    "stats": {
+      "totalBoats": "Total Boats",
+      "activeTours": "Active Tours",
+      "monthlyBookings": "Monthly Bookings",
+      "monthlyRevenue": "Monthly Revenue"
+    },
+    "quickStart": "Quick Start",
+    "links": {
+      "boats": "Manage boats",
+      "boatsDesc": "View and manage your fleet",
+      "tours": "Manage tours",
+      "toursDesc": "Create and edit tours",
+      "bookings": "View bookings",
+      "bookingsDesc": "Track reservations"
+    }
+  },
+  "ownerBoats": {
+    "title": "Boat Management",
+    "subtitle": "Manage your entire fleet",
+    "addBoat": "Add new boat",
+    "stats": {
+      "total": "Total Boats",
+      "running": "Running",
+      "idle": "Idle",
+      "revenue": "Total Revenue"
+    },
+    "search": "Search boats...",
+    "filter": {
+      "all": "All",
+      "running": "Running",
+      "idle": "Idle",
+      "allTypes": "All types"
+    },
+    "view": {
+      "grid": "Grid",
+      "table": "Table"
+    },
+    "empty": {
+      "title": "No boats found",
+      "filtered": "Try changing your filters or search keyword",
+      "noBoats": "Get started by adding your first boat"
+    },
+    "card": {
+      "revenue": "revenue",
+      "guests": "Guests",
+      "rooms": "Rooms",
+      "services": "Svc",
+      "tours": "Tours",
+      "edit": "Edit",
+      "viewPublic": "View public page",
+      "delete": "Delete boat",
+      "maintenance": "Maintenance"
+    },
+    "table": {
+      "boat": "Boat",
+      "type": "Type",
+      "status": "Status",
+      "capacity": "Capacity",
+      "rooms": "Rooms",
+      "services": "Services",
+      "tours": "Tours",
+      "revenue": "Revenue",
+      "actions": "Actions"
+    },
+    "delete": {
+      "title": "Delete \"{{name}}\"?",
+      "description": "This action cannot be undone. All related data (rooms, services, images) will be permanently deleted.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "status": {
+      "running": "Running",
+      "idle": "Idle"
+    },
+    "types": {
+      "cruise": "Cruise",
+      "standard": "Standard",
+      "luxury": "Luxury",
+      "party": "Party boat",
+      "speedboat": "Speedboat"
+    },
+    "form": {
+      "createTitle": "Add new boat",
+      "editTitle": "Edit: {{name}}",
+      "createSubtitle": "Fill in information for the new boat",
+      "editSubtitle": "Update boat information",
+      "save": "Save changes",
+      "saving": "Saving...",
+      "tabs": {
+        "basic": "Basic Info",
+        "cabins": "Cabins",
+        "services": "Services",
+        "images": "Images",
+        "maintenance": "Maintenance"
+      },
+      "basic": {
+        "title": "Basic Information",
+        "name": "Boat name",
+        "namePlaceholder": "e.g. Golden Dragon",
+        "type": "Boat type",
+        "capacity": "Max capacity (people)",
+        "capacityPlaceholder": "e.g. 40"
+      },
+      "cabins": {
+        "count": "{{count}} room(s) / cabin(s)",
+        "add": "Add room",
+        "empty": "No rooms yet. Add your first room!",
+        "label": "Room #{{index}}",
+        "name": "Room name",
+        "capacity": "Capacity",
+        "price": "Price (VND)",
+        "totalRooms": "Total rooms"
+      },
+      "services": {
+        "count": "{{count}} service(s)",
+        "add": "Add service",
+        "empty": "No services yet.",
+        "name": "Service name",
+        "price": "Price (VND)",
+        "active": "Active"
+      },
+      "images": {
+        "title": "Boat images",
+        "add": "Add photo",
+        "dragDrop": "Drag & drop or click to upload",
+        "select": "Select photos"
+      },
+      "maintenance": {
+        "title": "Maintenance schedule",
+        "add": "Add schedule",
+        "empty": "No maintenance scheduled.",
+        "default": "Maintenance"
+      }
+    }
   }
 }
