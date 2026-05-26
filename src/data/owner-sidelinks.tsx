@@ -1,4 +1,6 @@
 import { LayoutDashboard, Ship, Map, CalendarCheck, User, Home, LogOut } from 'lucide-react';
+import type { JSX } from 'react';
+import { routeName } from '@/constants/route-name';
 
 export interface NavLink {
   title: string;
@@ -19,28 +21,28 @@ export interface SideLink extends NavLink {
 export const ownerSidelinks: SideLink[] = [
   {
     title: 'ownerLayout.nav.dashboard',
-    href: '/owner',
+    href: routeName.owner,
     icon: <LayoutDashboard size={20} />,
     end: true,
   },
   {
     title: 'ownerLayout.nav.boats',
-    href: '/owner/boats',
+    href: routeName.ownerBoats,
     icon: <Ship size={20} />,
   },
   {
     title: 'ownerLayout.nav.tours',
-    href: '/owner/tours',
+    href: routeName.ownerTours,
     icon: <Map size={20} />,
   },
   {
     title: 'ownerLayout.nav.bookings',
-    href: '/owner/bookings',
+    href: routeName.ownerBookings,
     icon: <CalendarCheck size={20} />,
   },
   {
     title: 'ownerLayout.nav.profile',
-    href: '/owner/profile',
+    href: routeName.ownerProfile,
     icon: <User size={20} />,
   },
 ];
@@ -51,7 +53,7 @@ export const ownerSidelinks: SideLink[] = [
 export const ownerSecondaryLinks: NavLink[] = [
   {
     title: 'ownerLayout.backHome',
-    href: '/',
+    href: routeName.home,
     icon: <Home size={20} />,
   },
 ];

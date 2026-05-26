@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Star, ChevronRight, Heart } from 'lucide-react';
+import { routeName } from '@/constants/route-name';
 import { formatPrice } from '@/lib/utils';
 
 const FEATURED_TOURS = [
@@ -70,7 +71,7 @@ export default function FeaturedTours() {
           </p>
         </div>
         <Link
-          to="/tours"
+          to={routeName.tours}
           className="hidden items-center gap-1 text-sm font-semibold transition-colors hover:underline sm:flex"
           style={{ color: '#ffffff' }}
         >

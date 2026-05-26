@@ -3,6 +3,7 @@ import { NavLink, Outlet, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/use-auth';
 import { ChevronLeft, Menu, X } from 'lucide-react';
+import { routeName } from '@/constants/route-name';
 import logo from '@/assets/logo.png';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { ownerSidelinks, ownerSecondaryLinks, ownerLogoutLink } from '@/data/owner-sidelinks';
@@ -25,7 +26,7 @@ export default function OwnerLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate('/sign-in');
+    navigate(routeName.signIn);
   };
 
   return (
@@ -48,7 +49,7 @@ export default function OwnerLayout() {
           style={{ borderColor: 'rgba(255,255,255,0.06)' }}
         >
           {!collapsed && (
-            <Link to="/owner" className="flex items-center gap-2.5">
+            <Link to={routeName.owner} className="flex items-center gap-2.5">
               <img src={logo} alt="DDMS" className="h-8 w-auto" />
               <span className="text-sm font-bold tracking-wide" style={{ color: '#00F0FF' }}>
                 {t('ownerLayout.brand')}
@@ -56,7 +57,7 @@ export default function OwnerLayout() {
             </Link>
           )}
           {collapsed && (
-            <Link to="/owner" className="mx-auto">
+            <Link to={routeName.owner} className="mx-auto">
               <img src={logo} alt="DDMS" className="h-8 w-auto" />
             </Link>
           )}
@@ -167,9 +168,9 @@ export default function OwnerLayout() {
                 {t('ownerLayout.role')}
               </p>
             </div>
-            {user?.avatar ? (
+            {user?.avatar_url ? (
               <img
-                src={user.avatar}
+                src={user.avatar_url}
                 alt={user.name}
                 className="h-9 w-9 rounded-full object-cover"
               />

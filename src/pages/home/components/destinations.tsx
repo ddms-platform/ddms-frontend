@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { routeName } from '@/constants/route-name';
 
 export default function Destinations() {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ export default function Destinations() {
         {destinations.map((dest) => (
           <Link
             key={dest.name}
-            to="/tours"
+            to={routeName.tours}
             className="group relative overflow-hidden rounded-2xl"
             style={{ aspectRatio: '16/10' }}
           >

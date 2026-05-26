@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { routeName } from '@/constants/route-name';
 import {
   ArrowRight,
   BadgeCheck,
@@ -68,7 +69,7 @@ export default function BecomeOwnerPage() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/sign-up"
+                to={routeName.signUp}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
                 style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
               >
@@ -76,7 +77,7 @@ export default function BecomeOwnerPage() {
                 <ArrowRight size={18} />
               </Link>
               <Link
-                to="/tours"
+                to={routeName.tours}
                 className="inline-flex h-12 items-center justify-center rounded-lg border px-6 text-base font-semibold transition-all hover:bg-white/10"
                 style={{ borderColor: '#ffffff', color: '#ffffff' }}
               >
@@ -195,7 +196,7 @@ export default function BecomeOwnerPage() {
               {t('becomeOwner.requirements.subtitle')}
             </p>
             <Link
-              to="/sign-up"
+              to={routeName.signUp}
               className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
               style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
             >

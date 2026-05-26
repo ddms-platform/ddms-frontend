@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { CheckCircle2 } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { routeName } from '@/constants/route-name';
 import { MOCK_TOUR } from '../mock-data';
 import { formatDate } from './step-date-time';
 
@@ -76,10 +77,10 @@ export default function BookingSuccess({
 
       <div className="mt-8 flex flex-col gap-3">
         <Button variant="cyan" size="action-lg" asChild>
-          <Link to="/dashboard">{t('booking.success.viewBookings')}</Link>
+          <Link to={routeName.dashboard}>{t('booking.success.viewBookings')}</Link>
         </Button>
         <Button variant="dark-outline" size="action-lg" asChild>
-          <Link to="/">{t('booking.success.backHome')}</Link>
+          <Link to={routeName.home}>{t('booking.success.backHome')}</Link>
         </Button>
       </div>
     </div>

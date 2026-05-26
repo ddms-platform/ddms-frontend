@@ -18,6 +18,7 @@ import Breadcrumb from '@/components/shared/breadcrumb';
 import { StatusBadge } from '@/components/badges';
 import ImageCarousel from '@/components/shared/image-carousel';
 import { Button } from '@/components/ui/button';
+import { routeName } from '@/constants/route-name';
 
 interface BoatSpec {
   icon: React.ElementType;
@@ -272,7 +273,7 @@ export default function BoatDetailPage() {
           {t('boatDetail.notFoundDesc')}
         </p>
         <Button variant="cyan" size="action" className="mt-6 gap-2" asChild>
-          <Link to="/tours">
+          <Link to={routeName.tours}>
             <ArrowLeft size={16} />
             {t('boatDetail.backToTours')}
           </Link>
@@ -556,7 +557,7 @@ export default function BoatDetailPage() {
                   </Link>
                 </Button>
                 <Button variant="dark-outline" size="action-lg" className="w-full gap-2" asChild>
-                  <Link to="/tours">
+                  <Link to={routeName.tours}>
                     {t('boatDetail.bookWithBoat')}
                     <ChevronRight size={16} />
                   </Link>
