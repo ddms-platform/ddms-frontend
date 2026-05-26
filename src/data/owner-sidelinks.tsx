@@ -1,4 +1,13 @@
-import { LayoutDashboard, Ship, Map, CalendarCheck, User, Home, LogOut } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Ship,
+  Map,
+  CalendarCheck,
+  User,
+  Home,
+  LogOut,
+  Anchor,
+} from 'lucide-react';
 
 export interface NavLink {
   title: string;
@@ -27,6 +36,11 @@ export const ownerSidelinks: SideLink[] = [
     title: 'ownerLayout.nav.boats',
     href: '/owner/boats',
     icon: <Ship size={20} />,
+  },
+  {
+    title: 'ownerLayout.nav.docks',
+    href: '/owner/docks',
+    icon: <Anchor size={20} />,
   },
   {
     title: 'ownerLayout.nav.tours',

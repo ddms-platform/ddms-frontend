@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -15,6 +15,7 @@ import {
   Trash2,
   Eye,
   Filter,
+  RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,8 +32,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { MOCK_OWNER_BOATS, BOAT_TYPES, type OwnerBoat, type BoatStatus } from '@/data/owner-boats';
+import { BOAT_TYPES, type BoatStatus } from '@/data/owner-boats';
 import { formatPrice } from '@/lib/utils';
+import { boatService, type Boat } from '@/services/boatService';
 
 type FilterStatus = 'all' | BoatStatus;
 type ViewMode = 'grid' | 'table';
@@ -43,8 +45,28 @@ export default function OwnerBoatList() {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [filterType, setFilterType] = useState('all');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [boats, setBoats] = useState<OwnerBoat[]>(MOCK_OWNER_BOATS);
+  const [boats, setBoats] = useState<Boat[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  // Fetch boats from API
+  const fetchBoats = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await boatService.getAll({ pageSize: 100 });
+      setBoats(res.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Không thể tải danh sách tàu');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBoats();
+  }, [fetchBoats]);
 
   const filteredBoats = useMemo(
     () =>
@@ -62,18 +84,57 @@ export default function OwnerBoatList() {
       total: boats.length,
       running: boats.filter((b) => b.status === 'running').length,
       idle: boats.filter((b) => b.status === 'idle').length,
-      totalRevenue: boats.reduce((sum, b) => sum + b.revenue, 0),
     }),
     [boats]
   );
 
-  const handleDelete = (boatId: string) => {
-    setBoats((prev) => prev.filter((b) => b.id !== boatId));
+  const handleDelete = async (boatId: string) => {
+    try {
+      await boatService.delete(boatId);
+      setBoats((prev) => prev.filter((b) => b.id !== boatId));
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Xóa tàu thất bại');
+    }
     setOpenMenuId(null);
   };
-  const getTypeLabel = (type: string) => t(`ownerBoats.types.${type}`, type);
 
+  const getTypeLabel = (type: string) => t(`ownerBoats.types.${type}`, type);
   const isFiltered = search || filterStatus !== 'all' || filterType !== 'all';
+
+  if (loading) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div
+            className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
+            style={{ borderColor: '#00F0FF', borderTopColor: 'transparent' }}
+          />
+          <p className="text-sm" style={{ color: '#ecf0ff' }}>
+            Đang tải danh sách tàu...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-96 flex-col items-center justify-center gap-4">
+        <div
+          className="flex h-16 w-16 items-center justify-center rounded-full"
+          style={{ backgroundColor: 'rgba(239,68,68,0.1)' }}
+        >
+          <Ship size={28} style={{ color: '#EF4444' }} />
+        </div>
+        <p className="text-sm" style={{ color: '#EF4444' }}>
+          {error}
+        </p>
+        <Button variant="cyan" size="sm" className="gap-2" onClick={fetchBoats}>
+          <RefreshCw size={14} /> Thử lại
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 py-6 lg:px-8">
@@ -87,16 +148,21 @@ export default function OwnerBoatList() {
             {t('ownerBoats.subtitle')}
           </p>
         </div>
-        <Button variant="cyan" size="action" className="gap-2" asChild>
-          <Link to="/owner/boats/new">
-            <Plus size={16} />
-            {t('ownerBoats.addBoat')}
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={fetchBoats} title="Làm mới">
+            <RefreshCw size={16} style={{ color: '#ecf0ff' }} />
+          </Button>
+          <Button variant="cyan" size="action" className="gap-2" asChild>
+            <Link to="/owner/boats/new">
+              <Plus size={16} />
+              {t('ownerBoats.addBoat')}
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Stats */}
-      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-3">
         {[
           {
             label: t('ownerBoats.stats.total'),
@@ -118,13 +184,6 @@ export default function OwnerBoatList() {
             icon: Layers,
             gradient: 'linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04))',
             iconColor: '#F59E0B',
-          },
-          {
-            label: t('ownerBoats.stats.revenue'),
-            value: formatPrice(stats.totalRevenue),
-            icon: TrendingUp,
-            gradient: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.04))',
-            iconColor: '#8B5CF6',
           },
         ].map((s) => (
           <div
@@ -288,13 +347,15 @@ function BoatCard({
   openMenuId,
   setOpenMenuId,
 }: {
-  boat: OwnerBoat;
+  boat: Boat;
   t: (k: string, o?: Record<string, string>) => string;
   getTypeLabel: (t: string) => string;
   onDelete: (id: string) => void;
   openMenuId: string | null;
   setOpenMenuId: (id: string | null) => void;
 }) {
+  const hasActiveMaintenance = boat.maintenances.some((m) => new Date(m.endTime) > new Date());
+
   return (
     <div
       className="group overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.01]"
@@ -325,8 +386,8 @@ function BoatCard({
             variant={boat.status === 'running' ? 'ownerRunning' : 'ownerIdle'}
           />
         </div>
-        {boat.maintenances.some((m) => new Date(m.endTime) > new Date()) && (
-          <div className="absolute top-3 right-3">
+        {hasActiveMaintenance && (
+          <div className="absolute top-3 right-12">
             <StatusBadge label={t('ownerBoats.card.maintenance')} variant="ownerMaintenance" />
           </div>
         )}
@@ -389,24 +450,15 @@ function BoatCard({
               className="mt-0.5 inline-block rounded-md px-2 py-0.5 text-[11px] font-medium"
               style={{ backgroundColor: 'rgba(0,240,255,0.08)', color: '#00F0FF' }}
             >
-              {getTypeLabel(boat.type)}
+              {getTypeLabel(boat.type ?? '')}
             </span>
           </div>
-          <div className="text-right">
-            <p className="text-sm font-bold" style={{ color: '#00F0FF' }}>
-              {formatPrice(boat.revenue)}
-            </p>
-            <p className="text-[11px]" style={{ color: '#ecf0ff' }}>
-              {t('ownerBoats.card.revenue')}
-            </p>
-          </div>
         </div>
-        <div className="mt-3 grid grid-cols-4 gap-2">
+        <div className="mt-3 grid grid-cols-3 gap-2">
           {[
             { icon: Users, value: boat.maxPassengers, label: t('ownerBoats.card.guests') },
             { icon: DoorOpen, value: boat.totalCabins, label: t('ownerBoats.card.rooms') },
             { icon: Layers, value: boat.totalServices, label: t('ownerBoats.card.services') },
-            { icon: Wrench, value: boat.activeTours, label: t('ownerBoats.card.tours') },
           ].map((s) => (
             <div
               key={s.label}
@@ -448,7 +500,7 @@ function BoatTable({
   getTypeLabel,
   onDelete,
 }: {
-  boats: OwnerBoat[];
+  boats: Boat[];
   t: (k: string, o?: Record<string, string>) => string;
   getTypeLabel: (t: string) => string;
   onDelete: (id: string) => void;
@@ -467,8 +519,6 @@ function BoatTable({
             <th className="px-4 py-3 text-center">{t('ownerBoats.table.capacity')}</th>
             <th className="px-4 py-3 text-center">{t('ownerBoats.table.rooms')}</th>
             <th className="px-4 py-3 text-center">{t('ownerBoats.table.services')}</th>
-            <th className="px-4 py-3 text-center">{t('ownerBoats.table.tours')}</th>
-            <th className="px-4 py-3 text-right">{t('ownerBoats.table.revenue')}</th>
             <th className="px-4 py-3 text-right">{t('ownerBoats.table.actions')}</th>
           </tr>
         </thead>
@@ -507,7 +557,7 @@ function BoatTable({
                   className="rounded-md px-2 py-0.5 text-xs font-medium"
                   style={{ backgroundColor: 'rgba(0,240,255,0.08)', color: '#00F0FF' }}
                 >
-                  {getTypeLabel(boat.type)}
+                  {getTypeLabel(boat.type ?? '')}
                 </span>
               </td>
               <td className="px-4 py-3">
@@ -524,14 +574,6 @@ function BoatTable({
               </td>
               <td className="px-4 py-3 text-center text-sm" style={{ color: '#ffffff' }}>
                 {boat.totalServices}
-              </td>
-              <td className="px-4 py-3 text-center text-sm" style={{ color: '#ffffff' }}>
-                {boat.activeTours}
-              </td>
-              <td className="px-4 py-3 text-right">
-                <span className="text-sm font-semibold" style={{ color: '#00F0FF' }}>
-                  {formatPrice(boat.revenue)}
-                </span>
               </td>
               <td className="px-4 py-3 text-right">
                 <div className="flex items-center justify-end gap-1">
