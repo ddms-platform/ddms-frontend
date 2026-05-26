@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Briefcase } from 'lucide-react';
+import { routeName } from '@/constants/route-name';
 import BookingCard, { type Booking, type BookingStatus } from './components/booking-card';
 
 const MOCK_BOOKINGS: Booking[] = [
@@ -131,7 +132,7 @@ export default function DashboardPage() {
               {t('dashboard.emptyDescription')}
             </p>
             <Link
-              to="/tours"
+              to={routeName.tours}
               className="mt-6 rounded-xl px-6 py-3 font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
               style={{ backgroundColor: '#00F0FF' }}
             >

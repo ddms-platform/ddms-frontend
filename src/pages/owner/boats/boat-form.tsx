@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MOCK_OWNER_BOATS, BOAT_TYPES, type BoatCabin, type BoatService } from '@/data/owner-boats';
+import { routeName } from '@/constants/route-name';
 
 type Tab = 'basic' | 'cabins' | 'services' | 'images' | 'maintenance';
 
@@ -46,7 +47,7 @@ export default function BoatForm() {
     setSaving(true);
     await new Promise((r) => setTimeout(r, 800));
     setSaving(false);
-    navigate('/owner/boats');
+    navigate(routeName.ownerBoats);
   };
 
   const addCabin = () =>
@@ -75,7 +76,7 @@ export default function BoatForm() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/owner/boats">
+            <Link to={routeName.ownerBoats}>
               <ArrowLeft size={18} style={{ color: '#ecf0ff' }} />
             </Link>
           </Button>

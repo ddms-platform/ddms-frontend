@@ -5,6 +5,7 @@ import { User, LogOut, MapPin, ChevronDown, LayoutDashboard } from 'lucide-react
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
+import { routeName } from '@/constants/route-name';
 import logo from '@/assets/logo.png';
 
 interface NavLink {
@@ -42,7 +43,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
   const handleLogout = () => {
     logout();
     setDropdownOpen(false);
-    navigate('/sign-in');
+    navigate(routeName.signIn);
   };
 
   // Avatar initials from user name
@@ -66,7 +67,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to={routeName.home} className="flex items-center gap-2">
           <img src={logo} alt="DDMS" className="h-10 w-auto" />
         </Link>
 
@@ -92,7 +93,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
 
           {!isOwner && (
             <Link
-              to="/become-owner"
+              to={routeName.becomeOwner}
               className="hidden items-center rounded-full px-3 py-2 text-sm font-semibold transition-colors hover:bg-white/5 hover:text-[#00F0FF] sm:inline-flex"
               style={{ color: '#ecf0ff' }}
             >
@@ -112,9 +113,9 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                 aria-haspopup="true"
               >
                 {/* Avatar */}
-                {user?.avatar ? (
+                {user?.avatar_url ? (
                   <img
-                    src={user.avatar}
+                    src={user.avatar_url}
                     alt={user.name}
                     className="h-8 w-8 rounded-full object-cover"
                   />
@@ -171,7 +172,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                   {/* Menu items */}
                   {isOwner && (
                     <Link
-                      to="/owner"
+                      to={routeName.owner}
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
                       style={{ color: '#ecf0ff' }}
@@ -182,7 +183,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                     </Link>
                   )}
                   <Link
-                    to="/profile"
+                    to={routeName.profile}
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
                     style={{ color: '#ecf0ff' }}
@@ -192,7 +193,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                     {t('header.user.profile')}
                   </Link>
                   <Link
-                    to="/my-tours"
+                    to={routeName.myTours}
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
                     style={{ color: '#ecf0ff' }}
@@ -222,7 +223,7 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
           ) : (
             /* ── Not logged-in: Sign In button ── */
             <Button variant="cyan" size="action" asChild>
-              <Link to="/sign-in">{t('home.nav.signIn')}</Link>
+              <Link to={routeName.signIn}>{t('home.nav.signIn')}</Link>
             </Button>
           )}
         </div>

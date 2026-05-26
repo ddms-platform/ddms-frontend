@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useFormValidation, rules } from '@/hooks/use-form-validation';
 import FormField from '@/components/shared/form-field';
 import { GoogleIcon } from '@/components/shared/google-icon';
+import { routeName } from '@/constants/route-name';
 import logo from '@/assets/logo.png';
 
 export default function SignUpPage() {
@@ -53,7 +54,7 @@ export default function SignUpPage() {
     <div className="flex flex-col gap-8">
       {/* Logo & Header */}
       <div className="flex flex-col items-center gap-6">
-        <Link to="/" className="transition-transform hover:scale-105 active:scale-95">
+        <Link to={routeName.home} className="transition-transform hover:scale-105 active:scale-95">
           <img src={logo} alt="DDMS Logo" className="h-16 w-auto" />
         </Link>
         <div className="space-y-2 text-center">
@@ -193,7 +194,7 @@ export default function SignUpPage() {
             >
               {t('auth.signUp.agreeToTerms')}{' '}
               <Link
-                to="/terms"
+                to={routeName.terms}
                 className="font-medium underline underline-offset-4 transition-colors"
                 style={{ color: '#ffffff' }}
               >
@@ -201,7 +202,7 @@ export default function SignUpPage() {
               </Link>{' '}
               {t('auth.signUp.and')}{' '}
               <Link
-                to="/privacy"
+                to={routeName.privacy}
                 className="font-medium underline underline-offset-4 transition-colors"
                 style={{ color: '#ffffff' }}
               >
@@ -238,7 +239,7 @@ export default function SignUpPage() {
       <p className="text-center text-sm" style={{ color: '#ecf0ff' }}>
         {t('auth.signUp.alreadyHaveAccount')}?{' '}
         <Link
-          to="/sign-in"
+          to={routeName.signIn}
           className="font-semibold transition-colors hover:underline"
           style={{ color: '#00F0FF' }}
         >

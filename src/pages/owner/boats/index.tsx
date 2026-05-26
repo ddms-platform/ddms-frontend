@@ -32,6 +32,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { MOCK_OWNER_BOATS, BOAT_TYPES, type OwnerBoat, type BoatStatus } from '@/data/owner-boats';
+import { routeName } from '@/constants/route-name';
 import { formatPrice } from '@/lib/utils';
 
 type FilterStatus = 'all' | BoatStatus;
@@ -88,7 +89,7 @@ export default function OwnerBoatList() {
           </p>
         </div>
         <Button variant="cyan" size="action" className="gap-2" asChild>
-          <Link to="/owner/boats/new">
+          <Link to={routeName.ownerBoatsNew}>
             <Plus size={16} />
             {t('ownerBoats.addBoat')}
           </Link>
@@ -246,7 +247,7 @@ export default function OwnerBoatList() {
           </p>
           {!isFiltered && (
             <Button variant="cyan" size="action" className="mt-6 gap-2" asChild>
-              <Link to="/owner/boats/new">
+              <Link to={routeName.ownerBoatsNew}>
                 <Plus size={16} />
                 {t('ownerBoats.addBoat')}
               </Link>
@@ -351,7 +352,7 @@ function BoatCard({
               style={{ backgroundColor: '#1a2d4d', border: '1px solid rgba(255,255,255,0.08)' }}
             >
               <Link
-                to={`/owner/boats/${boat.id}/edit`}
+                to={`${routeName.ownerBoats}/${boat.id}/edit`}
                 onClick={() => setOpenMenuId(null)}
                 className="flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-white/5"
                 style={{ color: '#ecf0ff' }}
@@ -425,7 +426,7 @@ function BoatCard({
         </div>
         <div className="mt-3 flex gap-2">
           <Button variant="cyan" size="sm" className="flex-1 gap-1.5" asChild>
-            <Link to={`/owner/boats/${boat.id}/edit`}>
+            <Link to={`${routeName.ownerBoats}/${boat.id}/edit`}>
               <Pencil size={13} />
               {t('ownerBoats.card.edit')}
             </Link>
@@ -536,7 +537,7 @@ function BoatTable({
               <td className="px-4 py-3 text-right">
                 <div className="flex items-center justify-end gap-1">
                   <Button variant="ghost" size="icon-sm" asChild>
-                    <Link to={`/owner/boats/${boat.id}/edit`}>
+                    <Link to={`${routeName.ownerBoats}/${boat.id}/edit`}>
                       <Pencil size={14} style={{ color: '#ecf0ff' }} />
                     </Link>
                   </Button>
