@@ -40,7 +40,10 @@ export default function AuthLayout() {
             >
               {t('auth.layout.welcomeTitle')}
             </h1>
-            <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>
+            <p
+              className="text-lg leading-relaxed"
+              style={{ color: 'rgba(255,255,255,0.85)' }}
+            >
               {t('auth.layout.welcomeDescription')}
             </p>
 
@@ -57,7 +60,10 @@ export default function AuthLayout() {
                   style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}
                 >
                   <span className="text-xl">{feature.icon}</span>
-                  <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: '#ffffff' }}
+                  >
                     {feature.text}
                   </span>
                 </div>

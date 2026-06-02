@@ -10,7 +10,9 @@ interface OwnerRouteProps {
  * Route guard that checks both authentication and owner role.
  * Redirects to sign-in if not authenticated, or home if not an owner.
  */
-export default function OwnerRoute({ redirectPath = routeName.signIn }: OwnerRouteProps) {
+export default function OwnerRoute({
+  redirectPath = routeName.signIn,
+}: OwnerRouteProps) {
   const { isAuthenticated, user } = useAuth();
   const location = useLocation();
 

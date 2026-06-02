@@ -6,13 +6,18 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   fullScreen?: boolean;
 }
 
-export function LoadingSpinner({ text, fullScreen = false, className, ...props }: IProps) {
+export function LoadingSpinner({
+  text,
+  fullScreen = false,
+  className,
+  ...props
+}: IProps) {
   return (
     <div
       className={cn(
         'flex flex-col items-center justify-center gap-3',
         fullScreen && 'min-h-[60vh]',
-        className
+        className,
       )}
       {...props}
     >
