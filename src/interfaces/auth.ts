@@ -19,9 +19,34 @@ export interface ILoginRes {
 }
 
 export interface IRegisterRes {
-  accessToken: string;
+  requiresEmailVerification: boolean;
+  email: string;
+  message: string;
+  verificationLink?: string | null;
+}
+
+export interface IVerifyEmailPayload {
+  token: string;
+}
+
+export interface IResendVerificationEmailPayload {
+  email: string;
+}
+
+export interface IGoogleLoginPayload {
+  idToken: string;
+}
+
+export interface IApiEnvelope<T> {
+  code: number;
+  result: T;
+}
+
+export interface IAuthTokensResult {
+  token: string;
   refreshToken: string;
-  user: User;
+  authenticated: boolean;
+  expiresInSeconds: number;
 }
 
 export interface IForgotPasswordPayload {
@@ -41,6 +66,10 @@ export interface IChangePasswordPayload {
 }
 
 export interface IRefreshTokenPayload {
+  refreshToken: string;
+}
+
+export interface ILogoutPayload {
   refreshToken: string;
 }
 

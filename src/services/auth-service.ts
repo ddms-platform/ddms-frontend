@@ -1,64 +1,91 @@
 import { Api, Axios } from './axios';
-import { routeName } from '@/constants/route-name';
-import { env } from '@/config/env';
-import { localStorageService } from './local-storage-service';
 import type { IProfileRes } from '@/interfaces/profile';
 import type {
+  IApiEnvelope,
+  IAuthTokensResult,
+  IGoogleLoginPayload,
   ILoginPayload,
-  ILoginRes,
+  ILogoutPayload,
   IRegisterPayload,
   IRegisterRes,
+  IResendVerificationEmailPayload,
+  IVerifyEmailPayload,
   IForgotPasswordPayload,
   IResetPasswordPayload,
-  IChangePasswordPayload,
   IRefreshTokenPayload,
-  IRefreshTokenRes,
 } from '@/interfaces/auth';
 
-const resource = env.API_URL_PREFIX;
-
 const login = (payload: ILoginPayload) => {
-  return Axios.post<ILoginRes>(`${resource}/login`, payload);
+  return Axios.post<IApiEnvelope<IAuthTokensResult>>('/auth/login', payload);
 };
 
 const register = (payload: IRegisterPayload) => {
-  return Axios.post<IRegisterRes>(`${resource}/register`, payload);
+  return Axios.post<IApiEnvelope<IRegisterRes>>('/auth/register', payload);
+};
+
+const verifyEmail = (payload: IVerifyEmailPayload) => {
+  return Axios.post<
+    IApiEnvelope<{ message: string; alreadyVerified: boolean }>
+  >('/auth/verify-email', payload);
+};
+
+const resendVerificationEmail = (payload: IResendVerificationEmailPayload) => {
+  return Axios.post<
+    IApiEnvelope<{ message: string; verificationLink?: string | null }>
+  >('/auth/resend-verification-email', payload);
 };
 
 const forgotPassword = (payload: IForgotPasswordPayload) => {
-  return Axios.post(`${resource}/forgot-password`, payload);
+  return Axios.post<
+    IApiEnvelope<{ message: string; verificationLink?: string | null }>
+  >('/auth/forgot-password', payload);
 };
 
 const resetPassword = (payload: IResetPasswordPayload) => {
-  return Axios.post(`${resource}/reset-password`, payload);
+  return Axios.post<IApiEnvelope<{ message: string }>>(
+    '/auth/reset-password',
+    payload,
+  );
+};
+
+const googleLogin = (payload: IGoogleLoginPayload) => {
+  return Axios.post<IApiEnvelope<IAuthTokensResult>>(
+    '/auth/google-login',
+    payload,
+  );
 };
 
 const refreshToken = (payload: IRefreshTokenPayload) => {
-  return Axios.post<IRefreshTokenRes>(`${resource}/refresh-token`, payload);
+  return Axios.post<IApiEnvelope<IAuthTokensResult>>(
+    '/auth/refresh-token',
+    payload,
+  );
 };
 
 const getProfile = () => {
-  return Api.get<IProfileRes>(`${resource}/me`);
+  return Api.get<IApiEnvelope<IProfileRes>>('/auth/me');
 };
 
-const changePassword = (payload: IChangePasswordPayload) => {
-  return Api.post(`${resource}/change-password`, payload);
+// Revokes the supplied refresh token server-side. Idempotent on the backend.
+const logout = (payload: ILogoutPayload) => {
+  return Api.post('/auth/logout', payload);
 };
 
-const logout = () => {
-  return Api.post(`${resource}/logout`).finally(() => {
-    localStorageService.clearAccessToken();
-    window.location.href = routeName.signIn;
-  });
+// Revokes every active refresh token for the current user (requires Bearer).
+const logoutAll = () => {
+  return Api.post('/auth/logout-all');
 };
 
 export const AuthServices = {
   login,
   register,
+  verifyEmail,
+  resendVerificationEmail,
   forgotPassword,
   resetPassword,
+  googleLogin,
   refreshToken,
   getProfile,
-  changePassword,
   logout,
+  logoutAll,
 };

@@ -1,5 +1,14 @@
 import type { User, UserRole } from '@/data/user';
-import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
+import { localStorageKey } from '@/constants/local-storage';
+import { AuthServices } from '@/services/auth-service';
 
 export interface AuthContextType {
   isAuthenticated: boolean;
@@ -8,9 +17,10 @@ export interface AuthContextType {
   logout: () => void;
 }
 
-const TOKEN_KEY = 'token';
-const USER_KEY = 'user';
-const USER_ROLES: UserRole[] = ['user', 'owner', 'admin'];
+const TOKEN_KEY = localStorageKey.ACCESS_TOKEN;
+const USER_KEY = localStorageKey.USER;
+const REFRESH_TOKEN_KEY = localStorageKey.REFRESH_TOKEN;
+const USER_ROLES: UserRole[] = ['user', 'owner'];
 
 function isUserRole(role: unknown): role is UserRole {
   return typeof role === 'string' && USER_ROLES.includes(role as UserRole);
@@ -19,16 +29,26 @@ function isUserRole(role: unknown): role is UserRole {
 function normalizeUser(rawUser: unknown): User | null {
   if (!rawUser || typeof rawUser !== 'object') return null;
 
-  const user = rawUser as Partial<User>;
-  if (typeof user.name !== 'string' || typeof user.email !== 'string') return null;
+  const user = rawUser as any;
+  const name =
+    typeof user.name === 'string'
+      ? user.name
+      : typeof user.fullName === 'string'
+        ? user.fullName
+        : undefined;
+  const email = typeof user.email === 'string' ? user.email : undefined;
+
+  if (!name || !email) return null;
 
   const roles = Array.isArray(user.roles) ? user.roles.filter(isUserRole) : [];
 
   return {
-    name: user.name,
-    email: user.email,
+    name,
+    email,
     roles: roles.length > 0 ? roles : ['user'],
-    ...(typeof user.avatar === 'string' ? { avatar: user.avatar } : {}),
+    ...(typeof user.avatar_url === 'string'
+      ? { avatar_url: user.avatar_url }
+      : {}),
   };
 }
 
@@ -41,10 +61,14 @@ function readStoredUser(): User | null {
   }
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem(TOKEN_KEY),
+  );
   const [user, setUser] = useState<User | null>(() => readStoredUser());
 
   const isAuthenticated = !!token;
@@ -64,6 +88,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
+  // On app load, if a token exists, refresh the user from `/me` so roles and
+  // profile stay in sync. A genuine 401 is handled by the axios interceptor
+  // (silent refresh or forced sign-out).
+  useEffect(() => {
+    if (!token) return;
+    let cancelled = false;
+
+    (async () => {
+      const res = await AuthServices.getProfile();
+      if (cancelled) return;
+      if (res.status === 200 && res.data?.code === 1000 && res.data.result) {
+        const fresh = normalizeUser(res.data.result);
+        if (fresh) {
+          setUser(fresh);
+          localStorage.setItem(USER_KEY, JSON.stringify(fresh));
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // Run once on mount only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const login = useCallback((newToken: string, newUser: User) => {
     const normalizedUser = normalizeUser(newUser);
     if (!normalizedUser) return;
@@ -77,13 +127,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
     setToken(null);
     setUser(null);
   }, []);
 
   const value = useMemo(
     () => ({ isAuthenticated, user, login, logout }),
-    [isAuthenticated, user, login, logout]
+    [isAuthenticated, user, login, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
