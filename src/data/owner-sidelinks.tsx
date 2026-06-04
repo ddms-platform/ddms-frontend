@@ -6,6 +6,7 @@ import {
   User,
   Home,
   LogOut,
+  Anchor,
 } from 'lucide-react';
 import type { JSX } from 'react';
 import { routeName } from '@/constants/route-name';
@@ -37,6 +38,11 @@ export const ownerSidelinks: SideLink[] = [
     title: 'ownerLayout.nav.boats',
     href: routeName.ownerBoats,
     icon: <Ship size={20} />,
+  },
+  {
+    title: 'ownerLayout.nav.docks',
+    href: '/owner/docks',
+    icon: <Anchor size={20} />,
   },
   {
     title: 'ownerLayout.nav.tours',

@@ -31,6 +31,7 @@ const BecomeOwnerPage = lazy(() => import('@/pages/become-owner/index'));
 const OwnerDashboard = lazy(() => import('@/pages/owner/index'));
 const OwnerBoatList = lazy(() => import('@/pages/owner/boats/index'));
 const OwnerBoatForm = lazy(() => import('@/pages/owner/boats/boat-form'));
+const DockManagementPage = lazy(() => import('@/pages/owner/docks/index'));
 const ProfilePage = lazy(() => import('@/pages/profile/index'));
 const TourDetailPage = lazy(() => import('@/pages/tours/tour-detail'));
 const TourListPage = lazy(() => import('@/pages/tours/tour-list'));
@@ -220,6 +221,14 @@ function App() {
                     element={
                       <Suspense fallback={<PageLoader />}>
                         <OwnerBoatForm />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path="/owner/docks"
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <DockManagementPage />
                       </Suspense>
                     }
                   />
