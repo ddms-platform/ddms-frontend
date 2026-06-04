@@ -16,7 +16,11 @@ interface TourReviewsProps {
   totalReviews: number;
 }
 
-export default function TourReviews({ reviews, averageRating, totalReviews }: TourReviewsProps) {
+export default function TourReviews({
+  reviews,
+  averageRating,
+  totalReviews,
+}: TourReviewsProps) {
   const { t } = useTranslation();
 
   return (
@@ -37,18 +41,28 @@ export default function TourReviews({ reviews, averageRating, totalReviews }: To
       {/* Review Cards */}
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
         {reviews.map((review) => (
-          <div key={review.id} className="rounded-xl p-5" style={{ backgroundColor: '#112240' }}>
+          <div
+            key={review.id}
+            className="rounded-xl p-5"
+            style={{ backgroundColor: '#112240' }}
+          >
             <div className="flex items-center gap-3">
               <div
                 className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full"
                 style={{ backgroundColor: '#e0e0e0' }}
               >
-                <span className="text-sm font-bold" style={{ color: '#ecf0ff' }}>
+                <span
+                  className="text-sm font-bold"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {review.name.charAt(0)}
                 </span>
               </div>
               <div className="flex-1">
-                <p className="text-sm font-semibold" style={{ color: '#ffffff' }}>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: '#ffffff' }}
+                >
                   {review.name}
                 </p>
                 <p className="text-xs" style={{ color: '#ecf0ff' }}>
@@ -61,12 +75,20 @@ export default function TourReviews({ reviews, averageRating, totalReviews }: To
                     key={i}
                     size={12}
                     fill={i < review.rating ? '#222222' : 'none'}
-                    style={{ color: i < review.rating ? '#222222' : 'rgba(255,255,255,0.15)' }}
+                    style={{
+                      color:
+                        i < review.rating
+                          ? '#222222'
+                          : 'rgba(255,255,255,0.15)',
+                    }}
                   />
                 ))}
               </div>
             </div>
-            <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+            <p
+              className="mt-3 text-sm leading-relaxed"
+              style={{ color: '#ecf0ff' }}
+            >
               {review.comment}
             </p>
           </div>

@@ -91,7 +91,10 @@ export default function BookingPage() {
       />
 
       {/* Title */}
-      <h1 className="text-[28px] font-bold" style={{ color: '#ffffff', letterSpacing: '-0.44px' }}>
+      <h1
+        className="text-[28px] font-bold"
+        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+      >
         {t('booking.title')}
       </h1>
       <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
@@ -120,7 +123,10 @@ export default function BookingPage() {
         )}
 
         {step === 2 && (
-          <StepSelectBoat selectedBoat={selectedBoat} onSelectBoat={setSelectedBoat} />
+          <StepSelectBoat
+            selectedBoat={selectedBoat}
+            onSelectBoat={setSelectedBoat}
+          />
         )}
 
         {step === 3 && (
@@ -161,7 +167,12 @@ export default function BookingPage() {
       {/* Navigation Buttons */}
       <div className="mt-6 flex gap-3">
         {step > 1 && (
-          <Button variant="dark-outline" size="action-lg" className="flex-1" onClick={handleBack}>
+          <Button
+            variant="dark-outline"
+            size="action-lg"
+            className="flex-1"
+            onClick={handleBack}
+          >
             {t('booking.back')}
           </Button>
         )}
@@ -183,7 +194,9 @@ export default function BookingPage() {
             onClick={handleConfirm}
             disabled={isSubmitting}
           >
-            {isSubmitting ? t('booking.confirm.processing') : t('booking.confirm.pay')}
+            {isSubmitting
+              ? t('booking.confirm.processing')
+              : t('booking.confirm.pay')}
           </Button>
         )}
       </div>

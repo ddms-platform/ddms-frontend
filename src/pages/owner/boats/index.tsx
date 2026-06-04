@@ -31,7 +31,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { MOCK_OWNER_BOATS, BOAT_TYPES, type OwnerBoat, type BoatStatus } from '@/data/owner-boats';
+import {
+  MOCK_OWNER_BOATS,
+  BOAT_TYPES,
+  type OwnerBoat,
+  type BoatStatus,
+} from '@/data/owner-boats';
 import { routeName } from '@/constants/route-name';
 import { formatPrice } from '@/lib/utils';
 
@@ -50,12 +55,15 @@ export default function OwnerBoatList() {
   const filteredBoats = useMemo(
     () =>
       boats.filter((boat) => {
-        const matchSearch = boat.name.toLowerCase().includes(search.toLowerCase());
-        const matchStatus = filterStatus === 'all' || boat.status === filterStatus;
+        const matchSearch = boat.name
+          .toLowerCase()
+          .includes(search.toLowerCase());
+        const matchStatus =
+          filterStatus === 'all' || boat.status === filterStatus;
         const matchType = filterType === 'all' || boat.type === filterType;
         return matchSearch && matchStatus && matchType;
       }),
-    [boats, search, filterStatus, filterType]
+    [boats, search, filterStatus, filterType],
   );
 
   const stats = useMemo(
@@ -65,7 +73,7 @@ export default function OwnerBoatList() {
       idle: boats.filter((b) => b.status === 'idle').length,
       totalRevenue: boats.reduce((sum, b) => sum + b.revenue, 0),
     }),
-    [boats]
+    [boats],
   );
 
   const handleDelete = (boatId: string) => {
@@ -81,7 +89,10 @@ export default function OwnerBoatList() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: '#ffffff', letterSpacing: '-0.44px' }}>
+          <h1
+            className="text-2xl font-bold"
+            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+          >
             {t('ownerBoats.title')}
           </h1>
           <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
@@ -103,39 +114,49 @@ export default function OwnerBoatList() {
             label: t('ownerBoats.stats.total'),
             value: stats.total,
             icon: Ship,
-            gradient: 'linear-gradient(135deg, rgba(0,240,255,0.12), rgba(0,240,255,0.04))',
+            gradient:
+              'linear-gradient(135deg, rgba(0,240,255,0.12), rgba(0,240,255,0.04))',
             iconColor: '#00F0FF',
           },
           {
             label: t('ownerBoats.stats.running'),
             value: stats.running,
             icon: TrendingUp,
-            gradient: 'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.04))',
+            gradient:
+              'linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.04))',
             iconColor: '#10B981',
           },
           {
             label: t('ownerBoats.stats.idle'),
             value: stats.idle,
             icon: Layers,
-            gradient: 'linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04))',
+            gradient:
+              'linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04))',
             iconColor: '#F59E0B',
           },
           {
             label: t('ownerBoats.stats.revenue'),
             value: formatPrice(stats.totalRevenue),
             icon: TrendingUp,
-            gradient: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.04))',
+            gradient:
+              'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.04))',
             iconColor: '#8B5CF6',
           },
         ].map((s) => (
           <div
             key={s.label}
             className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.02]"
-            style={{ background: s.gradient, border: '1px solid rgba(255,255,255,0.04)' }}
+            style={{
+              background: s.gradient,
+              border: '1px solid rgba(255,255,255,0.04)',
+            }}
           >
             <div className="flex items-center gap-2">
               <s.icon size={16} style={{ color: s.iconColor }} />
-              <span className="text-xs font-medium" style={{ color: '#ecf0ff' }}>
+              <span
+                className="text-xs font-medium"
+                style={{ color: '#ecf0ff' }}
+              >
                 {s.label}
               </span>
             </div>
@@ -177,7 +198,9 @@ export default function OwnerBoatList() {
                 className="rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200"
                 style={{
                   backgroundColor:
-                    filterStatus === s ? 'rgba(0,240,255,0.15)' : 'rgba(255,255,255,0.04)',
+                    filterStatus === s
+                      ? 'rgba(0,240,255,0.15)'
+                      : 'rgba(255,255,255,0.04)',
                   color: filterStatus === s ? '#00F0FF' : '#ecf0ff',
                   border: `1px solid ${filterStatus === s ? 'rgba(0,240,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
                 }}
@@ -219,7 +242,8 @@ export default function OwnerBoatList() {
                 onClick={() => setViewMode(m)}
                 className="rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200"
                 style={{
-                  backgroundColor: viewMode === m ? 'rgba(0,240,255,0.12)' : 'transparent',
+                  backgroundColor:
+                    viewMode === m ? 'rgba(0,240,255,0.12)' : 'transparent',
                   color: viewMode === m ? '#00F0FF' : '#ecf0ff',
                 }}
               >
@@ -239,11 +263,16 @@ export default function OwnerBoatList() {
           >
             <Ship size={36} style={{ color: '#00F0FF' }} />
           </div>
-          <h3 className="mt-4 text-lg font-semibold" style={{ color: '#ffffff' }}>
+          <h3
+            className="mt-4 text-lg font-semibold"
+            style={{ color: '#ffffff' }}
+          >
             {t('ownerBoats.empty.title')}
           </h3>
           <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
-            {isFiltered ? t('ownerBoats.empty.filtered') : t('ownerBoats.empty.noBoats')}
+            {isFiltered
+              ? t('ownerBoats.empty.filtered')
+              : t('ownerBoats.empty.noBoats')}
           </p>
           {!isFiltered && (
             <Button variant="cyan" size="action" className="mt-6 gap-2" asChild>
@@ -328,7 +357,10 @@ function BoatCard({
         </div>
         {boat.maintenances.some((m) => new Date(m.endTime) > new Date()) && (
           <div className="absolute top-3 right-3">
-            <StatusBadge label={t('ownerBoats.card.maintenance')} variant="ownerMaintenance" />
+            <StatusBadge
+              label={t('ownerBoats.card.maintenance')}
+              variant="ownerMaintenance"
+            />
           </div>
         )}
         <div className="absolute right-3 bottom-3 relative">
@@ -349,7 +381,10 @@ function BoatCard({
           {openMenuId === boat.id && (
             <div
               className="absolute right-0 bottom-10 z-10 min-w-40 overflow-hidden rounded-xl py-1 shadow-xl"
-              style={{ backgroundColor: '#1a2d4d', border: '1px solid rgba(255,255,255,0.08)' }}
+              style={{
+                backgroundColor: '#1a2d4d',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
             >
               <Link
                 to={`${routeName.ownerBoats}/${boat.id}/edit`}
@@ -367,7 +402,10 @@ function BoatCard({
               >
                 <Eye size={14} /> {t('ownerBoats.card.viewPublic')}
               </Link>
-              <div className="my-1 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }} />
+              <div
+                className="my-1 h-px"
+                style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}
+              />
               <DeleteDialog
                 name={boat.name}
                 t={t}
@@ -383,12 +421,18 @@ function BoatCard({
       <div className="p-4">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+            <h3
+              className="text-base font-semibold"
+              style={{ color: '#ffffff' }}
+            >
               {boat.name}
             </h3>
             <span
               className="mt-0.5 inline-block rounded-md px-2 py-0.5 text-[11px] font-medium"
-              style={{ backgroundColor: 'rgba(0,240,255,0.08)', color: '#00F0FF' }}
+              style={{
+                backgroundColor: 'rgba(0,240,255,0.08)',
+                color: '#00F0FF',
+              }}
             >
               {getTypeLabel(boat.type)}
             </span>
@@ -404,10 +448,26 @@ function BoatCard({
         </div>
         <div className="mt-3 grid grid-cols-4 gap-2">
           {[
-            { icon: Users, value: boat.maxPassengers, label: t('ownerBoats.card.guests') },
-            { icon: DoorOpen, value: boat.totalCabins, label: t('ownerBoats.card.rooms') },
-            { icon: Layers, value: boat.totalServices, label: t('ownerBoats.card.services') },
-            { icon: Wrench, value: boat.activeTours, label: t('ownerBoats.card.tours') },
+            {
+              icon: Users,
+              value: boat.maxPassengers,
+              label: t('ownerBoats.card.guests'),
+            },
+            {
+              icon: DoorOpen,
+              value: boat.totalCabins,
+              label: t('ownerBoats.card.rooms'),
+            },
+            {
+              icon: Layers,
+              value: boat.totalServices,
+              label: t('ownerBoats.card.services'),
+            },
+            {
+              icon: Wrench,
+              value: boat.activeTours,
+              label: t('ownerBoats.card.tours'),
+            },
           ].map((s) => (
             <div
               key={s.label}
@@ -415,7 +475,10 @@ function BoatCard({
               style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
             >
               <s.icon size={14} style={{ color: '#ecf0ff' }} />
-              <span className="mt-1 text-sm font-bold" style={{ color: '#ffffff' }}>
+              <span
+                className="mt-1 text-sm font-bold"
+                style={{ color: '#ffffff' }}
+              >
                 {s.value}
               </span>
               <span className="text-[10px]" style={{ color: '#ecf0ff' }}>
@@ -465,12 +528,24 @@ function BoatTable({
             <th className="px-4 py-3">{t('ownerBoats.table.boat')}</th>
             <th className="px-4 py-3">{t('ownerBoats.table.type')}</th>
             <th className="px-4 py-3">{t('ownerBoats.table.status')}</th>
-            <th className="px-4 py-3 text-center">{t('ownerBoats.table.capacity')}</th>
-            <th className="px-4 py-3 text-center">{t('ownerBoats.table.rooms')}</th>
-            <th className="px-4 py-3 text-center">{t('ownerBoats.table.services')}</th>
-            <th className="px-4 py-3 text-center">{t('ownerBoats.table.tours')}</th>
-            <th className="px-4 py-3 text-right">{t('ownerBoats.table.revenue')}</th>
-            <th className="px-4 py-3 text-right">{t('ownerBoats.table.actions')}</th>
+            <th className="px-4 py-3 text-center">
+              {t('ownerBoats.table.capacity')}
+            </th>
+            <th className="px-4 py-3 text-center">
+              {t('ownerBoats.table.rooms')}
+            </th>
+            <th className="px-4 py-3 text-center">
+              {t('ownerBoats.table.services')}
+            </th>
+            <th className="px-4 py-3 text-center">
+              {t('ownerBoats.table.tours')}
+            </th>
+            <th className="px-4 py-3 text-right">
+              {t('ownerBoats.table.revenue')}
+            </th>
+            <th className="px-4 py-3 text-right">
+              {t('ownerBoats.table.actions')}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -498,7 +573,10 @@ function BoatTable({
                       </div>
                     )}
                   </div>
-                  <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: '#ffffff' }}
+                  >
                     {boat.name}
                   </span>
                 </div>
@@ -506,7 +584,10 @@ function BoatTable({
               <td className="px-4 py-3">
                 <span
                   className="rounded-md px-2 py-0.5 text-xs font-medium"
-                  style={{ backgroundColor: 'rgba(0,240,255,0.08)', color: '#00F0FF' }}
+                  style={{
+                    backgroundColor: 'rgba(0,240,255,0.08)',
+                    color: '#00F0FF',
+                  }}
                 >
                   {getTypeLabel(boat.type)}
                 </span>
@@ -514,23 +595,40 @@ function BoatTable({
               <td className="px-4 py-3">
                 <StatusBadge
                   label={t(`ownerBoats.status.${boat.status}`)}
-                  variant={boat.status === 'running' ? 'ownerRunning' : 'ownerIdle'}
+                  variant={
+                    boat.status === 'running' ? 'ownerRunning' : 'ownerIdle'
+                  }
                 />
               </td>
-              <td className="px-4 py-3 text-center text-sm" style={{ color: '#ffffff' }}>
+              <td
+                className="px-4 py-3 text-center text-sm"
+                style={{ color: '#ffffff' }}
+              >
                 {boat.maxPassengers}
               </td>
-              <td className="px-4 py-3 text-center text-sm" style={{ color: '#ffffff' }}>
+              <td
+                className="px-4 py-3 text-center text-sm"
+                style={{ color: '#ffffff' }}
+              >
                 {boat.totalCabins}
               </td>
-              <td className="px-4 py-3 text-center text-sm" style={{ color: '#ffffff' }}>
+              <td
+                className="px-4 py-3 text-center text-sm"
+                style={{ color: '#ffffff' }}
+              >
                 {boat.totalServices}
               </td>
-              <td className="px-4 py-3 text-center text-sm" style={{ color: '#ffffff' }}>
+              <td
+                className="px-4 py-3 text-center text-sm"
+                style={{ color: '#ffffff' }}
+              >
                 {boat.activeTours}
               </td>
               <td className="px-4 py-3 text-right">
-                <span className="text-sm font-semibold" style={{ color: '#00F0FF' }}>
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: '#00F0FF' }}
+                >
                   {formatPrice(boat.revenue)}
                 </span>
               </td>
@@ -546,7 +644,11 @@ function BoatTable({
                       <Eye size={14} style={{ color: '#ecf0ff' }} />
                     </Link>
                   </Button>
-                  <DeleteDialog name={boat.name} t={t} onConfirm={() => onDelete(boat.id)} />
+                  <DeleteDialog
+                    name={boat.name}
+                    t={t}
+                    onConfirm={() => onDelete(boat.id)}
+                  />
                 </div>
               </td>
             </tr>
@@ -582,8 +684,12 @@ function DeleteDialog({
           <AlertDialogMedia className="bg-destructive/10">
             <Trash2 className="text-destructive" />
           </AlertDialogMedia>
-          <AlertDialogTitle>{t('ownerBoats.delete.title', { name })}</AlertDialogTitle>
-          <AlertDialogDescription>{t('ownerBoats.delete.description')}</AlertDialogDescription>
+          <AlertDialogTitle>
+            {t('ownerBoats.delete.title', { name })}
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            {t('ownerBoats.delete.description')}
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{t('ownerBoats.delete.cancel')}</AlertDialogCancel>

@@ -65,44 +65,58 @@ export default function StepConfirm({
           style={{ borderColor: 'rgba(255,255,255,0.08)' }}
         >
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.date')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.date')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {formatDate(selectedDate)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.time')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.time')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {selectedTime}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.guests')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.guests')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {guests} {t('booking.guests.people')}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.boat')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.boat')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {selectedBoat?.name}
             </span>
           </div>
           {selectedRoom && (
             <div className="flex justify-between text-sm">
-              <span style={{ color: '#ecf0ff' }}>{t('booking.summary.room')}</span>
+              <span style={{ color: '#ecf0ff' }}>
+                {t('booking.summary.room')}
+              </span>
               <span className="font-medium" style={{ color: '#ffffff' }}>
                 {selectedRoom.name}
               </span>
             </div>
           )}
 
-          <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+          <div
+            className="h-px"
+            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+          />
 
           {/* Price breakdown */}
           <div className="flex justify-between text-sm">
             <span style={{ color: '#ecf0ff' }}>
-              {formatPrice(MOCK_TOUR.price)} × {guests} {t('booking.guests.people')}
+              {formatPrice(MOCK_TOUR.price)} × {guests}{' '}
+              {t('booking.guests.people')}
             </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {formatPrice(tourPrice)}
@@ -119,7 +133,10 @@ export default function StepConfirm({
             </div>
           )}
 
-          <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+          <div
+            className="h-px"
+            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+          />
           <div className="flex justify-between">
             <span className="font-semibold" style={{ color: '#ffffff' }}>
               {t('booking.summary.total')}

@@ -24,7 +24,8 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
             <div
               className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold transition-all"
               style={{
-                backgroundColor: currentStep >= num ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+                backgroundColor:
+                  currentStep >= num ? '#00F0FF' : 'rgba(255,255,255,0.15)',
                 color: currentStep >= num ? '#112240' : '#ecf0ff',
               }}
             >
@@ -40,7 +41,10 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
           {i < STEPS.length - 1 && (
             <div
               className="mb-5 h-0.5 flex-1"
-              style={{ backgroundColor: currentStep > num ? '#00F0FF' : 'rgba(255,255,255,0.15)' }}
+              style={{
+                backgroundColor:
+                  currentStep > num ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+              }}
             />
           )}
         </div>

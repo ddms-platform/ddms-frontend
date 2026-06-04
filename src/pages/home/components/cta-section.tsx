@@ -10,7 +10,8 @@ export default function CtaSection() {
     <section
       className="py-20"
       style={{
-        background: 'linear-gradient(135deg, #112240 0%, #0A192F 50%, #0d2847 100%)',
+        background:
+          'linear-gradient(135deg, #112240 0%, #0A192F 50%, #0d2847 100%)',
       }}
     >
       <div className="mx-auto max-w-3xl px-6 text-center">
@@ -24,7 +25,12 @@ export default function CtaSection() {
           {t('home.cta.description')}
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button variant="cyan" size="action-lg" className="px-8 text-base" asChild>
+          <Button
+            variant="cyan"
+            size="action-lg"
+            className="px-8 text-base"
+            asChild
+          >
             <Link to={routeName.signUp}>{t('home.cta.signUp')}</Link>
           </Button>
           <Button

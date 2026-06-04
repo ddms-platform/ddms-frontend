@@ -34,7 +34,8 @@ const MOCK_TOUR = {
       avatar: '',
       rating: 5,
       date: '15/04/2026',
-      comment: 'Tuyệt vời! Cảnh đêm sông Hàn rất đẹp, nhân viên phục vụ tận tình, đồ uống ngon.',
+      comment:
+        'Tuyệt vời! Cảnh đêm sông Hàn rất đẹp, nhân viên phục vụ tận tình, đồ uống ngon.',
     },
     {
       id: 2,
@@ -60,7 +61,8 @@ const MOCK_TOUR = {
       avatar: '',
       rating: 5,
       date: '05/04/2026',
-      comment: 'Lần thứ 2 đi rồi mà vẫn thấy hay. Tour rất chuyên nghiệp và đúng giờ.',
+      comment:
+        'Lần thứ 2 đi rồi mà vẫn thấy hay. Tour rất chuyên nghiệp và đúng giờ.',
     },
   ],
 };
@@ -131,7 +133,9 @@ export default function TourDetailPage() {
           </span>
         </div>
         <Button variant="cyan" size="action" asChild>
-          <Link to={`/tours/${tour.id}/booking`}>{t('tour.booking.bookNow')}</Link>
+          <Link to={`/tours/${tour.id}/booking`}>
+            {t('tour.booking.bookNow')}
+          </Link>
         </Button>
       </div>
     </div>

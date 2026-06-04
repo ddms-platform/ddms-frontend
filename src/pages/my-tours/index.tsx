@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Briefcase } from 'lucide-react';
 import { routeName } from '@/constants/route-name';
-import BookingCard, { type Booking, type BookingStatus } from './components/booking-card';
+import BookingCard, {
+  type Booking,
+  type BookingStatus,
+} from './components/booking-card';
 
 const MOCK_BOOKINGS: Booking[] = [
   {
@@ -13,7 +16,8 @@ const MOCK_BOOKINGS: Booking[] = [
     tourTitle_en: 'Han River Night Tour',
     location_vn: 'Sông Hàn, Đà Nẵng',
     location_en: 'Han River, Da Nang',
-    image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&q=80',
+    image:
+      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&q=80',
     date: '2026-04-25',
     time: '19:00',
     guests: 2,
@@ -28,7 +32,8 @@ const MOCK_BOOKINGS: Booking[] = [
     tourTitle_en: 'Ha Long Bay Cruise',
     location_vn: 'Vịnh Hạ Long, Quảng Ninh',
     location_en: 'Ha Long Bay, Quang Ninh',
-    image: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80',
+    image:
+      'https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80',
     date: '2026-02-14',
     time: '08:00',
     guests: 4,
@@ -43,7 +48,8 @@ const MOCK_BOOKINGS: Booking[] = [
     tourTitle_en: 'Hoi An Ancient Town',
     location_vn: 'Hội An, Quảng Nam',
     location_en: 'Hoi An, Quang Nam',
-    image: 'https://images.unsplash.com/photo-1549488344-c6a66b96e47d?w=800&q=80',
+    image:
+      'https://images.unsplash.com/photo-1549488344-c6a66b96e47d?w=800&q=80',
     date: '2026-03-10',
     time: '15:00',
     guests: 1,
@@ -73,7 +79,10 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-8 sm:py-12">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: '#ffffff' }}>
+        <h1
+          className="text-3xl font-bold tracking-tight sm:text-4xl"
+          style={{ color: '#ffffff' }}
+        >
           {t('dashboard.title')}
         </h1>
         <p className="mt-2 text-base" style={{ color: '#ecf0ff' }}>
@@ -112,12 +121,17 @@ export default function DashboardPage() {
       {/* Content */}
       <div className="flex flex-col gap-4 sm:gap-6">
         {filteredBookings.length > 0 ? (
-          filteredBookings.map((booking) => <BookingCard key={booking.id} booking={booking} />)
+          filteredBookings.map((booking) => (
+            <BookingCard key={booking.id} booking={booking} />
+          ))
         ) : (
           /* Empty State */
           <div
             className="mt-8 flex flex-col items-center justify-center rounded-2xl border border-dashed py-20 text-center"
-            style={{ borderColor: 'rgba(255,255,255,0.1)', backgroundColor: '#fafafa' }}
+            style={{
+              borderColor: 'rgba(255,255,255,0.1)',
+              backgroundColor: '#fafafa',
+            }}
           >
             <div
               className="flex h-16 w-16 items-center justify-center rounded-full"
@@ -128,7 +142,10 @@ export default function DashboardPage() {
             <h3 className="mt-4 text-lg font-bold" style={{ color: '#ffffff' }}>
               {t('dashboard.emptyTitle')}
             </h3>
-            <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+            <p
+              className="mt-2 max-w-sm text-sm leading-relaxed"
+              style={{ color: '#ecf0ff' }}
+            >
               {t('dashboard.emptyDescription')}
             </p>
             <Link

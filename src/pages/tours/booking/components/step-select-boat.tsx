@@ -10,7 +10,10 @@ interface StepSelectBoatProps {
   onSelectBoat: (boat: Boat) => void;
 }
 
-export default function StepSelectBoat({ selectedBoat, onSelectBoat }: StepSelectBoatProps) {
+export default function StepSelectBoat({
+  selectedBoat,
+  onSelectBoat,
+}: StepSelectBoatProps) {
   const { t } = useTranslation();
 
   return (
@@ -63,7 +66,10 @@ export default function StepSelectBoat({ selectedBoat, onSelectBoat }: StepSelec
                   : boat.available
                     ? 'rgba(255,255,255,0.15)'
                     : 'rgba(255,255,255,0.06)',
-              backgroundColor: selectedBoat?.id === boat.id ? 'rgba(0,240,255,0.06)' : '#0d1b36',
+              backgroundColor:
+                selectedBoat?.id === boat.id
+                  ? 'rgba(0,240,255,0.06)'
+                  : '#0d1b36',
               opacity: boat.available ? 1 : 0.55,
             }}
           >
@@ -76,7 +82,11 @@ export default function StepSelectBoat({ selectedBoat, onSelectBoat }: StepSelec
                 style={{ filter: boat.available ? 'none' : 'grayscale(80%)' }}
               />
               <StatusBadge
-                label={boat.available ? t('booking.boat.available') : t('booking.boat.unavailable')}
+                label={
+                  boat.available
+                    ? t('booking.boat.available')
+                    : t('booking.boat.unavailable')
+                }
                 variant={boat.available ? 'available' : 'unavailable'}
                 className="absolute right-2 top-2"
               />
@@ -103,7 +113,10 @@ export default function StepSelectBoat({ selectedBoat, onSelectBoat }: StepSelec
                 </h3>
                 <span
                   className="rounded-md px-2 py-0.5 text-xs font-medium"
-                  style={{ backgroundColor: 'rgba(0,240,255,0.1)', color: '#00F0FF' }}
+                  style={{
+                    backgroundColor: 'rgba(0,240,255,0.1)',
+                    color: '#00F0FF',
+                  }}
                 >
                   {boat.type === 'cruise'
                     ? t('booking.boat.types.cruise')
@@ -120,10 +133,14 @@ export default function StepSelectBoat({ selectedBoat, onSelectBoat }: StepSelec
                 {boat.description}
               </p>
               <div className="mt-3 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs" style={{ color: '#ecf0ff' }}>
+                <div
+                  className="flex items-center gap-1.5 text-xs"
+                  style={{ color: '#ecf0ff' }}
+                >
                   <Users size={13} />
                   <span>
-                    {t('booking.boat.capacity')}: {boat.capacity} {t('booking.guests.people')}
+                    {t('booking.boat.capacity')}: {boat.capacity}{' '}
+                    {t('booking.guests.people')}
                   </span>
                 </div>
                 <Link

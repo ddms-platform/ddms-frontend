@@ -60,7 +60,10 @@ export default function OwnerDashboard() {
 
   return (
     <div className="px-4 py-6 lg:px-8">
-      <h1 className="text-2xl font-bold" style={{ color: '#ffffff', letterSpacing: '-0.44px' }}>
+      <h1
+        className="text-2xl font-bold"
+        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+      >
         {t('ownerDash.title')}
       </h1>
       <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
@@ -72,7 +75,10 @@ export default function OwnerDashboard() {
           <div
             key={s.label}
             className="rounded-2xl p-5 transition-all hover:scale-[1.02]"
-            style={{ backgroundColor: '#112240', border: '1px solid rgba(255,255,255,0.04)' }}
+            style={{
+              backgroundColor: '#112240',
+              border: '1px solid rgba(255,255,255,0.04)',
+            }}
           >
             <div
               className="flex h-10 w-10 items-center justify-center rounded-xl"
@@ -92,7 +98,10 @@ export default function OwnerDashboard() {
 
       <div
         className="mt-8 rounded-2xl p-6"
-        style={{ backgroundColor: '#112240', border: '1px solid rgba(255,255,255,0.04)' }}
+        style={{
+          backgroundColor: '#112240',
+          border: '1px solid rgba(255,255,255,0.04)',
+        }}
       >
         <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
           {t('ownerDash.quickStart')}
