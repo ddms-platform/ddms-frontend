@@ -1,7 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Search, MapPin, Star, Heart, SlidersHorizontal, X } from 'lucide-react';
+import {
+  Search,
+  MapPin,
+  Star,
+  Heart,
+  SlidersHorizontal,
+  X,
+} from 'lucide-react';
 import Pagination from '@/components/shared/pagination';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
 import { usePagination } from '@/hooks/use-pagination';
@@ -10,7 +17,8 @@ import { Button } from '@/components/ui/button';
 const ALL_TOURS = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop',
     title_vn: 'Tour Sông Hàn Về Đêm',
     title_en: 'Han River Night Tour',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -24,7 +32,8 @@ const ALL_TOURS = [
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&h=400&fit=crop',
     title_vn: 'Khám Phá Ngũ Hành Sơn',
     title_en: 'Marble Mountains Discovery',
     location_vn: 'Ngũ Hành Sơn, Đà Nẵng',
@@ -38,7 +47,8 @@ const ALL_TOURS = [
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?w=600&h=400&fit=crop',
     title_vn: 'Du Thuyền Cầu Rồng',
     title_en: 'Dragon Bridge Cruise',
     location_vn: 'Cầu Rồng, Đà Nẵng',
@@ -52,7 +62,8 @@ const ALL_TOURS = [
   },
   {
     id: 4,
-    image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&h=400&fit=crop',
     title_vn: 'Tour Hoàng Hôn Sông Hàn',
     title_en: 'Han River Sunset Tour',
     location_vn: 'Bến Bạch Đằng, Đà Nẵng',
@@ -66,7 +77,8 @@ const ALL_TOURS = [
   },
   {
     id: 5,
-    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop',
     title_vn: 'Tiệc BBQ Trên Thuyền',
     title_en: 'BBQ Party on Boat',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -80,7 +92,8 @@ const ALL_TOURS = [
   },
   {
     id: 6,
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
     title_vn: 'Tour Gia Đình Sông Hàn',
     title_en: 'Han River Family Tour',
     location_vn: 'Bến Bạch Đằng, Đà Nẵng',
@@ -94,7 +107,8 @@ const ALL_TOURS = [
   },
   {
     id: 7,
-    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&h=400&fit=crop',
     title_vn: 'Party Boat Đà Nẵng',
     title_en: 'Da Nang Party Boat',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -108,7 +122,8 @@ const ALL_TOURS = [
   },
   {
     id: 8,
-    image: 'https://images.unsplash.com/photo-1468413253725-0d5181091126?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1468413253725-0d5181091126?w=600&h=400&fit=crop',
     title_vn: 'Ngắm Bình Minh Trên Sông',
     title_en: 'River Sunrise Tour',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -122,7 +137,8 @@ const ALL_TOURS = [
   },
   {
     id: 9,
-    image: 'https://images.unsplash.com/photo-1520942702018-0862200e6873?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1520942702018-0862200e6873?w=600&h=400&fit=crop',
     title_vn: 'Tour Cù Lao Chàm',
     title_en: 'Cham Island Tour',
     location_vn: 'Cù Lao Chàm, Hội An',
@@ -136,7 +152,8 @@ const ALL_TOURS = [
   },
   {
     id: 10,
-    image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&h=400&fit=crop',
     title_vn: 'Hoàng Hôn Bãi Biển Mỹ Khê',
     title_en: 'My Khe Beach Sunset',
     location_vn: 'Mỹ Khê, Đà Nẵng',
@@ -150,7 +167,8 @@ const ALL_TOURS = [
   },
   {
     id: 11,
-    image: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&h=400&fit=crop',
     title_vn: 'Du Thuyền VIP Sông Hàn',
     title_en: 'VIP Han River Cruise',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -164,7 +182,8 @@ const ALL_TOURS = [
   },
   {
     id: 12,
-    image: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&h=400&fit=crop',
     title_vn: 'Tour Chèo SUP Sông Hàn',
     title_en: 'Han River SUP Tour',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -178,7 +197,8 @@ const ALL_TOURS = [
   },
   {
     id: 13,
-    image: 'https://images.unsplash.com/photo-1517627043994-b991abb62fc8?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1517627043994-b991abb62fc8?w=600&h=400&fit=crop',
     title_vn: 'Đêm Nhạc Trên Du Thuyền',
     title_en: 'Live Music Cruise Night',
     location_vn: 'Bến Bạch Đằng, Đà Nẵng',
@@ -192,7 +212,8 @@ const ALL_TOURS = [
   },
   {
     id: 14,
-    image: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&h=400&fit=crop',
     title_vn: 'Tour Cầu Vàng Bà Nà',
     title_en: 'Golden Bridge Ba Na Tour',
     location_vn: 'Bà Nà Hills, Đà Nẵng',
@@ -206,7 +227,8 @@ const ALL_TOURS = [
   },
   {
     id: 15,
-    image: 'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&h=400&fit=crop',
     title_vn: 'Tour Câu Cá Sông Hàn',
     title_en: 'Han River Fishing Tour',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -220,7 +242,8 @@ const ALL_TOURS = [
   },
   {
     id: 16,
-    image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&h=400&fit=crop',
     title_vn: 'Ăn Tối Trên Sông Hàn',
     title_en: 'Dinner on Han River',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -234,7 +257,8 @@ const ALL_TOURS = [
   },
   {
     id: 17,
-    image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop',
     title_vn: 'Sunrise Tour Sơn Trà',
     title_en: 'Son Tra Sunrise Tour',
     location_vn: 'Bán đảo Sơn Trà, Đà Nẵng',
@@ -248,7 +272,8 @@ const ALL_TOURS = [
   },
   {
     id: 18,
-    image: 'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&h=400&fit=crop',
     title_vn: 'Du Thuyền Đêm Trăng',
     title_en: 'Moonlight Cruise',
     location_vn: 'Sông Hàn, Đà Nẵng',
@@ -262,7 +287,8 @@ const ALL_TOURS = [
   },
   {
     id: 19,
-    image: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600&h=400&fit=crop',
     title_vn: 'Pool Party Thuyền Buồm',
     title_en: 'Sailboat Pool Party',
     location_vn: 'Biển Mỹ Khê, Đà Nẵng',
@@ -276,7 +302,8 @@ const ALL_TOURS = [
   },
   {
     id: 20,
-    image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop',
     title_vn: 'Tour Gia Đình Cù Lao Chàm',
     title_en: 'Cham Island Family Tour',
     location_vn: 'Cù Lao Chàm, Hội An',
@@ -312,16 +339,23 @@ export default function TourListPage() {
   const [showFilters, setShowFilters] = useState(false);
 
   const toggleWishlist = (id: number) => {
-    setWishlist((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
+    setWishlist((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
   };
 
   // Filter & Sort
   const filtered = ALL_TOURS.filter((tour) => {
     const matchSearch =
       !searchQuery ||
-      getLocalizedField(tour, 'title', lang).toLowerCase().includes(searchQuery.toLowerCase()) ||
-      getLocalizedField(tour, 'location', lang).toLowerCase().includes(searchQuery.toLowerCase());
-    const matchCategory = activeCategory === 'all' || tour.category === activeCategory;
+      getLocalizedField(tour, 'title', lang)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      getLocalizedField(tour, 'location', lang)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+    const matchCategory =
+      activeCategory === 'all' || tour.category === activeCategory;
     return matchSearch && matchCategory;
   });
 
@@ -419,8 +453,12 @@ export default function TourListPage() {
             onClick={() => handleCategoryChange(cat.key)}
             className="flex shrink-0 items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
             style={{
-              borderColor: activeCategory === cat.key ? '#00F0FF' : 'rgba(255,255,255,0.15)',
-              backgroundColor: activeCategory === cat.key ? 'rgba(0,240,255,0.08)' : '#112240',
+              borderColor:
+                activeCategory === cat.key
+                  ? '#00F0FF'
+                  : 'rgba(255,255,255,0.15)',
+              backgroundColor:
+                activeCategory === cat.key ? 'rgba(0,240,255,0.08)' : '#112240',
               color: activeCategory === cat.key ? '#00F0FF' : '#ffffff',
             }}
           >
@@ -456,29 +494,49 @@ export default function TourListPage() {
                       toggleWishlist(tour.id);
                     }}
                     className="absolute right-3 top-3 rounded-full p-2 transition-all hover:scale-110"
-                    style={{ backgroundColor: 'rgba(0,240,255,0.15)', backdropFilter: 'blur(8px)' }}
+                    style={{
+                      backgroundColor: 'rgba(0,240,255,0.15)',
+                      backdropFilter: 'blur(8px)',
+                    }}
                   >
                     <Heart
                       size={18}
                       fill={wishlist.includes(tour.id) ? '#00F0FF' : 'none'}
-                      style={{ color: wishlist.includes(tour.id) ? '#00F0FF' : '#ffffff' }}
+                      style={{
+                        color: wishlist.includes(tour.id)
+                          ? '#00F0FF'
+                          : '#ffffff',
+                      }}
                     />
                   </button>
                 </div>
 
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+                    <h3
+                      className="text-base font-semibold"
+                      style={{ color: '#ffffff' }}
+                    >
                       {getLocalizedField(tour, 'title', lang)}
                     </h3>
                     <div className="flex shrink-0 items-center gap-1">
-                      <Star size={14} fill="#ffc107" style={{ color: '#ffc107' }} />
-                      <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                      <Star
+                        size={14}
+                        fill="#ffc107"
+                        style={{ color: '#ffc107' }}
+                      />
+                      <span
+                        className="text-sm font-medium"
+                        style={{ color: '#ffffff' }}
+                      >
                         {tour.rating}
                       </span>
                     </div>
                   </div>
-                  <p className="mt-1 flex items-center gap-1 text-sm" style={{ color: '#ecf0ff' }}>
+                  <p
+                    className="mt-1 flex items-center gap-1 text-sm"
+                    style={{ color: '#ecf0ff' }}
+                  >
                     <MapPin size={13} />
                     {getLocalizedField(tour, 'location', lang)}
                   </p>
@@ -486,9 +544,15 @@ export default function TourListPage() {
                     {getLocalizedField(tour, 'duration', lang)} · {tour.reviews}{' '}
                     {t('tourList.reviews')}
                   </p>
-                  <p className="mt-3 text-base font-semibold" style={{ color: '#00F0FF' }}>
+                  <p
+                    className="mt-3 text-base font-semibold"
+                    style={{ color: '#00F0FF' }}
+                  >
                     {formatPrice(tour.price)}
-                    <span className="text-sm font-normal" style={{ color: '#ecf0ff' }}>
+                    <span
+                      className="text-sm font-normal"
+                      style={{ color: '#ecf0ff' }}
+                    >
                       {' '}
                       / {t('tourList.perPerson')}
                     </span>
@@ -500,7 +564,11 @@ export default function TourListPage() {
 
           {/* Pagination */}
           <div className="mt-10">
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={goToPage} />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+            />
           </div>
         </>
       ) : (

@@ -28,7 +28,8 @@ export const MOCK_BOATS: Boat[] = [
     name: 'Rồng Vàng',
     type: 'cruise',
     capacity: 40,
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=250&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=250&fit=crop',
     available: true,
     description: 'Du thuyền hạng sang với 2 tầng, phòng VIP',
   },
@@ -37,7 +38,8 @@ export const MOCK_BOATS: Boat[] = [
     name: 'Sông Hàn 01',
     type: 'standard',
     capacity: 30,
-    image: 'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=400&h=250&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=400&h=250&fit=crop',
     available: true,
     description: 'Thuyền tiêu chuẩn, thoáng mát',
   },
@@ -46,7 +48,8 @@ export const MOCK_BOATS: Boat[] = [
     name: 'Phượng Hoàng',
     type: 'luxury',
     capacity: 20,
-    image: 'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=400&h=250&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=400&h=250&fit=crop',
     available: false,
     description: 'Du thuyền cao cấp, nội thất sang trọng',
   },
@@ -55,7 +58,8 @@ export const MOCK_BOATS: Boat[] = [
     name: 'Bạch Đằng Star',
     type: 'party',
     capacity: 50,
-    image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=400&h=250&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=400&h=250&fit=crop',
     available: true,
     description: 'Thuyền tiệc lớn, sân khấu ngoài trời',
   },
@@ -64,7 +68,8 @@ export const MOCK_BOATS: Boat[] = [
     name: 'Cá Chép Đỏ',
     type: 'standard',
     capacity: 25,
-    image: 'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=400&h=250&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=400&h=250&fit=crop',
     available: false,
     description: 'Đang bảo trì định kỳ',
   },
@@ -73,7 +78,8 @@ export const MOCK_BOATS: Boat[] = [
     name: 'Hải Âu',
     type: 'speedboat',
     capacity: 12,
-    image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=250&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=400&h=250&fit=crop',
     available: true,
     description: 'Ca nô cao tốc, trải nghiệm mạo hiểm',
   },
@@ -123,21 +129,24 @@ export const BOAT_ROOMS: Record<string, RoomOption[]> = {
           name: 'Minh Anh',
           rating: 5,
           date: '20/04/2026',
-          comment: 'Phòng rất đẹp, view sông Hàn tuyệt vời! Minibar miễn phí là điểm cộng lớn.',
+          comment:
+            'Phòng rất đẹp, view sông Hàn tuyệt vời! Minibar miễn phí là điểm cộng lớn.',
         },
         {
           id: 2,
           name: 'David K.',
           rating: 5,
           date: '15/04/2026',
-          comment: 'Amazing luxury cabin. The panoramic view is breathtaking, especially at night.',
+          comment:
+            'Amazing luxury cabin. The panoramic view is breathtaking, especially at night.',
         },
         {
           id: 3,
           name: 'Hương Trần',
           rating: 4,
           date: '10/04/2026',
-          comment: 'Nội thất sang trọng, bồn tắm rộng. Chỉ tiếc phòng hơi nhỏ so với giá.',
+          comment:
+            'Nội thất sang trọng, bồn tắm rộng. Chỉ tiếc phòng hơi nhỏ so với giá.',
         },
         {
           id: 4,
@@ -186,14 +195,16 @@ export const BOAT_ROOMS: Record<string, RoomOption[]> = {
           name: 'Thanh Hoa',
           rating: 5,
           date: '18/04/2026',
-          comment: 'Ban công nhìn ra sông rất lãng mạn, đặc biệt lúc hoàng hôn.',
+          comment:
+            'Ban công nhìn ra sông rất lãng mạn, đặc biệt lúc hoàng hôn.',
         },
         {
           id: 2,
           name: 'John M.',
           rating: 4,
           date: '12/04/2026',
-          comment: 'Great room with a lovely balcony. The bed was very comfortable.',
+          comment:
+            'Great room with a lovely balcony. The bed was very comfortable.',
         },
         {
           id: 3,
@@ -217,7 +228,9 @@ export const BOAT_ROOMS: Record<string, RoomOption[]> = {
       reviewCount: 230,
       totalRooms: 6,
       availableRooms: 4,
-      images: ['https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=500&fit=crop'],
+      images: [
+        'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=500&fit=crop',
+      ],
       description:
         'Phòng tiêu chuẩn gọn gàng, đầy đủ tiện nghi cơ bản. Phù hợp cho chuyến đi ngắn.',
       amenities: [
@@ -264,7 +277,9 @@ export const BOAT_ROOMS: Record<string, RoomOption[]> = {
       reviewCount: 67,
       totalRooms: 2,
       availableRooms: 2,
-      images: ['https://images.unsplash.com/photo-1590490360182-c33d955f4e24?w=800&h=500&fit=crop'],
+      images: [
+        'https://images.unsplash.com/photo-1590490360182-c33d955f4e24?w=800&h=500&fit=crop',
+      ],
       description:
         'Suite tiệc lớn với không gian mở, hệ thống đèn LED, loa karaoke chất lượng cao.',
       amenities: [
@@ -307,7 +322,9 @@ export const DEFAULT_BOAT_ROOMS: RoomOption[] = [
     reviewCount: 45,
     totalRooms: 3,
     availableRooms: 2,
-    images: ['https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=500&fit=crop'],
+    images: [
+      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=500&fit=crop',
+    ],
     description: 'Cabin tiêu chuẩn nhỏ gọn, đầy đủ tiện nghi cơ bản.',
     amenities: [
       { icon: Wifi, label: 'WiFi' },

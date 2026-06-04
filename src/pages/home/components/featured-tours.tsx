@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Star, ChevronRight, Heart } from 'lucide-react';
+import { routeName } from '@/constants/route-name';
 import { formatPrice } from '@/lib/utils';
 
 const FEATURED_TOURS = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop',
     title: 'Tour Sông Hàn Về Đêm',
     location: 'Sông Hàn, Đà Nẵng',
     price: 350000,
@@ -17,7 +19,8 @@ const FEATURED_TOURS = [
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&h=400&fit=crop',
     title: 'Khám Phá Ngũ Hành Sơn',
     location: 'Ngũ Hành Sơn, Đà Nẵng',
     price: 500000,
@@ -27,7 +30,8 @@ const FEATURED_TOURS = [
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?w=600&h=400&fit=crop',
     title: 'Du Thuyền Cầu Rồng',
     location: 'Cầu Rồng, Đà Nẵng',
     price: 450000,
@@ -37,7 +41,8 @@ const FEATURED_TOURS = [
   },
   {
     id: 4,
-    image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&h=400&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&h=400&fit=crop',
     title: 'Tour Hoàng Hôn Sông Hàn',
     location: 'Bến Bạch Đằng, Đà Nẵng',
     price: 400000,
@@ -52,7 +57,9 @@ export default function FeaturedTours() {
   const [wishlist, setWishlist] = useState<number[]>([]);
 
   const toggleWishlist = (id: number) => {
-    setWishlist((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
+    setWishlist((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
   };
 
   return (
@@ -70,7 +77,7 @@ export default function FeaturedTours() {
           </p>
         </div>
         <Link
-          to="/tours"
+          to={routeName.tours}
           className="hidden items-center gap-1 text-sm font-semibold transition-colors hover:underline sm:flex"
           style={{ color: '#ffffff' }}
         >
@@ -103,12 +110,17 @@ export default function FeaturedTours() {
                   toggleWishlist(tour.id);
                 }}
                 className="absolute right-3 top-3 rounded-full p-2 transition-all hover:scale-110"
-                style={{ backgroundColor: 'rgba(0,240,255,0.15)', backdropFilter: 'blur(8px)' }}
+                style={{
+                  backgroundColor: 'rgba(0,240,255,0.15)',
+                  backdropFilter: 'blur(8px)',
+                }}
               >
                 <Heart
                   size={18}
                   fill={wishlist.includes(tour.id) ? '#ff385c' : 'none'}
-                  style={{ color: wishlist.includes(tour.id) ? '#ff385c' : '#ffffff' }}
+                  style={{
+                    color: wishlist.includes(tour.id) ? '#ff385c' : '#ffffff',
+                  }}
                 />
               </button>
             </div>
@@ -116,26 +128,41 @@ export default function FeaturedTours() {
             {/* Details */}
             <div className="p-4">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+                <h3
+                  className="text-base font-semibold"
+                  style={{ color: '#ffffff' }}
+                >
                   {tour.title}
                 </h3>
                 <div className="flex shrink-0 items-center gap-1">
                   <Star size={14} fill="#ffc107" style={{ color: '#ffc107' }} />
-                  <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: '#ffffff' }}
+                  >
                     {tour.rating}
                   </span>
                 </div>
               </div>
-              <p className="mt-1 flex items-center gap-1 text-sm" style={{ color: '#ecf0ff' }}>
+              <p
+                className="mt-1 flex items-center gap-1 text-sm"
+                style={{ color: '#ecf0ff' }}
+              >
                 <MapPin size={13} />
                 {tour.location}
               </p>
               <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
                 {tour.duration} · {tour.reviews} {t('home.tours.reviews')}
               </p>
-              <p className="mt-3 text-base font-semibold" style={{ color: '#00F0FF' }}>
+              <p
+                className="mt-3 text-base font-semibold"
+                style={{ color: '#00F0FF' }}
+              >
                 {formatPrice(tour.price)}
-                <span className="text-sm font-normal" style={{ color: '#ecf0ff' }}>
+                <span
+                  className="text-sm font-normal"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {' '}
                   / {t('home.tours.perPerson')}
                 </span>

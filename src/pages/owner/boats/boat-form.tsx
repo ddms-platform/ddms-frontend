@@ -1,14 +1,28 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Save, Ship, DoorOpen, Layers, ImageIcon, Wrench, Loader2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  Save,
+  Ship,
+  DoorOpen,
+  Layers,
+  ImageIcon,
+  Wrench,
+  Loader2,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { BOAT_TYPES } from '@/data/owner-boats';
-import { boatService, type Boat, type BoatMaintenance } from '@/services/boatService';
+import {
+  boatService,
+  type Boat,
+  type BoatMaintenance,
+} from '@/services/boatService';
 import { cabinService } from '@/services/cabinService';
 import { boatServiceApi } from '@/services/boatServiceApi';
+import { routeName } from '@/constants/route-name';
 import CabinTab, { type LocalCabin } from './cabin-tab';
 import ServiceTab, { type LocalService } from './service-tab';
 import MaintenanceTab from './maintenance-tab';
@@ -49,15 +63,27 @@ export default function BoatForm() {
       setMaxPassengers(String(b.maxPassengers));
       setStatus(b.status);
       setMaintenances(b.maintenances);
-      setCabins(b.cabins.map((c) => ({
-        _localId: c.id, id: c.id, name: c.name,
-        capacity: c.capacity, price: c.price,
-        totalRooms: c.totalRooms, description: c.description,
-      })));
-      setServices(b.services.map((s) => ({
-        _localId: s.id, id: s.id, name: s.name,
-        price: s.price, description: s.description, isActive: s.isActive,
-      })));
+      setCabins(
+        b.cabins.map((c) => ({
+          _localId: c.id,
+          id: c.id,
+          name: c.name,
+          capacity: c.capacity,
+          price: c.price,
+          totalRooms: c.totalRooms,
+          description: c.description,
+        })),
+      );
+      setServices(
+        b.services.map((s) => ({
+          _localId: s.id,
+          id: s.id,
+          name: s.name,
+          price: s.price,
+          description: s.description,
+          isActive: s.isActive,
+        })),
+      );
     } catch {
       toast.error('Không thể tải thông tin tàu');
     } finally {
@@ -65,12 +91,15 @@ export default function BoatForm() {
     }
   }, [boatId]);
 
-  useEffect(() => { loadBoat(); }, [loadBoat]);
+  useEffect(() => {
+    loadBoat();
+  }, [loadBoat]);
 
   const validate = () => {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = 'Tên tàu không được để trống';
-    if (!maxPassengers || Number(maxPassengers) < 1) e.maxPassengers = 'Sức chứa phải lớn hơn 0';
+    if (!maxPassengers || Number(maxPassengers) < 1)
+      e.maxPassengers = 'Sức chứa phải lớn hơn 0';
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -94,34 +123,61 @@ export default function BoatForm() {
       // Sync new cabins only
       for (const cabin of cabins.filter((c) => !c.id)) {
         await cabinService.create(savedBoatId, {
-          name: cabin.name, capacity: cabin.capacity,
-          price: cabin.price, totalRooms: cabin.totalRooms, description: cabin.description,
+          name: cabin.name,
+          capacity: cabin.capacity,
+          price: cabin.price,
+          totalRooms: cabin.totalRooms,
+          description: cabin.description,
         });
       }
 
       // Sync new services only
       for (const svc of services.filter((s) => !s.id)) {
         await boatServiceApi.create(savedBoatId, {
-          name: svc.name, price: svc.price,
-          description: svc.description, isActive: svc.isActive,
+          name: svc.name,
+          price: svc.price,
+          description: svc.description,
+          isActive: svc.isActive,
         });
       }
 
       toast.success(isEdit ? 'Cập nhật tàu thành công' : 'Tạo tàu thành công');
       navigate('/owner/boats');
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Lưu thất bại, vui lòng thử lại');
+      toast.error(
+        err instanceof Error ? err.message : 'Lưu thất bại, vui lòng thử lại',
+      );
     } finally {
       setSaving(false);
     }
   };
 
-  const TABS: { id: Tab; label: string; icon: React.ElementType; count?: number }[] = [
+  const TABS: {
+    id: Tab;
+    label: string;
+    icon: React.ElementType;
+    count?: number;
+  }[] = [
     { id: 'basic', label: t('ownerBoats.form.tabs.basic'), icon: Ship },
-    { id: 'cabins', label: t('ownerBoats.form.tabs.cabins'), icon: DoorOpen, count: cabins.length },
-    { id: 'services', label: t('ownerBoats.form.tabs.services'), icon: Layers, count: services.length },
+    {
+      id: 'cabins',
+      label: t('ownerBoats.form.tabs.cabins'),
+      icon: DoorOpen,
+      count: cabins.length,
+    },
+    {
+      id: 'services',
+      label: t('ownerBoats.form.tabs.services'),
+      icon: Layers,
+      count: services.length,
+    },
     { id: 'images', label: t('ownerBoats.form.tabs.images'), icon: ImageIcon },
-    { id: 'maintenance', label: t('ownerBoats.form.tabs.maintenance'), icon: Wrench, count: maintenances.length },
+    {
+      id: 'maintenance',
+      label: t('ownerBoats.form.tabs.maintenance'),
+      icon: Wrench,
+      count: maintenances.length,
+    },
   ];
 
   const inputStyle = {
@@ -133,7 +189,11 @@ export default function BoatForm() {
   if (loadingBoat) {
     return (
       <div className="flex h-96 items-center justify-center">
-        <Loader2 size={32} className="animate-spin" style={{ color: '#00F0FF' }} />
+        <Loader2
+          size={32}
+          className="animate-spin"
+          style={{ color: '#00F0FF' }}
+        />
       </div>
     );
   }
@@ -144,7 +204,7 @@ export default function BoatForm() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/owner/boats">
+            <Link to={routeName.ownerBoats}>
               <ArrowLeft size={18} style={{ color: '#ecf0ff' }} />
             </Link>
           </Button>
@@ -155,12 +215,24 @@ export default function BoatForm() {
                 : t('ownerBoats.form.createTitle')}
             </h1>
             <p className="text-xs" style={{ color: '#ecf0ff' }}>
-              {isEdit ? t('ownerBoats.form.editSubtitle') : t('ownerBoats.form.createSubtitle')}
+              {isEdit
+                ? t('ownerBoats.form.editSubtitle')
+                : t('ownerBoats.form.createSubtitle')}
             </p>
           </div>
         </div>
-        <Button variant="cyan" size="action" className="gap-2" onClick={handleSave} disabled={saving}>
-          {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+        <Button
+          variant="cyan"
+          size="action"
+          className="gap-2"
+          onClick={handleSave}
+          disabled={saving}
+        >
+          {saving ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <Save size={16} />
+          )}
           {saving ? t('ownerBoats.form.saving') : t('ownerBoats.form.save')}
         </Button>
       </div>
@@ -168,7 +240,10 @@ export default function BoatForm() {
       {/* Tabs */}
       <div
         className="mt-6 flex gap-1 overflow-x-auto rounded-xl p-1"
-        style={{ backgroundColor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)' }}
+        style={{
+          backgroundColor: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.04)',
+        }}
       >
         {TABS.map(({ id, label, icon: Icon, count }) => (
           <button
@@ -176,7 +251,8 @@ export default function BoatForm() {
             onClick={() => setActiveTab(id)}
             className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all"
             style={{
-              backgroundColor: activeTab === id ? 'rgba(0,240,255,0.1)' : 'transparent',
+              backgroundColor:
+                activeTab === id ? 'rgba(0,240,255,0.1)' : 'transparent',
               color: activeTab === id ? '#00F0FF' : '#ecf0ff',
             }}
           >
@@ -197,26 +273,45 @@ export default function BoatForm() {
         {activeTab === 'basic' && (
           <div
             className="rounded-2xl p-6"
-            style={{ backgroundColor: '#112240', border: '1px solid rgba(255,255,255,0.04)' }}
+            style={{
+              backgroundColor: '#112240',
+              border: '1px solid rgba(255,255,255,0.04)',
+            }}
           >
-            <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+            <h2
+              className="text-base font-semibold"
+              style={{ color: '#ffffff' }}
+            >
               {t('ownerBoats.form.basic.title')}
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <label
+                  className="mb-1.5 block text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t('ownerBoats.form.basic.name')} *
                 </label>
                 <Input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder={t('ownerBoats.form.basic.namePlaceholder')}
-                  style={{ ...inputStyle, borderColor: errors.name ? '#EF4444' : 'rgba(255,255,255,0.08)' }}
+                  style={{
+                    ...inputStyle,
+                    borderColor: errors.name
+                      ? '#EF4444'
+                      : 'rgba(255,255,255,0.08)',
+                  }}
                 />
-                {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
+                {errors.name && (
+                  <p className="mt-1 text-xs text-red-400">{errors.name}</p>
+                )}
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <label
+                  className="mb-1.5 block text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t('ownerBoats.form.basic.type')} *
                 </label>
                 <select
@@ -233,7 +328,10 @@ export default function BoatForm() {
                 </select>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <label
+                  className="mb-1.5 block text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t('ownerBoats.form.basic.capacity')} *
                 </label>
                 <Input
@@ -241,12 +339,24 @@ export default function BoatForm() {
                   value={maxPassengers}
                   onChange={(e) => setMaxPassengers(e.target.value)}
                   placeholder={t('ownerBoats.form.basic.capacityPlaceholder')}
-                  style={{ ...inputStyle, borderColor: errors.maxPassengers ? '#EF4444' : 'rgba(255,255,255,0.08)' }}
+                  style={{
+                    ...inputStyle,
+                    borderColor: errors.maxPassengers
+                      ? '#EF4444'
+                      : 'rgba(255,255,255,0.08)',
+                  }}
                 />
-                {errors.maxPassengers && <p className="mt-1 text-xs text-red-400">{errors.maxPassengers}</p>}
+                {errors.maxPassengers && (
+                  <p className="mt-1 text-xs text-red-400">
+                    {errors.maxPassengers}
+                  </p>
+                )}
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <label
+                  className="mb-1.5 block text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   Trạng thái
                 </label>
                 <select
@@ -274,9 +384,15 @@ export default function BoatForm() {
         {activeTab === 'images' && (
           <div
             className="rounded-2xl p-6"
-            style={{ backgroundColor: '#112240', border: '1px solid rgba(255,255,255,0.04)' }}
+            style={{
+              backgroundColor: '#112240',
+              border: '1px solid rgba(255,255,255,0.04)',
+            }}
           >
-            <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+            <h2
+              className="text-base font-semibold"
+              style={{ color: '#ffffff' }}
+            >
               {t('ownerBoats.form.images.title')}
             </h2>
             <div

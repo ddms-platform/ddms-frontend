@@ -8,9 +8,23 @@ import { lazy, Suspense } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { LoadingSpinner } from './components/common/LoadingSpinner';
+import { Toaster } from '@/components/ui/sonner';
+import { routeName } from '@/constants/route-name';
 
 const SignInPage = lazy(() => import('@/pages/auth/sign-in'));
 const SignUpPage = lazy(() => import('@/pages/auth/sign-up'));
+const VerifyEmailPage = lazy(() => import('@/pages/auth/verify-email'));
+const VerifyEmailPendingPage = lazy(
+  () => import('@/pages/auth/verify-email-pending'),
+);
+const VerifyEmailSuccessPage = lazy(
+  () => import('@/pages/auth/verify-email-success'),
+);
+const ForgotPasswordPage = lazy(() => import('@/pages/auth/forgot-password'));
+const ResetPasswordPage = lazy(() => import('@/pages/auth/reset-password'));
+const ResetPasswordSuccessPage = lazy(
+  () => import('@/pages/auth/reset-password-success'),
+);
 const MyToursPage = lazy(() => import('@/pages/my-tours/index'));
 const HomePage = lazy(() => import('@/pages/home/index'));
 const BecomeOwnerPage = lazy(() => import('@/pages/become-owner/index'));
@@ -34,11 +48,12 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <LanguageProvider>
+            <Toaster position="top-right" richColors closeButton />
             <Routes>
               {/* Auth Routes - own layout, no header/footer */}
               <Route element={<AuthLayout />}>
                 <Route
-                  path="/sign-in"
+                  path={routeName.signIn}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <SignInPage />
@@ -46,10 +61,58 @@ function App() {
                   }
                 />
                 <Route
-                  path="/sign-up"
+                  path={routeName.signUp}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <SignUpPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path={routeName.verifyEmail}
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <VerifyEmailPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path={routeName.verifyEmailPending}
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <VerifyEmailPendingPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path={routeName.verifyEmailSuccess}
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <VerifyEmailSuccessPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path={routeName.forgotPassword}
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <ForgotPasswordPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path={routeName.resetPassword}
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <ResetPasswordPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path={routeName.resetPasswordSuccess}
+                  element={
+                    <Suspense fallback={<PageLoader />}>
+                      <ResetPasswordSuccessPage />
                     </Suspense>
                   }
                 />
@@ -58,7 +121,7 @@ function App() {
               {/* Public pages - with GlobalHeader + GlobalFooter */}
               <Route element={<MainLayout />}>
                 <Route
-                  path="/"
+                  path={routeName.home}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <HomePage />
@@ -66,7 +129,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/tours"
+                  path={routeName.tours}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <TourListPage />
@@ -74,7 +137,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/tours/:id"
+                  path={routeName.tourDetail}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <TourDetailPage />
@@ -82,7 +145,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/tours/:id/booking"
+                  path={routeName.tourBooking}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <BookingPage />
@@ -90,7 +153,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/boats/:boatId"
+                  path={routeName.boatDetail}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <BoatDetailPage />
@@ -98,36 +161,39 @@ function App() {
                   }
                 />
                 <Route
-                  path="/become-owner"
+                  path={routeName.becomeOwner}
                   element={
                     <Suspense fallback={<PageLoader />}>
                       <BecomeOwnerPage />
                     </Suspense>
                   }
                 />
-                <Route
-                  path="/profile"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <ProfilePage />
-                    </Suspense>
-                  }
-                />
-                <Route
-                  path="/my-tours"
-                  element={
-                    <Suspense fallback={<PageLoader />}>
-                      <MyToursPage />
-                    </Suspense>
-                  }
-                />
+                {/* Authenticated user pages */}
+                <Route element={<ProtectedRoute />}>
+                  <Route
+                    path={routeName.profile}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <ProfilePage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.myTours}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <MyToursPage />
+                      </Suspense>
+                    }
+                  />
+                </Route>
               </Route>
 
               {/* Owner pages - sidebar layout, role-gated */}
               <Route element={<ProtectedRoute roles={['owner']} />}>
                 <Route element={<OwnerLayout />}>
                   <Route
-                    path="/owner"
+                    path={routeName.owner}
                     element={
                       <Suspense fallback={<PageLoader />}>
                         <OwnerDashboard />
@@ -135,7 +201,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/owner/boats"
+                    path={routeName.ownerBoats}
                     element={
                       <Suspense fallback={<PageLoader />}>
                         <OwnerBoatList />
@@ -143,7 +209,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/owner/boats/new"
+                    path={routeName.ownerBoatsNew}
                     element={
                       <Suspense fallback={<PageLoader />}>
                         <OwnerBoatForm />
@@ -151,7 +217,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/owner/boats/:boatId/edit"
+                    path={routeName.ownerBoatEdit}
                     element={
                       <Suspense fallback={<PageLoader />}>
                         <OwnerBoatForm />
@@ -170,7 +236,10 @@ function App() {
               </Route>
 
               {/* Catch-all */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route
+                path="*"
+                element={<Navigate to={routeName.home} replace />}
+              />
             </Routes>
           </LanguageProvider>
         </AuthProvider>

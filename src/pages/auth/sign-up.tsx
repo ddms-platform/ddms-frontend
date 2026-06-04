@@ -1,11 +1,20 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useFormValidation, rules } from '@/hooks/use-form-validation';
 import FormField from '@/components/shared/form-field';
-import { GoogleIcon } from '@/components/shared/google-icon';
+import { AuthServices } from '@/services/auth-service';
+import { toast } from 'sonner';
+import { routeName } from '@/constants/route-name';
+import { useAuth } from '@/hooks/use-auth';
+import {
+  getApiErrorMessage,
+  loginWithTokens,
+  unwrapEnvelope,
+} from '@/lib/auth-session';
 import logo from '@/assets/logo.png';
 
 export default function SignUpPage() {
@@ -15,19 +24,47 @@ export default function SignUpPage() {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [termsError, setTermsError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleGoogleSuccess = async (credential?: string) => {
+    if (!credential) {
+      toast.error(t('auth.signUp.error'));
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const res = await AuthServices.googleLogin({ idToken: credential });
+      const tokens = unwrapEnvelope(res.data);
+
+      if (!tokens?.token) {
+        toast.error(t('auth.signUp.error'));
+        return;
+      }
+
+      await loginWithTokens(tokens, login);
+      toast.success(t('auth.signUp.success'));
+      navigate(routeName.home, { replace: true });
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, t('auth.signUp.error')));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const { values, getFieldProps, validateAll } = useFormValidation(
     { fullName: '', email: '', password: '', confirmPassword: '' },
     {
       fullName: [rules.required(t('auth.signUp.fullName')), rules.minLength(2)],
       email: [rules.required(t('auth.signUp.email')), rules.email()],
-      password: [rules.required(t('auth.signUp.password')), rules.minLength(8)],
+      password: [rules.required(t('auth.signUp.password')), rules.password()],
       confirmPassword: [
         rules.required(t('auth.signUp.confirmPassword')),
         rules.match('password', 'auth.signUp.passwordsDoNotMatch'),
       ],
     },
-    t
+    t,
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,13 +72,40 @@ export default function SignUpPage() {
     const isValid = validateAll();
     if (!agreeTerms) {
       setTermsError(t('validation.termsRequired'));
-      if (!isValid) return;
       return;
     }
     if (!isValid) return;
 
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 2000);
+    try {
+      const res = await AuthServices.register({
+        fullName: fullNameProps.value,
+        email: emailProps.value,
+        password: passwordProps.value,
+        confirmPassword: confirmPasswordProps.value,
+      });
+
+      const result = unwrapEnvelope(res.data);
+      if (!result) {
+        toast.error(t('auth.signUp.error'));
+        return;
+      }
+
+      toast.success(result.message || t('auth.signUp.success'));
+
+      if (result.verificationLink) {
+        console.info('Dev verification link:', result.verificationLink);
+        toast.info('Dev: check console for verification link');
+      }
+
+      navigate(routeName.verifyEmailPending, {
+        state: { email: result.email },
+      });
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, t('auth.signUp.error')));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const fullNameProps = getFieldProps('fullName');
@@ -51,9 +115,11 @@ export default function SignUpPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Logo & Header */}
       <div className="flex flex-col items-center gap-6">
-        <Link to="/" className="transition-transform hover:scale-105 active:scale-95">
+        <Link
+          to={routeName.home}
+          className="transition-transform hover:scale-105 active:scale-95"
+        >
           <img src={logo} alt="DDMS Logo" className="h-16 w-auto" />
         </Link>
         <div className="space-y-2 text-center">
@@ -69,24 +135,34 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      {/* Social Sign-up */}
-      <div className="flex flex-col gap-3">
-        <Button type="button" variant="dark-outline" className="h-11 w-full gap-2">
-          <GoogleIcon />
-          Google
-        </Button>
+      <div className="flex justify-center [&>div]:w-full">
+        <GoogleLogin
+          onSuccess={(credentialResponse) =>
+            handleGoogleSuccess(credentialResponse.credential)
+          }
+          onError={() => toast.error(t('auth.signUp.error'))}
+          theme="filled_black"
+          size="large"
+          width="100%"
+          text="signup_with"
+          shape="rectangular"
+        />
       </div>
 
-      {/* Divider */}
       <div className="relative flex items-center">
-        <div className="flex-1" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }} />
+        <div
+          className="flex-1"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        />
         <span className="px-4 text-xs font-medium" style={{ color: '#ecf0ff' }}>
           {t('auth.signUp.orSignUpWithEmail')}
         </span>
-        <div className="flex-1" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }} />
+        <div
+          className="flex-1"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        />
       </div>
 
-      {/* Sign-up Form */}
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
         <FormField
           id="fullName"
@@ -127,7 +203,6 @@ export default function SignUpPage() {
             }
           />
 
-          {/* Password strength indicator */}
           {values.password && (
             <div className="flex gap-1.5">
               {[1, 2, 3, 4].map((level) => {
@@ -166,14 +241,15 @@ export default function SignUpPage() {
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
               style={{ color: '#ecf0ff' }}
-              aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+              aria-label={
+                showConfirmPassword ? 'Hide password' : 'Show password'
+              }
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           }
         />
 
-        {/* Terms Checkbox */}
         <div className="flex flex-col gap-1">
           <div className="flex items-start gap-3">
             <input
@@ -182,7 +258,9 @@ export default function SignUpPage() {
               checked={agreeTerms}
               onChange={(e) => {
                 setAgreeTerms(e.target.checked);
-                setTermsError(e.target.checked ? undefined : t('validation.termsRequired'));
+                setTermsError(
+                  e.target.checked ? undefined : t('validation.termsRequired'),
+                );
               }}
               className="mt-0.5 h-4 w-4 cursor-pointer rounded accent-[#00F0FF]"
             />
@@ -193,7 +271,7 @@ export default function SignUpPage() {
             >
               {t('auth.signUp.agreeToTerms')}{' '}
               <Link
-                to="/terms"
+                to={routeName.terms}
                 className="font-medium underline underline-offset-4 transition-colors"
                 style={{ color: '#ffffff' }}
               >
@@ -201,7 +279,7 @@ export default function SignUpPage() {
               </Link>{' '}
               {t('auth.signUp.and')}{' '}
               <Link
-                to="/privacy"
+                to={routeName.privacy}
                 className="font-medium underline underline-offset-4 transition-colors"
                 style={{ color: '#ffffff' }}
               >
@@ -216,7 +294,6 @@ export default function SignUpPage() {
           )}
         </div>
 
-        {/* Submit Button */}
         <Button
           type="submit"
           disabled={isLoading}
@@ -234,11 +311,10 @@ export default function SignUpPage() {
         </Button>
       </form>
 
-      {/* Sign-in Link */}
       <p className="text-center text-sm" style={{ color: '#ecf0ff' }}>
         {t('auth.signUp.alreadyHaveAccount')}?{' '}
         <Link
-          to="/sign-in"
+          to={routeName.signIn}
           className="font-semibold transition-colors hover:underline"
           style={{ color: '#00F0FF' }}
         >

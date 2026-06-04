@@ -1,7 +1,15 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Ship, Plus, Search, TrendingUp, Layers, RefreshCw, Filter } from 'lucide-react';
+import {
+  Ship,
+  Plus,
+  Search,
+  TrendingUp,
+  Layers,
+  RefreshCw,
+  Filter,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,13 +36,17 @@ export default function OwnerBoatList() {
       const res = await boatService.getAll({ pageSize: 100 });
       setBoats(res.data);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Không thể tải danh sách tàu');
+      toast.error(
+        err instanceof Error ? err.message : 'Không thể tải danh sách tàu',
+      );
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { fetchBoats(); }, [fetchBoats]);
+  useEffect(() => {
+    fetchBoats();
+  }, [fetchBoats]);
 
   const filteredBoats = useMemo(
     () =>
@@ -44,14 +56,17 @@ export default function OwnerBoatList() {
         const matchType = filterType === 'all' || b.type === filterType;
         return matchSearch && matchStatus && matchType;
       }),
-    [boats, search, filterStatus, filterType]
+    [boats, search, filterStatus, filterType],
   );
 
-  const stats = useMemo(() => ({
-    total: boats.length,
-    running: boats.filter((b) => b.status === 'running').length,
-    idle: boats.filter((b) => b.status === 'idle').length,
-  }), [boats]);
+  const stats = useMemo(
+    () => ({
+      total: boats.length,
+      running: boats.filter((b) => b.status === 'running').length,
+      idle: boats.filter((b) => b.status === 'idle').length,
+    }),
+    [boats],
+  );
 
   const handleDelete = async (boatId: string) => {
     try {
@@ -70,7 +85,10 @@ export default function OwnerBoatList() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: '#ffffff', letterSpacing: '-0.44px' }}>
+          <h1
+            className="text-2xl font-bold"
+            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+          >
             {t('ownerBoats.title')}
           </h1>
           <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
@@ -78,8 +96,17 @@ export default function OwnerBoatList() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={fetchBoats} title="Làm mới">
-            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} style={{ color: '#ecf0ff' }} />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={fetchBoats}
+            title="Làm mới"
+          >
+            <RefreshCw
+              size={16}
+              className={loading ? 'animate-spin' : ''}
+              style={{ color: '#ecf0ff' }}
+            />
           </Button>
           <Button variant="cyan" size="action" className="gap-2" asChild>
             <Link to="/owner/boats/new">
@@ -93,20 +120,48 @@ export default function OwnerBoatList() {
       {/* Stats */}
       <div className="mt-6 grid grid-cols-3 gap-3">
         {[
-          { label: t('ownerBoats.stats.total'), value: stats.total, icon: Ship, iconColor: '#00F0FF', bg: 'rgba(0,240,255,0.12)' },
-          { label: t('ownerBoats.stats.running'), value: stats.running, icon: TrendingUp, iconColor: '#10B981', bg: 'rgba(16,185,129,0.12)' },
-          { label: t('ownerBoats.stats.idle'), value: stats.idle, icon: Layers, iconColor: '#F59E0B', bg: 'rgba(245,158,11,0.12)' },
+          {
+            label: t('ownerBoats.stats.total'),
+            value: stats.total,
+            icon: Ship,
+            iconColor: '#00F0FF',
+            bg: 'rgba(0,240,255,0.12)',
+          },
+          {
+            label: t('ownerBoats.stats.running'),
+            value: stats.running,
+            icon: TrendingUp,
+            iconColor: '#10B981',
+            bg: 'rgba(16,185,129,0.12)',
+          },
+          {
+            label: t('ownerBoats.stats.idle'),
+            value: stats.idle,
+            icon: Layers,
+            iconColor: '#F59E0B',
+            bg: 'rgba(245,158,11,0.12)',
+          },
         ].map((s) => (
           <div
             key={s.label}
             className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.02]"
-            style={{ background: `linear-gradient(135deg, ${s.bg}, transparent)`, border: '1px solid rgba(255,255,255,0.04)' }}
+            style={{
+              background: `linear-gradient(135deg, ${s.bg}, transparent)`,
+              border: '1px solid rgba(255,255,255,0.04)',
+            }}
           >
             <div className="flex items-center gap-2">
               <s.icon size={16} style={{ color: s.iconColor }} />
-              <span className="text-xs font-medium" style={{ color: '#ecf0ff' }}>{s.label}</span>
+              <span
+                className="text-xs font-medium"
+                style={{ color: '#ecf0ff' }}
+              >
+                {s.label}
+              </span>
             </div>
-            <p className="mt-2 text-xl font-bold" style={{ color: '#ffffff' }}>{s.value}</p>
+            <p className="mt-2 text-xl font-bold" style={{ color: '#ffffff' }}>
+              {s.value}
+            </p>
           </div>
         ))}
       </div>
@@ -115,14 +170,22 @@ export default function OwnerBoatList() {
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <div className="relative w-full sm:w-72">
-            <Search size={16} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2" style={{ color: '#ecf0ff' }} />
+            <Search
+              size={16}
+              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2"
+              style={{ color: '#ecf0ff' }}
+            />
             <Input
               id="boat-search"
               placeholder={t('ownerBoats.search')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-9"
-              style={{ backgroundColor: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#ffffff' }}
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.04)',
+                borderColor: 'rgba(255,255,255,0.08)',
+                color: '#ffffff',
+              }}
             />
           </div>
           <div className="hidden items-center gap-1 sm:flex">
@@ -133,7 +196,10 @@ export default function OwnerBoatList() {
                 onClick={() => setFilterStatus(s)}
                 className="rounded-full px-3 py-1.5 text-xs font-medium transition-all"
                 style={{
-                  backgroundColor: filterStatus === s ? 'rgba(0,240,255,0.15)' : 'rgba(255,255,255,0.04)',
+                  backgroundColor:
+                    filterStatus === s
+                      ? 'rgba(0,240,255,0.15)'
+                      : 'rgba(255,255,255,0.04)',
                   color: filterStatus === s ? '#00F0FF' : '#ecf0ff',
                   border: `1px solid ${filterStatus === s ? 'rgba(0,240,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
                 }}
@@ -149,21 +215,34 @@ export default function OwnerBoatList() {
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
             className="rounded-xl px-3 py-2 text-xs font-medium outline-none"
-            style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#ecf0ff' }}
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              color: '#ecf0ff',
+            }}
           >
             <option value="all">{t('ownerBoats.filter.allTypes')}</option>
             {BOAT_TYPES.map((bt) => (
-              <option key={bt.value} value={bt.value}>{t(`ownerBoats.types.${bt.value}`)}</option>
+              <option key={bt.value} value={bt.value}>
+                {t(`ownerBoats.types.${bt.value}`)}
+              </option>
             ))}
           </select>
-          <div className="flex rounded-xl p-0.5" style={{ backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div
+            className="flex rounded-xl p-0.5"
+            style={{
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.06)',
+            }}
+          >
             {(['grid', 'table'] as ViewMode[]).map((m) => (
               <button
                 key={m}
                 onClick={() => setViewMode(m)}
                 className="rounded-lg px-3 py-1.5 text-xs font-medium transition-all"
                 style={{
-                  backgroundColor: viewMode === m ? 'rgba(0,240,255,0.12)' : 'transparent',
+                  backgroundColor:
+                    viewMode === m ? 'rgba(0,240,255,0.12)' : 'transparent',
                   color: viewMode === m ? '#00F0FF' : '#ecf0ff',
                 }}
               >
@@ -177,20 +256,36 @@ export default function OwnerBoatList() {
       {/* Content */}
       {loading ? (
         <div className="mt-16 flex items-center justify-center">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: '#00F0FF', borderTopColor: 'transparent' }} />
+          <div
+            className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
+            style={{ borderColor: '#00F0FF', borderTopColor: 'transparent' }}
+          />
         </div>
       ) : filteredBoats.length === 0 ? (
         <div className="mt-16 flex flex-col items-center text-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full" style={{ backgroundColor: 'rgba(0,240,255,0.08)' }}>
+          <div
+            className="flex h-20 w-20 items-center justify-center rounded-full"
+            style={{ backgroundColor: 'rgba(0,240,255,0.08)' }}
+          >
             <Ship size={36} style={{ color: '#00F0FF' }} />
           </div>
-          <h3 className="mt-4 text-lg font-semibold" style={{ color: '#ffffff' }}>{t('ownerBoats.empty.title')}</h3>
+          <h3
+            className="mt-4 text-lg font-semibold"
+            style={{ color: '#ffffff' }}
+          >
+            {t('ownerBoats.empty.title')}
+          </h3>
           <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
-            {isFiltered ? t('ownerBoats.empty.filtered') : t('ownerBoats.empty.noBoats')}
+            {isFiltered
+              ? t('ownerBoats.empty.filtered')
+              : t('ownerBoats.empty.noBoats')}
           </p>
           {!isFiltered && (
             <Button variant="cyan" size="action" className="mt-6 gap-2" asChild>
-              <Link to="/owner/boats/new"><Plus size={16} />{t('ownerBoats.addBoat')}</Link>
+              <Link to="/owner/boats/new">
+                <Plus size={16} />
+                {t('ownerBoats.addBoat')}
+              </Link>
             </Button>
           )}
         </div>

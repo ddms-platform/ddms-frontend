@@ -21,7 +21,10 @@ export default function TranslationToggle() {
     >
       <Globe size={16} />
       <span>{language === 'VN' ? 'VI' : 'EN'}</span>
-      <span className="h-4 w-px" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} />
+      <span
+        className="h-4 w-px"
+        style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+      />
       <span className="text-xs" style={{ color: '#ecf0ff' }}>
         {language === 'VN' ? 'English' : 'Tiếng Việt'}
       </span>

@@ -1,8 +1,8 @@
-export type UserRole = 'user' | 'owner' | 'admin';
+export type UserRole = 'user' | 'owner';
 
 export interface User {
   name: string;
   email: string;
   roles: UserRole[];
-  avatar?: string;
+  avatar_url?: string;
 }

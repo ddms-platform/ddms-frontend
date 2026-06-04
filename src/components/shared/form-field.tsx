@@ -37,8 +37,14 @@ export default function FormField({
 }: FormFieldProps) {
   return (
     <div className="flex flex-col gap-2">
-      <div className={labelExtra ? 'flex items-center justify-between' : undefined}>
-        <Label htmlFor={id} className="text-sm font-medium" style={{ color: '#ffffff' }}>
+      <div
+        className={labelExtra ? 'flex items-center justify-between' : undefined}
+      >
+        <Label
+          htmlFor={id}
+          className="text-sm font-medium"
+          style={{ color: '#ffffff' }}
+        >
           {label}
         </Label>
         {labelExtra}

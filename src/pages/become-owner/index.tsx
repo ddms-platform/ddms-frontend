@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { routeName } from '@/constants/route-name';
 import {
   ArrowRight,
   BadgeCheck,
@@ -13,7 +14,8 @@ import {
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&h=900&fit=crop';
 
-const cardShadow = 'rgba(0,0,0,0.22) 0px 8px 24px, rgba(255,255,255,0.06) 0px 0px 0px 1px';
+const cardShadow =
+  'rgba(0,0,0,0.22) 0px 8px 24px, rgba(255,255,255,0.06) 0px 0px 0px 1px';
 
 const benefits = [
   { icon: Ship, key: 'manageTours' },
@@ -68,7 +70,7 @@ export default function BecomeOwnerPage() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/sign-up"
+                to={routeName.signUp}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
                 style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
               >
@@ -76,7 +78,7 @@ export default function BecomeOwnerPage() {
                 <ArrowRight size={18} />
               </Link>
               <Link
-                to="/tours"
+                to={routeName.tours}
                 className="inline-flex h-12 items-center justify-center rounded-lg border px-6 text-base font-semibold transition-all hover:bg-white/10"
                 style={{ borderColor: '#ffffff', color: '#ffffff' }}
               >
@@ -96,7 +98,10 @@ export default function BecomeOwnerPage() {
             >
               {t('becomeOwner.benefits.title')}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+            <p
+              className="mt-2 text-sm leading-relaxed"
+              style={{ color: '#ecf0ff' }}
+            >
               {t('becomeOwner.benefits.subtitle')}
             </p>
           </div>
@@ -123,7 +128,10 @@ export default function BecomeOwnerPage() {
                 >
                   {t(`becomeOwner.benefits.items.${key}.title`)}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+                <p
+                  className="mt-3 text-sm leading-relaxed"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t(`becomeOwner.benefits.items.${key}.description`)}
                 </p>
               </article>
@@ -141,7 +149,10 @@ export default function BecomeOwnerPage() {
             >
               {t('becomeOwner.process.title')}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+            <p
+              className="mt-2 text-sm leading-relaxed"
+              style={{ color: '#ecf0ff' }}
+            >
               {t('becomeOwner.process.subtitle')}
             </p>
           </div>
@@ -163,7 +174,10 @@ export default function BecomeOwnerPage() {
                   >
                     <Icon size={22} />
                   </div>
-                  <span className="text-sm font-semibold" style={{ color: '#00F0FF' }}>
+                  <span
+                    className="text-sm font-semibold"
+                    style={{ color: '#00F0FF' }}
+                  >
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 </div>
@@ -173,7 +187,10 @@ export default function BecomeOwnerPage() {
                 >
                   {t(`becomeOwner.process.steps.${key}.title`)}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+                <p
+                  className="mt-3 text-sm leading-relaxed"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t(`becomeOwner.process.steps.${key}.description`)}
                 </p>
               </article>
@@ -191,11 +208,14 @@ export default function BecomeOwnerPage() {
             >
               {t('becomeOwner.requirements.title')}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+            <p
+              className="mt-2 text-sm leading-relaxed"
+              style={{ color: '#ecf0ff' }}
+            >
               {t('becomeOwner.requirements.subtitle')}
             </p>
             <Link
-              to="/sign-up"
+              to={routeName.signUp}
               className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
               style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
             >
@@ -213,15 +233,24 @@ export default function BecomeOwnerPage() {
               >
                 <div
                   className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-                  style={{ backgroundColor: 'rgba(0,240,255,0.1)', color: '#00F0FF' }}
+                  style={{
+                    backgroundColor: 'rgba(0,240,255,0.1)',
+                    color: '#00F0FF',
+                  }}
                 >
                   <Icon size={20} />
                 </div>
                 <div>
-                  <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+                  <h3
+                    className="text-base font-semibold"
+                    style={{ color: '#ffffff' }}
+                  >
                     {t(`becomeOwner.requirements.items.${key}.title`)}
                   </h3>
-                  <p className="mt-1 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+                  <p
+                    className="mt-1 text-sm leading-relaxed"
+                    style={{ color: '#ecf0ff' }}
+                  >
                     {t(`becomeOwner.requirements.items.${key}.description`)}
                   </p>
                 </div>

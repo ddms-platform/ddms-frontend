@@ -87,7 +87,8 @@ export default function StepGuests({
       >
         <div className="flex justify-between text-sm">
           <span style={{ color: '#ecf0ff' }}>
-            {formatPrice(MOCK_TOUR.price)} × {guests} {t('booking.guests.people')}
+            {formatPrice(MOCK_TOUR.price)} × {guests}{' '}
+            {t('booking.guests.people')}
           </span>
           <span className="font-medium" style={{ color: '#ffffff' }}>
             {formatPrice(tourPrice)}
@@ -103,7 +104,10 @@ export default function StepGuests({
             </span>
           </div>
         )}
-        <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+        <div
+          className="h-px"
+          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+        />
         <div className="flex justify-between">
           <span className="font-semibold" style={{ color: '#ffffff' }}>
             {t('booking.summary.total')}

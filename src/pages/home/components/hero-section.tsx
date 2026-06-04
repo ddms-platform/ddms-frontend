@@ -10,7 +10,8 @@ export default function HeroSection() {
     <section
       className="relative overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #0A192F 0%, #112240 40%, #0d2847 70%, #0A192F 100%)',
+        background:
+          'linear-gradient(135deg, #0A192F 0%, #112240 40%, #0d2847 70%, #0A192F 100%)',
       }}
     >
       {/* Decorative circles */}
@@ -63,7 +64,9 @@ export default function HeroSection() {
               style={{ backgroundColor: '#00F0FF' }}
             >
               <Search size={18} />
-              <span className="hidden sm:inline">{t('home.hero.searchButton')}</span>
+              <span className="hidden sm:inline">
+                {t('home.hero.searchButton')}
+              </span>
             </button>
           </div>
 
@@ -78,7 +81,10 @@ export default function HeroSection() {
                 <p className="text-2xl font-bold" style={{ color: '#ffffff' }}>
                   {stat.value}
                 </p>
-                <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                <p
+                  className="text-sm"
+                  style={{ color: 'rgba(255,255,255,0.7)' }}
+                >
                   {stat.label}
                 </p>
               </div>

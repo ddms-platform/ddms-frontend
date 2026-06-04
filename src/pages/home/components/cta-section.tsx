@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { routeName } from '@/constants/route-name';
 
 export default function CtaSection() {
   const { t } = useTranslation();
@@ -9,7 +10,8 @@ export default function CtaSection() {
     <section
       className="py-20"
       style={{
-        background: 'linear-gradient(135deg, #112240 0%, #0A192F 50%, #0d2847 100%)',
+        background:
+          'linear-gradient(135deg, #112240 0%, #0A192F 50%, #0d2847 100%)',
       }}
     >
       <div className="mx-auto max-w-3xl px-6 text-center">
@@ -23,8 +25,13 @@ export default function CtaSection() {
           {t('home.cta.description')}
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button variant="cyan" size="action-lg" className="px-8 text-base" asChild>
-            <Link to="/sign-up">{t('home.cta.signUp')}</Link>
+          <Button
+            variant="cyan"
+            size="action-lg"
+            className="px-8 text-base"
+            asChild
+          >
+            <Link to={routeName.signUp}>{t('home.cta.signUp')}</Link>
           </Button>
           <Button
             variant="dark-outline"
@@ -33,7 +40,7 @@ export default function CtaSection() {
             style={{ borderColor: '#ffffff' }}
             asChild
           >
-            <Link to="/tours">{t('home.cta.explore')}</Link>
+            <Link to={routeName.tours}>{t('home.cta.explore')}</Link>
           </Button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
+import { routeName } from '@/constants/route-name';
 
 interface OwnerRouteProps {
   redirectPath?: string;
@@ -9,7 +10,9 @@ interface OwnerRouteProps {
  * Route guard that checks both authentication and owner role.
  * Redirects to sign-in if not authenticated, or home if not an owner.
  */
-export default function OwnerRoute({ redirectPath = '/sign-in' }: OwnerRouteProps) {
+export default function OwnerRoute({
+  redirectPath = routeName.signIn,
+}: OwnerRouteProps) {
   const { isAuthenticated, user } = useAuth();
   const location = useLocation();
 
@@ -19,7 +22,7 @@ export default function OwnerRoute({ redirectPath = '/sign-in' }: OwnerRouteProp
 
   const isOwner = user?.roles.includes('owner') ?? false;
   if (!isOwner) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={routeName.home} replace />;
   }
 
   return <Outlet />;

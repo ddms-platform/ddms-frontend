@@ -24,12 +24,18 @@ function RoomDetailModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}
+      style={{
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        backdropFilter: 'blur(4px)',
+      }}
       onClick={onClose}
     >
       <div
         className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl"
-        style={{ backgroundColor: '#0d1b36', border: '1px solid rgba(255,255,255,0.1)' }}
+        style={{
+          backgroundColor: '#0d1b36',
+          border: '1px solid rgba(255,255,255,0.1)',
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -66,12 +72,19 @@ function RoomDetailModal({
                     color: '#0A192F',
                   }}
                 >
-                  {room.type === 'vip' ? 'VIP' : room.type === 'deluxe' ? 'Deluxe' : 'Standard'}
+                  {room.type === 'vip'
+                    ? 'VIP'
+                    : room.type === 'deluxe'
+                      ? 'Deluxe'
+                      : 'Standard'}
                 </span>
               </div>
               <div className="mt-1 flex items-center gap-2">
                 <Star size={14} fill="#FFD700" style={{ color: '#FFD700' }} />
-                <span className="text-sm font-semibold" style={{ color: '#FFD700' }}>
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: '#FFD700' }}
+                >
                   {room.rating}
                 </span>
                 <span className="text-xs" style={{ color: '#ecf0ff' }}>
@@ -89,7 +102,10 @@ function RoomDetailModal({
             </div>
           </div>
 
-          <p className="mt-4 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+          <p
+            className="mt-4 text-sm leading-relaxed"
+            style={{ color: '#ecf0ff' }}
+          >
             {room.description}
           </p>
 
@@ -100,7 +116,12 @@ function RoomDetailModal({
               { label: room.bed, icon: '🛏️' },
               { label: `${room.maxAdults} ${t('rooms.adults')}`, icon: '👤' },
               ...(room.maxChildren > 0
-                ? [{ label: `${room.maxChildren} ${t('rooms.children')}`, icon: '👶' }]
+                ? [
+                    {
+                      label: `${room.maxChildren} ${t('rooms.children')}`,
+                      icon: '👶',
+                    },
+                  ]
                 : []),
               {
                 label: `${room.availableRooms}/${room.totalRooms} ${t('rooms.available')}`,
@@ -122,7 +143,10 @@ function RoomDetailModal({
             ))}
           </div>
 
-          <div className="my-5 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+          <div
+            className="my-5 h-px"
+            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+          />
 
           {/* Amenities */}
           <h3 className="text-sm font-semibold" style={{ color: '#ffffff' }}>
@@ -139,14 +163,20 @@ function RoomDetailModal({
                 }}
               >
                 <AIcon size={16} style={{ color: '#00F0FF' }} />
-                <span className="text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <span
+                  className="text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {label}
                 </span>
               </div>
             ))}
           </div>
 
-          <div className="my-5 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+          <div
+            className="my-5 h-px"
+            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+          />
 
           {/* Rating Overview */}
           <h3 className="text-sm font-semibold" style={{ color: '#ffffff' }}>
@@ -162,9 +192,14 @@ function RoomDetailModal({
                   <Star
                     key={s}
                     size={12}
-                    fill={s <= Math.round(room.rating) ? '#FFD700' : 'transparent'}
+                    fill={
+                      s <= Math.round(room.rating) ? '#FFD700' : 'transparent'
+                    }
                     style={{
-                      color: s <= Math.round(room.rating) ? '#FFD700' : 'rgba(255,255,255,0.2)',
+                      color:
+                        s <= Math.round(room.rating)
+                          ? '#FFD700'
+                          : 'rgba(255,255,255,0.2)',
                     }}
                   />
                 ))}
@@ -175,7 +210,9 @@ function RoomDetailModal({
             </div>
             <div className="flex-1 space-y-1.5">
               {[5, 4, 3, 2, 1].map((stars) => {
-                const item = room.ratingBreakdown.find((r) => r.stars === stars);
+                const item = room.ratingBreakdown.find(
+                  (r) => r.stars === stars,
+                );
                 const count = item?.count || 0;
                 const pct = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
                 return (
@@ -185,7 +222,11 @@ function RoomDetailModal({
                       style={{ color: '#ecf0ff' }}
                     >
                       {stars}
-                      <Star size={8} fill="#FFD700" style={{ color: '#FFD700' }} />
+                      <Star
+                        size={8}
+                        fill="#FFD700"
+                        style={{ color: '#FFD700' }}
+                      />
                     </span>
                     <div
                       className="flex-1 h-2 rounded-full overflow-hidden"
@@ -196,7 +237,10 @@ function RoomDetailModal({
                         style={{ width: `${pct}%`, backgroundColor: '#FFD700' }}
                       />
                     </div>
-                    <span className="w-7 text-right text-[10px]" style={{ color: '#ecf0ff' }}>
+                    <span
+                      className="w-7 text-right text-[10px]"
+                      style={{ color: '#ecf0ff' }}
+                    >
                       {count}
                     </span>
                   </div>
@@ -205,7 +249,10 @@ function RoomDetailModal({
             </div>
           </div>
 
-          <div className="my-5 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+          <div
+            className="my-5 h-px"
+            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+          />
 
           {/* Reviews */}
           <h3 className="text-sm font-semibold" style={{ color: '#ffffff' }}>
@@ -233,10 +280,16 @@ function RoomDetailModal({
                       {rev.name.charAt(0)}
                     </div>
                     <div>
-                      <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                      <span
+                        className="text-sm font-medium"
+                        style={{ color: '#ffffff' }}
+                      >
                         {rev.name}
                       </span>
-                      <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                      <p
+                        className="text-[10px]"
+                        style={{ color: 'rgba(255,255,255,0.4)' }}
+                      >
                         {rev.date}
                       </p>
                     </div>
@@ -247,12 +300,20 @@ function RoomDetailModal({
                         key={s}
                         size={10}
                         fill={s <= rev.rating ? '#FFD700' : 'transparent'}
-                        style={{ color: s <= rev.rating ? '#FFD700' : 'rgba(255,255,255,0.15)' }}
+                        style={{
+                          color:
+                            s <= rev.rating
+                              ? '#FFD700'
+                              : 'rgba(255,255,255,0.15)',
+                        }}
                       />
                     ))}
                   </div>
                 </div>
-                <p className="mt-2 text-xs leading-relaxed" style={{ color: '#ecf0ff' }}>
+                <p
+                  className="mt-2 text-xs leading-relaxed"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {rev.comment}
                 </p>
               </div>
@@ -261,7 +322,12 @@ function RoomDetailModal({
 
           {/* Actions */}
           <div className="mt-6 flex gap-3">
-            <Button variant="dark-outline" size="action" className="flex-1" onClick={onClose}>
+            <Button
+              variant="dark-outline"
+              size="action"
+              className="flex-1"
+              onClick={onClose}
+            >
               {t('booking.rooms.closeModal')}
             </Button>
             <Button
@@ -274,11 +340,16 @@ function RoomDetailModal({
               }}
               style={
                 isSelected
-                  ? { backgroundColor: 'rgba(255,255,255,0.1)', color: '#ffffff' }
+                  ? {
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      color: '#ffffff',
+                    }
                   : undefined
               }
             >
-              {isSelected ? t('booking.rooms.unselectRoom') : t('booking.rooms.selectRoom')}
+              {isSelected
+                ? t('booking.rooms.unselectRoom')
+                : t('booking.rooms.selectRoom')}
             </Button>
           </div>
         </div>
@@ -317,11 +388,19 @@ export default function StepViewRooms({
         {rooms.map((room) => (
           <button
             key={room.id}
-            onClick={() => onSelectRoom(selectedRoom?.id === room.id ? null : room)}
+            onClick={() =>
+              onSelectRoom(selectedRoom?.id === room.id ? null : room)
+            }
             className="group relative w-full overflow-hidden rounded-xl border text-left transition-all hover:shadow-lg active:scale-[0.99]"
             style={{
-              borderColor: selectedRoom?.id === room.id ? '#00F0FF' : 'rgba(255,255,255,0.1)',
-              backgroundColor: selectedRoom?.id === room.id ? 'rgba(0,240,255,0.06)' : '#0d1b36',
+              borderColor:
+                selectedRoom?.id === room.id
+                  ? '#00F0FF'
+                  : 'rgba(255,255,255,0.1)',
+              backgroundColor:
+                selectedRoom?.id === room.id
+                  ? 'rgba(0,240,255,0.06)'
+                  : '#0d1b36',
             }}
           >
             <div className="flex flex-col sm:flex-row">
@@ -344,13 +423,19 @@ export default function StepViewRooms({
                     color: '#0A192F',
                   }}
                 >
-                  {room.type === 'vip' ? 'VIP' : room.type === 'deluxe' ? 'Deluxe' : 'Standard'}
+                  {room.type === 'vip'
+                    ? 'VIP'
+                    : room.type === 'deluxe'
+                      ? 'Deluxe'
+                      : 'Standard'}
                 </div>
                 <div
                   className="absolute right-2 top-2 rounded-full px-2 py-1 text-[10px] font-semibold"
                   style={{
                     backgroundColor:
-                      room.availableRooms > 0 ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)',
+                      room.availableRooms > 0
+                        ? 'rgba(16,185,129,0.9)'
+                        : 'rgba(239,68,68,0.9)',
                     color: '#fff',
                   }}
                 >
@@ -379,8 +464,15 @@ export default function StepViewRooms({
                       {room.name}
                     </h3>
                     <div className="mt-1 flex items-center gap-1.5">
-                      <Star size={12} fill="#FFD700" style={{ color: '#FFD700' }} />
-                      <span className="text-xs font-semibold" style={{ color: '#FFD700' }}>
+                      <Star
+                        size={12}
+                        fill="#FFD700"
+                        style={{ color: '#FFD700' }}
+                      />
+                      <span
+                        className="text-xs font-semibold"
+                        style={{ color: '#FFD700' }}
+                      >
                         {room.rating}
                       </span>
                       <span className="text-xs" style={{ color: '#ecf0ff' }}>
@@ -389,7 +481,10 @@ export default function StepViewRooms({
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold" style={{ color: '#00F0FF' }}>
+                    <p
+                      className="text-lg font-bold"
+                      style={{ color: '#00F0FF' }}
+                    >
                       {formatPrice(room.price)}
                     </p>
                     <p className="text-[10px]" style={{ color: '#ecf0ff' }}>
@@ -398,7 +493,10 @@ export default function StepViewRooms({
                   </div>
                 </div>
 
-                <p className="mt-2 text-xs leading-relaxed" style={{ color: '#ecf0ff' }}>
+                <p
+                  className="mt-2 text-xs leading-relaxed"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {room.description}
                 </p>
 
@@ -406,9 +504,17 @@ export default function StepViewRooms({
                   {[
                     { label: room.area, icon: '📐' },
                     { label: room.bed, icon: '🛏️' },
-                    { label: `${room.maxAdults} ${t('rooms.adults')}`, icon: '👤' },
+                    {
+                      label: `${room.maxAdults} ${t('rooms.adults')}`,
+                      icon: '👤',
+                    },
                     ...(room.maxChildren > 0
-                      ? [{ label: `${room.maxChildren} ${t('rooms.children')}`, icon: '👶' }]
+                      ? [
+                          {
+                            label: `${room.maxChildren} ${t('rooms.children')}`,
+                            icon: '👶',
+                          },
+                        ]
                       : []),
                   ].map((item, i) => (
                     <span
@@ -427,16 +533,18 @@ export default function StepViewRooms({
                 </div>
 
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {room.amenities.slice(0, 4).map(({ icon: AIcon, label }, i) => (
-                    <span
-                      key={i}
-                      className="flex items-center gap-1 text-[10px]"
-                      style={{ color: '#ecf0ff' }}
-                    >
-                      <AIcon size={12} style={{ color: '#00F0FF' }} />
-                      {label}
-                    </span>
-                  ))}
+                  {room.amenities
+                    .slice(0, 4)
+                    .map(({ icon: AIcon, label }, i) => (
+                      <span
+                        key={i}
+                        className="flex items-center gap-1 text-[10px]"
+                        style={{ color: '#ecf0ff' }}
+                      >
+                        <AIcon size={12} style={{ color: '#00F0FF' }} />
+                        {label}
+                      </span>
+                    ))}
                   {room.amenities.length > 4 && (
                     <span
                       className="text-[10px] font-medium"
@@ -479,8 +587,8 @@ export default function StepViewRooms({
         >
           <Check size={16} style={{ color: '#00F0FF' }} />
           <span className="text-sm" style={{ color: '#ffffff' }}>
-            {t('booking.rooms.selected')}: <strong>{selectedRoom.name}</strong> —{' '}
-            {formatPrice(selectedRoom.price)}
+            {t('booking.rooms.selected')}: <strong>{selectedRoom.name}</strong>{' '}
+            — {formatPrice(selectedRoom.price)}
           </span>
         </div>
       )}
@@ -490,7 +598,9 @@ export default function StepViewRooms({
         <RoomDetailModal
           room={detailRoom}
           onClose={() => setDetailRoom(null)}
-          onSelect={(room) => onSelectRoom(selectedRoom?.id === room.id ? null : room)}
+          onSelect={(room) =>
+            onSelectRoom(selectedRoom?.id === room.id ? null : room)
+          }
           isSelected={selectedRoom?.id === detailRoom.id}
         />
       )}

@@ -89,7 +89,13 @@ export const MOCK_OWNER_BOATS: OwnerBoat[] = [
         totalRooms: 5,
         description: 'Phòng đôi tiện nghi',
       },
-      { id: 'c3', name: 'Standard Twin', capacity: 2, price: 900000, totalRooms: 8 },
+      {
+        id: 'c3',
+        name: 'Standard Twin',
+        capacity: 2,
+        price: 900000,
+        totalRooms: 8,
+      },
     ],
     services: [
       {
@@ -118,13 +124,15 @@ export const MOCK_OWNER_BOATS: OwnerBoat[] = [
     images: [
       {
         id: 'i1',
-        imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
+        imageUrl:
+          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
         caption: 'Tổng quan',
         sortOrder: 0,
       },
       {
         id: 'i2',
-        imageUrl: 'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=600&h=400&fit=crop',
+        imageUrl:
+          'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=600&h=400&fit=crop',
         caption: 'Khu VIP',
         sortOrder: 1,
       },
@@ -159,7 +167,13 @@ export const MOCK_OWNER_BOATS: OwnerBoat[] = [
     createdAt: '2024-03-20T08:00:00Z',
     updatedAt: '2025-05-12T10:00:00Z',
     cabins: [
-      { id: 'c4', name: 'Cabin Đôi', capacity: 2, price: 800000, totalRooms: 6 },
+      {
+        id: 'c4',
+        name: 'Cabin Đôi',
+        capacity: 2,
+        price: 800000,
+        totalRooms: 6,
+      },
       {
         id: 'c5',
         name: 'Cabin Gia đình',
@@ -285,7 +299,8 @@ export const MOCK_OWNER_BOATS: OwnerBoat[] = [
       },
       {
         id: 'i8',
-        imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
+        imageUrl:
+          'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
         caption: 'Sân khấu',
         sortOrder: 1,
       },
@@ -306,7 +321,9 @@ export const MOCK_OWNER_BOATS: OwnerBoat[] = [
     createdAt: '2024-09-05T08:00:00Z',
     updatedAt: '2025-05-13T11:00:00Z',
     cabins: [],
-    services: [{ id: 's13', name: 'Áo phao chuyên dụng', price: 0, isActive: true }],
+    services: [
+      { id: 's13', name: 'Áo phao chuyên dụng', price: 0, isActive: true },
+    ],
     images: [
       {
         id: 'i9',
@@ -332,8 +349,20 @@ export const MOCK_OWNER_BOATS: OwnerBoat[] = [
     createdAt: '2023-07-20T08:00:00Z',
     updatedAt: '2025-05-01T08:00:00Z',
     cabins: [
-      { id: 'c8', name: 'Cabin Đơn', capacity: 1, price: 500000, totalRooms: 4 },
-      { id: 'c9', name: 'Cabin Đôi', capacity: 2, price: 750000, totalRooms: 5 },
+      {
+        id: 'c8',
+        name: 'Cabin Đơn',
+        capacity: 1,
+        price: 500000,
+        totalRooms: 4,
+      },
+      {
+        id: 'c9',
+        name: 'Cabin Đôi',
+        capacity: 2,
+        price: 750000,
+        totalRooms: 5,
+      },
     ],
     services: [
       { id: 's14', name: 'Nước giải khát', price: 50000, isActive: true },
@@ -342,7 +371,8 @@ export const MOCK_OWNER_BOATS: OwnerBoat[] = [
     images: [
       {
         id: 'i10',
-        imageUrl: 'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=600&h=400&fit=crop',
+        imageUrl:
+          'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=600&h=400&fit=crop',
         sortOrder: 0,
       },
     ],

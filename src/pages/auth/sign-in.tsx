@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { useFormValidation, rules } from '@/hooks/use-form-validation';
 import FormField from '@/components/shared/form-field';
 import { useAuth } from '@/hooks/use-auth';
-import { GoogleIcon } from '@/components/shared/google-icon';
+import { AuthServices } from '@/services/auth-service';
+import { toast } from 'sonner';
+import { routeName } from '@/constants/route-name';
+import {
+  getApiErrorCode,
+  getApiErrorMessage,
+  loginWithTokens,
+  unwrapEnvelope,
+} from '@/lib/auth-session';
+import { ApiErrorCode } from '@/constants/apiError';
 import logo from '@/assets/logo.png';
 
 export default function SignInPage() {
@@ -19,31 +29,90 @@ export default function SignInPage() {
   const { login } = useAuth();
   const from = location.state?.from?.pathname || '/';
 
+  useEffect(() => {
+    const state = location.state as {
+      fromVerifySuccess?: boolean;
+      fromPasswordResetSuccess?: boolean;
+    } | null;
+
+    if (state?.fromVerifySuccess) {
+      toast.success(t('auth.signIn.pleaseLoginAfterVerify'));
+      navigate(location.pathname, { replace: true, state: {} });
+    } else if (state?.fromPasswordResetSuccess) {
+      toast.success(t('auth.signIn.pleaseLoginAfterReset'));
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+    // Run once on mount; intentionally not depending on changing values.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const { getFieldProps, validateAll } = useFormValidation(
     { email: '', password: '' },
     {
       email: [rules.required(t('auth.signIn.email')), rules.email()],
-      password: [rules.required(t('auth.signIn.password')), rules.minLength(6)],
+      password: [rules.required(t('auth.signIn.password')), rules.password()],
     },
-    t
+    t,
   );
+
+  const handleGoogleSuccess = async (credential?: string) => {
+    if (!credential) {
+      toast.error(t('auth.signIn.error'));
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const res = await AuthServices.googleLogin({ idToken: credential });
+      const tokens = unwrapEnvelope(res.data);
+
+      if (!tokens?.token) {
+        toast.error(t('auth.signIn.error'));
+        return;
+      }
+
+      await loginWithTokens(tokens, login);
+      toast.success(t('auth.signIn.success'));
+      navigate(from, { replace: true });
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, t('auth.signIn.error')));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateAll()) return;
 
     setIsLoading(true);
-    // TODO: Replace with real API call
-    setTimeout(() => {
-      // Mock login — save token + user info via AuthContext
-      login('mock-jwt-token', {
-        name: 'Nguyễn Văn A',
+    try {
+      const res = await AuthServices.login({
         email: emailProps.value,
-        roles: ['owner'],
+        password: passwordProps.value,
       });
-      setIsLoading(false);
+
+      const tokens = unwrapEnvelope(res.data);
+      if (!tokens?.token) {
+        toast.error(t('auth.signIn.error'));
+        return;
+      }
+
+      await loginWithTokens(tokens, login);
+      toast.success(t('auth.signIn.success'));
       navigate(from, { replace: true });
-    }, 1500);
+    } catch (error) {
+      if (getApiErrorCode(error) === ApiErrorCode.EMAIL_NOT_VERIFIED) {
+        toast.error(getApiErrorMessage(error, t('auth.verifyEmail.error')));
+        navigate(routeName.verifyEmailPending, {
+          state: { email: emailProps.value },
+        });
+        return;
+      }
+      toast.error(getApiErrorMessage(error, t('auth.signIn.error')));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const emailProps = getFieldProps('email');
@@ -51,9 +120,11 @@ export default function SignInPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Logo & Header */}
       <div className="flex flex-col items-center gap-6">
-        <Link to="/" className="transition-transform hover:scale-105 active:scale-95">
+        <Link
+          to={routeName.home}
+          className="transition-transform hover:scale-105 active:scale-95"
+        >
           <img src={logo} alt="DDMS Logo" className="h-16 w-auto" />
         </Link>
         <div className="space-y-2 text-center">
@@ -69,7 +140,6 @@ export default function SignInPage() {
         </div>
       </div>
 
-      {/* Sign-in Form */}
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
         <FormField
           id="email"
@@ -90,7 +160,7 @@ export default function SignInPage() {
           {...passwordProps}
           labelExtra={
             <Link
-              to="/forgot-password"
+              to={routeName.forgotPassword}
               className="text-sm font-medium transition-colors hover:underline"
               style={{ color: '#00F0FF' }}
             >
@@ -110,7 +180,6 @@ export default function SignInPage() {
           }
         />
 
-        {/* Submit Button */}
         <Button
           type="submit"
           disabled={isLoading}
@@ -128,28 +197,38 @@ export default function SignInPage() {
         </Button>
       </form>
 
-      {/* Divider */}
       <div className="relative flex items-center">
-        <div className="flex-1" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }} />
+        <div
+          className="flex-1"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        />
         <span className="px-4 text-xs font-medium" style={{ color: '#ecf0ff' }}>
           {t('auth.signIn.orContinueWith')}
         </span>
-        <div className="flex-1" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }} />
+        <div
+          className="flex-1"
+          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
+        />
       </div>
 
-      {/* Social Login */}
-      <div className="flex flex-col gap-3">
-        <Button type="button" variant="dark-outline" className="h-11 w-full gap-2">
-          <GoogleIcon />
-          Google
-        </Button>
+      <div className="flex justify-center [&>div]:w-full">
+        <GoogleLogin
+          onSuccess={(credentialResponse) =>
+            handleGoogleSuccess(credentialResponse.credential)
+          }
+          onError={() => toast.error(t('auth.signIn.error'))}
+          theme="filled_black"
+          size="large"
+          width="100%"
+          text="continue_with"
+          shape="rectangular"
+        />
       </div>
 
-      {/* Sign-up Link */}
       <p className="text-center text-sm" style={{ color: '#ecf0ff' }}>
         {t('auth.signIn.dontHaveAccount')}?{' '}
         <Link
-          to="/sign-up"
+          to={routeName.signUp}
           className="font-semibold transition-colors hover:underline"
           style={{ color: '#00F0FF' }}
         >
