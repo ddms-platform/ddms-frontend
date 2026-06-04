@@ -1,3 +1,7 @@
-import type { User } from '@/data/user';
-
-export type IProfileRes = User;
+export interface IProfileRes {
+  id: string;
+  fullName: string;
+  email: string;
+  roles: string[];
+  emailVerified: boolean;
+}

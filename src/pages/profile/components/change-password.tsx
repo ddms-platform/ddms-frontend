@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { isPasswordPolicyValid } from '@/hooks/use-form-validation';
+import { AuthServices } from '@/services/auth-service';
 
 export default function ChangePassword() {
   const { t } = useTranslation();
@@ -25,10 +28,13 @@ export default function ChangePassword() {
 
   const validate = () => {
     const errs: Record<string, string> = {};
-    if (!values.current) errs.current = t('profile.changePassword.errors.currentRequired');
+    if (!values.current)
+      errs.current = t('profile.changePassword.errors.currentRequired');
     if (!values.new) errs.new = t('profile.changePassword.errors.newRequired');
-    else if (values.new.length < 6) errs.new = t('profile.changePassword.errors.minLength');
-    if (values.new !== values.confirm) errs.confirm = t('profile.changePassword.errors.mismatch');
+    else if (!isPasswordPolicyValid(values.new))
+      errs.new = t('validation.passwordPolicy');
+    if (values.new !== values.confirm)
+      errs.confirm = t('profile.changePassword.errors.mismatch');
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -37,11 +43,39 @@ export default function ChangePassword() {
     e.preventDefault();
     if (!validate()) return;
     setIsSaving(true);
-    // TODO: API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsSaving(false);
-    setValues({ current: '', new: '', confirm: '' });
-    setIsOpen(false);
+    try {
+      const res = await AuthServices.changePassword({
+        currentPassword: values.current,
+        newPassword: values.new,
+        confirmPassword: values.confirm,
+      });
+
+      if (res.status === 200 && res.data?.code === 1000) {
+        toast.success(t('profile.changePassword.success'));
+        setValues({ current: '', new: '', confirm: '' });
+        setErrors({});
+        setIsOpen(false);
+        return;
+      }
+
+      const fieldErrors = res.data?.fieldErrors;
+      if (fieldErrors) {
+        const mapped: Record<string, string> = {};
+        if (fieldErrors.currentPassword?.[0])
+          mapped.current = fieldErrors.currentPassword[0];
+        if (fieldErrors.newPassword?.[0])
+          mapped.new = fieldErrors.newPassword[0];
+        if (fieldErrors.confirmPassword?.[0])
+          mapped.confirm = fieldErrors.confirmPassword[0];
+        if (Object.keys(mapped).length > 0) setErrors(mapped);
+      }
+
+      toast.error(res.data?.message || t('profile.changePassword.error'));
+    } catch {
+      toast.error(t('profile.changePassword.error'));
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const passwordFields = [
@@ -97,7 +131,10 @@ export default function ChangePassword() {
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           {passwordFields.map(({ key, label }) => (
             <div key={key}>
-              <label className="mb-1.5 block text-sm font-medium" style={{ color: '#ffffff' }}>
+              <label
+                className="mb-1.5 block text-sm font-medium"
+                style={{ color: '#ffffff' }}
+              >
                 {label}
               </label>
               <div className="relative">
@@ -110,10 +147,14 @@ export default function ChangePassword() {
                 <input
                   type={showPasswords[key] ? 'text' : 'password'}
                   value={values[key]}
-                  onChange={(e) => setValues((prev) => ({ ...prev, [key]: e.target.value }))}
+                  onChange={(e) =>
+                    setValues((prev) => ({ ...prev, [key]: e.target.value }))
+                  }
                   className="w-full rounded-lg border py-3 pl-11 pr-12 text-sm font-medium outline-none transition-all focus:ring-2"
                   style={{
-                    borderColor: errors[key] ? '#ff6b6b' : 'rgba(255,255,255,0.15)',
+                    borderColor: errors[key]
+                      ? '#ff6b6b'
+                      : 'rgba(255,255,255,0.15)',
                     color: '#ffffff',
                   }}
                 />
@@ -123,7 +164,11 @@ export default function ChangePassword() {
                   className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
                   style={{ color: '#ecf0ff' }}
                 >
-                  {showPasswords[key] ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPasswords[key] ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
                 </button>
               </div>
               <div className="min-h-4.5">
@@ -157,7 +202,9 @@ export default function ChangePassword() {
               type="submit"
               disabled={isSaving}
             >
-              {isSaving ? t('profile.saving') : t('profile.changePassword.update')}
+              {isSaving
+                ? t('profile.saving')
+                : t('profile.changePassword.update')}
             </Button>
           </div>
         </form>
