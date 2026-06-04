@@ -1,21 +1,25 @@
 import { localStorageKey } from '@/constants/local-storage';
 
 const saveAccessToken = (token: string) => {
-  localStorage.setItem(localStorageKey.ACCESS_TOKEN, JSON.stringify(token));
+  localStorage.setItem(localStorageKey.ACCESS_TOKEN, token);
 };
 
-const getAccessToken = () => {
-  try {
-    const token = localStorage.getItem(localStorageKey.ACCESS_TOKEN);
-    if (token) {
-      return JSON.parse(token);
-    }
-    return null;
-  } catch (error) {
-    console.warn('Failed to parse access token from localStorage:', error);
-    localStorage.removeItem(localStorageKey.ACCESS_TOKEN);
+const getAccessToken = (): string | null => {
+  const token = localStorage.getItem(localStorageKey.ACCESS_TOKEN);
+  if (!token) {
     return null;
   }
+
+  if (token.startsWith('"') && token.endsWith('"')) {
+    try {
+      return JSON.parse(token) as string;
+    } catch {
+      localStorage.removeItem(localStorageKey.ACCESS_TOKEN);
+      return null;
+    }
+  }
+
+  return token;
 };
 
 const clearAccessToken = () => {

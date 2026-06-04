@@ -1,11 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { User, LogOut, MapPin, ChevronDown, LayoutDashboard } from 'lucide-react';
+import {
+  User,
+  LogOut,
+  MapPin,
+  ChevronDown,
+  LayoutDashboard,
+} from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
+import { performLogout } from '@/lib/auth-session';
 import logo from '@/assets/logo.png';
 
 interface NavLink {
@@ -19,7 +26,10 @@ interface GlobalHeaderProps {
   transparent?: boolean;
 }
 
-export default function GlobalHeader({ navLinks, transparent = false }: GlobalHeaderProps) {
+export default function GlobalHeader({
+  navLinks,
+  transparent = false,
+}: GlobalHeaderProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
@@ -30,7 +40,10 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setDropdownOpen(false);
       }
     }
@@ -40,9 +53,9 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dropdownOpen]);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
     setDropdownOpen(false);
+    await performLogout(logout);
     navigate(routeName.signIn);
   };
 
@@ -132,7 +145,10 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                 )}
 
                 {/* Name + chevron (hidden on mobile) */}
-                <span className="hidden text-sm font-medium sm:inline" style={{ color: '#ffffff' }}>
+                <span
+                  className="hidden text-sm font-medium sm:inline"
+                  style={{ color: '#ffffff' }}
+                >
                   {user?.name || 'User'}
                 </span>
                 <ChevronDown
@@ -161,10 +177,16 @@ export default function GlobalHeader({ navLinks, transparent = false }: GlobalHe
                     className="border-b px-4 py-3"
                     style={{ borderColor: 'rgba(255,255,255,0.08)' }}
                   >
-                    <p className="text-sm font-semibold" style={{ color: '#ffffff' }}>
+                    <p
+                      className="text-sm font-semibold"
+                      style={{ color: '#ffffff' }}
+                    >
                       {user?.name || 'User'}
                     </p>
-                    <p className="mt-0.5 truncate text-xs" style={{ color: '#ecf0ff' }}>
+                    <p
+                      className="mt-0.5 truncate text-xs"
+                      style={{ color: '#ecf0ff' }}
+                    >
                       {user?.email || ''}
                     </p>
                   </div>

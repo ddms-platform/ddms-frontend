@@ -5,8 +5,8 @@ import GlobalFooter from '@/components/layouts/global-footer';
 
 export default function MainLayout() {
   const { t } = useTranslation();
-
   const location = useLocation();
+
   const isHome = location.pathname === '/';
 
   const navLinks = isHome
@@ -18,7 +18,10 @@ export default function MainLayout() {
     : [];
 
   return (
-    <div className="flex min-h-screen flex-col" style={{ backgroundColor: '#0A192F' }}>
+    <div
+      className="flex min-h-screen flex-col"
+      style={{ backgroundColor: '#0A192F' }}
+    >
       <GlobalHeader navLinks={navLinks} />
       <main className="flex-1">
         <Outlet />

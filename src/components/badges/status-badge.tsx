@@ -1,4 +1,13 @@
-import { AlertTriangle, Check, Clock3, Eye, Ship, Wrench, X, type LucideIcon } from 'lucide-react';
+import {
+  AlertTriangle,
+  Check,
+  Clock3,
+  Eye,
+  Ship,
+  Wrench,
+  X,
+  type LucideIcon,
+} from 'lucide-react';
 
 export type BadgeVariant =
   | 'available'
@@ -17,7 +26,10 @@ export type BadgeVariant =
   | 'ownerIdle'
   | 'ownerMaintenance';
 
-const VARIANT_CONFIG: Record<BadgeVariant, { bg: string; color: string; icon: LucideIcon }> = {
+const VARIANT_CONFIG: Record<
+  BadgeVariant,
+  { bg: string; color: string; icon: LucideIcon }
+> = {
   available: {
     bg: 'rgba(16, 185, 129, 0.9)',
     color: '#ffffff',

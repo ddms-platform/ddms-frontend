@@ -41,10 +41,15 @@ export default function ImageCarousel({
   if (!images?.length) return null;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl" style={{ aspectRatio }}>
+    <div
+      className="group relative overflow-hidden rounded-2xl"
+      style={{ aspectRatio }}
+    >
       {/* Hide scrollbars with embedded style */}
       <style
-        dangerouslySetInnerHTML={{ __html: `.no-scrollbar::-webkit-scrollbar { display: none; }` }}
+        dangerouslySetInnerHTML={{
+          __html: `.no-scrollbar::-webkit-scrollbar { display: none; }`,
+        }}
       />
 
       {/* Scroll Container */}
@@ -102,7 +107,8 @@ export default function ImageCarousel({
               className="h-2 rounded-full transition-all"
               style={{
                 width: i === current ? 24 : 8,
-                backgroundColor: i === current ? '#ffffff' : 'rgba(255,255,255,0.5)',
+                backgroundColor:
+                  i === current ? '#ffffff' : 'rgba(255,255,255,0.5)',
               }}
             />
           ))}

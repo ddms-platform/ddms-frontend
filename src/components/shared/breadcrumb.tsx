@@ -14,7 +14,10 @@ interface BreadcrumbProps {
   showHomeIcon?: boolean;
 }
 
-export default function Breadcrumb({ items, showHomeIcon = true }: BreadcrumbProps) {
+export default function Breadcrumb({
+  items,
+  showHomeIcon = true,
+}: BreadcrumbProps) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
       <ol className="flex flex-wrap items-center gap-1.5 text-sm">
@@ -35,7 +38,11 @@ export default function Breadcrumb({ items, showHomeIcon = true }: BreadcrumbPro
 
               {isLast || !item.to ? (
                 /* Current page — no link */
-                <span className="font-medium" style={{ color: '#ffffff' }} aria-current="page">
+                <span
+                  className="font-medium"
+                  style={{ color: '#ffffff' }}
+                  aria-current="page"
+                >
                   {item.label}
                 </span>
               ) : (

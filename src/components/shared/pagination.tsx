@@ -11,7 +11,11 @@ interface PaginationProps {
   siblingCount?: number;
 }
 
-function generatePages(current: number, total: number, siblings: number): (number | '...')[] {
+function generatePages(
+  current: number,
+  total: number,
+  siblings: number,
+): (number | '...')[] {
   const pages: (number | '...')[] = [];
 
   pages.push(1);
@@ -40,7 +44,10 @@ export default function Pagination({
   const pages = generatePages(currentPage, totalPages, siblingCount);
 
   return (
-    <nav className="flex items-center justify-center gap-1.5" aria-label="Pagination">
+    <nav
+      className="flex items-center justify-center gap-1.5"
+      aria-label="Pagination"
+    >
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage <= 1}
@@ -74,7 +81,7 @@ export default function Pagination({
           >
             {page}
           </button>
-        )
+        ),
       )}
 
       <button

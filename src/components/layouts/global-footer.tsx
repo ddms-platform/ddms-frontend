@@ -21,7 +21,11 @@ export default function GlobalFooter() {
             <div key={section}>
               <h4
                 className="mb-4 text-sm font-semibold"
-                style={{ color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.32px' }}
+                style={{
+                  color: '#ffffff',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.32px',
+                }}
               >
                 {t(`home.footer.${section}.title`)}
               </h4>
@@ -42,7 +46,10 @@ export default function GlobalFooter() {
           ))}
         </div>
 
-        <div className="mt-10 border-t pt-6" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+        <div
+          className="mt-10 border-t pt-6"
+          style={{ borderColor: 'rgba(255,255,255,0.1)' }}
+        >
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-sm" style={{ color: '#ecf0ff' }}>
               © {new Date().getFullYear()} DDMS. {t('home.footer.rights')}

@@ -14,7 +14,7 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/30 focus-visible:border-[#00F0FF]',
         'disabled:cursor-not-allowed disabled:opacity-50',
         'aria-invalid:border-destructive aria-invalid:ring-destructive/20',
-        className
+        className,
       )}
       {...props}
     />

@@ -4,9 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/use-auth';
 import { ChevronLeft, Menu, X } from 'lucide-react';
 import { routeName } from '@/constants/route-name';
+import { performLogout } from '@/lib/auth-session';
 import logo from '@/assets/logo.png';
 import TranslationToggle from '@/components/shared/translation-toggle';
-import { ownerSidelinks, ownerSecondaryLinks, ownerLogoutLink } from '@/data/owner-sidelinks';
+import {
+  ownerSidelinks,
+  ownerSecondaryLinks,
+  ownerLogoutLink,
+} from '@/data/owner-sidelinks';
 
 export default function OwnerLayout() {
   const { t } = useTranslation();
@@ -24,13 +29,16 @@ export default function OwnerLayout() {
         .toUpperCase()
     : '?';
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await performLogout(logout);
     navigate(routeName.signIn);
   };
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ backgroundColor: '#0A192F' }}>
+    <div
+      className="flex h-screen overflow-hidden"
+      style={{ backgroundColor: '#0A192F' }}
+    >
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/60 lg:hidden"
@@ -41,7 +49,10 @@ export default function OwnerLayout() {
       {/* ── Sidebar ── */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} ${collapsed ? 'w-[72px]' : 'w-[260px]'}`}
-        style={{ backgroundColor: '#0d1f3c', borderColor: 'rgba(255,255,255,0.06)' }}
+        style={{
+          backgroundColor: '#0d1f3c',
+          borderColor: 'rgba(255,255,255,0.06)',
+        }}
       >
         {/* Logo */}
         <div
@@ -51,7 +62,10 @@ export default function OwnerLayout() {
           {!collapsed && (
             <Link to={routeName.owner} className="flex items-center gap-2.5">
               <img src={logo} alt="DDMS" className="h-8 w-auto" />
-              <span className="text-sm font-bold tracking-wide" style={{ color: '#00F0FF' }}>
+              <span
+                className="text-sm font-bold tracking-wide"
+                style={{ color: '#00F0FF' }}
+              >
                 {t('ownerLayout.brand')}
               </span>
             </Link>
@@ -83,7 +97,9 @@ export default function OwnerLayout() {
                     `group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${isActive ? 'shadow-sm' : 'hover:bg-white/5'} ${collapsed ? 'justify-center' : ''}`
                   }
                   style={({ isActive }) => ({
-                    backgroundColor: isActive ? 'rgba(0,240,255,0.1)' : undefined,
+                    backgroundColor: isActive
+                      ? 'rgba(0,240,255,0.1)'
+                      : undefined,
                     color: isActive ? '#00F0FF' : '#ecf0ff',
                   })}
                 >
@@ -94,7 +110,10 @@ export default function OwnerLayout() {
             ))}
           </ul>
 
-          <div className="mx-2 my-4 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.06)' }} />
+          <div
+            className="mx-2 my-4 h-px"
+            style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}
+          />
 
           {/* Secondary Nav — driven by ownerSecondaryLinks */}
           <ul className="space-y-1">
@@ -137,7 +156,9 @@ export default function OwnerLayout() {
             <ChevronLeft
               size={18}
               className="shrink-0 transition-transform duration-200"
-              style={{ transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)' }}
+              style={{
+                transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)',
+              }}
             />
             {!collapsed && <span>{t('ownerLayout.collapse')}</span>}
           </button>
@@ -148,7 +169,10 @@ export default function OwnerLayout() {
       <div className="flex flex-1 flex-col overflow-hidden">
         <header
           className="flex h-16 shrink-0 items-center justify-between border-b px-4 lg:px-6"
-          style={{ backgroundColor: '#0A192F', borderColor: 'rgba(255,255,255,0.06)' }}
+          style={{
+            backgroundColor: '#0A192F',
+            borderColor: 'rgba(255,255,255,0.06)',
+          }}
         >
           <button
             onClick={() => setMobileOpen(true)}
