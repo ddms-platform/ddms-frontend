@@ -1,7 +1,10 @@
 import axios, {
   type AxiosRequestConfig,
   type AxiosResponse,
+<<<<<<< Updated upstream
   type InternalAxiosRequestConfig,
+=======
+>>>>>>> Stashed changes
   HttpStatusCode,
 } from 'axios';
 import { toast } from 'sonner';
@@ -162,8 +165,12 @@ api.interceptors.response.use(
       redirectToSignIn();
       return Promise.reject(error);
     }
+<<<<<<< Updated upstream
 
     return Promise.reject(error);
+=======
+    return error.response;
+>>>>>>> Stashed changes
   },
 );
 

@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/sonner';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from '@/components/layouts/auth-layout';
 import MainLayout from '@/components/layouts/main-layout';
@@ -38,13 +39,16 @@ const TourListPage = lazy(() => import('@/pages/tours/tour-list'));
 const BookingPage = lazy(() => import('@/pages/tours/booking'));
 const BoatDetailPage = lazy(() => import('@/pages/boats/boat-detail'));
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 function PageLoader() {
   return <LoadingSpinner fullScreen />;
 }
 
-function App() {
+export default function App() {
   return (
     <ErrorBoundary>
+<<<<<<< Updated upstream
       <BrowserRouter>
         <AuthProvider>
           <LanguageProvider>
@@ -192,35 +196,33 @@ function App() {
               {/* Owner pages - sidebar layout, role-gated */}
               <Route element={<ProtectedRoute roles={['owner']} />}>
                 <Route element={<OwnerLayout />}>
+=======
+      <GoogleOAuthProvider
+        clientId={
+          import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+          '747852977200-546j036ca6ftgpmvmtju936r0ujckrai.apps.googleusercontent.com'
+        }
+      >
+        <BrowserRouter>
+          <AuthProvider>
+            <LanguageProvider>
+              <Routes>
+                {/* Auth Routes - own layout, no header/footer */}
+                <Route element={<AuthLayout />}>
+>>>>>>> Stashed changes
                   <Route
-                    path={routeName.owner}
+                    path={routeName.signIn}
                     element={
                       <Suspense fallback={<PageLoader />}>
-                        <OwnerDashboard />
+                        <SignInPage />
                       </Suspense>
                     }
                   />
                   <Route
-                    path={routeName.ownerBoats}
+                    path={routeName.signUp}
                     element={
                       <Suspense fallback={<PageLoader />}>
-                        <OwnerBoatList />
-                      </Suspense>
-                    }
-                  />
-                  <Route
-                    path={routeName.ownerBoatsNew}
-                    element={
-                      <Suspense fallback={<PageLoader />}>
-                        <OwnerBoatForm />
-                      </Suspense>
-                    }
-                  />
-                  <Route
-                    path={routeName.ownerBoatEdit}
-                    element={
-                      <Suspense fallback={<PageLoader />}>
-                        <OwnerBoatForm />
+                        <SignUpPage />
                       </Suspense>
                     }
                   />
@@ -233,8 +235,8 @@ function App() {
                     }
                   />
                 </Route>
-              </Route>
 
+<<<<<<< Updated upstream
               {/* Catch-all */}
               <Route
                 path="*"
@@ -244,8 +246,125 @@ function App() {
           </LanguageProvider>
         </AuthProvider>
       </BrowserRouter>
+=======
+                {/* Public pages - with GlobalHeader + GlobalFooter */}
+                <Route element={<MainLayout />}>
+                  <Route
+                    path={routeName.home}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <HomePage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.tours}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <TourListPage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.tourDetail}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <TourDetailPage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.tourBooking}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <BookingPage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.boatDetail}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <BoatDetailPage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.becomeOwner}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <BecomeOwnerPage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.profile}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <ProfilePage />
+                      </Suspense>
+                    }
+                  />
+                  <Route
+                    path={routeName.myTours}
+                    element={
+                      <Suspense fallback={<PageLoader />}>
+                        <MyToursPage />
+                      </Suspense>
+                    }
+                  />
+                </Route>
+
+                {/* Owner pages - sidebar layout, role-gated */}
+                <Route element={<ProtectedRoute roles={['owner']} />}>
+                  <Route element={<OwnerLayout />}>
+                    <Route
+                      path={routeName.owner}
+                      element={
+                        <Suspense fallback={<PageLoader />}>
+                          <OwnerDashboard />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path={routeName.ownerBoats}
+                      element={
+                        <Suspense fallback={<PageLoader />}>
+                          <OwnerBoatList />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path={routeName.ownerBoatsNew}
+                      element={
+                        <Suspense fallback={<PageLoader />}>
+                          <OwnerBoatForm />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path={routeName.ownerBoatEdit}
+                      element={
+                        <Suspense fallback={<PageLoader />}>
+                          <OwnerBoatForm />
+                        </Suspense>
+                      }
+                    />
+                  </Route>
+                </Route>
+
+                {/* Catch-all */}
+                <Route
+                  path="*"
+                  element={<Navigate to={routeName.home} replace />}
+                />
+              </Routes>
+            </LanguageProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </GoogleOAuthProvider>
+      <Toaster position="top-right" />
+>>>>>>> Stashed changes
     </ErrorBoundary>
   );
 }
-
-export default App;

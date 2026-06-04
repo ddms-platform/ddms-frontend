@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // Numeric API error codes that mirror the backend `ErrorDefinitions.Codes`.
 export const ApiErrorCode = {
   SUCCESS: 1000,
@@ -34,3 +35,15 @@ export const REFRESH_FAILURE_CODES: number[] = [
   ApiErrorCode.REFRESH_TOKEN_REVOKED,
   ApiErrorCode.REFRESH_TOKEN_REUSE_DETECTED,
 ];
+=======
+export enum ApiErrorConstant {
+  USER_DISABLED = 'USER_DISABLED',
+  UNAUTHORIZED = 'UNAUTHORIZED',
+}
+
+export enum ApiErrorCode {
+  SUCCESS = 1000,
+  EMAIL_NOT_VERIFIED = 1002,
+  RATE_LIMITED = 429,
+}
+>>>>>>> Stashed changes
