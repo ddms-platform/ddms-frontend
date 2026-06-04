@@ -25,7 +25,7 @@ export default function ResetPasswordPage() {
     {
       password: [
         rules.required(t('auth.resetPassword.password')),
-        rules.minLength(8),
+        rules.password(),
       ],
       confirmPassword: [
         rules.required(t('auth.resetPassword.confirmPassword')),
