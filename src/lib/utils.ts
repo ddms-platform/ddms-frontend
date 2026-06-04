@@ -6,7 +6,10 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(price: number) {
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(price);
 }
 
 /**
@@ -16,7 +19,7 @@ export function formatPrice(price: number) {
 export function getLocalizedField<T extends Record<string, unknown>>(
   obj: T,
   field: string,
-  lang: string
+  lang: string,
 ): string {
   const key = `${field}_${lang}` as keyof T;
   const fallback = `${field}_vn` as keyof T;

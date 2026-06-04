@@ -29,6 +29,20 @@ interface UseFormValidationReturn<T> {
   };
 }
 
+// ---- Password policy ----
+// Case-sensitive, no trimming/lowercasing: the raw value is validated as-is.
+export const PASSWORD_MIN_LENGTH = 8;
+
+export function isPasswordPolicyValid(value: string): boolean {
+  return (
+    value.length >= PASSWORD_MIN_LENGTH &&
+    /[a-z]/.test(value) &&
+    /[A-Z]/.test(value) &&
+    /[0-9]/.test(value) &&
+    /[^A-Za-z0-9]/.test(value)
+  );
+}
+
 // ---- Built-in validation rules ----
 
 export const rules = {
@@ -39,9 +53,19 @@ export const rules = {
     };
   },
 
+  password: (): ValidationRule<Record<string, string>> => {
+    return (value) => {
+      if (value && !isPasswordPolicyValid(value)) {
+        return 'validation.passwordPolicy';
+      }
+      return undefined;
+    };
+  },
+
   email: (): ValidationRule<Record<string, string>> => {
     return (value) => {
-      if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'invalidEmail';
+      if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+        return 'invalidEmail';
       return undefined;
     };
   },
@@ -53,7 +77,10 @@ export const rules = {
     };
   },
 
-  match: (otherField: string, errorKey: string): ValidationRule<Record<string, string>> => {
+  match: (
+    otherField: string,
+    errorKey: string,
+  ): ValidationRule<Record<string, string>> => {
     return (value, allValues) => {
       if (value && value !== allValues[otherField]) return errorKey;
       return undefined;
@@ -66,7 +93,7 @@ export const rules = {
 export function useFormValidation<T extends Record<string, string>>(
   initialValues: T,
   fieldRules: FieldRules<T>,
-  translationFn?: (key: string, options?: Record<string, unknown>) => string
+  translationFn?: (key: string, options?: Record<string, unknown>) => string,
 ): UseFormValidationReturn<T> {
   const { t: defaultT } = useTranslation();
   const t = translationFn || defaultT;
@@ -102,7 +129,7 @@ export function useFormValidation<T extends Record<string, string>>(
       }
       return undefined;
     },
-    [fieldRules, t]
+    [fieldRules, t],
   );
 
   const setValue = useCallback(
@@ -112,10 +139,13 @@ export function useFormValidation<T extends Record<string, string>>(
 
       // Re-validate if already touched
       if (touched[field]) {
-        setErrors((prev) => ({ ...prev, [field]: validateField(field, newValues) }));
+        setErrors((prev) => ({
+          ...prev,
+          [field]: validateField(field, newValues),
+        }));
       }
     },
-    [values, touched, validateField]
+    [values, touched, validateField],
   );
 
   const setFieldTouched = useCallback((field: keyof T) => {
@@ -127,13 +157,13 @@ export function useFormValidation<T extends Record<string, string>>(
       setTouched((prev) => ({ ...prev, [field]: true }));
       setErrors((prev) => ({ ...prev, [field]: validateField(field, values) }));
     },
-    [values, validateField]
+    [values, validateField],
   );
 
   const validateAll = useCallback((): boolean => {
     const allTouched = Object.keys(initialValues).reduce(
       (acc, key) => ({ ...acc, [key]: true }),
-      {} as Record<keyof T, boolean>
+      {} as Record<keyof T, boolean>,
     );
     setTouched(allTouched);
 
@@ -161,12 +191,13 @@ export function useFormValidation<T extends Record<string, string>>(
   const getFieldProps = useCallback(
     (field: keyof T) => ({
       value: values[field],
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => setValue(field, e.target.value),
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+        setValue(field, e.target.value),
       onBlur: () => handleBlur(field),
       hasError: !!(touched[field] && errors[field]),
       error: touched[field] ? errors[field] : undefined,
     }),
-    [values, errors, touched, setValue, handleBlur]
+    [values, errors, touched, setValue, handleBlur],
   );
 
   return {
