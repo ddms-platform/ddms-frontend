@@ -3,6 +3,8 @@
   "css.validate": false,
   "scss.validate": false,
   "less.validate": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
   "editor.quickSuggestions": {
     "strings": "on"
   },
