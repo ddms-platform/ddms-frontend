@@ -12,7 +12,11 @@
       "signingIn": "Đang đăng nhập...",
       "orContinueWith": "hoặc tiếp tục với",
       "dontHaveAccount": "Chưa có tài khoản",
-      "signUpLink": "Đăng ký"
+      "signUpLink": "Đăng ký",
+      "success": "Đăng nhập thành công",
+      "error": "Đăng nhập thất bại. Kiểm tra email và mật khẩu.",
+      "pleaseLoginAfterVerify": "Tài khoản đã được xác minh. Vui lòng đăng nhập để tiếp tục.",
+      "pleaseLoginAfterReset": "Đặt lại mật khẩu thành công. Vui lòng đăng nhập bằng mật khẩu mới."
     },
     "signUp": {
       "title": "Tạo tài khoản",
@@ -34,7 +38,61 @@
       "createAccount": "Tạo tài khoản",
       "creatingAccount": "Đang tạo tài khoản...",
       "alreadyHaveAccount": "Đã có tài khoản",
-      "signInLink": "Đăng nhập"
+      "signInLink": "Đăng nhập",
+      "success": "Tạo tài khoản thành công. Kiểm tra email để xác minh.",
+      "error": "Đăng ký thất bại. Vui lòng thử lại."
+    },
+    "verifyEmail": {
+      "title": "Xác minh email",
+      "verifying": "Đang xác minh email...",
+      "success": "Xác minh thành công. Chào mừng bạn!",
+      "successTitle": "Tạo tài khoản thành công",
+      "successDescription": "Email của bạn đã được xác minh và tài khoản đã được kích hoạt. Vui lòng đăng nhập để tiếp tục.",
+      "alreadyVerifiedTitle": "Tài khoản đã được xác thực",
+      "alreadyVerifiedDescription": "Tài khoản này đã được xác thực trước đó. Vui lòng đăng nhập để tiếp tục.",
+      "goToSignIn": "Đăng nhập",
+      "error": "Xác minh thất bại. Link có thể hết hạn hoặc không hợp lệ.",
+      "missingToken": "Thiếu mã xác minh.",
+      "backToSignIn": "Quay lại đăng nhập",
+      "pendingTitle": "Kiểm tra hộp thư",
+      "pendingDescription": "Chúng tôi đã gửi link xác minh tới {{email}}. Mở link để kích hoạt tài khoản.",
+      "resend": "Gửi lại email xác minh",
+      "resending": "Đang gửi...",
+      "resendIn": "Gửi lại sau {{seconds}}s",
+      "resendSuccess": "Đã gửi email xác minh. Vui lòng kiểm tra hộp thư.",
+      "resendError": "Không thể gửi lại email. Vui lòng thử lại.",
+      "resendRateLimited": "Quá nhiều yêu cầu. Vui lòng đợi một lát rồi thử lại.",
+      "noEmail": "Không tìm thấy email. Vui lòng đăng ký lại."
+    },
+    "forgotPassword": {
+      "title": "Quên mật khẩu",
+      "description": "Nhập email của bạn, chúng tôi sẽ gửi link đặt lại mật khẩu.",
+      "submittedDescription": "Nếu email tồn tại trong hệ thống, bạn sẽ nhận link đặt lại mật khẩu. Vui lòng kiểm tra hộp thư và thư rác.",
+      "email": "Địa chỉ email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "submit": "Gửi link đặt lại",
+      "sending": "Đang gửi...",
+      "success": "Nếu tài khoản tồn tại, link đặt lại mật khẩu đã được gửi.",
+      "error": "Không thể gửi link. Vui lòng thử lại.",
+      "backToSignIn": "Quay lại đăng nhập"
+    },
+    "resetPassword": {
+      "title": "Đặt lại mật khẩu",
+      "description": "Nhập mật khẩu mới của bạn bên dưới.",
+      "password": "Mật khẩu mới",
+      "passwordPlaceholder": "Nhập mật khẩu mới",
+      "confirmPassword": "Xác nhận mật khẩu mới",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu mới",
+      "hint": "Mật khẩu phải có ít nhất 8 ký tự.",
+      "submit": "Cập nhật mật khẩu",
+      "submitting": "Đang cập nhật...",
+      "error": "Không thể đặt lại mật khẩu. Link có thể hết hạn hoặc không hợp lệ.",
+      "missingToken": "Link đặt lại không hợp lệ hoặc bị thiếu.",
+      "requestNewLink": "Yêu cầu link mới",
+      "backToSignIn": "Quay lại đăng nhập",
+      "successTitle": "Đặt lại mật khẩu thành công",
+      "successDescription": "Mật khẩu của bạn đã được cập nhật. Vui lòng đăng nhập bằng mật khẩu mới.",
+      "goToSignIn": "Đăng nhập"
     },
     "layout": {
       "welcomeTitle": "Chào mừng đến với DDMS",
@@ -78,6 +136,7 @@
     "required": "{{field}} là bắt buộc",
     "invalidEmail": "Vui lòng nhập địa chỉ email hợp lệ",
     "minLength": "Phải có ít nhất {{count}} ký tự",
+    "passwordPolicy": "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ thường, chữ hoa, số và ký tự đặc biệt",
     "termsRequired": "Bạn phải đồng ý với các điều khoản và điều kiện"
   },
   "becomeOwner": {
@@ -330,6 +389,8 @@
       "new": "Mật khẩu mới",
       "confirm": "Xác nhận mật khẩu mới",
       "update": "Cập nhật mật khẩu",
+      "success": "Đổi mật khẩu thành công",
+      "error": "Không thể đổi mật khẩu. Vui lòng thử lại.",
       "errors": {
         "currentRequired": "Vui lòng nhập mật khẩu hiện tại",
         "newRequired": "Vui lòng nhập mật khẩu mới",
