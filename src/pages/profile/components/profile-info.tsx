@@ -17,12 +17,19 @@ export default function ProfileInfo() {
 
   const [fields, setFields] = useState<ProfileField[]>([
     { key: 'fullName', icon: User, type: 'text', value: 'Nguyễn Tuấn' },
-    { key: 'email', icon: Mail, type: 'email', value: 'tuan.nguyen@example.com' },
+    {
+      key: 'email',
+      icon: Mail,
+      type: 'email',
+      value: 'tuan.nguyen@example.com',
+    },
     { key: 'phone', icon: Phone, type: 'tel', value: '0903 123 456' },
     { key: 'address', icon: MapPin, type: 'text', value: 'Đà Nẵng, Việt Nam' },
   ]);
 
-  const [editValues, setEditValues] = useState<string[]>(fields.map((f) => f.value));
+  const [editValues, setEditValues] = useState<string[]>(
+    fields.map((f) => f.value),
+  );
 
   const handleEdit = () => {
     setEditValues(fields.map((f) => f.value));
@@ -72,7 +79,12 @@ export default function ProfileInfo() {
           </Button>
         ) : (
           <div className="flex gap-2">
-            <Button variant="dark-outline" size="action" className="gap-1.5" onClick={handleCancel}>
+            <Button
+              variant="dark-outline"
+              size="action"
+              className="gap-1.5"
+              onClick={handleCancel}
+            >
               <X size={14} />
               {t('profile.cancel')}
             </Button>
@@ -96,7 +108,10 @@ export default function ProfileInfo() {
           const Icon = field.icon;
           return (
             <div key={field.key}>
-              <label className="mb-1.5 block text-sm font-medium" style={{ color: '#ffffff' }}>
+              <label
+                className="mb-1.5 block text-sm font-medium"
+                style={{ color: '#ffffff' }}
+              >
                 {t(`profile.fields.${field.key}`)}
               </label>
               <div className="relative">
