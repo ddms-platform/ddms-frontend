@@ -58,7 +58,7 @@ export default function SignUpPage() {
     {
       fullName: [rules.required(t('auth.signUp.fullName')), rules.minLength(2)],
       email: [rules.required(t('auth.signUp.email')), rules.email()],
-      password: [rules.required(t('auth.signUp.password')), rules.minLength(8)],
+      password: [rules.required(t('auth.signUp.password')), rules.password()],
       confirmPassword: [
         rules.required(t('auth.signUp.confirmPassword')),
         rules.match('password', 'auth.signUp.passwordsDoNotMatch'),

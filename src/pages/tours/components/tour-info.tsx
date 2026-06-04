@@ -45,7 +45,10 @@ export default function TourInfo({
           >
             {title}
           </h1>
-          <p className="mt-2 flex items-center gap-1.5 text-sm" style={{ color: '#ecf0ff' }}>
+          <p
+            className="mt-2 flex items-center gap-1.5 text-sm"
+            style={{ color: '#ecf0ff' }}
+          >
             <MapPin size={15} />
             {location}
           </p>
@@ -78,10 +81,16 @@ export default function TourInfo({
             style={{ backgroundColor: '#112240' }}
           >
             <Icon size={22} style={{ color: '#00F0FF' }} />
-            <span className="mt-2 text-xs font-medium" style={{ color: '#ecf0ff' }}>
+            <span
+              className="mt-2 text-xs font-medium"
+              style={{ color: '#ecf0ff' }}
+            >
               {label}
             </span>
-            <span className="mt-0.5 text-sm font-semibold" style={{ color: '#ffffff' }}>
+            <span
+              className="mt-0.5 text-sm font-semibold"
+              style={{ color: '#ffffff' }}
+            >
               {value}
             </span>
           </div>
@@ -99,7 +108,10 @@ export default function TourInfo({
         >
           {t('tour.info.about')}
         </h2>
-        <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+        <p
+          className="mt-3 text-sm leading-relaxed"
+          style={{ color: '#ecf0ff' }}
+        >
           {description}
         </p>
       </div>

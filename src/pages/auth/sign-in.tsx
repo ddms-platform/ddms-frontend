@@ -50,7 +50,7 @@ export default function SignInPage() {
     { email: '', password: '' },
     {
       email: [rules.required(t('auth.signIn.email')), rules.email()],
-      password: [rules.required(t('auth.signIn.password')), rules.minLength(6)],
+      password: [rules.required(t('auth.signIn.password')), rules.password()],
     },
     t,
   );

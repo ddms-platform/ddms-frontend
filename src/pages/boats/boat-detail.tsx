@@ -58,7 +58,8 @@ const MOCK_BOATS_DATA: Record<
     name: 'Rồng Vàng',
     type: 'cruise',
     capacity: 40,
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=675&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=675&fit=crop',
     available: true,
     description: 'Du thuyền hạng sang với 2 tầng, phòng VIP',
     longDescription:
@@ -96,7 +97,8 @@ const MOCK_BOATS_DATA: Record<
     name: 'Sông Hàn 01',
     type: 'standard',
     capacity: 30,
-    image: 'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1200&h=675&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1200&h=675&fit=crop',
     available: true,
     description: 'Thuyền tiêu chuẩn, thoáng mát',
     longDescription:
@@ -128,7 +130,8 @@ const MOCK_BOATS_DATA: Record<
     name: 'Phượng Hoàng',
     type: 'luxury',
     capacity: 20,
-    image: 'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=1200&h=675&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?w=1200&h=675&fit=crop',
     available: false,
     description: 'Du thuyền cao cấp, nội thất sang trọng',
     longDescription:
@@ -162,7 +165,8 @@ const MOCK_BOATS_DATA: Record<
     name: 'Bạch Đằng Star',
     type: 'party',
     capacity: 50,
-    image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=1200&h=675&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1540946485063-a40da27545f8?w=1200&h=675&fit=crop',
     available: true,
     description: 'Thuyền tiệc lớn, sân khấu ngoài trời',
     longDescription:
@@ -196,7 +200,8 @@ const MOCK_BOATS_DATA: Record<
     name: 'Cá Chép Đỏ',
     type: 'standard',
     capacity: 25,
-    image: 'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=1200&h=675&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=1200&h=675&fit=crop',
     available: false,
     description: 'Đang bảo trì định kỳ',
     longDescription:
@@ -206,7 +211,9 @@ const MOCK_BOATS_DATA: Record<
     speed: '10 knots',
     rating: 4.6,
     totalTrips: 1800,
-    images: ['https://images.unsplash.com/photo-1559599746-8823b38544c6?w=1200&h=675&fit=crop'],
+    images: [
+      'https://images.unsplash.com/photo-1559599746-8823b38544c6?w=1200&h=675&fit=crop',
+    ],
     amenities: [
       { icon: '🛟', label: 'Áo phao' },
       { icon: '☂️', label: 'Mái che' },
@@ -224,7 +231,8 @@ const MOCK_BOATS_DATA: Record<
     name: 'Hải Âu',
     type: 'speedboat',
     capacity: 12,
-    image: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1200&h=675&fit=crop',
+    image:
+      'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=1200&h=675&fit=crop',
     available: true,
     description: 'Ca nô cao tốc, trải nghiệm mạo hiểm',
     longDescription:
@@ -301,7 +309,11 @@ export default function BoatDetailPage() {
     },
     { icon: Gauge, label: t('boatDetail.specs.speed'), value: boat.speed },
     { icon: Anchor, label: t('boatDetail.specs.length'), value: boat.length },
-    { icon: Calendar, label: t('boatDetail.specs.yearBuilt'), value: `${boat.yearBuilt}` },
+    {
+      icon: Calendar,
+      label: t('boatDetail.specs.yearBuilt'),
+      value: `${boat.yearBuilt}`,
+    },
   ];
 
   return (
@@ -319,7 +331,9 @@ export default function BoatDetailPage() {
       <div className="mt-4">
         <ImageCarousel
           images={boat.images}
-          getAltText={(i) => `${boat.name} - ${t('tour.gallery.photo')} ${i + 1}`}
+          getAltText={(i) =>
+            `${boat.name} - ${t('tour.gallery.photo')} ${i + 1}`
+          }
         />
       </div>
 
@@ -335,12 +349,18 @@ export default function BoatDetailPage() {
             </h1>
             <span
               className="rounded-md px-2.5 py-1 text-xs font-semibold"
-              style={{ backgroundColor: 'rgba(0,240,255,0.12)', color: '#00F0FF' }}
+              style={{
+                backgroundColor: 'rgba(0,240,255,0.12)',
+                color: '#00F0FF',
+              }}
             >
               {boatTypeLabel}
             </span>
           </div>
-          <p className="mt-2 flex items-center gap-1.5 text-sm" style={{ color: '#ecf0ff' }}>
+          <p
+            className="mt-2 flex items-center gap-1.5 text-sm"
+            style={{ color: '#ecf0ff' }}
+          >
             <MapPin size={15} />
             Bến Bạch Đằng, Đà Nẵng
           </p>
@@ -348,7 +368,11 @@ export default function BoatDetailPage() {
 
         <div className="flex items-center gap-4">
           <StatusBadge
-            label={boat.available ? t('booking.boat.available') : t('booking.boat.unavailable')}
+            label={
+              boat.available
+                ? t('booking.boat.available')
+                : t('booking.boat.unavailable')
+            }
             variant={boat.available ? 'available' : 'unavailable'}
           />
           <div
@@ -367,7 +391,10 @@ export default function BoatDetailPage() {
       </div>
 
       {/* Divider */}
-      <div className="my-6 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+      <div
+        className="my-6 h-px"
+        style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+      />
 
       {/* Specs Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -380,15 +407,22 @@ export default function BoatDetailPage() {
             <div
               className="flex h-10 w-10 items-center justify-center rounded-lg"
               style={{
-                background: 'linear-gradient(135deg, rgba(0,240,255,0.15), rgba(0,240,255,0.05))',
+                background:
+                  'linear-gradient(135deg, rgba(0,240,255,0.15), rgba(0,240,255,0.05))',
               }}
             >
               <Icon size={20} style={{ color: '#00F0FF' }} />
             </div>
-            <span className="mt-2.5 text-xs font-medium" style={{ color: '#ecf0ff' }}>
+            <span
+              className="mt-2.5 text-xs font-medium"
+              style={{ color: '#ecf0ff' }}
+            >
               {label}
             </span>
-            <span className="mt-0.5 text-sm font-bold" style={{ color: '#ffffff' }}>
+            <span
+              className="mt-0.5 text-sm font-bold"
+              style={{ color: '#ffffff' }}
+            >
               {value}
             </span>
           </div>
@@ -400,17 +434,26 @@ export default function BoatDetailPage() {
         {/* Left Column */}
         <div className="space-y-8">
           {/* Description */}
-          <div className="rounded-2xl p-6" style={{ backgroundColor: '#112240' }}>
+          <div
+            className="rounded-2xl p-6"
+            style={{ backgroundColor: '#112240' }}
+          >
             <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
               {t('boatDetail.about')}
             </h2>
-            <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+            <p
+              className="mt-3 text-sm leading-relaxed"
+              style={{ color: '#ecf0ff' }}
+            >
               {boat.longDescription}
             </p>
           </div>
 
           {/* Amenities */}
-          <div className="rounded-2xl p-6" style={{ backgroundColor: '#112240' }}>
+          <div
+            className="rounded-2xl p-6"
+            style={{ backgroundColor: '#112240' }}
+          >
             <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
               {t('boatDetail.amenities')}
             </h2>
@@ -425,7 +468,10 @@ export default function BoatDetailPage() {
                   }}
                 >
                   <span className="text-lg">{amenity.icon}</span>
-                  <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: '#ffffff' }}
+                  >
                     {amenity.label}
                   </span>
                 </div>
@@ -435,8 +481,14 @@ export default function BoatDetailPage() {
 
           {/* Schedule */}
           {boat.schedule.length > 0 && (
-            <div className="rounded-2xl p-6" style={{ backgroundColor: '#112240' }}>
-              <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
+            <div
+              className="rounded-2xl p-6"
+              style={{ backgroundColor: '#112240' }}
+            >
+              <h2
+                className="text-lg font-semibold"
+                style={{ color: '#ffffff' }}
+              >
                 {t('boatDetail.schedule')}
               </h2>
               <div className="mt-4 space-y-3">
@@ -449,7 +501,10 @@ export default function BoatDetailPage() {
                       border: '1px solid rgba(255,255,255,0.06)',
                     }}
                   >
-                    <span className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: '#ffffff' }}
+                    >
                       {s.day}
                     </span>
                     <span className="text-sm" style={{ color: '#00F0FF' }}>
@@ -475,7 +530,10 @@ export default function BoatDetailPage() {
           >
             {/* Captain */}
             <div>
-              <h3 className="text-sm font-semibold" style={{ color: '#ecf0ff' }}>
+              <h3
+                className="text-sm font-semibold"
+                style={{ color: '#ecf0ff' }}
+              >
                 {t('boatDetail.captain')}
               </h3>
               <div className="mt-3 flex items-center gap-3">
@@ -499,7 +557,10 @@ export default function BoatDetailPage() {
               </div>
             </div>
 
-            <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+            <div
+              className="h-px"
+              style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+            />
 
             {/* Safety */}
             <div
@@ -523,8 +584,15 @@ export default function BoatDetailPage() {
                 className="rounded-xl p-3 text-center"
                 style={{ backgroundColor: 'rgba(0,240,255,0.05)' }}
               >
-                <Waves size={18} className="mx-auto" style={{ color: '#00F0FF' }} />
-                <p className="mt-1 text-lg font-bold" style={{ color: '#ffffff' }}>
+                <Waves
+                  size={18}
+                  className="mx-auto"
+                  style={{ color: '#00F0FF' }}
+                />
+                <p
+                  className="mt-1 text-lg font-bold"
+                  style={{ color: '#ffffff' }}
+                >
                   {boat.totalTrips.toLocaleString()}
                 </p>
                 <p className="text-xs" style={{ color: '#ecf0ff' }}>
@@ -535,8 +603,16 @@ export default function BoatDetailPage() {
                 className="rounded-xl p-3 text-center"
                 style={{ backgroundColor: 'rgba(0,240,255,0.05)' }}
               >
-                <Star size={18} className="mx-auto" fill="#FFD700" style={{ color: '#FFD700' }} />
-                <p className="mt-1 text-lg font-bold" style={{ color: '#ffffff' }}>
+                <Star
+                  size={18}
+                  className="mx-auto"
+                  fill="#FFD700"
+                  style={{ color: '#FFD700' }}
+                />
+                <p
+                  className="mt-1 text-lg font-bold"
+                  style={{ color: '#ffffff' }}
+                >
                   {boat.rating}
                 </p>
                 <p className="text-xs" style={{ color: '#ecf0ff' }}>
@@ -545,18 +621,31 @@ export default function BoatDetailPage() {
               </div>
             </div>
 
-            <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }} />
+            <div
+              className="h-px"
+              style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+            />
 
             {/* CTA */}
             {boat.available ? (
               <div className="space-y-3">
-                <Button variant="cyan" size="action-lg" className="w-full gap-2" asChild>
+                <Button
+                  variant="cyan"
+                  size="action-lg"
+                  className="w-full gap-2"
+                  asChild
+                >
                   <Link to={`/boats/${boat.id}/rooms`}>
                     <DoorOpen size={16} />
                     {t('boatDetail.viewRooms')}
                   </Link>
                 </Button>
-                <Button variant="dark-outline" size="action-lg" className="w-full gap-2" asChild>
+                <Button
+                  variant="dark-outline"
+                  size="action-lg"
+                  className="w-full gap-2"
+                  asChild
+                >
                   <Link to={routeName.tours}>
                     {t('boatDetail.bookWithBoat')}
                     <ChevronRight size={16} />
@@ -566,7 +655,10 @@ export default function BoatDetailPage() {
             ) : (
               <div
                 className="rounded-lg py-3.5 text-center text-sm font-medium"
-                style={{ backgroundColor: 'rgba(255,255,255,0.06)', color: '#ecf0ff' }}
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.06)',
+                  color: '#ecf0ff',
+                }}
               >
                 {t('boatDetail.currentlyUnavailable')}
               </div>

@@ -13,6 +13,7 @@ import type {
   IForgotPasswordPayload,
   IResetPasswordPayload,
   IRefreshTokenPayload,
+  IChangePasswordPayload,
 } from '@/interfaces/auth';
 
 const login = (payload: ILoginPayload) => {
@@ -44,6 +45,13 @@ const forgotPassword = (payload: IForgotPasswordPayload) => {
 const resetPassword = (payload: IResetPasswordPayload) => {
   return Axios.post<IApiEnvelope<{ message: string }>>(
     '/auth/reset-password',
+    payload,
+  );
+};
+
+const changePassword = (payload: IChangePasswordPayload) => {
+  return Api.post<IApiEnvelope<{ message: string }>>(
+    '/auth/change-password',
     payload,
   );
 };
@@ -83,6 +91,7 @@ export const AuthServices = {
   resendVerificationEmail,
   forgotPassword,
   resetPassword,
+  changePassword,
   googleLogin,
   refreshToken,
   getProfile,

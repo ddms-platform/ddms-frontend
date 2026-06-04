@@ -1,4 +1,12 @@
-import { LayoutDashboard, Ship, Map, CalendarCheck, User, Home, LogOut } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Ship,
+  Map,
+  CalendarCheck,
+  User,
+  Home,
+  LogOut,
+} from 'lucide-react';
 import type { JSX } from 'react';
 import { routeName } from '@/constants/route-name';
 

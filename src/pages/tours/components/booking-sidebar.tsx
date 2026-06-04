@@ -35,13 +35,17 @@ export default function BookingSidebar({ tourId, price }: BookingSidebarProps) {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between text-sm">
-          <span style={{ color: '#ecf0ff' }}>{t('tour.booking.availability')}</span>
+          <span style={{ color: '#ecf0ff' }}>
+            {t('tour.booking.availability')}
+          </span>
           <span className="font-medium" style={{ color: '#34A853' }}>
             {t('tour.booking.available')}
           </span>
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span style={{ color: '#ecf0ff' }}>{t('tour.booking.cancellation')}</span>
+          <span style={{ color: '#ecf0ff' }}>
+            {t('tour.booking.cancellation')}
+          </span>
           <span className="font-medium" style={{ color: '#ffffff' }}>
             {t('tour.booking.freeCancellation')}
           </span>
@@ -54,7 +58,11 @@ export default function BookingSidebar({ tourId, price }: BookingSidebarProps) {
         <Link to={`/tours/${tourId}/booking`}>{t('tour.booking.bookNow')}</Link>
       </Button>
 
-      <Button variant="dark-outline" size="action" className="mt-3 w-full gap-2">
+      <Button
+        variant="dark-outline"
+        size="action"
+        className="mt-3 w-full gap-2"
+      >
         <Heart size={16} />
         {t('tour.booking.addWishlist')}
       </Button>

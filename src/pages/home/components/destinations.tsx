@@ -7,17 +7,20 @@ export default function Destinations() {
 
   const destinations = [
     {
-      image: 'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop',
+      image:
+        'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=500&fit=crop',
       name: t('home.destinations.hanRiver'),
       tours: 12,
     },
     {
-      image: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&h=500&fit=crop',
+      image:
+        'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&h=500&fit=crop',
       name: t('home.destinations.marbleMountains'),
       tours: 8,
     },
     {
-      image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&h=500&fit=crop',
+      image:
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&h=500&fit=crop',
       name: t('home.destinations.bachDang'),
       tours: 15,
     },
@@ -47,14 +50,18 @@ export default function Destinations() {
             <div
               className="absolute inset-0"
               style={{
-                background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)',
+                background:
+                  'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)',
               }}
             />
             <div className="absolute bottom-0 left-0 p-6">
               <h3 className="text-xl font-bold" style={{ color: '#ffffff' }}>
                 {dest.name}
               </h3>
-              <p className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>
+              <p
+                className="mt-1 text-sm"
+                style={{ color: 'rgba(255,255,255,0.8)' }}
+              >
                 {dest.tours} {t('home.destinations.toursAvailable')}
               </p>
             </div>

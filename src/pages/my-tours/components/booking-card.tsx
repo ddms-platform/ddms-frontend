@@ -34,9 +34,17 @@ export default function BookingCard({ booking }: BookingCardProps) {
   const getStatusConfig = (status: BookingStatus) => {
     switch (status) {
       case 'UPCOMING':
-        return { bg: '#e8f5e9', text: '#2e7d32', label: t('dashboard.status.UPCOMING') };
+        return {
+          bg: '#e8f5e9',
+          text: '#2e7d32',
+          label: t('dashboard.status.UPCOMING'),
+        };
       case 'COMPLETED':
-        return { bg: '#eef2ff', text: '#4338ca', label: t('dashboard.status.COMPLETED') };
+        return {
+          bg: '#eef2ff',
+          text: '#4338ca',
+          label: t('dashboard.status.COMPLETED'),
+        };
       case 'CANCELLED':
         return {
           bg: 'rgba(255,255,255,0.1)',
@@ -50,18 +58,24 @@ export default function BookingCard({ booking }: BookingCardProps) {
 
   // Simple date format
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString(lang === 'vn' ? 'vi-VN' : 'en-US', {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
+    return new Date(dateStr).toLocaleDateString(
+      lang === 'vn' ? 'vi-VN' : 'en-US',
+      {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      },
+    );
   };
 
   return (
     <div
       className="flex flex-col gap-4 rounded-2xl border p-4 transition-all hover:shadow-md sm:flex-row sm:gap-6 sm:p-5"
-      style={{ borderColor: 'rgba(255,255,255,0.1)', backgroundColor: '#112240' }}
+      style={{
+        borderColor: 'rgba(255,255,255,0.1)',
+        backgroundColor: '#112240',
+      }}
     >
       {/* Thumbnail */}
       <div className="relative aspect-4/3 w-full shrink-0 overflow-hidden rounded-xl sm:h-32 sm:w-40 sm:aspect-square">
@@ -70,7 +84,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
           alt={getLocalizedField(
             { title_vn: booking.tourTitle_vn, title_en: booking.tourTitle_en },
             'title',
-            lang
+            lang,
           )}
           className="h-full w-full object-cover"
         />
@@ -78,7 +92,10 @@ export default function BookingCard({ booking }: BookingCardProps) {
         <div className="absolute left-3 top-3 sm:hidden">
           <span
             className="rounded-full px-2.5 py-1 text-xs font-semibold"
-            style={{ backgroundColor: statusConfig.bg, color: statusConfig.text }}
+            style={{
+              backgroundColor: statusConfig.bg,
+              color: statusConfig.text,
+            }}
           >
             {statusConfig.label}
           </span>
@@ -98,7 +115,10 @@ export default function BookingCard({ booking }: BookingCardProps) {
               </span>
               <span
                 className="hidden rounded-full px-2.5 py-0.5 text-xs font-semibold sm:inline-block"
-                style={{ backgroundColor: statusConfig.bg, color: statusConfig.text }}
+                style={{
+                  backgroundColor: statusConfig.bg,
+                  color: statusConfig.text,
+                }}
               >
                 {statusConfig.label}
               </span>
@@ -108,23 +128,35 @@ export default function BookingCard({ booking }: BookingCardProps) {
               style={{ color: '#ffffff' }}
             >
               {getLocalizedField(
-                { title_vn: booking.tourTitle_vn, title_en: booking.tourTitle_en },
+                {
+                  title_vn: booking.tourTitle_vn,
+                  title_en: booking.tourTitle_en,
+                },
                 'title',
-                lang
+                lang,
               )}
             </h3>
-            <p className="mt-1 flex items-center gap-1 text-sm" style={{ color: '#ecf0ff' }}>
+            <p
+              className="mt-1 flex items-center gap-1 text-sm"
+              style={{ color: '#ecf0ff' }}
+            >
               <MapPin size={14} />
               {getLocalizedField(
-                { location_vn: booking.location_vn, location_en: booking.location_en },
+                {
+                  location_vn: booking.location_vn,
+                  location_en: booking.location_en,
+                },
                 'location',
-                lang
+                lang,
               )}
             </p>
           </div>
 
           <div className="hidden text-right sm:block">
-            <span className="block text-lg font-bold" style={{ color: '#ffffff' }}>
+            <span
+              className="block text-lg font-bold"
+              style={{ color: '#ffffff' }}
+            >
               {formatPrice(booking.totalPrice)}
             </span>
             <span className="text-sm" style={{ color: '#ecf0ff' }}>
@@ -135,12 +167,21 @@ export default function BookingCard({ booking }: BookingCardProps) {
 
         {/* Date & Time */}
         <div className="mt-4 flex flex-wrap gap-4 text-sm sm:mt-auto">
-          <div className="flex items-center gap-1.5 font-medium" style={{ color: '#ffffff' }}>
+          <div
+            className="flex items-center gap-1.5 font-medium"
+            style={{ color: '#ffffff' }}
+          >
             <Calendar size={16} style={{ color: '#ecf0ff' }} />
             {formatDate(booking.date)}
           </div>
-          <div className="flex items-center gap-1.5 font-medium" style={{ color: '#ffffff' }}>
-            <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#ecf0ff' }} />
+          <div
+            className="flex items-center gap-1.5 font-medium"
+            style={{ color: '#ffffff' }}
+          >
+            <div
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: '#ecf0ff' }}
+            />
             {booking.time}
           </div>
           <div
@@ -159,7 +200,10 @@ export default function BookingCard({ booking }: BookingCardProps) {
         style={{ borderColor: 'rgba(255,255,255,0.08)' }}
       >
         <div>
-          <span className="block text-lg font-bold" style={{ color: '#ffffff' }}>
+          <span
+            className="block text-lg font-bold"
+            style={{ color: '#ffffff' }}
+          >
             {formatPrice(booking.totalPrice)}
           </span>
         </div>
@@ -179,7 +223,11 @@ export default function BookingCard({ booking }: BookingCardProps) {
 
       <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30">
         {booking.status === 'UPCOMING' && (
-          <Button variant="dark-outline" size="action" className="w-full rounded-xl">
+          <Button
+            variant="dark-outline"
+            size="action"
+            className="w-full rounded-xl"
+          >
             {t('dashboard.cancelBooking')}
           </Button>
         )}
@@ -196,7 +244,9 @@ export default function BookingCard({ booking }: BookingCardProps) {
             style={{ backgroundColor: '#112240' }}
             asChild
           >
-            <Link to={`/tours/${booking.tourId}`}>{t('dashboard.viewDetails')}</Link>
+            <Link to={`/tours/${booking.tourId}`}>
+              {t('dashboard.viewDetails')}
+            </Link>
           </Button>
         )}
       </div>

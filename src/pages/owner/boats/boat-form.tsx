@@ -15,7 +15,12 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MOCK_OWNER_BOATS, BOAT_TYPES, type BoatCabin, type BoatService } from '@/data/owner-boats';
+import {
+  MOCK_OWNER_BOATS,
+  BOAT_TYPES,
+  type BoatCabin,
+  type BoatService,
+} from '@/data/owner-boats';
 import { routeName } from '@/constants/route-name';
 
 type Tab = 'basic' | 'cabins' | 'services' | 'images' | 'maintenance';
@@ -25,14 +30,20 @@ export default function BoatForm() {
   const { boatId } = useParams();
   const navigate = useNavigate();
   const isEdit = !!boatId;
-  const existing = isEdit ? MOCK_OWNER_BOATS.find((b) => b.id === boatId) : null;
+  const existing = isEdit
+    ? MOCK_OWNER_BOATS.find((b) => b.id === boatId)
+    : null;
 
   const [activeTab, setActiveTab] = useState<Tab>('basic');
   const [name, setName] = useState(existing?.name || '');
   const [type, setType] = useState(existing?.type || 'standard');
-  const [maxPassengers, setMaxPassengers] = useState(existing?.maxPassengers?.toString() || '');
+  const [maxPassengers, setMaxPassengers] = useState(
+    existing?.maxPassengers?.toString() || '',
+  );
   const [cabins, setCabins] = useState<BoatCabin[]>(existing?.cabins || []);
-  const [services, setServices] = useState<BoatService[]>(existing?.services || []);
+  const [services, setServices] = useState<BoatService[]>(
+    existing?.services || [],
+  );
   const [saving, setSaving] = useState(false);
 
   const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
@@ -40,7 +51,11 @@ export default function BoatForm() {
     { id: 'cabins', label: t('ownerBoats.form.tabs.cabins'), icon: DoorOpen },
     { id: 'services', label: t('ownerBoats.form.tabs.services'), icon: Layers },
     { id: 'images', label: t('ownerBoats.form.tabs.images'), icon: ImageIcon },
-    { id: 'maintenance', label: t('ownerBoats.form.tabs.maintenance'), icon: Wrench },
+    {
+      id: 'maintenance',
+      label: t('ownerBoats.form.tabs.maintenance'),
+      icon: Wrench,
+    },
   ];
 
   const handleSave = async () => {
@@ -53,22 +68,45 @@ export default function BoatForm() {
   const addCabin = () =>
     setCabins((prev) => [
       ...prev,
-      { id: `new-c-${Date.now()}`, name: '', capacity: 2, price: 0, totalRooms: 1 },
+      {
+        id: `new-c-${Date.now()}`,
+        name: '',
+        capacity: 2,
+        price: 0,
+        totalRooms: 1,
+      },
     ]);
-  const updateCabin = (idx: number, field: keyof BoatCabin, value: string | number) =>
-    setCabins((prev) => prev.map((c, i) => (i === idx ? { ...c, [field]: value } : c)));
-  const removeCabin = (idx: number) => setCabins((prev) => prev.filter((_, i) => i !== idx));
+  const updateCabin = (
+    idx: number,
+    field: keyof BoatCabin,
+    value: string | number,
+  ) =>
+    setCabins((prev) =>
+      prev.map((c, i) => (i === idx ? { ...c, [field]: value } : c)),
+    );
+  const removeCabin = (idx: number) =>
+    setCabins((prev) => prev.filter((_, i) => i !== idx));
 
   const addService = () =>
     setServices((prev) => [
       ...prev,
       { id: `new-s-${Date.now()}`, name: '', price: 0, isActive: true },
     ]);
-  const updateService = (idx: number, field: keyof BoatService, value: string | number | boolean) =>
-    setServices((prev) => prev.map((s, i) => (i === idx ? { ...s, [field]: value } : s)));
-  const removeService = (idx: number) => setServices((prev) => prev.filter((_, i) => i !== idx));
+  const updateService = (
+    idx: number,
+    field: keyof BoatService,
+    value: string | number | boolean,
+  ) =>
+    setServices((prev) =>
+      prev.map((s, i) => (i === idx ? { ...s, [field]: value } : s)),
+    );
+  const removeService = (idx: number) =>
+    setServices((prev) => prev.filter((_, i) => i !== idx));
 
-  const sectionStyle = { backgroundColor: '#112240', border: '1px solid rgba(255,255,255,0.04)' };
+  const sectionStyle = {
+    backgroundColor: '#112240',
+    border: '1px solid rgba(255,255,255,0.04)',
+  };
 
   return (
     <div className="px-4 py-6 lg:px-8">
@@ -87,7 +125,9 @@ export default function BoatForm() {
                 : t('ownerBoats.form.createTitle')}
             </h1>
             <p className="text-xs" style={{ color: '#ecf0ff' }}>
-              {isEdit ? t('ownerBoats.form.editSubtitle') : t('ownerBoats.form.createSubtitle')}
+              {isEdit
+                ? t('ownerBoats.form.editSubtitle')
+                : t('ownerBoats.form.createSubtitle')}
             </p>
           </div>
         </div>
@@ -117,7 +157,8 @@ export default function BoatForm() {
             onClick={() => setActiveTab(id)}
             className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all"
             style={{
-              backgroundColor: activeTab === id ? 'rgba(0,240,255,0.1)' : 'transparent',
+              backgroundColor:
+                activeTab === id ? 'rgba(0,240,255,0.1)' : 'transparent',
               color: activeTab === id ? '#00F0FF' : '#ecf0ff',
             }}
           >
@@ -141,12 +182,18 @@ export default function BoatForm() {
       <div className="mt-6">
         {activeTab === 'basic' && (
           <div className="rounded-2xl p-6" style={sectionStyle}>
-            <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+            <h2
+              className="text-base font-semibold"
+              style={{ color: '#ffffff' }}
+            >
               {t('ownerBoats.form.basic.title')}
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <label
+                  className="mb-1.5 block text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t('ownerBoats.form.basic.name')} *
                 </label>
                 <Input
@@ -161,7 +208,10 @@ export default function BoatForm() {
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <label
+                  className="mb-1.5 block text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t('ownerBoats.form.basic.type')} *
                 </label>
                 <select
@@ -182,7 +232,10 @@ export default function BoatForm() {
                 </select>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium" style={{ color: '#ecf0ff' }}>
+                <label
+                  className="mb-1.5 block text-xs font-medium"
+                  style={{ color: '#ecf0ff' }}
+                >
                   {t('ownerBoats.form.basic.capacity')} *
                 </label>
                 <Input
@@ -205,28 +258,51 @@ export default function BoatForm() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium" style={{ color: '#ecf0ff' }}>
-                {t('ownerBoats.form.cabins.count', { count: String(cabins.length) })}
+                {t('ownerBoats.form.cabins.count', {
+                  count: String(cabins.length),
+                })}
               </p>
-              <Button variant="cyan" size="sm" className="gap-1.5" onClick={addCabin}>
+              <Button
+                variant="cyan"
+                size="sm"
+                className="gap-1.5"
+                onClick={addCabin}
+              >
                 <Plus size={14} />
                 {t('ownerBoats.form.cabins.add')}
               </Button>
             </div>
             {cabins.length === 0 ? (
-              <div className="rounded-2xl p-12 text-center" style={sectionStyle}>
-                <DoorOpen size={40} className="mx-auto" style={{ color: 'rgba(0,240,255,0.3)' }} />
+              <div
+                className="rounded-2xl p-12 text-center"
+                style={sectionStyle}
+              >
+                <DoorOpen
+                  size={40}
+                  className="mx-auto"
+                  style={{ color: 'rgba(0,240,255,0.3)' }}
+                />
                 <p className="mt-3 text-sm" style={{ color: '#ecf0ff' }}>
                   {t('ownerBoats.form.cabins.empty')}
                 </p>
               </div>
             ) : (
               cabins.map((cabin, idx) => (
-                <div key={cabin.id} className="rounded-2xl p-4" style={sectionStyle}>
+                <div
+                  key={cabin.id}
+                  className="rounded-2xl p-4"
+                  style={sectionStyle}
+                >
                   <div className="mb-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <GripVertical size={14} style={{ color: '#ecf0ff' }} />
-                      <span className="text-sm font-semibold" style={{ color: '#ffffff' }}>
-                        {t('ownerBoats.form.cabins.label', { index: String(idx + 1) })}
+                      <span
+                        className="text-sm font-semibold"
+                        style={{ color: '#ffffff' }}
+                      >
+                        {t('ownerBoats.form.cabins.label', {
+                          index: String(idx + 1),
+                        })}
                       </span>
                     </div>
                     <button
@@ -246,7 +322,9 @@ export default function BoatForm() {
                       </label>
                       <Input
                         value={cabin.name}
-                        onChange={(e) => updateCabin(idx, 'name', e.target.value)}
+                        onChange={(e) =>
+                          updateCabin(idx, 'name', e.target.value)
+                        }
                         style={{
                           backgroundColor: 'rgba(255,255,255,0.04)',
                           borderColor: 'rgba(255,255,255,0.08)',
@@ -264,7 +342,9 @@ export default function BoatForm() {
                       <Input
                         type="number"
                         value={cabin.capacity}
-                        onChange={(e) => updateCabin(idx, 'capacity', +e.target.value)}
+                        onChange={(e) =>
+                          updateCabin(idx, 'capacity', +e.target.value)
+                        }
                         style={{
                           backgroundColor: 'rgba(255,255,255,0.04)',
                           borderColor: 'rgba(255,255,255,0.08)',
@@ -282,7 +362,9 @@ export default function BoatForm() {
                       <Input
                         type="number"
                         value={cabin.price}
-                        onChange={(e) => updateCabin(idx, 'price', +e.target.value)}
+                        onChange={(e) =>
+                          updateCabin(idx, 'price', +e.target.value)
+                        }
                         style={{
                           backgroundColor: 'rgba(255,255,255,0.04)',
                           borderColor: 'rgba(255,255,255,0.08)',
@@ -300,7 +382,9 @@ export default function BoatForm() {
                       <Input
                         type="number"
                         value={cabin.totalRooms}
-                        onChange={(e) => updateCabin(idx, 'totalRooms', +e.target.value)}
+                        onChange={(e) =>
+                          updateCabin(idx, 'totalRooms', +e.target.value)
+                        }
                         style={{
                           backgroundColor: 'rgba(255,255,255,0.04)',
                           borderColor: 'rgba(255,255,255,0.08)',
@@ -319,16 +403,30 @@ export default function BoatForm() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium" style={{ color: '#ecf0ff' }}>
-                {t('ownerBoats.form.services.count', { count: String(services.length) })}
+                {t('ownerBoats.form.services.count', {
+                  count: String(services.length),
+                })}
               </p>
-              <Button variant="cyan" size="sm" className="gap-1.5" onClick={addService}>
+              <Button
+                variant="cyan"
+                size="sm"
+                className="gap-1.5"
+                onClick={addService}
+              >
                 <Plus size={14} />
                 {t('ownerBoats.form.services.add')}
               </Button>
             </div>
             {services.length === 0 ? (
-              <div className="rounded-2xl p-12 text-center" style={sectionStyle}>
-                <Layers size={40} className="mx-auto" style={{ color: 'rgba(0,240,255,0.3)' }} />
+              <div
+                className="rounded-2xl p-12 text-center"
+                style={sectionStyle}
+              >
+                <Layers
+                  size={40}
+                  className="mx-auto"
+                  style={{ color: 'rgba(0,240,255,0.3)' }}
+                />
                 <p className="mt-3 text-sm" style={{ color: '#ecf0ff' }}>
                   {t('ownerBoats.form.services.empty')}
                 </p>
@@ -350,7 +448,9 @@ export default function BoatForm() {
                       </label>
                       <Input
                         value={svc.name}
-                        onChange={(e) => updateService(idx, 'name', e.target.value)}
+                        onChange={(e) =>
+                          updateService(idx, 'name', e.target.value)
+                        }
                         style={{
                           backgroundColor: 'rgba(255,255,255,0.04)',
                           borderColor: 'rgba(255,255,255,0.08)',
@@ -368,7 +468,9 @@ export default function BoatForm() {
                       <Input
                         type="number"
                         value={svc.price}
-                        onChange={(e) => updateService(idx, 'price', +e.target.value)}
+                        onChange={(e) =>
+                          updateService(idx, 'price', +e.target.value)
+                        }
                         style={{
                           backgroundColor: 'rgba(255,255,255,0.04)',
                           borderColor: 'rgba(255,255,255,0.08)',
@@ -384,7 +486,9 @@ export default function BoatForm() {
                         <input
                           type="checkbox"
                           checked={svc.isActive}
-                          onChange={(e) => updateService(idx, 'isActive', e.target.checked)}
+                          onChange={(e) =>
+                            updateService(idx, 'isActive', e.target.checked)
+                          }
                           className="h-4 w-4 rounded accent-[#00F0FF]"
                         />
                         {t('ownerBoats.form.services.active')}
@@ -405,7 +509,10 @@ export default function BoatForm() {
 
         {activeTab === 'images' && (
           <div className="rounded-2xl p-6" style={sectionStyle}>
-            <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+            <h2
+              className="text-base font-semibold"
+              style={{ color: '#ffffff' }}
+            >
               {t('ownerBoats.form.images.title')}
             </h2>
             {existing?.images && existing.images.length > 0 ? (
@@ -462,7 +569,10 @@ export default function BoatForm() {
         {activeTab === 'maintenance' && (
           <div className="rounded-2xl p-6" style={sectionStyle}>
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+              <h2
+                className="text-base font-semibold"
+                style={{ color: '#ffffff' }}
+              >
                 {t('ownerBoats.form.maintenance.title')}
               </h2>
               <Button variant="cyan" size="sm" className="gap-1.5">
@@ -482,7 +592,10 @@ export default function BoatForm() {
                     }}
                   >
                     <div>
-                      <p className="text-sm font-medium" style={{ color: '#ffffff' }}>
+                      <p
+                        className="text-sm font-medium"
+                        style={{ color: '#ffffff' }}
+                      >
                         {m.reason || t('ownerBoats.form.maintenance.default')}
                       </p>
                       <p className="text-xs" style={{ color: '#ecf0ff' }}>

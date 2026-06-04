@@ -33,7 +33,11 @@ export default function ProfileAvatar() {
           }}
         >
           {avatar ? (
-            <img src={avatar} alt="Avatar" className="h-full w-full object-cover" />
+            <img
+              src={avatar}
+              alt="Avatar"
+              className="h-full w-full object-cover"
+            />
           ) : (
             <span className="text-3xl font-bold" style={{ color: '#ecf0ff' }}>
               {initials}
@@ -62,7 +66,10 @@ export default function ProfileAvatar() {
 
       {/* Name & Email */}
       <div className="text-center">
-        <h2 className="text-xl font-bold" style={{ color: '#ffffff', letterSpacing: '-0.44px' }}>
+        <h2
+          className="text-xl font-bold"
+          style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+        >
           Nguyễn Tuấn
         </h2>
         <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
@@ -70,7 +77,11 @@ export default function ProfileAvatar() {
         </p>
       </div>
 
-      <Button variant="dark-outline" size="action" onClick={() => fileInputRef.current?.click()}>
+      <Button
+        variant="dark-outline"
+        size="action"
+        onClick={() => fileInputRef.current?.click()}
+      >
         {t('profile.uploadAvatar')}
       </Button>
     </div>

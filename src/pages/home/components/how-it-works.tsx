@@ -12,7 +12,11 @@ export default function HowItWorks() {
   const { t } = useTranslation();
 
   return (
-    <section id="how-it-works" className="py-16" style={{ backgroundColor: '#112240' }}>
+    <section
+      id="how-it-works"
+      className="py-16"
+      style={{ backgroundColor: '#112240' }}
+    >
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12 text-center">
           <h2
@@ -46,14 +50,24 @@ export default function HowItWorks() {
               </div>
               <span
                 className="mb-2 text-xs font-bold"
-                style={{ color: '#00F0FF', letterSpacing: '0.32px', textTransform: 'uppercase' }}
+                style={{
+                  color: '#00F0FF',
+                  letterSpacing: '0.32px',
+                  textTransform: 'uppercase',
+                }}
               >
                 {t('home.howItWorks.stepLabel', { step })}
               </span>
-              <h3 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
+              <h3
+                className="text-lg font-semibold"
+                style={{ color: '#ffffff' }}
+              >
                 {t(`home.howItWorks.step${step}Title`)}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+              <p
+                className="mt-2 text-sm leading-relaxed"
+                style={{ color: '#ecf0ff' }}
+              >
                 {t(`home.howItWorks.step${step}Desc`)}
               </p>
             </div>

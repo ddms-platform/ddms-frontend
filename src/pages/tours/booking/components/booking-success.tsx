@@ -30,40 +30,57 @@ export default function BookingSuccess({
       >
         <CheckCircle2 size={40} color="#ffffff" />
       </div>
-      <h1 className="text-[28px] font-bold" style={{ color: '#ffffff', letterSpacing: '-0.44px' }}>
+      <h1
+        className="text-[28px] font-bold"
+        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+      >
         {t('booking.success.title')}
       </h1>
       <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
         {t('booking.success.description')}
       </p>
 
-      <div className="mt-8 rounded-2xl p-6 text-left" style={{ backgroundColor: '#112240' }}>
+      <div
+        className="mt-8 rounded-2xl p-6 text-left"
+        style={{ backgroundColor: '#112240' }}
+      >
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.tour')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.tour')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {MOCK_TOUR.title}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.date')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.date')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {formatDate(selectedDate)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.time')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.time')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {selectedTime}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>{t('booking.summary.guests')}</span>
+            <span style={{ color: '#ecf0ff' }}>
+              {t('booking.summary.guests')}
+            </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
               {guests}
             </span>
           </div>
-          <div className="h-px" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }} />
+          <div
+            className="h-px"
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          />
           <div className="flex justify-between">
             <span className="font-semibold" style={{ color: '#ffffff' }}>
               {t('booking.summary.total')}
@@ -77,7 +94,9 @@ export default function BookingSuccess({
 
       <div className="mt-8 flex flex-col gap-3">
         <Button variant="cyan" size="action-lg" asChild>
-          <Link to={routeName.dashboard}>{t('booking.success.viewBookings')}</Link>
+          <Link to={routeName.dashboard}>
+            {t('booking.success.viewBookings')}
+          </Link>
         </Button>
         <Button variant="dark-outline" size="action-lg" asChild>
           <Link to={routeName.home}>{t('booking.success.backHome')}</Link>

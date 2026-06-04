@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useMemo, type ReactNode } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  type ReactNode,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 
 type Language = 'VN' | 'EN';
@@ -8,7 +14,9 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
+);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const { i18n } = useTranslation();
@@ -20,12 +28,19 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     (lang: Language) => {
       i18n.changeLanguage(lang === 'EN' ? 'en' : 'vn');
     },
-    [i18n]
+    [i18n],
   );
 
-  const value = useMemo(() => ({ language, setLanguage }), [language, setLanguage]);
+  const value = useMemo(
+    () => ({ language, setLanguage }),
+    [language, setLanguage],
+  );
 
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  );
 }
 
 export default function useLanguage() {

@@ -32,7 +32,7 @@ interface UsePaginationReturn<T> {
 
 export function usePagination<T>(
   items: T[],
-  options: UsePaginationOptions = {}
+  options: UsePaginationOptions = {},
 ): UsePaginationReturn<T> {
   const { itemsPerPage = 8, initialPage = 1 } = options;
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -52,7 +52,7 @@ export function usePagination<T>(
     (page: number) => {
       setCurrentPage(Math.max(1, Math.min(page, totalPages)));
     },
-    [totalPages]
+    [totalPages],
   );
 
   const nextPage = useCallback(() => {

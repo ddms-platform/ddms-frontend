@@ -12,7 +12,11 @@
       "signingIn": "Signing in...",
       "orContinueWith": "or continue with",
       "dontHaveAccount": "Don't have an account",
-      "signUpLink": "Sign up"
+      "signUpLink": "Sign up",
+      "success": "Signed in successfully",
+      "error": "Sign in failed. Check your email and password.",
+      "pleaseLoginAfterVerify": "Account verified. Please sign in to continue.",
+      "pleaseLoginAfterReset": "Password reset successfully. Please sign in with your new password."
     },
     "signUp": {
       "title": "Create your account",
@@ -34,7 +38,61 @@
       "createAccount": "Create account",
       "creatingAccount": "Creating account...",
       "alreadyHaveAccount": "Already have an account",
-      "signInLink": "Sign in"
+      "signInLink": "Sign in",
+      "success": "Account created. Check your email to verify.",
+      "error": "Sign up failed. Please try again."
+    },
+    "verifyEmail": {
+      "title": "Verify your email",
+      "verifying": "Verifying your email...",
+      "success": "Email verified. Welcome!",
+      "successTitle": "Account created successfully",
+      "successDescription": "Your email has been verified and your account is now active. Please sign in to continue.",
+      "alreadyVerifiedTitle": "Account already verified",
+      "alreadyVerifiedDescription": "This account has already been verified. Please sign in to continue.",
+      "goToSignIn": "Sign in",
+      "error": "Verification failed. The link may be invalid or expired.",
+      "missingToken": "Verification token is missing.",
+      "backToSignIn": "Back to sign in",
+      "pendingTitle": "Check your inbox",
+      "pendingDescription": "We sent a verification link to {{email}}. Open it to activate your account.",
+      "resend": "Resend verification email",
+      "resending": "Sending...",
+      "resendIn": "Resend in {{seconds}}s",
+      "resendSuccess": "Verification email sent. Please check your inbox.",
+      "resendError": "Could not resend the email. Please try again.",
+      "resendRateLimited": "Too many requests. Please wait a moment before trying again.",
+      "noEmail": "No email address found. Please sign up again."
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "description": "Enter your email and we will send you a link to reset your password.",
+      "submittedDescription": "If an account exists for this email, you will receive a reset link shortly. Check your inbox and spam folder.",
+      "email": "Email address",
+      "emailPlaceholder": "name@example.com",
+      "submit": "Send reset link",
+      "sending": "Sending...",
+      "success": "If an account exists, a reset link has been sent to your email.",
+      "error": "Could not send reset link. Please try again.",
+      "backToSignIn": "Back to sign in"
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "description": "Enter your new password below.",
+      "password": "New password",
+      "passwordPlaceholder": "Enter new password",
+      "confirmPassword": "Confirm new password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "hint": "Password must be at least 8 characters.",
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "error": "Could not reset password. The link may be invalid or expired.",
+      "missingToken": "Reset link is invalid or missing.",
+      "requestNewLink": "Request a new reset link",
+      "backToSignIn": "Back to sign in",
+      "successTitle": "Password reset successfully",
+      "successDescription": "Your password has been updated. Please sign in with your new password.",
+      "goToSignIn": "Sign in"
     },
     "layout": {
       "welcomeTitle": "Welcome to DDMS",
@@ -78,6 +136,7 @@
     "required": "{{field}} is required",
     "invalidEmail": "Please enter a valid email address",
     "minLength": "Must be at least {{count}} characters",
+    "passwordPolicy": "Password must be at least 8 characters with lowercase, uppercase, number and a special character",
     "termsRequired": "You must agree to the terms and conditions"
   },
   "becomeOwner": {
@@ -330,6 +389,8 @@
       "new": "New password",
       "confirm": "Confirm new password",
       "update": "Update password",
+      "success": "Password changed successfully",
+      "error": "Could not change password. Please try again.",
       "errors": {
         "currentRequired": "Please enter your current password",
         "newRequired": "Please enter a new password",

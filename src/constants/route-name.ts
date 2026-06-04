@@ -2,7 +2,12 @@ export const routeName = Object.freeze({
   // Auth
   signIn: '/sign-in',
   signUp: '/sign-up',
+  verifyEmail: '/verify-email',
+  verifyEmailPending: '/verify-email/pending',
+  verifyEmailSuccess: '/verify-email/success',
   forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
+  resetPasswordSuccess: '/reset-password/success',
 
   // Public
   home: '/',

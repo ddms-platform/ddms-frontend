@@ -10,7 +10,11 @@ interface StepDateTimeProps {
 
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric', month: 'long' });
+  return date.toLocaleDateString('vi-VN', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'long',
+  });
 }
 
 export { formatDate };
@@ -34,7 +38,10 @@ export default function StepDateTime({
 
       {/* Date Grid */}
       <div className="mt-6">
-        <label className="mb-3 block text-sm font-medium" style={{ color: '#ffffff' }}>
+        <label
+          className="mb-3 block text-sm font-medium"
+          style={{ color: '#ffffff' }}
+        >
           {t('booking.dateTime.selectDate')}
         </label>
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
@@ -44,8 +51,10 @@ export default function StepDateTime({
               onClick={() => onSelectDate(date)}
               className="rounded-xl border p-3 text-center text-sm font-medium transition-all hover:shadow-md active:scale-[0.98]"
               style={{
-                borderColor: selectedDate === date ? '#00F0FF' : 'rgba(255,255,255,0.15)',
-                backgroundColor: selectedDate === date ? 'rgba(0,240,255,0.08)' : '#112240',
+                borderColor:
+                  selectedDate === date ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+                backgroundColor:
+                  selectedDate === date ? 'rgba(0,240,255,0.08)' : '#112240',
                 color: selectedDate === date ? '#00F0FF' : '#ffffff',
               }}
             >
@@ -57,7 +66,10 @@ export default function StepDateTime({
 
       {/* Time Slots */}
       <div className="mt-6">
-        <label className="mb-3 block text-sm font-medium" style={{ color: '#ffffff' }}>
+        <label
+          className="mb-3 block text-sm font-medium"
+          style={{ color: '#ffffff' }}
+        >
           {t('booking.dateTime.selectTime')}
         </label>
         <div className="flex gap-3">
@@ -67,8 +79,10 @@ export default function StepDateTime({
               onClick={() => onSelectTime(time)}
               className="flex-1 rounded-xl border py-3 text-center text-sm font-semibold transition-all hover:shadow-md active:scale-[0.98]"
               style={{
-                borderColor: selectedTime === time ? '#00F0FF' : 'rgba(255,255,255,0.15)',
-                backgroundColor: selectedTime === time ? 'rgba(0,240,255,0.08)' : '#112240',
+                borderColor:
+                  selectedTime === time ? '#00F0FF' : 'rgba(255,255,255,0.15)',
+                backgroundColor:
+                  selectedTime === time ? 'rgba(0,240,255,0.08)' : '#112240',
                 color: selectedTime === time ? '#00F0FF' : '#ffffff',
               }}
             >
