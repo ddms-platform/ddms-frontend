@@ -8,70 +8,13 @@ import BookingSidebar from './components/booking-sidebar';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-// Mock tour data
-const MOCK_TOUR = {
-  id: 1,
-  title: 'Tour Sông Hàn Về Đêm',
-  location: 'Sông Hàn, Đà Nẵng',
-  price: 350000,
-  rating: 4.9,
-  reviews: 128,
-  duration: '2 giờ',
-  maxGuests: 30,
-  boatName: 'Dragon Cruise',
-  description:
-    'Trải nghiệm du thuyền tuyệt vời trên sông Hàn vào ban đêm. Ngắm nhìn cầu Rồng phun lửa, cầu Sông Hàn quay, và toàn cảnh thành phố Đà Nẵng lung linh ánh đèn. Tour bao gồm đồ uống chào mừng, hướng dẫn viên song ngữ, và âm nhạc sống trên thuyền.',
-  images: [
-    'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=1200&h=675&fit=crop',
-    'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1200&h=675&fit=crop',
-    'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?w=1200&h=675&fit=crop',
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&h=675&fit=crop',
-  ],
-  reviewsList: [
-    {
-      id: 1,
-      name: 'Minh Anh',
-      avatar: '',
-      rating: 5,
-      date: '15/04/2026',
-      comment:
-        'Tuyệt vời! Cảnh đêm sông Hàn rất đẹp, nhân viên phục vụ tận tình, đồ uống ngon.',
-    },
-    {
-      id: 2,
-      name: 'Thanh Hoa',
-      avatar: '',
-      rating: 5,
-      date: '12/04/2026',
-      comment:
-        'Đáng giá từng đồng! Con gái tôi rất thích khi thấy cầu Rồng phun lửa từ trên thuyền.',
-    },
-    {
-      id: 3,
-      name: 'David Kim',
-      avatar: '',
-      rating: 4,
-      date: '08/04/2026',
-      comment:
-        'Great experience! Beautiful night views of Da Nang. Would recommend to any tourist.',
-    },
-    {
-      id: 4,
-      name: 'Hương Giang',
-      avatar: '',
-      rating: 5,
-      date: '05/04/2026',
-      comment:
-        'Lần thứ 2 đi rồi mà vẫn thấy hay. Tour rất chuyên nghiệp và đúng giờ.',
-    },
-  ],
-};
-
 export default function TourDetailPage() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const { id } = useParams();
-  const tour = { ...MOCK_TOUR, id: Number(id) || MOCK_TOUR.id };
+  const tour: any = null;
+
+  if (!tour) return null;
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">

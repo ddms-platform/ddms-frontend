@@ -8,56 +8,7 @@ import BookingCard, {
   type BookingStatus,
 } from './components/booking-card';
 
-const MOCK_BOOKINGS: Booking[] = [
-  {
-    id: '8A9B2C',
-    tourId: 1,
-    tourTitle_vn: 'Tour Sông Hàn Về Đêm',
-    tourTitle_en: 'Han River Night Tour',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    image:
-      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&q=80',
-    date: '2026-04-25',
-    time: '19:00',
-    guests: 2,
-    totalPrice: 700000,
-    status: 'UPCOMING',
-    createdAt: '2026-04-21T08:00:00Z',
-  },
-  {
-    id: '5D3E1F',
-    tourId: 2,
-    tourTitle_vn: 'Tour Vịnh Hạ Long',
-    tourTitle_en: 'Ha Long Bay Cruise',
-    location_vn: 'Vịnh Hạ Long, Quảng Ninh',
-    location_en: 'Ha Long Bay, Quang Ninh',
-    image:
-      'https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80',
-    date: '2026-02-14',
-    time: '08:00',
-    guests: 4,
-    totalPrice: 4800000,
-    status: 'COMPLETED',
-    createdAt: '2026-02-01T10:30:00Z',
-  },
-  {
-    id: '1X2Y3Z',
-    tourId: 3,
-    tourTitle_vn: 'Phố Cổ Hội An',
-    tourTitle_en: 'Hoi An Ancient Town',
-    location_vn: 'Hội An, Quảng Nam',
-    location_en: 'Hoi An, Quang Nam',
-    image:
-      'https://images.unsplash.com/photo-1549488344-c6a66b96e47d?w=800&q=80',
-    date: '2026-03-10',
-    time: '15:00',
-    guests: 1,
-    totalPrice: 500000,
-    status: 'CANCELLED',
-    createdAt: '2026-03-01T14:20:00Z',
-  },
-];
+const MOCK_BOOKINGS: Booking[] = [];
 
 type TabType = 'ALL' | BookingStatus;
 
