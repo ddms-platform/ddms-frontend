@@ -1,14 +1,17 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Users, MapPin } from 'lucide-react';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { bookingService } from '@/services/bookingService';
+import { toast } from 'sonner';
 
-export type BookingStatus = 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
 
 export interface Booking {
   id: string;
-  tourId: number;
+  tourId: string;
   tourTitle_vn: string;
   tourTitle_en: string;
   location_vn: string;
@@ -24,15 +27,25 @@ export interface Booking {
 
 interface BookingCardProps {
   booking: Booking;
+  onCancelSuccess?: () => void;
 }
 
-export default function BookingCard({ booking }: BookingCardProps) {
+export default function BookingCard({
+  booking,
+  onCancelSuccess,
+}: BookingCardProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
 
   // Status Badge Helper
   const getStatusConfig = (status: BookingStatus) => {
     switch (status) {
+      case 'PENDING':
+        return {
+          bg: 'rgba(245, 158, 11, 0.15)',
+          text: '#f59e0b',
+          label: t('dashboard.status.PENDING', 'Chờ thanh toán'),
+        };
       case 'UPCOMING':
         return {
           bg: '#e8f5e9',
@@ -55,6 +68,41 @@ export default function BookingCard({ booking }: BookingCardProps) {
   };
 
   const statusConfig = getStatusConfig(booking.status);
+
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+
+  // Parse departure date to check refund eligibility (>= 48 hours away)
+  const departureDate = new Date(
+    `${booking.date}T${booking.time.split(' - ')[0]}`,
+  );
+  const now = new Date();
+  const timeDiff = departureDate.getTime() - now.getTime();
+  const hoursToDeparture = timeDiff / (1000 * 60 * 60);
+  const eligibleForRefund = hoursToDeparture >= 48;
+
+  const handleCancelBooking = async () => {
+    setIsCancelling(true);
+    try {
+      const res = await bookingService.cancelBooking(booking.id);
+      if (res.success) {
+        toast.success(
+          res.refunded
+            ? `Đã hủy đặt tour thành công. Bạn được hoàn lại ${formatPrice(booking.totalPrice)} về ví!`
+            : 'Đã hủy đặt tour thành công. (Không hoàn tiền do sát ngày khởi hành)',
+        );
+        onCancelSuccess?.();
+      }
+    } catch (error: any) {
+      console.error('Cancel booking failed:', error);
+      toast.error(
+        error.response?.data?.message || 'Có lỗi xảy ra khi hủy đặt tour.',
+      );
+    } finally {
+      setIsCancelling(false);
+      setIsCancelModalOpen(false);
+    }
+  };
 
   // Simple date format
   const formatDate = (dateStr: string) => {
@@ -208,8 +256,19 @@ export default function BookingCard({ booking }: BookingCardProps) {
           </span>
         </div>
         <div className="flex gap-2">
+          {booking.status === 'PENDING' && (
+            <Button variant="cyan" size="action" asChild>
+              <Link to={`/tours/${booking.tourId}/booking`}>
+                {t('dashboard.payNow', 'Thanh toán')}
+              </Link>
+            </Button>
+          )}
           {booking.status === 'UPCOMING' && (
-            <Button variant="dark-outline" size="action">
+            <Button
+              variant="dark-outline"
+              size="action"
+              onClick={() => setIsCancelModalOpen(true)}
+            >
               {t('dashboard.cancelBooking')}
             </Button>
           )}
@@ -221,12 +280,25 @@ export default function BookingCard({ booking }: BookingCardProps) {
         </div>
       </div>
 
-      <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30">
+      <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30 gap-2">
+        {booking.status === 'PENDING' && (
+          <Button
+            variant="cyan"
+            size="action"
+            className="w-full rounded-xl"
+            asChild
+          >
+            <Link to={`/tours/${booking.tourId}/booking`}>
+              {t('dashboard.payNow', 'Thanh toán')}
+            </Link>
+          </Button>
+        )}
         {booking.status === 'UPCOMING' && (
           <Button
             variant="dark-outline"
             size="action"
             className="w-full rounded-xl"
+            onClick={() => setIsCancelModalOpen(true)}
           >
             {t('dashboard.cancelBooking')}
           </Button>
@@ -250,6 +322,70 @@ export default function BookingCard({ booking }: BookingCardProps) {
           </Button>
         )}
       </div>
+
+      {/* Cancellation Modal */}
+      {isCancelModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+          <div
+            className="w-full max-w-md overflow-hidden rounded-2xl border p-6 shadow-2xl scale-in"
+            style={{
+              backgroundColor: '#112240',
+              borderColor: 'rgba(255, 255, 255, 0.12)',
+              color: '#ffffff',
+            }}
+          >
+            <h3 className="text-xl font-bold mb-4" style={{ color: '#00F0FF' }}>
+              Xác Nhận Hủy Đặt Tour
+            </h3>
+            <div
+              className="text-sm leading-relaxed mb-6"
+              style={{ color: '#ecf0ff' }}
+            >
+              {eligibleForRefund ? (
+                <p>
+                  Bạn có chắc chắn muốn hủy đặt tour này không? Tour của bạn sẽ
+                  được hủy và bạn sẽ được{' '}
+                  <span className="font-bold text-emerald-400">
+                    hoàn trả 100% số tiền {formatPrice(booking.totalPrice)} về
+                    ví
+                  </span>{' '}
+                  vì thời gian hủy cách ngày khởi hành trên 2 ngày (48 tiếng).
+                </p>
+              ) : (
+                <p>
+                  Bạn có chắc chắn muốn hủy đặt tour này không?{' '}
+                  <span className="font-bold text-rose-400">
+                    Lưu ý: Bạn sẽ KHÔNG ĐƯỢC HOÀN TIỀN
+                  </span>{' '}
+                  vì thời gian hủy đến ngày khởi hành đã dưới 2 ngày (48 tiếng)
+                  - sát ngày khởi hành.
+                </p>
+              )}
+            </div>
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="dark-outline"
+                onClick={() => setIsCancelModalOpen(false)}
+                disabled={isCancelling}
+              >
+                Đóng
+              </Button>
+              <Button
+                variant="cyan"
+                onClick={handleCancelBooking}
+                disabled={isCancelling}
+                className={
+                  !eligibleForRefund
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white'
+                    : ''
+                }
+              >
+                {isCancelling ? 'Đang hủy...' : 'Xác nhận hủy'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

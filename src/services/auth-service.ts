@@ -84,6 +84,40 @@ const logoutAll = () => {
   return Api.post('/auth/logout-all');
 };
 
+const updateProfile = (payload: {
+  fullName: string;
+  phone?: string;
+  address?: string;
+}) => {
+  return Api.put<IApiEnvelope<{ message: string }>>('/auth/me', payload);
+};
+
+const updateAvatar = (file: File) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return Api.post<IApiEnvelope<{ message: string }>>(
+    '/auth/me/avatar',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+};
+
+const registerOwner = (formData: FormData) => {
+  return Api.post<IApiEnvelope<{ message: string }>>(
+    '/owner/register',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+};
+
 export const AuthServices = {
   login,
   register,
@@ -97,4 +131,7 @@ export const AuthServices = {
   getProfile,
   logout,
   logoutAll,
+  updateProfile,
+  updateAvatar,
+  registerOwner,
 };

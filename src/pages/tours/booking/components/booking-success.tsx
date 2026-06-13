@@ -4,10 +4,10 @@ import { CheckCircle2 } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { routeName } from '@/constants/route-name';
-import { MOCK_TOUR } from '../mock-data';
 import { formatDate } from './step-date-time';
 
 interface BookingSuccessProps {
+  tourName: string;
   selectedDate: string;
   selectedTime: string;
   guests: number;
@@ -15,6 +15,7 @@ interface BookingSuccessProps {
 }
 
 export default function BookingSuccess({
+  tourName,
   selectedDate,
   selectedTime,
   guests,
@@ -50,7 +51,7 @@ export default function BookingSuccess({
               {t('booking.summary.tour')}
             </span>
             <span className="font-medium" style={{ color: '#ffffff' }}>
-              {MOCK_TOUR.title}
+              {tourName}
             </span>
           </div>
           <div className="flex justify-between text-sm">
@@ -94,7 +95,7 @@ export default function BookingSuccess({
 
       <div className="mt-8 flex flex-col gap-3">
         <Button variant="cyan" size="action-lg" asChild>
-          <Link to={routeName.dashboard}>
+          <Link to={routeName.myTours}>
             {t('booking.success.viewBookings')}
           </Link>
         </Button>

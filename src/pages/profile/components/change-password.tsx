@@ -26,14 +26,15 @@ export default function ChangePassword() {
     setShowPasswords((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const validate = () => {
+  const validate = (currentValues = values) => {
     const errs: Record<string, string> = {};
-    if (!values.current)
+    if (!currentValues.current)
       errs.current = t('profile.changePassword.errors.currentRequired');
-    if (!values.new) errs.new = t('profile.changePassword.errors.newRequired');
-    else if (!isPasswordPolicyValid(values.new))
+    if (!currentValues.new)
+      errs.new = t('profile.changePassword.errors.newRequired');
+    else if (!isPasswordPolicyValid(currentValues.new))
       errs.new = t('validation.passwordPolicy');
-    if (values.new !== values.confirm)
+    if (currentValues.new !== currentValues.confirm && currentValues.confirm)
       errs.confirm = t('profile.changePassword.errors.mismatch');
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -147,9 +148,11 @@ export default function ChangePassword() {
                 <input
                   type={showPasswords[key] ? 'text' : 'password'}
                   value={values[key]}
-                  onChange={(e) =>
-                    setValues((prev) => ({ ...prev, [key]: e.target.value }))
-                  }
+                  onChange={(e) => {
+                    const newValues = { ...values, [key]: e.target.value };
+                    setValues(newValues);
+                    validate(newValues);
+                  }}
                   className="w-full rounded-lg border py-3 pl-11 pr-12 text-sm font-medium outline-none transition-all focus:ring-2"
                   style={{
                     borderColor: errors[key]

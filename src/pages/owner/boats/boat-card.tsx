@@ -1,18 +1,28 @@
-import { Ship, Users, DoorOpen, Layers, Pencil, Eye, Trash2 } from 'lucide-react';
+import {
+  Ship,
+  Users,
+  DoorOpen,
+  Layers,
+  Pencil,
+  Eye,
+  Trash2,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { StatusBadge } from '@/components/badges';
-import type { Boat } from '@/services/boatService';
+import type { BoatListItem } from '@/services/boatService';
+import type { IBoatType } from '@/services/system-service';
 
 interface BoatCardProps {
-  boat: Boat;
+  boat: BoatListItem;
+  boatTypes?: IBoatType[];
   onDelete: (id: string) => void;
 }
 
-export default function BoatCard({ boat, onDelete }: BoatCardProps) {
-  const { t } = useTranslation();
-  const hasActiveMaintenance = boat.maintenances.some((m) => new Date(m.endTime) > new Date());
+export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
+  const { t, i18n } = useTranslation();
+  const hasActiveMaintenance = boat.status === 'maintenance';
 
   return (
     <div
@@ -25,9 +35,9 @@ export default function BoatCard({ boat, onDelete }: BoatCardProps) {
     >
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden">
-        {boat.images[0] ? (
+        {boat.thumbnailUrl ? (
           <img
-            src={boat.images[0].imageUrl}
+            src={boat.thumbnailUrl}
             alt={boat.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -49,7 +59,10 @@ export default function BoatCard({ boat, onDelete }: BoatCardProps) {
 
         {hasActiveMaintenance && (
           <div className="absolute top-3 right-3">
-            <StatusBadge label={t('ownerBoats.card.maintenance')} variant="ownerMaintenance" />
+            <StatusBadge
+              label={t('ownerBoats.card.maintenance')}
+              variant="ownerMaintenance"
+            />
           </div>
         )}
       </div>
@@ -60,19 +73,52 @@ export default function BoatCard({ boat, onDelete }: BoatCardProps) {
           <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
             {boat.name}
           </h3>
-          <span
-            className="mt-0.5 inline-block rounded-md px-2 py-0.5 text-[11px] font-medium"
-            style={{ backgroundColor: 'rgba(0,240,255,0.08)', color: '#00F0FF' }}
-          >
-            {t(`ownerBoats.types.${boat.type}`)}
-          </span>
+          {boat.type && (
+            <span
+              className="mt-0.5 inline-block rounded-md px-2 py-0.5 text-[11px] font-medium"
+              style={{
+                backgroundColor: 'rgba(0,240,255,0.08)',
+                color: '#00F0FF',
+              }}
+            >
+              {(() => {
+                const localizedName = t(`ownerBoats.types.${boat.type}`);
+                if (
+                  localizedName &&
+                  !localizedName.startsWith('ownerBoats.types.')
+                ) {
+                  return localizedName;
+                }
+                const foundType = boatTypes?.find(
+                  (bt) => bt.code === boat.type,
+                );
+                return foundType
+                  ? i18n.language === 'en'
+                    ? foundType.name_en
+                    : foundType.name_vi
+                  : boat.type;
+              })()}
+            </span>
+          )}
         </div>
 
         <div className="mt-3 grid grid-cols-3 gap-2">
           {[
-            { icon: Users, value: boat.maxPassengers, label: t('ownerBoats.card.guests') },
-            { icon: DoorOpen, value: boat.totalCabins, label: t('ownerBoats.card.rooms') },
-            { icon: Layers, value: boat.totalServices, label: t('ownerBoats.card.services') },
+            {
+              icon: Users,
+              value: boat.maxPassengers,
+              label: t('ownerBoats.card.guests'),
+            },
+            {
+              icon: DoorOpen,
+              value: boat.cabinCount,
+              label: t('ownerBoats.card.rooms'),
+            },
+            {
+              icon: Layers,
+              value: boat.serviceCount,
+              label: t('ownerBoats.card.services'),
+            },
           ].map((s) => (
             <div
               key={s.label}
@@ -80,7 +126,10 @@ export default function BoatCard({ boat, onDelete }: BoatCardProps) {
               style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
             >
               <s.icon size={14} style={{ color: '#ecf0ff' }} />
-              <span className="mt-1 text-sm font-bold" style={{ color: '#ffffff' }}>
+              <span
+                className="mt-1 text-sm font-bold"
+                style={{ color: '#ffffff' }}
+              >
                 {s.value}
               </span>
               <span className="text-[10px]" style={{ color: '#ecf0ff' }}>

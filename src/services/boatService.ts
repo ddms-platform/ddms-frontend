@@ -18,6 +18,9 @@ export interface BoatMaintenance {
   endTime: string;
   reason?: string;
   createdAt: string;
+  portMaintenanceServiceId?: string;
+  status: 'pending' | 'approved' | 'rejected' | string;
+  portMaintenanceServiceName?: string;
 }
 
 export interface BoatCabin {
@@ -32,7 +35,7 @@ export interface BoatCabin {
   updatedAt: string;
 }
 
-export interface BoatService {
+export interface BoatServiceItem {
   id: string;
   boatId: string;
   name: string;
@@ -48,23 +51,41 @@ export interface Boat {
   name: string;
   type?: string;
   maxPassengers: number;
-  status: 'idle' | 'running';
+  status: 'idle' | 'running' | string;
   createdAt: string;
   updatedAt: string;
   cabins: BoatCabin[];
-  services: BoatService[];
+  services: BoatServiceItem[];
   images: BoatImage[];
   maintenances: BoatMaintenance[];
-  totalCabins: number;
-  totalServices: number;
-  activeServices: number;
 }
 
-export interface BoatListResponse {
-  data: Boat[];
-  total: number;
+export interface BoatListItem {
+  id: string;
+  ownerId?: string;
+  name: string;
+  type?: string;
+  maxPassengers: number;
+  status: 'idle' | 'running' | string;
+  cabinCount: number;
+  serviceCount: number;
+  thumbnailUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PagedResponse<T> {
+  items: T[];
+  totalItems: number;
   page: number;
   pageSize: number;
+  totalPages: number;
+}
+
+export interface ApiResponse<T> {
+  code: number;
+  result: T;
+  message?: string;
 }
 
 export interface CreateBoatDto {
@@ -80,32 +101,129 @@ export interface CreateMaintenanceDto {
   reason?: string;
 }
 
+export interface MonthlyProfit {
+  month: string;
+  profit: number;
+  year: number;
+}
+
+export interface BoatStatsResponse {
+  total: number;
+  running: number;
+  idle: number;
+  totalCabins: number;
+  totalServices?: number;
+  monthlyProfits?: MonthlyProfit[];
+}
+
 // ── API Functions ─────────────────────────────────────────────────────────────
 
 export const boatService = {
-  getAll: (params?: {
+  // --- Public Endpoints ---
+  getAllPublic: (params?: {
     status?: string;
     type?: string;
     search?: string;
-    page?: number;
+    pageNumber?: number;
     pageSize?: number;
-  }) => api.get<BoatListResponse>('/boats', { params }).then((r) => r.data),
+  }) =>
+    api
+      .get<ApiResponse<PagedResponse<BoatListItem>>>('/boats', { params })
+      .then((r) => r.data.result),
 
-  getById: (id: string) => api.get<Boat>(`/boats/${id}`).then((r) => r.data),
+  getByIdPublic: (id: string) =>
+    api.get<ApiResponse<Boat>>(`/boats/${id}`).then((r) => r.data.result),
 
-  create: (dto: CreateBoatDto) => api.post<Boat>('/boats', dto).then((r) => r.data),
+  // --- Owner Endpoints ---
+  getOwnerBoats: (params?: {
+    status?: string;
+    type?: string;
+    search?: string;
+    pageNumber?: number;
+    pageSize?: number;
+  }) =>
+    api
+      .get<ApiResponse<PagedResponse<BoatListItem>>>('/owner/boats', { params })
+      .then((r) => r.data.result),
 
-  update: (id: string, dto: CreateBoatDto) =>
-    api.put<Boat>(`/boats/${id}`, dto).then((r) => r.data),
+  getOwnerStats: () =>
+    api
+      .get<ApiResponse<BoatStatsResponse>>('/owner/boats/stats')
+      .then((r) => r.data.result),
 
-  updateStatus: (id: string, status: string) =>
-    api.patch(`/boats/${id}/status`, { status }).then((r) => r.data),
+  getOwnerBoatById: (id: string) =>
+    api.get<ApiResponse<Boat>>(`/owner/boats/${id}`).then((r) => r.data.result),
 
-  delete: (id: string) => api.delete(`/boats/${id}`).then((r) => r.data),
+  uploadBoatImage: (boatId: string, base64: string, caption?: string) =>
+    api
+      .post<
+        ApiResponse<any>
+      >(`/owner/boats/${boatId}/images`, { fileBase64: base64, caption })
+      .then((r) => r.data.result),
 
+  deleteBoatImage: (boatId: string, imageId: string) =>
+    api
+      .delete<ApiResponse<any>>(`/owner/boats/${boatId}/images/${imageId}`)
+      .then((r) => r.data.result),
+
+  createByOwner: (dto: CreateBoatDto) =>
+    api.post<ApiResponse<Boat>>('/owner/boats', dto).then((r) => r.data.result),
+
+  updateByOwner: (id: string, dto: CreateBoatDto) =>
+    api
+      .put<ApiResponse<Boat>>(`/owner/boats/${id}`, dto)
+      .then((r) => r.data.result),
+
+  deleteByOwner: (id: string) =>
+    api
+      .delete<ApiResponse<any>>(`/owner/boats/${id}`)
+      .then((r) => r.data.result),
+
+  // --- Admin/Owner Management Endpoints (Cabins, Services, Images, Maintenance) ---
+  // Currently backend maps these as /api/admin/boats/... but we will use them here.
   addMaintenance: (boatId: string, dto: CreateMaintenanceDto) =>
-    api.post<BoatMaintenance>(`/boats/${boatId}/maintenances`, dto).then((r) => r.data),
+    api
+      .post<
+        ApiResponse<BoatMaintenance>
+      >(`/admin/boats/${boatId}/maintenances`, dto)
+      .then((r) => r.data.result),
 
   deleteMaintenance: (boatId: string, maintenanceId: string) =>
-    api.delete(`/boats/${boatId}/maintenances/${maintenanceId}`).then((r) => r.data),
+    api
+      .delete<
+        ApiResponse<any>
+      >(`/admin/boats/${boatId}/maintenances/${maintenanceId}`)
+      .then((r) => r.data.result),
+
+  registerPortMaintenances: (
+    boatId: string,
+    registrations: { serviceId: string; scheduledDate: string }[],
+  ) =>
+    api
+      .post<
+        ApiResponse<any>
+      >(`/owner/boats/${boatId}/maintenances/register`, registrations)
+      .then((r) => r.data.result),
+
+  deleteOwnerMaintenance: (boatId: string, maintenanceId: string) =>
+    api
+      .delete<
+        ApiResponse<any>
+      >(`/owner/boats/${boatId}/maintenances/${maintenanceId}`)
+      .then((r) => r.data.result),
+
+  getPendingMaintenancesAdmin: () =>
+    api
+      .get<ApiResponse<any[]>>('/admin/maintenances/pending')
+      .then((r) => r.data.result),
+
+  approveMaintenanceAdmin: (id: string) =>
+    api
+      .post<ApiResponse<any>>(`/admin/maintenances/${id}/approve`)
+      .then((r) => r.data.result),
+
+  rejectMaintenanceAdmin: (id: string) =>
+    api
+      .post<ApiResponse<any>>(`/admin/maintenances/${id}/reject`)
+      .then((r) => r.data.result),
 };

@@ -107,16 +107,19 @@
     "welcome": "Welcome to DDMS Dashboard",
     "tabs": {
       "all": "All trips",
+      "pending": "Pending",
       "upcoming": "Upcoming",
       "completed": "Completed"
     },
     "status": {
+      "PENDING": "Pending",
       "UPCOMING": "Upcoming",
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled"
     },
     "bookingRef": "Booking ID",
     "guests": "guest(s)",
+    "payNow": "Pay Now",
     "cancelBooking": "Cancel booking",
     "writeReview": "Write review",
     "viewDetails": "View details",
@@ -604,7 +607,11 @@
     "nav": {
       "dashboard": "Dashboard",
       "boats": "Boat Management",
+      "dockMap": "Dock Map",
+      "services": "Services & Maintenance",
+      "tourServices": "Tour Services",
       "tours": "Tour Management",
+      "revenue": "Payments & Revenue",
       "bookings": "Bookings",
       "profile": "Business Profile"
     },
@@ -750,5 +757,15 @@
         "default": "Maintenance"
       }
     }
+  },
+  "boatTypes": {
+    "yacht": "Yacht",
+    "cruise": "Cruise Ship",
+    "speedboat": "Speedboat",
+    "ferry": "Ferry",
+    "sail": "Sailboat",
+    "wooden": "Wooden Boat",
+    "restaurant": "Restaurant Ship",
+    "unclassified": "Unclassified"
   }
 }

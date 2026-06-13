@@ -107,16 +107,19 @@
     "welcome": "Quản lý các chuyến đi và lịch trình của bạn",
     "tabs": {
       "all": "Tất cả",
+      "pending": "Chờ thanh toán",
       "upcoming": "Sắp khởi hành",
       "completed": "Đã đi"
     },
     "status": {
+      "PENDING": "Chờ thanh toán",
       "UPCOMING": "Sắp khởi hành",
       "COMPLETED": "Hoàn tất",
       "CANCELLED": "Đã huỷ"
     },
     "bookingRef": "Mã đặt chỗ",
     "guests": "khách",
+    "payNow": "Thanh toán",
     "cancelBooking": "Huỷ chuyến",
     "writeReview": "Đánh giá",
     "viewDetails": "Xem chi tiết",
@@ -602,11 +605,15 @@
   "ownerLayout": {
     "brand": "OWNER",
     "nav": {
-      "dashboard": "Dashboard",
-      "boats": "Quản lý Thuyền",
+      "dashboard": "Tổng quan",
+      "boats": "Quản lý Đội tàu",
+      "dockMap": "Sơ đồ bến",
+      "services": "Dịch vụ & Bảo trì",
+      "tourServices": "Dịch vụ Tour",
       "tours": "Quản lý Tour",
+      "revenue": "Thanh toán & Doanh thu",
       "bookings": "Booking",
-      "profile": "Hồ sơ doanh nghiệp"
+      "profile": "Cài đặt hệ thống"
     },
     "backHome": "Về trang chủ",
     "logout": "Đăng xuất",
@@ -750,5 +757,15 @@
         "default": "Bảo trì"
       }
     }
+  },
+  "boatTypes": {
+    "yacht": "Du thuyền",
+    "cruise": "Tàu du lịch",
+    "speedboat": "Ca nô",
+    "ferry": "Phà",
+    "sail": "Thuyền buồm",
+    "wooden": "Thuyền gỗ",
+    "restaurant": "Tàu nhà hàng",
+    "unclassified": "Chưa phân loại"
   }
 }

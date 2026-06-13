@@ -1,5 +1,8 @@
 import api from './api';
-import type { BoatService } from './boatService';
+import type {
+  BoatServiceItem as BoatService,
+  ApiResponse,
+} from './boatService';
 
 export interface CreateServiceDto {
   name: string;
@@ -11,25 +14,37 @@ export interface CreateServiceDto {
 export const boatServiceApi = {
   getAll: (boatId: string, isActive?: boolean) =>
     api
-      .get<BoatService[]>(`/boats/${boatId}/services`, {
+      .get<ApiResponse<BoatService[]>>(`/admin/boats/${boatId}/services`, {
         params: isActive !== undefined ? { isActive } : undefined,
       })
-      .then((r) => r.data),
+      .then((r) => r.data.result),
 
   getById: (boatId: string, id: string) =>
-    api.get<BoatService>(`/boats/${boatId}/services/${id}`).then((r) => r.data),
+    api
+      .get<ApiResponse<BoatService>>(`/admin/boats/${boatId}/services/${id}`)
+      .then((r) => r.data.result),
 
   create: (boatId: string, dto: CreateServiceDto) =>
-    api.post<BoatService>(`/boats/${boatId}/services`, dto).then((r) => r.data),
+    api
+      .post<ApiResponse<BoatService>>(`/admin/boats/${boatId}/services`, dto)
+      .then((r) => r.data.result),
 
   update: (boatId: string, id: string, dto: CreateServiceDto) =>
-    api.put<BoatService>(`/boats/${boatId}/services/${id}`, dto).then((r) => r.data),
+    api
+      .put<
+        ApiResponse<BoatService>
+      >(`/admin/boats/${boatId}/services/${id}`, dto)
+      .then((r) => r.data.result),
 
   toggle: (boatId: string, id: string) =>
     api
-      .patch<{ id: string; isActive: boolean }>(`/boats/${boatId}/services/${id}/toggle`)
-      .then((r) => r.data),
+      .patch<
+        ApiResponse<BoatService>
+      >(`/admin/boats/${boatId}/services/${id}/toggle`)
+      .then((r) => r.data.result),
 
   delete: (boatId: string, id: string) =>
-    api.delete(`/boats/${boatId}/services/${id}`).then((r) => r.data),
+    api
+      .delete<ApiResponse<any>>(`/admin/boats/${boatId}/services/${id}`)
+      .then((r) => r.data.result),
 };

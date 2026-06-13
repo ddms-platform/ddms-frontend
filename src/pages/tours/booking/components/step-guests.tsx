@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { formatPrice } from '@/lib/utils';
 import type { RoomOption } from '../types';
-import { MOCK_TOUR } from '../mock-data';
 
 interface StepGuestsProps {
   guests: number;
@@ -11,6 +10,7 @@ interface StepGuestsProps {
   roomPrice: number;
   totalPrice: number;
   onSetGuests: (guests: number) => void;
+  basePrice: number;
 }
 
 export default function StepGuests({
@@ -21,15 +21,16 @@ export default function StepGuests({
   roomPrice,
   totalPrice,
   onSetGuests,
+  basePrice,
 }: StepGuestsProps) {
   const { t } = useTranslation();
 
   return (
     <div>
       <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
-        {t('booking.guests.title')}
+        {t('booking.guests.title', 'Số lượng khách')}
       </h2>
-      <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
+      <p className="mt-1 text-sm text-gray-400">
         {t('booking.guests.subtitle', { max: maxGuests })}
         {selectedRoom && (
           <span className="ml-1" style={{ color: '#00F0FF' }}>
@@ -83,36 +84,40 @@ export default function StepGuests({
       {/* Price Breakdown */}
       <div
         className="mx-auto mt-8 max-w-sm space-y-2 rounded-xl p-4"
-        style={{ backgroundColor: '#112240' }}
+        style={{
+          backgroundColor: '#0d1b36',
+          border: '1px solid rgba(255,255,255,0.06)',
+        }}
       >
         <div className="flex justify-between text-sm">
-          <span style={{ color: '#ecf0ff' }}>
-            {formatPrice(MOCK_TOUR.price)} × {guests}{' '}
-            {t('booking.guests.people')}
+          <span className="text-gray-400">
+            {formatPrice(basePrice)} × {guests}{' '}
+            {t('booking.guests.people', 'người')}
           </span>
-          <span className="font-medium" style={{ color: '#ffffff' }}>
+          <span className="font-semibold text-white">
             {formatPrice(tourPrice)}
           </span>
         </div>
         {selectedRoom && (
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>
-              {t('booking.summary.room')}: {selectedRoom.name}
+            <span className="text-gray-400">
+              {t('booking.summary.room', 'Phòng nghỉ / Hạng ghế')}:{' '}
+              {selectedRoom.name}
             </span>
-            <span className="font-medium" style={{ color: '#ffffff' }}>
+            <span className="font-semibold text-white">
               {formatPrice(roomPrice)}
             </span>
           </div>
         )}
         <div
-          className="h-px"
-          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          className="h-px my-2"
+          style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
         />
-        <div className="flex justify-between">
-          <span className="font-semibold" style={{ color: '#ffffff' }}>
-            {t('booking.summary.total')}
+        <div className="flex justify-between items-baseline">
+          <span className="font-bold text-white">
+            {t('booking.summary.total', 'Tổng cộng')}
           </span>
-          <span className="font-bold" style={{ color: '#00F0FF' }}>
+          <span className="text-xl font-black text-[#00F0FF]">
             {formatPrice(totalPrice)}
           </span>
         </div>

@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { ChevronLeft, Menu, X } from 'lucide-react';
 import { routeName } from '@/constants/route-name';
 import { performLogout } from '@/lib/auth-session';
-import logo from '@/assets/logo.png';
+// import logo from '@/assets/logo.png';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import {
   ownerSidelinks,
@@ -29,6 +29,8 @@ export default function OwnerLayout() {
         .toUpperCase()
     : '?';
 
+  const visibleLinks = ownerSidelinks;
+
   const handleLogout = async () => {
     await performLogout(logout);
     navigate(routeName.signIn);
@@ -37,7 +39,7 @@ export default function OwnerLayout() {
   return (
     <div
       className="flex h-screen overflow-hidden"
-      style={{ backgroundColor: '#0A192F' }}
+      style={{ backgroundColor: '#0B132B' }}
     >
       {mobileOpen && (
         <div
@@ -50,7 +52,7 @@ export default function OwnerLayout() {
       <aside
         className={`fixed inset-y-0 left-0 z-50 flex flex-col border-r transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} ${collapsed ? 'w-[72px]' : 'w-[260px]'}`}
         style={{
-          backgroundColor: '#0d1f3c',
+          backgroundColor: '#0B132B',
           borderColor: 'rgba(255,255,255,0.06)',
         }}
       >
@@ -61,18 +63,17 @@ export default function OwnerLayout() {
         >
           {!collapsed && (
             <Link to={routeName.owner} className="flex items-center gap-2.5">
-              <img src={logo} alt="DDMS" className="h-8 w-auto" />
               <span
-                className="text-sm font-bold tracking-wide"
+                className="text-lg font-black tracking-widest"
                 style={{ color: '#00F0FF' }}
               >
-                {t('ownerLayout.brand')}
+                MARINA COMMAND
               </span>
             </Link>
           )}
           {collapsed && (
             <Link to={routeName.owner} className="mx-auto">
-              <img src={logo} alt="DDMS" className="h-8 w-auto" />
+              <span className="text-xl font-black text-cyan-400">MC</span>
             </Link>
           )}
           <button
@@ -87,7 +88,7 @@ export default function OwnerLayout() {
         {/* Primary Nav — driven by ownerSidelinks */}
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="space-y-1">
-            {ownerSidelinks.map((link) => (
+            {visibleLinks.map((link) => (
               <li key={link.href}>
                 <NavLink
                   to={link.href}
@@ -101,10 +102,19 @@ export default function OwnerLayout() {
                       ? 'rgba(0,240,255,0.1)'
                       : undefined,
                     color: isActive ? '#00F0FF' : '#ecf0ff',
+                    borderLeft: isActive
+                      ? '3px solid #00F0FF'
+                      : '3px solid transparent',
                   })}
                 >
                   <span className="shrink-0">{link.icon}</span>
-                  {!collapsed && <span>{t(link.title)}</span>}
+                  {!collapsed && (
+                    <span>
+                      {link.title.startsWith('ownerLayout.nav.')
+                        ? t(link.title)
+                        : link.title}
+                    </span>
+                  )}
                 </NavLink>
               </li>
             ))}
@@ -170,7 +180,7 @@ export default function OwnerLayout() {
         <header
           className="flex h-16 shrink-0 items-center justify-between border-b px-4 lg:px-6"
           style={{
-            backgroundColor: '#0A192F',
+            backgroundColor: '#0B132B',
             borderColor: 'rgba(255,255,255,0.06)',
           }}
         >

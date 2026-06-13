@@ -13,8 +13,9 @@ import {
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { BOAT_TYPES, type BoatStatus } from '@/data/owner-boats';
-import { boatService, type Boat } from '@/services/boatService';
+import { type BoatStatus } from '@/data/owner-boats';
+import { boatService, type BoatListItem } from '@/services/boatService';
+import { getBoatTypes, type IBoatType } from '@/services/system-service';
 import BoatCard from './boat-card';
 import BoatTable from './boat-table';
 
@@ -22,19 +23,20 @@ type FilterStatus = 'all' | BoatStatus;
 type ViewMode = 'grid' | 'table';
 
 export default function OwnerBoatList() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [filterType, setFilterType] = useState('all');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [boats, setBoats] = useState<Boat[]>([]);
+  const [boats, setBoats] = useState<BoatListItem[]>([]);
+  const [boatTypes, setBoatTypes] = useState<IBoatType[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchBoats = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await boatService.getAll({ pageSize: 100 });
-      setBoats(res.data);
+      const res = await boatService.getOwnerBoats({ pageSize: 100 });
+      setBoats(res.items || []);
     } catch (err) {
       toast.error(
         err instanceof Error ? err.message : 'Không thể tải danh sách tàu',
@@ -47,6 +49,18 @@ export default function OwnerBoatList() {
   useEffect(() => {
     fetchBoats();
   }, [fetchBoats]);
+
+  useEffect(() => {
+    getBoatTypes()
+      .then((res) => {
+        if (res.data) {
+          setBoatTypes(res.data);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load boat types:', err);
+      });
+  }, []);
 
   const filteredBoats = useMemo(
     () =>
@@ -70,7 +84,7 @@ export default function OwnerBoatList() {
 
   const handleDelete = async (boatId: string) => {
     try {
-      await boatService.delete(boatId);
+      await boatService.deleteByOwner(boatId);
       setBoats((prev) => prev.filter((b) => b.id !== boatId));
       toast.success('Đã xóa tàu thành công');
     } catch (err) {
@@ -222,11 +236,20 @@ export default function OwnerBoatList() {
             }}
           >
             <option value="all">{t('ownerBoats.filter.allTypes')}</option>
-            {BOAT_TYPES.map((bt) => (
-              <option key={bt.value} value={bt.value}>
-                {t(`ownerBoats.types.${bt.value}`)}
-              </option>
-            ))}
+            {boatTypes.map((bt) => {
+              const localizedName = t(`ownerBoats.types.${bt.code}`);
+              const displayName =
+                localizedName && !localizedName.startsWith('ownerBoats.types.')
+                  ? localizedName
+                  : i18n.language === 'en'
+                    ? bt.name_en
+                    : bt.name_vi;
+              return (
+                <option key={bt.code} value={bt.code}>
+                  {displayName}
+                </option>
+              );
+            })}
           </select>
           <div
             className="flex rounded-xl p-0.5"
@@ -292,11 +315,20 @@ export default function OwnerBoatList() {
       ) : viewMode === 'grid' ? (
         <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {filteredBoats.map((boat) => (
-            <BoatCard key={boat.id} boat={boat} onDelete={handleDelete} />
+            <BoatCard
+              key={boat.id}
+              boat={boat}
+              boatTypes={boatTypes}
+              onDelete={handleDelete}
+            />
           ))}
         </div>
       ) : (
-        <BoatTable boats={filteredBoats} onDelete={handleDelete} />
+        <BoatTable
+          boats={filteredBoats}
+          boatTypes={boatTypes}
+          onDelete={handleDelete}
+        />
       )}
     </div>
   );

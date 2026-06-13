@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Breadcrumb from '@/components/shared/breadcrumb';
 import { Button } from '@/components/ui/button';
-import type { Boat, RoomOption } from './types';
-import { MOCK_TOUR, BOAT_ROOMS, DEFAULT_BOAT_ROOMS } from './mock-data';
+import { Loader2 } from 'lucide-react';
+import type { RoomOption } from './types';
+import { tourService, type TourItemResponse } from '@/services/tourService';
 
 // Step components
 import StepIndicator from './components/step-indicator';
@@ -13,62 +14,143 @@ import StepViewRooms from './components/step-view-rooms';
 import StepGuests from './components/step-guests';
 import StepConfirm from './components/step-confirm';
 import BookingSuccess from './components/booking-success';
-import StepSelectBoat from './components/step-select-boat';
 
 export default function BookingPage() {
   const { t } = useTranslation();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
   // ── State ──
   const [step, setStep] = useState(1);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [selectedBoat, setSelectedBoat] = useState<Boat | null>(null);
+  const [tour, setTour] = useState<TourItemResponse | null>(null);
+  const [schedules, setSchedules] = useState<any[]>([]);
+  const [selectedSchedule, setSelectedSchedule] = useState<any | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<RoomOption | null>(null);
   const [guests, setGuests] = useState(1);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  // ── Derived ──
-  const boatRooms = useMemo(() => {
-    if (!selectedBoat) return [];
-    return BOAT_ROOMS[selectedBoat.id] || DEFAULT_BOAT_ROOMS;
-  }, [selectedBoat]);
+  // ── Fetch Data ──
+  useEffect(() => {
+    if (!id) return;
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [tourData, schedulesData] = await Promise.all([
+          tourService.getPublicTourById(id),
+          tourService.getTourSchedules(id).catch(() => []),
+        ]);
+        setTour(tourData);
+        setSchedules(schedulesData || []);
+      } catch (error) {
+        console.error('Failed to fetch booking details:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]);
 
-  const tourPrice = MOCK_TOUR.price * guests;
+  // ── Derived State ──
+  const hasRooms = useMemo(() => {
+    return !!tour && tour.classes && tour.classes.length > 0;
+  }, [tour]);
+
+  const rooms: RoomOption[] = useMemo(() => {
+    if (!tour || !tour.classes) return [];
+    return tour.classes.map((c) => ({
+      id: c.id,
+      name: c.name,
+      type: c.name.toLowerCase().includes('vip')
+        ? 'vip'
+        : c.name.toLowerCase().includes('deluxe')
+          ? 'deluxe'
+          : 'standard',
+      price: c.price,
+      maxAdults: c.capacity,
+      maxChildren: 0,
+      area: 'Tiêu chuẩn',
+      bed: '1 giường đôi hoặc 2 giường đơn',
+      rating: 5,
+      reviewCount: 0,
+      totalRooms: 10,
+      availableRooms: 10,
+      images: [
+        c.imageUrl ||
+          'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=600&fit=crop',
+      ],
+      description:
+        c.description || 'Hạng ghế / phòng nghỉ chất lượng cao trên du thuyền',
+      amenities: [],
+      reviews: [],
+      ratingBreakdown: [],
+    }));
+  }, [tour]);
+
+  const basePrice = tour ? tour.price : 0;
+  const tourPrice = basePrice * guests;
   const roomPrice = selectedRoom ? selectedRoom.price : 0;
   const totalPrice = tourPrice + roomPrice;
-  const maxGuests = selectedBoat?.capacity || MOCK_TOUR.maxGuests;
+  const maxGuests =
+    selectedSchedule?.maxCapacity || tour?.classes?.[0]?.capacity || 50;
 
   // ── Handlers ──
   const canProceed = () => {
-    if (step === 1) return selectedDate && selectedTime;
-    if (step === 2) return selectedBoat !== null;
-    if (step === 3) return true;
-    if (step === 4) return guests >= 1 && guests <= maxGuests;
+    if (step === 1) return selectedSchedule !== null;
+    if (hasRooms) {
+      if (step === 2) return true; // Room selection is optional
+      if (step === 3) return guests >= 1 && guests <= maxGuests;
+    } else {
+      if (step === 2) return guests >= 1 && guests <= maxGuests;
+    }
     return true;
   };
 
   const handleNext = () => {
-    if (step < 5) setStep(step + 1);
+    const totalSteps = hasRooms ? 4 : 3;
+    if (step < totalSteps) setStep(step + 1);
   };
 
   const handleBack = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleConfirm = async () => {
-    setIsSubmitting(true);
-    // TODO: API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
+  const handleConfirm = () => {
     setIsConfirmed(true);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[80vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-10 w-10 animate-spin text-[#00F0FF]" />
+          <p className="text-sm font-medium text-gray-400">
+            Đang tải thông tin đặt tour...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!tour) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center text-white">
+        Không tìm thấy thông tin tour. Vui lòng thử lại sau.
+      </div>
+    );
+  }
+
+  const selectedDate = selectedSchedule
+    ? new Date(selectedSchedule.start_time).toISOString().split('T')[0]
+    : '';
+  const selectedTime = selectedSchedule
+    ? `${new Date(selectedSchedule.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })} - ${new Date(selectedSchedule.end_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}`
+    : '';
 
   // ── Success screen ──
   if (isConfirmed) {
     return (
       <BookingSuccess
+        tourName={tour.name}
         selectedDate={selectedDate}
         selectedTime={selectedTime}
         guests={guests}
@@ -77,7 +159,8 @@ export default function BookingPage() {
     );
   }
 
-  // ── Main booking flow ──
+  const totalSteps = hasRooms ? 4 : 3;
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-8">
       {/* Breadcrumb */}
@@ -85,7 +168,7 @@ export default function BookingPage() {
         items={[
           { label: t('nav.home'), to: '/' },
           { label: t('nav.tours'), to: '/tours' },
-          { label: MOCK_TOUR.title, to: `/tours/${id}` },
+          { label: tour.name, to: `/tours/${id}` },
           { label: t('booking.title') },
         ]}
       />
@@ -97,12 +180,10 @@ export default function BookingPage() {
       >
         {t('booking.title')}
       </h1>
-      <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
-        {MOCK_TOUR.title}
-      </p>
+      <p className="mt-1 text-sm text-[#00F0FF]">{tour.name}</p>
 
       {/* Step Indicator */}
-      <StepIndicator currentStep={step} />
+      <StepIndicator currentStep={step} hasRooms={hasRooms} />
 
       {/* Step Content */}
       <div
@@ -115,52 +196,84 @@ export default function BookingPage() {
       >
         {step === 1 && (
           <StepDateTime
-            selectedDate={selectedDate}
-            selectedTime={selectedTime}
-            onSelectDate={setSelectedDate}
-            onSelectTime={setSelectedTime}
+            schedules={schedules}
+            selectedSchedule={selectedSchedule}
+            onSelectSchedule={(sched) => {
+              setSelectedSchedule(sched);
+              setSelectedRoom(null);
+            }}
           />
         )}
 
-        {step === 2 && (
-          <StepSelectBoat
-            selectedBoat={selectedBoat}
-            onSelectBoat={setSelectedBoat}
-          />
-        )}
+        {hasRooms ? (
+          <>
+            {step === 2 && (
+              <StepViewRooms
+                rooms={rooms}
+                selectedRoom={selectedRoom}
+                selectedBoatName={selectedSchedule?.boatName || 'Du thuyền'}
+                onSelectRoom={setSelectedRoom}
+              />
+            )}
 
-        {step === 3 && (
-          <StepViewRooms
-            rooms={boatRooms}
-            selectedRoom={selectedRoom}
-            selectedBoatName={selectedBoat?.name || ''}
-            onSelectRoom={setSelectedRoom}
-          />
-        )}
+            {step === 3 && (
+              <StepGuests
+                guests={guests}
+                maxGuests={maxGuests}
+                selectedRoom={selectedRoom}
+                tourPrice={tourPrice}
+                roomPrice={roomPrice}
+                totalPrice={totalPrice}
+                onSetGuests={setGuests}
+                basePrice={basePrice}
+              />
+            )}
 
-        {step === 4 && (
-          <StepGuests
-            guests={guests}
-            maxGuests={maxGuests}
-            selectedRoom={selectedRoom}
-            tourPrice={tourPrice}
-            roomPrice={roomPrice}
-            totalPrice={totalPrice}
-            onSetGuests={setGuests}
-          />
-        )}
+            {step === 4 && (
+              <StepConfirm
+                tour={tour}
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                selectedRoom={selectedRoom}
+                guests={guests}
+                tourPrice={tourPrice}
+                roomPrice={roomPrice}
+                totalPrice={totalPrice}
+                selectedSchedule={selectedSchedule}
+                onConfirm={handleConfirm}
+              />
+            )}
+          </>
+        ) : (
+          <>
+            {step === 2 && (
+              <StepGuests
+                guests={guests}
+                maxGuests={maxGuests}
+                selectedRoom={selectedRoom}
+                tourPrice={tourPrice}
+                roomPrice={roomPrice}
+                totalPrice={totalPrice}
+                onSetGuests={setGuests}
+                basePrice={basePrice}
+              />
+            )}
 
-        {step === 5 && (
-          <StepConfirm
-            selectedDate={selectedDate}
-            selectedTime={selectedTime}
-            selectedBoat={selectedBoat}
-            selectedRoom={selectedRoom}
-            guests={guests}
-            tourPrice={tourPrice}
-            roomPrice={roomPrice}
-            totalPrice={totalPrice}
-          />
+            {step === 3 && (
+              <StepConfirm
+                tour={tour}
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                selectedRoom={selectedRoom}
+                guests={guests}
+                tourPrice={tourPrice}
+                roomPrice={roomPrice}
+                totalPrice={totalPrice}
+                selectedSchedule={selectedSchedule}
+                onConfirm={handleConfirm}
+              />
+            )}
+          </>
         )}
       </div>
 
@@ -176,7 +289,7 @@ export default function BookingPage() {
             {t('booking.back')}
           </Button>
         )}
-        {step < 5 ? (
+        {step < totalSteps && (
           <Button
             variant="cyan"
             size="action-lg"
@@ -185,18 +298,6 @@ export default function BookingPage() {
             disabled={!canProceed()}
           >
             {t('booking.next')}
-          </Button>
-        ) : (
-          <Button
-            variant="cyan"
-            size="action-lg"
-            className="flex-1"
-            onClick={handleConfirm}
-            disabled={isSubmitting}
-          >
-            {isSubmitting
-              ? t('booking.confirm.processing')
-              : t('booking.confirm.pay')}
           </Button>
         )}
       </div>
