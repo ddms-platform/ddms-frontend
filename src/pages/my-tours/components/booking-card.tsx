@@ -25,19 +25,17 @@ export interface Booking {
   createdAt: string;
 }
 
-interface BookingCardProps {
-  booking: Booking;
-  onCancelSuccess?: () => void;
+interface BookingStatusBadgeProps {
+  status: BookingStatus;
+  className?: string;
 }
 
-export default function BookingCard({
-  booking,
-  onCancelSuccess,
-}: BookingCardProps) {
-  const { t, i18n } = useTranslation();
-  const lang = i18n.language;
+function BookingStatusBadge({
+  status,
+  className = '',
+}: BookingStatusBadgeProps) {
+  const { t } = useTranslation();
 
-  // Status Badge Helper
   const getStatusConfig = (status: BookingStatus) => {
     switch (status) {
       case 'PENDING':
@@ -50,24 +48,49 @@ export default function BookingCard({
         return {
           bg: '#e8f5e9',
           text: '#2e7d32',
-          label: t('dashboard.status.UPCOMING'),
+          label: t('dashboard.status.UPCOMING', 'Sắp khởi hành'),
         };
       case 'COMPLETED':
         return {
           bg: '#eef2ff',
           text: '#4338ca',
-          label: t('dashboard.status.COMPLETED'),
+          label: t('dashboard.status.COMPLETED', 'Đã hoàn thành'),
         };
       case 'CANCELLED':
         return {
           bg: 'rgba(255,255,255,0.1)',
           text: '#ecf0ff',
-          label: t('dashboard.status.CANCELLED'),
+          label: t('dashboard.status.CANCELLED', 'Đã hủy'),
         };
     }
   };
 
-  const statusConfig = getStatusConfig(booking.status);
+  const config = getStatusConfig(status);
+
+  return (
+    <span
+      className={`rounded-full px-2.5 text-xs font-semibold ${className}`}
+      style={{
+        backgroundColor: config.bg,
+        color: config.text,
+      }}
+    >
+      {config.label}
+    </span>
+  );
+}
+
+interface BookingCardProps {
+  booking: Booking;
+  onCancelSuccess?: () => void;
+}
+
+export default function BookingCard({
+  booking,
+  onCancelSuccess,
+}: BookingCardProps) {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
@@ -88,15 +111,17 @@ export default function BookingCard({
       if (res.success) {
         toast.success(
           res.refunded
-            ? `Đã hủy đặt tour thành công. Bạn được hoàn lại ${formatPrice(booking.totalPrice)} về ví!`
-            : 'Đã hủy đặt tour thành công. (Không hoàn tiền do sát ngày khởi hành)',
+            ? t('dashboard.cancelModal.successRefunded', {
+                price: formatPrice(booking.totalPrice),
+              })
+            : t('dashboard.cancelModal.successNoRefund'),
         );
         onCancelSuccess?.();
       }
     } catch (error: any) {
       console.error('Cancel booking failed:', error);
       toast.error(
-        error.response?.data?.message || 'Có lỗi xảy ra khi hủy đặt tour.',
+        error.response?.data?.message || t('dashboard.cancelModal.error'),
       );
     } finally {
       setIsCancelling(false);
@@ -138,15 +163,7 @@ export default function BookingCard({
         />
         {/* Mobile Badges overlay */}
         <div className="absolute left-3 top-3 sm:hidden">
-          <span
-            className="rounded-full px-2.5 py-1 text-xs font-semibold"
-            style={{
-              backgroundColor: statusConfig.bg,
-              color: statusConfig.text,
-            }}
-          >
-            {statusConfig.label}
-          </span>
+          <BookingStatusBadge status={booking.status} className="py-1" />
         </div>
       </div>
 
@@ -161,15 +178,10 @@ export default function BookingCard({
               >
                 {t('dashboard.bookingRef')}: #DDMS-{booking.id}
               </span>
-              <span
-                className="hidden rounded-full px-2.5 py-0.5 text-xs font-semibold sm:inline-block"
-                style={{
-                  backgroundColor: statusConfig.bg,
-                  color: statusConfig.text,
-                }}
-              >
-                {statusConfig.label}
-              </span>
+              <BookingStatusBadge
+                status={booking.status}
+                className="hidden py-0.5 sm:inline-block"
+              />
             </div>
             <h3
               className="text-lg font-bold leading-tight line-clamp-2"
@@ -335,7 +347,7 @@ export default function BookingCard({
             }}
           >
             <h3 className="text-xl font-bold mb-4" style={{ color: '#00F0FF' }}>
-              Xác Nhận Hủy Đặt Tour
+              {t('dashboard.cancelModal.title')}
             </h3>
             <div
               className="text-sm leading-relaxed mb-6"
@@ -343,23 +355,12 @@ export default function BookingCard({
             >
               {eligibleForRefund ? (
                 <p>
-                  Bạn có chắc chắn muốn hủy đặt tour này không? Tour của bạn sẽ
-                  được hủy và bạn sẽ được{' '}
-                  <span className="font-bold text-emerald-400">
-                    hoàn trả 100% số tiền {formatPrice(booking.totalPrice)} về
-                    ví
-                  </span>{' '}
-                  vì thời gian hủy cách ngày khởi hành trên 2 ngày (48 tiếng).
+                  {t('dashboard.cancelModal.refundEligible', {
+                    price: formatPrice(booking.totalPrice),
+                  })}
                 </p>
               ) : (
-                <p>
-                  Bạn có chắc chắn muốn hủy đặt tour này không?{' '}
-                  <span className="font-bold text-rose-400">
-                    Lưu ý: Bạn sẽ KHÔNG ĐƯỢC HOÀN TIỀN
-                  </span>{' '}
-                  vì thời gian hủy đến ngày khởi hành đã dưới 2 ngày (48 tiếng)
-                  - sát ngày khởi hành.
-                </p>
+                <p>{t('dashboard.cancelModal.noRefund')}</p>
               )}
             </div>
             <div className="flex justify-end gap-3">
@@ -368,7 +369,7 @@ export default function BookingCard({
                 onClick={() => setIsCancelModalOpen(false)}
                 disabled={isCancelling}
               >
-                Đóng
+                {t('dashboard.cancelModal.closeBtn')}
               </Button>
               <Button
                 variant="cyan"
@@ -380,7 +381,9 @@ export default function BookingCard({
                     : ''
                 }
               >
-                {isCancelling ? 'Đang hủy...' : 'Xác nhận hủy'}
+                {isCancelling
+                  ? t('dashboard.cancelModal.cancellingBtn')
+                  : t('dashboard.cancelModal.confirmBtn')}
               </Button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Wallet,
   Landmark,
@@ -18,7 +19,41 @@ import {
 } from '@/services/walletService';
 import { toast } from 'sonner';
 
+interface WithdrawalStatusBadgeProps {
+  status: WalletWithdrawalResponse['status'];
+}
+
+function WithdrawalStatusBadge({ status }: WithdrawalStatusBadgeProps) {
+  const { t } = useTranslation();
+  switch (status) {
+    case 'pending':
+      return (
+        <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <Clock size={12} />
+          {t('wallet.history.status.pending')}
+        </span>
+      );
+    case 'approved':
+      return (
+        <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <CheckCircle size={12} />
+          {t('wallet.history.status.approved')}
+        </span>
+      );
+    case 'rejected':
+      return (
+        <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+          <XCircle size={12} />
+          {t('wallet.history.status.rejected')}
+        </span>
+      );
+    default:
+      return null;
+  }
+}
+
 export default function WalletPage() {
+  const { t, i18n } = useTranslation();
   const [balance, setBalance] = useState<number>(0);
   const [withdrawals, setWithdrawals] = useState<WalletWithdrawalResponse[]>(
     [],
@@ -44,7 +79,7 @@ export default function WalletPage() {
       setWithdrawals(withdrawalsData);
     } catch (e: any) {
       console.error('Failed to load wallet data:', e);
-      toast.error('Không thể tải thông tin ví của bạn.');
+      toast.error(t('wallet.form.validation.fetchError'));
     } finally {
       setIsLoading(false);
     }
@@ -52,6 +87,7 @@ export default function WalletPage() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleWithdrawSubmit = async (e: React.FormEvent) => {
@@ -60,17 +96,17 @@ export default function WalletPage() {
 
     const parsedAmount = parseFloat(amount);
     if (isNaN(parsedAmount) || parsedAmount <= 0) {
-      setFormError('Số tiền rút phải lớn hơn 0.');
+      setFormError(t('wallet.form.validation.amountError'));
       return;
     }
 
     if (parsedAmount > balance) {
-      setFormError('Số dư ví không đủ.');
+      setFormError(t('wallet.form.validation.insufficientBalance'));
       return;
     }
 
     if (!bankName.trim() || !accountNumber.trim() || !accountName.trim()) {
-      setFormError('Vui lòng nhập đầy đủ thông tin ngân hàng.');
+      setFormError(t('wallet.form.validation.emptyBankInfo'));
       return;
     }
 
@@ -85,7 +121,9 @@ export default function WalletPage() {
 
       if (res.success) {
         toast.success(
-          `Yêu cầu rút tiền ${formatPrice(parsedAmount)} đang được xử lý!`,
+          t('wallet.form.validation.successToast', {
+            amount: formatPrice(parsedAmount),
+          }),
         );
         setBalance(res.newBalance);
         // Reset form
@@ -96,35 +134,11 @@ export default function WalletPage() {
       }
     } catch (err: any) {
       console.error('Withdrawal request failed:', err);
-      toast.error(err.response?.data?.message || 'Yêu cầu rút tiền thất bại.');
+      toast.error(
+        err.response?.data?.message || t('wallet.form.validation.errorToast'),
+      );
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const getStatusBadge = (status: WalletWithdrawalResponse['status']) => {
-    switch (status) {
-      case 'pending':
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-            <Clock size={12} />
-            Đang xử lý
-          </span>
-        );
-      case 'approved':
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            <CheckCircle size={12} />
-            Thành công
-          </span>
-        );
-      case 'rejected':
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-            <XCircle size={12} />
-            Từ chối
-          </span>
-        );
     }
   };
 
@@ -133,11 +147,10 @@ export default function WalletPage() {
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">
-            Ví Của Tôi
+            {t('wallet.title')}
           </h1>
           <p className="mt-2 text-base text-[#ecf0ff]">
-            Quản lý số dư hoàn tiền của bạn và thực hiện yêu cầu rút tiền về
-            ngân hàng.
+            {t('wallet.subtitle')}
           </p>
         </div>
         <button
@@ -151,7 +164,7 @@ export default function WalletPage() {
           }}
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
-          Cập nhật
+          {t('wallet.updateBtn')}
         </button>
       </div>
 
@@ -172,7 +185,7 @@ export default function WalletPage() {
 
             <div className="flex items-center justify-between mb-6">
               <span className="text-sm font-semibold tracking-wider text-[#00F0FF] uppercase">
-                Số Dư Ví
+                {t('wallet.balanceCard.title')}
               </span>
               <Wallet className="h-6 w-6 text-[#00F0FF]" />
             </div>
@@ -183,7 +196,7 @@ export default function WalletPage() {
 
             <div className="mt-8 flex items-center gap-2 text-xs text-slate-400">
               <span className="h-2 w-2 rounded-full bg-[#00F0FF] animate-pulse" />
-              Tài khoản khả dụng
+              {t('wallet.balanceCard.available')}
             </div>
           </div>
 
@@ -201,7 +214,7 @@ export default function WalletPage() {
             >
               <Landmark className="h-5 w-5 text-[#00F0FF]" />
               <h3 className="text-lg font-bold text-white">
-                Yêu Cầu Rút Tiền Về Ngân Hàng
+                {t('wallet.form.title')}
               </h3>
             </div>
 
@@ -216,12 +229,12 @@ export default function WalletPage() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-semibold text-[#ecf0ff] uppercase tracking-wider mb-2">
-                    Tên Ngân Hàng
+                    {t('wallet.form.bankName')}
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Ví dụ: Vietcombank, MB Bank..."
+                    placeholder={t('wallet.form.bankNamePlaceholder')}
                     value={bankName}
                     onChange={(e) => setBankName(e.target.value)}
                     className="w-full rounded-xl border px-4 py-2.5 text-sm bg-[#0a192f] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF] transition-all"
@@ -231,12 +244,12 @@ export default function WalletPage() {
 
                 <div>
                   <label className="block text-xs font-semibold text-[#ecf0ff] uppercase tracking-wider mb-2">
-                    Số Tài Khoản
+                    {t('wallet.form.accountNumber')}
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Nhập số tài khoản"
+                    placeholder={t('wallet.form.accountNumberPlaceholder')}
                     value={accountNumber}
                     onChange={(e) => setAccountNumber(e.target.value)}
                     className="w-full rounded-xl border px-4 py-2.5 text-sm bg-[#0a192f] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF] transition-all"
@@ -247,12 +260,12 @@ export default function WalletPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-[#ecf0ff] uppercase tracking-wider mb-2">
-                  Tên Chủ Tài Khoản (Không Dấu)
+                  {t('wallet.form.accountName')}
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Ví dụ: NGUYEN VAN A"
+                  placeholder={t('wallet.form.accountNamePlaceholder')}
                   value={accountName}
                   onChange={(e) => setAccountName(e.target.value)}
                   className="w-full rounded-xl border px-4 py-2.5 text-sm bg-[#0a192f] text-white uppercase focus:outline-none focus:ring-1 focus:ring-[#00F0FF] transition-all"
@@ -262,27 +275,31 @@ export default function WalletPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-[#ecf0ff] uppercase tracking-wider mb-2">
-                  Số Tiền Rút (đ)
+                  {t('wallet.form.amount')}
                 </label>
                 <input
                   type="number"
                   required
                   min="1"
                   max={balance}
-                  placeholder="Nhập số tiền muốn rút"
+                  placeholder={t('wallet.form.amountPlaceholder')}
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className="w-full rounded-xl border px-4 py-2.5 text-sm bg-[#0a192f] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF] transition-all"
                   style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                 />
                 <div className="mt-2 flex justify-between text-xs text-slate-400">
-                  <span>Tối đa có thể rút: {formatPrice(balance)}</span>
+                  <span>
+                    {t('wallet.form.maxWithdraw', {
+                      balance: formatPrice(balance),
+                    })}
+                  </span>
                   <button
                     type="button"
                     onClick={() => setAmount(balance.toString())}
                     className="text-[#00F0FF] hover:underline"
                   >
-                    Rút tối đa
+                    {t('wallet.form.maxWithdrawBtn')}
                   </button>
                 </div>
               </div>
@@ -294,11 +311,11 @@ export default function WalletPage() {
                 className="w-full py-3 font-bold text-sm tracking-wide uppercase transition-all rounded-xl"
               >
                 {isSubmitting ? (
-                  'Đang xử lý yêu cầu...'
+                  t('wallet.form.submittingBtn')
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     <Send size={16} />
-                    Gửi yêu cầu rút tiền
+                    {t('wallet.form.submitBtn')}
                   </span>
                 )}
               </Button>
@@ -320,7 +337,9 @@ export default function WalletPage() {
               style={{ borderColor: 'rgba(255,255,255,0.08)' }}
             >
               <History className="h-5 w-5 text-[#00F0FF]" />
-              <h3 className="text-lg font-bold text-white">Lịch Sử Rút Tiền</h3>
+              <h3 className="text-lg font-bold text-white">
+                {t('wallet.history.title')}
+              </h3>
             </div>
 
             <div className="flex-1 overflow-y-auto max-h-105 pr-2 no-scrollbar flex flex-col gap-4">
@@ -338,30 +357,36 @@ export default function WalletPage() {
                       <span className="font-bold text-white text-base">
                         -{formatPrice(w.amount)}
                       </span>
-                      {getStatusBadge(w.status)}
+                      <WithdrawalStatusBadge status={w.status} />
                     </div>
                     <div
                       className="text-xs text-[#ecf0ff] space-y-1 mt-1 border-t pt-2"
                       style={{ borderColor: 'rgba(255,255,255,0.06)' }}
                     >
                       <p className="flex justify-between">
-                        <span className="text-slate-400">Ngân hàng:</span>
+                        <span className="text-slate-400">
+                          {t('wallet.history.bank')}
+                        </span>
                         <span className="font-medium">{w.bankName}</span>
                       </p>
                       <p className="flex justify-between">
-                        <span className="text-slate-400">Tài khoản:</span>
+                        <span className="text-slate-400">
+                          {t('wallet.history.account')}
+                        </span>
                         <span className="font-medium">{w.accountNumber}</span>
                       </p>
                       <p className="flex justify-between">
-                        <span className="text-slate-400">Chủ TK:</span>
+                        <span className="text-slate-400">
+                          {t('wallet.history.holder')}
+                        </span>
                         <span className="font-medium uppercase">
                           {w.accountName}
                         </span>
                       </p>
                       <p className="flex justify-between text-[10px] text-slate-500 mt-1">
-                        <span>Ngày yêu cầu:</span>
+                        <span>{t('wallet.history.date')}</span>
                         <span>
-                          {new Date(w.createdAt).toLocaleString('vi-VN')}
+                          {new Date(w.createdAt).toLocaleString(i18n.language)}
                         </span>
                       </p>
                     </div>
@@ -370,7 +395,7 @@ export default function WalletPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-20 text-center text-slate-500">
                   <Clock size={36} className="text-slate-600 mb-2" />
-                  <p className="text-sm">Chưa có giao dịch rút tiền nào.</p>
+                  <p className="text-sm">{t('wallet.history.empty')}</p>
                 </div>
               )}
             </div>

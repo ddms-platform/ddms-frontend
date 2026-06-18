@@ -67,11 +67,8 @@ export default function BoatTable({
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <div
-                        className="flex h-full w-full items-center justify-center"
-                        style={{ backgroundColor: 'rgba(0,240,255,0.06)' }}
-                      >
-                        <Ship size={16} style={{ color: '#00F0FF' }} />
+                      <div className="flex h-full w-full items-center justify-center bg-[#00F0FF]/10">
+                        <Ship size={16} className="text-[#00F0FF]" />
                       </div>
                     )}
                   </div>
@@ -85,13 +82,7 @@ export default function BoatTable({
               </td>
               <td className="px-4 py-3">
                 {boat.type && (
-                  <span
-                    className="rounded-md px-2 py-0.5 text-xs font-medium"
-                    style={{
-                      backgroundColor: 'rgba(0,240,255,0.08)',
-                      color: '#00F0FF',
-                    }}
-                  >
+                  <span className="rounded-md px-2 py-0.5 text-xs font-medium bg-[#00F0FF]/10 text-[#00F0FF]">
                     {(() => {
                       const localizedName = t(`ownerBoats.types.${boat.type}`);
                       if (

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Settings,
   AlertTriangle,
@@ -10,16 +11,11 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { boatService, type BoatListItem } from '@/services/boatService';
-import api from '@/services/api';
-
-interface MaintenanceService {
-  id: string;
-  name: string;
-  iconCode: string;
-  price: number | null;
-  description: string | null;
-}
+import {
+  boatService,
+  type BoatListItem,
+  type MaintenanceService,
+} from '@/services/boatService';
 
 const getIconComponent = (code: string) => {
   switch (code) {
@@ -55,6 +51,7 @@ const generateSlots = () => {
 const ALL_SLOTS = generateSlots();
 
 export default function MaintenanceServicesPage() {
+  const { t } = useTranslation();
   const [boats, setBoats] = useState<BoatListItem[]>([]);
   const [maintenanceServices, setMaintenanceServices] = useState<
     MaintenanceService[]
@@ -69,17 +66,14 @@ export default function MaintenanceServicesPage() {
       try {
         const [boatsRes, servicesRes] = await Promise.all([
           boatService.getOwnerBoats({ pageSize: 100 }),
-          api.get('/owner/maintenance-services'),
+          boatService.getOwnerMaintenanceServices(),
         ]);
 
         setBoats(boatsRes.items || []);
-
-        if (servicesRes.data.isSuccess) {
-          setMaintenanceServices(servicesRes.data.result || []);
-        }
+        setMaintenanceServices(servicesRes || []);
       } catch (error) {
         console.error(error);
-        toast.error('Không thể tải dữ liệu');
+        toast.error(t('maintenanceServices.toast.fetchError'));
       } finally {
         setLoadingBoats(false);
         setLoadingServices(false);
@@ -87,7 +81,7 @@ export default function MaintenanceServicesPage() {
     };
 
     fetchInitialData();
-  }, []);
+  }, [t]);
 
   const toggleService = (id: string) => {
     setSelectedServiceIds((prev) =>
@@ -96,7 +90,7 @@ export default function MaintenanceServicesPage() {
   };
 
   const formatPrice = (price: number | null) => {
-    if (price === null) return 'Khảo sát báo giá';
+    if (price === null) return t('maintenanceServices.priceSurvey');
     return price.toLocaleString('vi-VN') + 'đ';
   };
 
@@ -110,12 +104,13 @@ export default function MaintenanceServicesPage() {
   };
 
   const handleRegister = () => {
-    if (!selectedBoat) return toast.error('Vui lòng chọn tàu');
+    if (!selectedBoat)
+      return toast.error(t('maintenanceServices.toast.selectBoatError'));
     if (selectedServiceIds.length === 0)
-      return toast.error('Vui lòng chọn ít nhất 1 dịch vụ');
+      return toast.error(t('maintenanceServices.toast.selectServiceError'));
 
     // TODO: Connect to backend POST API when available
-    toast.success('Đăng ký dịch vụ thành công!');
+    toast.success(t('maintenanceServices.toast.registerSuccess'));
     setSelectedServiceIds([]);
     setSelectedBoat(null);
   };
@@ -125,10 +120,10 @@ export default function MaintenanceServicesPage() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
-            Đăng ký Dịch vụ & Bảo trì
+            {t('maintenanceServices.title')}
           </h1>
           <p className="text-sm text-slate-400">
-            Hệ thống quản lý bảo trì chuyên nghiệp cho đội tàu của bạn.
+            {t('maintenanceServices.subtitle')}
           </p>
         </div>
 
@@ -142,20 +137,20 @@ export default function MaintenanceServicesPage() {
                   <span className="w-8 h-8 rounded-full bg-cyan-500 text-[#0B132B] flex items-center justify-center font-black text-sm">
                     1
                   </span>
-                  Chọn tàu cần cung cấp dịch vụ
+                  {t('maintenanceServices.step1')}
                 </h2>
                 <span className="text-xs text-slate-400 italic">
-                  Có {boats.length} tàu đang neo đậu
+                  {t('maintenanceServices.boatsCount', { count: boats.length })}
                 </span>
               </div>
 
               {loadingBoats ? (
                 <div className="text-slate-400 text-sm p-4 bg-slate-800/30 rounded-xl border border-slate-700">
-                  Đang tải danh sách tàu...
+                  {t('maintenanceServices.loadingBoats')}
                 </div>
               ) : boats.length === 0 ? (
                 <div className="text-amber-400 text-sm p-4 border border-amber-500/20 bg-amber-500/10 rounded-xl">
-                  Bạn chưa có tàu nào.
+                  {t('maintenanceServices.emptyBoats')}
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-4">
@@ -163,21 +158,21 @@ export default function MaintenanceServicesPage() {
                     const isSelected = selectedBoat?.id === boat.id;
                     const statusConfig = {
                       idle: {
-                        text: 'HOẠT ĐỘNG',
+                        text: t('maintenanceServices.boatStatus.idle'),
                         color:
                           'text-emerald-400 bg-emerald-400/10 border-emerald-500/30',
                       },
                       maintenance: {
-                        text: 'CẦN BẢO TRÌ',
+                        text: t('maintenanceServices.boatStatus.maintenance'),
                         color:
                           'text-yellow-400 bg-yellow-400/10 border-yellow-500/30',
                       },
                       broken: {
-                        text: 'HỎNG HÓC',
+                        text: t('maintenanceServices.boatStatus.broken'),
                         color: 'text-red-400 bg-red-400/10 border-red-500/30',
                       },
                       in_use: {
-                        text: 'ĐANG CHẠY',
+                        text: t('maintenanceServices.boatStatus.in_use'),
                         color:
                           'text-blue-400 bg-blue-400/10 border-blue-500/30',
                       },
@@ -188,7 +183,7 @@ export default function MaintenanceServicesPage() {
                     const mockSlot = ALL_SLOTS[
                       boats.findIndex((b) => b.id === boat.id) %
                         ALL_SLOTS.length
-                    ] || { pier: 'Chưa xếp bến', id: '' };
+                    ] || { pier: t('maintenanceServices.notDocked'), id: '' };
 
                     return (
                       <button
@@ -237,7 +232,10 @@ export default function MaintenanceServicesPage() {
                             <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-auto">
                               <MapPin className="w-3.5 h-3.5 text-cyan-500" />
                               <span className="truncate">
-                                {mockSlot.pier} • Khoang {mockSlot.id}
+                                {t('maintenanceServices.pierSlot', {
+                                  pier: mockSlot.pier,
+                                  slot: mockSlot.id,
+                                })}
                               </span>
                             </div>
                           </div>
@@ -262,13 +260,13 @@ export default function MaintenanceServicesPage() {
                   >
                     2
                   </span>
-                  Chọn loại dịch vụ cần thực hiện
+                  {t('maintenanceServices.step2')}
                 </h2>
               </div>
 
               {loadingServices ? (
                 <div className="text-slate-400 text-sm p-4 bg-slate-800/30 rounded-xl border border-slate-700">
-                  Đang tải danh mục dịch vụ...
+                  {t('maintenanceServices.loadingServices')}
                 </div>
               ) : (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -318,13 +316,13 @@ export default function MaintenanceServicesPage() {
 
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-white mb-6">
-                    Tóm tắt yêu cầu
+                    {t('maintenanceServices.summaryTitle')}
                   </h3>
 
                   {/* Selected Boat Info */}
                   <div className="mb-6">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-3">
-                      TÀU ĐÃ CHỌN
+                      {t('maintenanceServices.selectedBoat')}
                     </p>
                     {selectedBoat ? (
                       <div className="flex gap-3 items-center bg-slate-800/30 p-3 rounded-xl border border-slate-700/50">
@@ -343,7 +341,7 @@ export default function MaintenanceServicesPage() {
                       </div>
                     ) : (
                       <div className="text-sm text-slate-500 italic py-2">
-                        Chưa chọn tàu
+                        {t('maintenanceServices.noBoatSelected')}
                       </div>
                     )}
                   </div>
@@ -352,8 +350,11 @@ export default function MaintenanceServicesPage() {
                   <div className="mb-6">
                     <div className="flex justify-between items-center mb-3">
                       <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider">
-                        DỊCH VỤ (
-                        {selectedServiceIds.length.toString().padStart(2, '0')})
+                        {t('maintenanceServices.servicesCount', {
+                          count: selectedServiceIds.length
+                            .toString()
+                            .padStart(2, '0'),
+                        })}
                       </p>
                     </div>
 
@@ -370,7 +371,7 @@ export default function MaintenanceServicesPage() {
                               className="flex justify-between items-start text-sm"
                             >
                               <div className="flex gap-2">
-                                <span className="text-cyan-500 mt-0.5">✓</span>
+                                <span className="text-cyan-50 mt-0.5">✓</span>
                                 <span className="text-slate-300 pr-2">
                                   {srv.name}
                                 </span>
@@ -384,7 +385,7 @@ export default function MaintenanceServicesPage() {
                       </ul>
                     ) : (
                       <div className="text-sm text-slate-500 italic py-2 border-t border-slate-800/50">
-                        Chưa chọn dịch vụ nào
+                        {t('maintenanceServices.noServicesSelected')}
                       </div>
                     )}
                   </div>
@@ -392,7 +393,7 @@ export default function MaintenanceServicesPage() {
                   {/* Total */}
                   <div className="pt-4 border-t border-slate-800 mb-8">
                     <p className="text-slate-400 text-sm mb-1">
-                      Tổng cộng ước tính
+                      {t('maintenanceServices.totalEstimate')}
                     </p>
                     <p className="text-3xl font-bold text-cyan-400">
                       {calculateTotal().toLocaleString('vi-VN')}đ
@@ -408,7 +409,7 @@ export default function MaintenanceServicesPage() {
                       }
                       onClick={handleRegister}
                     >
-                      Xác nhận đăng ký
+                      {t('maintenanceServices.confirmBtn')}
                     </Button>
                     <Button
                       variant="outline"
@@ -418,7 +419,7 @@ export default function MaintenanceServicesPage() {
                         setSelectedServiceIds([]);
                       }}
                     >
-                      Hủy bỏ
+                      {t('maintenanceServices.cancelBtn')}
                     </Button>
                   </div>
                 </div>
@@ -431,12 +432,10 @@ export default function MaintenanceServicesPage() {
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-200 text-sm mb-1">
-                    Cần hỗ trợ kỹ thuật?
+                    {t('maintenanceServices.supportTitle')}
                   </h4>
                   <p className="text-xs text-slate-500 leading-relaxed">
-                    Liên hệ đội ngũ kỹ thuật Marina Command qua Hotline:{' '}
-                    <strong>1900 1234</strong> hoặc kênh chat nội bộ để được tư
-                    vấn trực tiếp về các gói bảo trì chuyên sâu.
+                    {t('maintenanceServices.supportDesc')}
                   </p>
                 </div>
               </div>

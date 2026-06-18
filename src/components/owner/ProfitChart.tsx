@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
-import type { MonthlyProfit } from '@/services/boatService';
-
-interface ProfitChartProps {
-  data: MonthlyProfit[];
-}
+import { useTranslation } from 'react-i18next';
+import { Download } from 'lucide-react';
+import type { ProfitChartProps } from '@/interfaces/owner';
+import SimpleBarChart from '@/components/common/SimpleBarChart';
+import { CsvExporter } from '@/lib/csvExporter';
 
 export default function ProfitChart({ data = [] }: ProfitChartProps) {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<'month' | 'quarter' | 'year'>('month');
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Default fallback if no data provided
   const baseData =
@@ -60,8 +60,6 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
     return [];
   }, [baseData, filter]);
 
-  const maxProfit = Math.max(...chartData.map((d) => d.profit), 1000000); // Ensure non-zero divisor
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -74,27 +72,16 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
     .toUpperCase();
 
   const handleExport = () => {
-    // Generate CSV content
-    const headers = ['Thời gian', 'Doanh thu (VNĐ)'];
-    const csvContent = [
-      headers.join(','),
-      ...chartData.map((d) => `${d.name},${d.profit}`),
-    ].join('\n');
-
-    // Create Blob and trigger download
-    const blob = new Blob(['\uFEFF' + csvContent], {
-      type: 'text/csv;charset=utf-8;',
-    });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute(
-      'download',
-      `doanh_thu_${filter}_${new Date().getTime()}.csv`,
+    const headers = [t('profitChart.csvTime'), t('profitChart.csvRevenue')];
+    const rows = chartData.map((d) => [
+      t(`profitChart.months.${d.name}`, d.name),
+      d.profit,
+    ]);
+    CsvExporter.export(
+      headers,
+      rows,
+      `${t('profitChart.csvFileName')}_${filter}_${new Date().getTime()}.csv`,
     );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -102,10 +89,10 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-            Xu hướng lợi nhuận
+            {t('profitChart.title')}
           </h2>
           <p className="text-slate-400 text-sm mt-1">
-            Dữ liệu tổng hợp từ hệ thống theo thời gian thực
+            {t('profitChart.subtitle')}
           </p>
         </div>
 
@@ -119,7 +106,7 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              THÁNG
+              {t('profitChart.month')}
             </button>
             <button
               onClick={() => setFilter('quarter')}
@@ -129,7 +116,7 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              QUÝ
+              {t('profitChart.quarter')}
             </button>
             <button
               onClick={() => setFilter('year')}
@@ -139,93 +126,32 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              NĂM
+              {t('profitChart.year')}
             </button>
           </div>
           <button
             onClick={handleExport}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-white transition-colors"
-            title="Xuất file CSV"
+            title={t('profitChart.export')}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" x2="12" y1="15" y2="3" />
-            </svg>
-            Export
+            <Download className="w-3.5 h-3.5" />
+            {t('profitChart.export')}
           </button>
         </div>
       </div>
 
-      <div className="relative h-62.5 w-full flex items-end justify-between px-2 pb-6 mt-10 border-b border-slate-800">
-        {chartData.map((entry, index) => {
-          const heightPercentage = (entry.profit / maxProfit) * 100;
-          const isHighlight =
-            filter === 'month' && entry.name === currentMonthName;
-          const isHovered = hoveredIndex === index;
-
-          return (
-            <div
-              key={index}
-              className="relative flex flex-col items-center flex-1 h-full justify-end group"
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {/* Tooltip */}
-              <div
-                className={`absolute -top-14 z-10 bg-slate-800 border border-slate-700 p-2 rounded shadow-xl whitespace-nowrap pointer-events-none transition-all duration-200 ${
-                  isHovered
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-2'
-                }`}
-              >
-                <p className="text-white font-medium text-xs mb-0.5">
-                  {entry.name}
-                </p>
-                <p className="text-cyan-400 font-bold text-sm">
-                  {formatCurrency(entry.profit)}
-                </p>
-                {/* Tooltip Arrow */}
-                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-slate-800 border-b border-r border-slate-700 rotate-45"></div>
-              </div>
-
-              {/* Bar */}
-              <div
-                className={`w-4/5 max-w-[40px] rounded-t-sm transition-all duration-500 ease-out ${
-                  isHighlight || isHovered
-                    ? 'bg-cyan-400'
-                    : 'bg-slate-800 hover:bg-slate-700'
-                }`}
-                style={{ height: `${Math.max(heightPercentage, 2)}%` }}
-              ></div>
-
-              {/* Label below bar */}
-              <span
-                className={`absolute -bottom-7 text-[10px] font-medium transition-colors ${
-                  isHighlight || isHovered ? 'text-cyan-400' : 'text-slate-500'
-                }`}
-              >
-                {entry.name}
-              </span>
-
-              {/* Active Underline for Current Month */}
-              {isHighlight && (
-                <div className="absolute -bottom-9 w-12 h-0.5 bg-cyan-400"></div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <SimpleBarChart
+        data={chartData.map((d) => ({
+          name: t(`profitChart.months.${d.name}`, d.name),
+          value: d.profit,
+        }))}
+        highlightName={
+          filter === 'month'
+            ? t(`profitChart.months.${currentMonthName}`, currentMonthName)
+            : undefined
+        }
+        valueFormatter={formatCurrency}
+      />
     </div>
   );
 }

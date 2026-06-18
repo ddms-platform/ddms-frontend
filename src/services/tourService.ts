@@ -158,4 +158,46 @@ export const tourService = {
     api
       .get<ApiResponse<any[]>>(`/tour-schedules/tour/${tourId}`)
       .then((r) => r.data.result),
+
+  getToursDashboardStats: () =>
+    api
+      .get<ApiResponse<any[]>>('/owner/tours-dashboard/stats')
+      .then((r) => r.data),
+
+  getToursDashboardSchedules: (month: number, year: number) =>
+    api
+      .get<ApiResponse<any[]>>('/owner/tours-dashboard/schedules', {
+        params: { month, year },
+      })
+      .then((r) => r.data),
+
+  getToursDashboardRecentBookings: () =>
+    api
+      .get<ApiResponse<any[]>>('/owner/tours-dashboard/recent-bookings')
+      .then((r) => r.data),
+
+  getToursDashboardResources: () =>
+    api
+      .get<ApiResponse<any>>('/owner/tours-dashboard/resources')
+      .then((r) => r.data),
+
+  createTourSchedule: (payload: {
+    boatId: string;
+    tourId: string;
+    startTime: string;
+    endTime: string;
+  }) =>
+    api
+      .post<ApiResponse<any>>('/owner/tours-dashboard/schedule', payload)
+      .then((r) => r.data),
+
+  updateBookingStatus: (
+    bookingId: string,
+    payload: { status: string; cancelReason?: string },
+  ) =>
+    api
+      .post<
+        ApiResponse<any>
+      >(`/owner/tours-dashboard/bookings/${bookingId}/status`, payload)
+      .then((r) => r.data),
 };

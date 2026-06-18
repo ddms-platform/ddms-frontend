@@ -116,6 +116,14 @@ export interface BoatStatsResponse {
   monthlyProfits?: MonthlyProfit[];
 }
 
+export interface MaintenanceService {
+  id: string;
+  name: string;
+  iconCode: string;
+  price: number | null;
+  description: string | null;
+}
+
 // ── API Functions ─────────────────────────────────────────────────────────────
 
 export const boatService = {
@@ -225,5 +233,10 @@ export const boatService = {
   rejectMaintenanceAdmin: (id: string) =>
     api
       .post<ApiResponse<any>>(`/admin/maintenances/${id}/reject`)
+      .then((r) => r.data.result),
+
+  getOwnerMaintenanceServices: () =>
+    api
+      .get<ApiResponse<MaintenanceService[]>>('/owner/maintenance-services')
       .then((r) => r.data.result),
 };
