@@ -1,19 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  ArrowLeft,
-  Save,
-  Ship,
-  Layers,
-  ImageIcon,
-  Wrench,
-  Loader2,
-  Trash2,
-} from 'lucide-react';
+import { ArrowLeft, Save, Ship, Layers, Wrench, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   boatService,
   type Boat,
@@ -26,6 +16,8 @@ import ServiceTab, {
   getEmptyService,
 } from './service-tab';
 import MaintenanceTab from './maintenance-tab';
+import BoatBasicInfoSection from './boat-form/BoatBasicInfoSection';
+import BoatImagesSection from './boat-form/BoatImagesSection';
 
 type Tab = 'basic' | 'services' | 'maintenance';
 
@@ -34,7 +26,7 @@ export default function BoatForm({
   onClose,
   onSaved,
 }: { boatIdProp?: string; onClose?: () => void; onSaved?: () => void } = {}) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { boatId: routeBoatId } = useParams();
   const boatId = boatIdProp || routeBoatId;
   const navigate = useNavigate();
@@ -295,12 +287,6 @@ export default function BoatForm({
     },
   ];
 
-  const inputStyle = {
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    borderColor: 'rgba(255,255,255,0.08)',
-    color: '#fff',
-  };
-
   if (loadingBoat) {
     return (
       <div className="flex h-96 items-center justify-center">
@@ -388,184 +374,24 @@ export default function BoatForm({
 
       {/* Tab Panels */}
       <div className="mt-6">
-        {/* Basic Info & Images */}
         {activeTab === 'basic' && (
           <div className="space-y-6">
-            <div
-              className="rounded-2xl p-6"
-              style={{
-                backgroundColor: '#112240',
-                border: '1px solid rgba(255,255,255,0.04)',
-              }}
-            >
-              <h2
-                className="text-base font-semibold"
-                style={{ color: '#ffffff' }}
-              >
-                {t('ownerBoats.form.basic.title')}
-              </h2>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label
-                    className="mb-1.5 block text-xs font-medium"
-                    style={{ color: '#ecf0ff' }}
-                  >
-                    {t('ownerBoats.form.basic.name')} *
-                  </label>
-                  <Input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder={t('ownerBoats.form.basic.namePlaceholder')}
-                    style={{
-                      ...inputStyle,
-                      borderColor: errors.name
-                        ? '#EF4444'
-                        : 'rgba(255,255,255,0.08)',
-                    }}
-                  />
-                  {errors.name && (
-                    <p className="mt-1 text-xs text-red-400">{errors.name}</p>
-                  )}
-                </div>
-                <div>
-                  <label
-                    className="mb-1.5 block text-xs font-medium"
-                    style={{ color: '#ecf0ff' }}
-                  >
-                    {t('ownerBoats.form.basic.type')} *
-                  </label>
-                  <select
-                    value={type}
-                    onChange={(e) => setType(e.target.value)}
-                    className="h-11 w-full rounded-lg border px-4 text-sm outline-none"
-                    style={inputStyle}
-                  >
-                    {boatTypes.map((bt) => {
-                      const localizedName = t(`ownerBoats.types.${bt.code}`);
-                      const displayName =
-                        localizedName &&
-                        !localizedName.startsWith('ownerBoats.types.')
-                          ? localizedName
-                          : i18n.language === 'en'
-                            ? bt.name_en
-                            : bt.name_vi;
-                      return (
-                        <option
-                          key={bt.code}
-                          value={bt.code}
-                          style={{ color: '#000' }}
-                        >
-                          {displayName}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-                <div>
-                  <label
-                    className="mb-1.5 block text-xs font-medium"
-                    style={{ color: '#ecf0ff' }}
-                  >
-                    {t('ownerBoats.form.basic.capacity')} *
-                  </label>
-                  <Input
-                    type="number"
-                    value={maxPassengers}
-                    onChange={(e) => setMaxPassengers(e.target.value)}
-                    placeholder={t('ownerBoats.form.basic.capacityPlaceholder')}
-                    style={{
-                      ...inputStyle,
-                      borderColor: errors.maxPassengers
-                        ? '#EF4444'
-                        : 'rgba(255,255,255,0.08)',
-                    }}
-                  />
-                  {errors.maxPassengers && (
-                    <p className="mt-1 text-xs text-red-400">
-                      {errors.maxPassengers}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
+            <BoatBasicInfoSection
+              name={name}
+              type={type}
+              maxPassengers={maxPassengers}
+              boatTypes={boatTypes}
+              errors={errors}
+              onNameChange={setName}
+              onTypeChange={setType}
+              onMaxPassengersChange={setMaxPassengers}
+            />
 
-            {/* Images section integrated into Info Tab */}
-            <div
-              className="rounded-2xl p-6"
-              style={{
-                backgroundColor: '#112240',
-                border: '1px solid rgba(255,255,255,0.04)',
-              }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h2
-                  className="text-base font-semibold"
-                  style={{ color: '#ffffff' }}
-                >
-                  Hình ảnh tàu
-                </h2>
-                {boatImages.length > 0 && (
-                  <label className="text-sm text-cyan-400 hover:text-cyan-300 font-semibold cursor-pointer flex items-center gap-1">
-                    + Thêm ảnh
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      className="hidden"
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                )}
-              </div>
-
-              {boatImages.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {boatImages.map((img, i) => (
-                    <div
-                      key={i}
-                      className="relative aspect-video rounded-xl overflow-hidden group border border-slate-800"
-                    >
-                      <img
-                        src={img.imageUrl}
-                        alt={`boat-image-${i}`}
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(i)}
-                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-lg"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div
-                  className="relative flex flex-col items-center rounded-xl border-2 border-dashed py-12 bg-slate-800/20 hover:border-cyan-500/50 transition-colors group cursor-pointer"
-                  style={{ borderColor: 'rgba(255,255,255,0.1)' }}
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    onChange={handleFileChange}
-                  />
-                  <ImageIcon
-                    size={40}
-                    style={{ color: 'rgba(0,240,255,0.3)' }}
-                    className="mb-4 group-hover:scale-110 transition-transform"
-                  />
-                  <p className="mt-3 text-sm" style={{ color: '#ecf0ff' }}>
-                    Kéo thả hoặc nhấn vào đây để tải ảnh tàu lên
-                  </p>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Hỗ trợ JPG, PNG (Tối đa 5MB)
-                  </p>
-                </div>
-              )}
-            </div>
+            <BoatImagesSection
+              images={boatImages}
+              onFileChange={handleFileChange}
+              onRemove={handleRemoveImage}
+            />
           </div>
         )}
 
