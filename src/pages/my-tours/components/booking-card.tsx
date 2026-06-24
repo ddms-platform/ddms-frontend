@@ -1,14 +1,17 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Users, MapPin } from 'lucide-react';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { bookingService } from '@/services/bookingService';
+import { toast } from 'sonner';
 
-export type BookingStatus = 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
 
 export interface Booking {
   id: string;
-  tourId: number;
+  tourId: string;
   tourTitle_vn: string;
   tourTitle_en: string;
   location_vn: string;
@@ -22,39 +25,109 @@ export interface Booking {
   createdAt: string;
 }
 
-interface BookingCardProps {
-  booking: Booking;
+interface BookingStatusBadgeProps {
+  status: BookingStatus;
+  className?: string;
 }
 
-export default function BookingCard({ booking }: BookingCardProps) {
-  const { t, i18n } = useTranslation();
-  const lang = i18n.language;
+function BookingStatusBadge({
+  status,
+  className = '',
+}: BookingStatusBadgeProps) {
+  const { t } = useTranslation();
 
-  // Status Badge Helper
   const getStatusConfig = (status: BookingStatus) => {
     switch (status) {
+      case 'PENDING':
+        return {
+          bg: 'rgba(245, 158, 11, 0.15)',
+          text: '#f59e0b',
+          label: t('dashboard.status.PENDING', 'Chờ thanh toán'),
+        };
       case 'UPCOMING':
         return {
           bg: '#e8f5e9',
           text: '#2e7d32',
-          label: t('dashboard.status.UPCOMING'),
+          label: t('dashboard.status.UPCOMING', 'Sắp khởi hành'),
         };
       case 'COMPLETED':
         return {
           bg: '#eef2ff',
           text: '#4338ca',
-          label: t('dashboard.status.COMPLETED'),
+          label: t('dashboard.status.COMPLETED', 'Đã hoàn thành'),
         };
       case 'CANCELLED':
         return {
           bg: 'rgba(255,255,255,0.1)',
           text: '#ecf0ff',
-          label: t('dashboard.status.CANCELLED'),
+          label: t('dashboard.status.CANCELLED', 'Đã hủy'),
         };
     }
   };
 
-  const statusConfig = getStatusConfig(booking.status);
+  const config = getStatusConfig(status);
+
+  return (
+    <span
+      className={`rounded-full px-2.5 text-xs font-semibold ${className}`}
+      style={{
+        backgroundColor: config.bg,
+        color: config.text,
+      }}
+    >
+      {config.label}
+    </span>
+  );
+}
+
+interface BookingCardProps {
+  booking: Booking;
+  onCancelSuccess?: () => void;
+}
+
+export default function BookingCard({
+  booking,
+  onCancelSuccess,
+}: BookingCardProps) {
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+
+  // Parse departure date to check refund eligibility (>= 48 hours away)
+  const departureDate = new Date(
+    `${booking.date}T${booking.time.split(' - ')[0]}`,
+  );
+  const now = new Date();
+  const timeDiff = departureDate.getTime() - now.getTime();
+  const hoursToDeparture = timeDiff / (1000 * 60 * 60);
+  const eligibleForRefund = hoursToDeparture >= 48;
+
+  const handleCancelBooking = async () => {
+    setIsCancelling(true);
+    try {
+      const res = await bookingService.cancelBooking(booking.id);
+      if (res.success) {
+        toast.success(
+          res.refunded
+            ? t('dashboard.cancelModal.successRefunded', {
+                price: formatPrice(booking.totalPrice),
+              })
+            : t('dashboard.cancelModal.successNoRefund'),
+        );
+        onCancelSuccess?.();
+      }
+    } catch (error: any) {
+      console.error('Cancel booking failed:', error);
+      toast.error(
+        error.response?.data?.message || t('dashboard.cancelModal.error'),
+      );
+    } finally {
+      setIsCancelling(false);
+      setIsCancelModalOpen(false);
+    }
+  };
 
   // Simple date format
   const formatDate = (dateStr: string) => {
@@ -90,15 +163,7 @@ export default function BookingCard({ booking }: BookingCardProps) {
         />
         {/* Mobile Badges overlay */}
         <div className="absolute left-3 top-3 sm:hidden">
-          <span
-            className="rounded-full px-2.5 py-1 text-xs font-semibold"
-            style={{
-              backgroundColor: statusConfig.bg,
-              color: statusConfig.text,
-            }}
-          >
-            {statusConfig.label}
-          </span>
+          <BookingStatusBadge status={booking.status} className="py-1" />
         </div>
       </div>
 
@@ -113,15 +178,10 @@ export default function BookingCard({ booking }: BookingCardProps) {
               >
                 {t('dashboard.bookingRef')}: #DDMS-{booking.id}
               </span>
-              <span
-                className="hidden rounded-full px-2.5 py-0.5 text-xs font-semibold sm:inline-block"
-                style={{
-                  backgroundColor: statusConfig.bg,
-                  color: statusConfig.text,
-                }}
-              >
-                {statusConfig.label}
-              </span>
+              <BookingStatusBadge
+                status={booking.status}
+                className="hidden py-0.5 sm:inline-block"
+              />
             </div>
             <h3
               className="text-lg font-bold leading-tight line-clamp-2"
@@ -208,8 +268,19 @@ export default function BookingCard({ booking }: BookingCardProps) {
           </span>
         </div>
         <div className="flex gap-2">
+          {booking.status === 'PENDING' && (
+            <Button variant="cyan" size="action" asChild>
+              <Link to={`/tours/${booking.tourId}/booking`}>
+                {t('dashboard.payNow', 'Thanh toán')}
+              </Link>
+            </Button>
+          )}
           {booking.status === 'UPCOMING' && (
-            <Button variant="dark-outline" size="action">
+            <Button
+              variant="dark-outline"
+              size="action"
+              onClick={() => setIsCancelModalOpen(true)}
+            >
               {t('dashboard.cancelBooking')}
             </Button>
           )}
@@ -221,12 +292,25 @@ export default function BookingCard({ booking }: BookingCardProps) {
         </div>
       </div>
 
-      <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30">
+      <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30 gap-2">
+        {booking.status === 'PENDING' && (
+          <Button
+            variant="cyan"
+            size="action"
+            className="w-full rounded-xl"
+            asChild
+          >
+            <Link to={`/tours/${booking.tourId}/booking`}>
+              {t('dashboard.payNow', 'Thanh toán')}
+            </Link>
+          </Button>
+        )}
         {booking.status === 'UPCOMING' && (
           <Button
             variant="dark-outline"
             size="action"
             className="w-full rounded-xl"
+            onClick={() => setIsCancelModalOpen(true)}
           >
             {t('dashboard.cancelBooking')}
           </Button>
@@ -250,6 +334,61 @@ export default function BookingCard({ booking }: BookingCardProps) {
           </Button>
         )}
       </div>
+
+      {/* Cancellation Modal */}
+      {isCancelModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+          <div
+            className="w-full max-w-md overflow-hidden rounded-2xl border p-6 shadow-2xl scale-in"
+            style={{
+              backgroundColor: '#112240',
+              borderColor: 'rgba(255, 255, 255, 0.12)',
+              color: '#ffffff',
+            }}
+          >
+            <h3 className="text-xl font-bold mb-4" style={{ color: '#00F0FF' }}>
+              {t('dashboard.cancelModal.title')}
+            </h3>
+            <div
+              className="text-sm leading-relaxed mb-6"
+              style={{ color: '#ecf0ff' }}
+            >
+              {eligibleForRefund ? (
+                <p>
+                  {t('dashboard.cancelModal.refundEligible', {
+                    price: formatPrice(booking.totalPrice),
+                  })}
+                </p>
+              ) : (
+                <p>{t('dashboard.cancelModal.noRefund')}</p>
+              )}
+            </div>
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="dark-outline"
+                onClick={() => setIsCancelModalOpen(false)}
+                disabled={isCancelling}
+              >
+                {t('dashboard.cancelModal.closeBtn')}
+              </Button>
+              <Button
+                variant="cyan"
+                onClick={handleCancelBooking}
+                disabled={isCancelling}
+                className={
+                  !eligibleForRefund
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white'
+                    : ''
+                }
+              >
+                {isCancelling
+                  ? t('dashboard.cancelModal.cancellingBtn')
+                  : t('dashboard.cancelModal.confirmBtn')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

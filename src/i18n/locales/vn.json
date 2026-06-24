@@ -107,22 +107,36 @@
     "welcome": "Quản lý các chuyến đi và lịch trình của bạn",
     "tabs": {
       "all": "Tất cả",
+      "pending": "Chờ thanh toán",
       "upcoming": "Sắp khởi hành",
       "completed": "Đã đi"
     },
     "status": {
+      "PENDING": "Chờ thanh toán",
       "UPCOMING": "Sắp khởi hành",
       "COMPLETED": "Hoàn tất",
       "CANCELLED": "Đã huỷ"
     },
     "bookingRef": "Mã đặt chỗ",
     "guests": "khách",
+    "payNow": "Thanh toán",
     "cancelBooking": "Huỷ chuyến",
     "writeReview": "Đánh giá",
     "viewDetails": "Xem chi tiết",
     "emptyTitle": "Chưa có chuyến đi nào được đặt... cả!",
     "emptyDescription": "Đã đến lúc phủi bụi hành lý và bắt đầu lên kế hoạch cho chuyến phiêu lưu tiếp theo.",
-    "exploreBtn": "Bắt đầu tìm kiếm"
+    "exploreBtn": "Bắt đầu tìm kiếm",
+    "cancelModal": {
+      "title": "Xác Nhận Hủy Đặt Tour",
+      "refundEligible": "Bạn có chắc chắn muốn hủy đặt tour này không? Tour của bạn sẽ được hủy và bạn sẽ được hoàn trả 100% số tiền {{price}} về ví vì thời gian hủy cách ngày khởi hành trên 2 ngày (48 tiếng).",
+      "noRefund": "Bạn có chắc chắn muốn hủy đặt tour này không? Lưu ý: Bạn sẽ KHÔNG ĐƯỢC HOÀN TIỀN vì thời gian hủy đến ngày khởi hành đã dưới 2 ngày (48 tiếng) - sát ngày khởi hành.",
+      "closeBtn": "Đóng",
+      "confirmBtn": "Xác nhận hủy",
+      "cancellingBtn": "Đang hủy...",
+      "successRefunded": "Đã hủy đặt tour thành công. Bạn được hoàn lại {{price}} về ví!",
+      "successNoRefund": "Đã hủy đặt tour thành công. (Không hoàn tiền do sát ngày khởi hành)",
+      "error": "Có lỗi xảy ra khi hủy đặt tour."
+    }
   },
   "common": {
     "loading": "Đang tải...",
@@ -602,11 +616,15 @@
   "ownerLayout": {
     "brand": "OWNER",
     "nav": {
-      "dashboard": "Dashboard",
-      "boats": "Quản lý Thuyền",
+      "dashboard": "Tổng quan",
+      "boats": "Quản lý Đội tàu",
+      "dockMap": "Sơ đồ bến",
+      "services": "Dịch vụ & Bảo trì",
+      "tourServices": "Dịch vụ Tour",
       "tours": "Quản lý Tour",
+      "revenue": "Thanh toán & Doanh thu",
       "bookings": "Booking",
-      "profile": "Hồ sơ doanh nghiệp"
+      "profile": "Cài đặt hệ thống"
     },
     "backHome": "Về trang chủ",
     "logout": "Đăng xuất",
@@ -748,6 +766,229 @@
         "add": "Thêm lịch",
         "empty": "Chưa có lịch bảo trì nào.",
         "default": "Bảo trì"
+      }
+    }
+  },
+  "boatTypes": {
+    "yacht": "Du thuyền",
+    "cruise": "Tàu du lịch",
+    "speedboat": "Ca nô",
+    "ferry": "Phà",
+    "sail": "Thuyền buồm",
+    "wooden": "Thuyền gỗ",
+    "restaurant": "Tàu nhà hàng",
+    "unclassified": "Chưa phân loại"
+  },
+  "profitChart": {
+    "title": "Xu hướng lợi nhuận",
+    "subtitle": "Dữ liệu tổng hợp từ hệ thống theo thời gian thực",
+    "month": "THÁNG",
+    "quarter": "QUÝ",
+    "year": "NĂM",
+    "export": "Export",
+    "csvTime": "Thời gian",
+    "csvRevenue": "Doanh thu (VNĐ)",
+    "csvFileName": "doanh_thu",
+    "months": {
+      "JAN": "Thg 1",
+      "FEB": "Thg 2",
+      "MAR": "Thg 3",
+      "APR": "Thg 4",
+      "MAY": "Thg 5",
+      "JUN": "Thg 6",
+      "JUL": "Thg 7",
+      "AUG": "Thg 8",
+      "SEP": "Thg 9",
+      "OCT": "Thg 10",
+      "NOV": "Thg 11",
+      "DEC": "Thg 12"
+    }
+  },
+  "adminMaintenance": {
+    "title": "Phê duyệt Yêu cầu Bảo trì (Admin)",
+    "subtitle": "Xem xét và duyệt các đăng ký dịch vụ bảo trì từ chủ thuyền gửi đến Siêu Cảng Marina Đà Nẵng.",
+    "searchPlaceholder": "Tìm kiếm theo tên tàu, dịch vụ...",
+    "showCount": "Hiển thị {{count}} trên {{total}} yêu cầu",
+    "emptyFiltered": "Không tìm thấy yêu cầu nào phù hợp.",
+    "empty": "Chưa có yêu cầu bảo trì nào cần duyệt.",
+    "scheduledDate": "Ngày hẹn sửa chữa",
+    "estimatedEndTime": "Thời gian hoàn thành dự kiến",
+    "reason": "Lý do bảo trì",
+    "requestTime": "Yêu cầu khởi tạo lúc: {{time}}",
+    "reject": "Từ chối",
+    "approve": "Duyệt",
+    "toast": {
+      "fetchError": "Không thể tải danh sách yêu cầu bảo trì",
+      "approveSuccess": "Đã phê duyệt yêu cầu bảo trì",
+      "approveError": "Phê duyệt thất bại",
+      "rejectSuccess": "Đã từ chối yêu cầu bảo trì",
+      "rejectError": "Từ chối thất bại"
+    }
+  },
+  "maintenanceServices": {
+    "title": "Đăng ký Dịch vụ & Bảo trì",
+    "subtitle": "Hệ thống quản lý bảo trì chuyên nghiệp cho đội tàu của bạn.",
+    "step1": "Chọn tàu cần cung cấp dịch vụ",
+    "step2": "Chọn loại dịch vụ cần thực hiện",
+    "boatsCount": "Có {{count}} tàu đang neo đậu",
+    "loadingBoats": "Đang tải danh sách tàu...",
+    "emptyBoats": "Bạn chưa có tàu nào.",
+    "loadingServices": "Đang tải danh mục dịch vụ...",
+    "summaryTitle": "Tóm tắt yêu cầu",
+    "selectedBoat": "TÀU ĐÃ CHỌN",
+    "noBoatSelected": "Chưa chọn tàu",
+    "servicesCount": "DỊCH VỤ ({{count}})",
+    "noServicesSelected": "Chưa chọn dịch vụ nào",
+    "priceSurvey": "Khảo sát báo giá",
+    "totalEstimate": "Tổng cộng ước tính",
+    "confirmBtn": "Xác nhận đăng ký",
+    "cancelBtn": "Hủy bỏ",
+    "supportTitle": "Cần hỗ trợ kỹ thuật?",
+    "supportDesc": "Liên hệ đội ngũ kỹ thuật Marina Command qua Hotline: 1900 1234 hoặc kênh chat nội bộ để được tư vấn trực tiếp về các gói bảo trì chuyên sâu.",
+    "boatStatus": {
+      "idle": "HOẠT ĐỘNG",
+      "maintenance": "CẦN BẢO TRÌ",
+      "broken": "HỎNG HÓC",
+      "in_use": "ĐANG CHẠY"
+    },
+    "pierSlot": "{{pier}} • Khoang {{slot}}",
+    "notDocked": "Chưa xếp bến",
+    "toast": {
+      "fetchError": "Không thể tải dữ liệu",
+      "selectBoatError": "Vui lòng chọn tàu",
+      "selectServiceError": "Vui lòng chọn ít nhất 1 dịch vụ",
+      "registerSuccess": "Đăng ký dịch vụ thành công!"
+    }
+  },
+  "ownerTours": {
+    "title": "Quản lý Tour",
+    "loadingData": "Đang tải dữ liệu...",
+    "stats": {
+      "title": "Phân tích Doanh thu & Lượt đặt (Theo Tour)",
+      "bookingsCount": "Lượt đặt chỗ (Theo Tour)",
+      "bookingsCountUnit": "{{count}} lượt",
+      "bookingsCountLabel": "Lượt đặt: ",
+      "totalRevenue": "Doanh thu VNĐ (Theo Tour)",
+      "totalRevenueLabel": "Doanh thu: ",
+      "noData": "Chưa có dữ liệu"
+    },
+    "calendar": {
+      "title": "Lịch Trình Sự Kiện - Tháng {{month}}, {{year}}",
+      "viewMonth": "THÁNG",
+      "viewWeek": "TUẦN",
+      "viewDay": "NGÀY",
+      "createTourBtn": "TẠO TOUR",
+      "weekdays": {
+        "monday": "Thứ 2",
+        "tuesday": "Thứ 3",
+        "wednesday": "Thứ 4",
+        "thursday": "Thứ 5",
+        "friday": "Thứ 6",
+        "saturday": "Thứ 7",
+        "sunday": "Chủ Nhật"
+      },
+      "next7DaysTitle": "Lịch trình 7 ngày tới",
+      "noSchedulesNext7Days": "Không có lịch trình nào trong tuần tới.",
+      "todayTitle": "Lịch trình Hôm nay ({{date}})",
+      "noSchedulesToday": "Không có lịch trình nào trong hôm nay."
+    },
+    "recentBookings": {
+      "title": "Danh sách Đặt chỗ Gần đây",
+      "viewAll": "XEM TẤT CẢ",
+      "tableHeaders": {
+        "bookingId": "MÃ ĐƠN",
+        "customer": "KHÁCH HÀNG",
+        "serviceBoat": "DỊCH VỤ / TÀU",
+        "time": "THỜI GIAN",
+        "value": "GIÁ TRỊ",
+        "status": "TRẠNG THÁI",
+        "action": "HÀNH ĐỘNG"
+      },
+      "empty": "Chưa có lượt đặt nào gần đây.",
+      "boatPrefix": "Tàu: {{name}}",
+      "status": {
+        "paid": "ĐÃ THANH TOÁN",
+        "pending": "CHỜ XỬ LÝ",
+        "cancelled": "ĐÃ HỦY"
+      },
+      "actions": {
+        "noAction": "Không có hành động",
+        "confirm": "Xác nhận",
+        "reject": "Từ chối",
+        "complete": "Hoàn thành",
+        "cancel": "Hủy đơn"
+      }
+    },
+    "createModal": {
+      "title": "Tạo Lịch Trình Tour",
+      "selectBoat": "Chọn Tàu",
+      "selectBoatPlaceholder": "-- Chọn tàu của bạn --",
+      "selectTour": "Chọn Tour (Chỉ Tour đã được Admin duyệt)",
+      "selectTourPlaceholder": "-- Chọn Tour --",
+      "noTourWarning": "Tàu này chưa có Tour nào được Admin duyệt. Hãy đợi duyệt hoặc đăng ký thêm ở Quản lý Tàu.",
+      "startDate": "Ngày diễn ra",
+      "startTime": "Giờ xuất phát",
+      "endDate": "Ngày kết thúc",
+      "endTime": "Giờ kết thúc",
+      "cancelBtn": "Hủy",
+      "saveBtn": "Lưu Lịch Trình",
+      "savingBtn": "Đang tạo...",
+      "validationError": "Vui lòng điền đầy đủ thông tin ngày/giờ bắt đầu và kết thúc!",
+      "createSuccess": "Tạo lịch trình tour thành công!",
+      "createError": "Lỗi khi tạo lịch trình",
+      "connectionError": "Lỗi kết nối khi tạo lịch trình"
+    },
+    "cancelModal": {
+      "title": "Hủy / Từ chối Đơn Đặt",
+      "warningMessage": "Bạn đang yêu cầu hủy đơn đặt chỗ #{{bookingId}} của khách hàng {{customerName}}.",
+      "reasonLabel": "Lý do hủy đơn (Bắt buộc)",
+      "reasonPlaceholder": "Nhập lý do chi tiết...",
+      "cancelBtn": "Hủy bỏ",
+      "confirmCancelBtn": "Xác nhận Hủy"
+    }
+  },
+  "wallet": {
+    "title": "Ví Của Tôi",
+    "subtitle": "Quản lý số dư hoàn tiền của bạn và thực hiện yêu cầu rút tiền về ngân hàng.",
+    "updateBtn": "Cập nhật",
+    "balanceCard": {
+      "title": "Số Dư Ví",
+      "available": "Tài khoản khả dụng"
+    },
+    "form": {
+      "title": "Yêu Cầu Rút Tiền Về Ngân Hàng",
+      "bankName": "Tên Ngân Hàng",
+      "bankNamePlaceholder": "Ví dụ: Vietcombank, MB Bank...",
+      "accountNumber": "Số Tài Khoản",
+      "accountNumberPlaceholder": "Nhập số tài khoản",
+      "accountName": "Tên Chủ Tài Khoản (Không Dấu)",
+      "accountNamePlaceholder": "Ví dụ: NGUYEN VAN A",
+      "amount": "Số Tiền Rút (đ)",
+      "amountPlaceholder": "Nhập số tiền muốn rút",
+      "maxWithdraw": "Tối đa có thể rút: {{balance}}",
+      "maxWithdrawBtn": "Rút tối đa",
+      "submitBtn": "Gửi yêu cầu rút tiền",
+      "submittingBtn": "Đang xử lý yêu cầu...",
+      "validation": {
+        "fetchError": "Không thể tải thông tin ví của bạn.",
+        "amountError": "Số tiền rút phải lớn hơn 0.",
+        "insufficientBalance": "Số dư ví không đủ.",
+        "emptyBankInfo": "Vui lòng nhập đầy đủ thông tin ngân hàng.",
+        "successToast": "Yêu cầu rút tiền {{amount}} đang được xử lý!",
+        "errorToast": "Yêu cầu rút tiền thất bại."
+      }
+    },
+    "history": {
+      "title": "Lịch Sử Rút Tiền",
+      "bank": "Ngân hàng:",
+      "account": "Tài khoản:",
+      "holder": "Chủ TK:",
+      "date": "Ngày yêu cầu:",
+      "empty": "Chưa có giao dịch rút tiền nào.",
+      "status": {
+        "pending": "Đang xử lý",
+        "approved": "Thành công",
+        "rejected": "Từ chối"
       }
     }
   }

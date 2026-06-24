@@ -3,10 +3,10 @@ import {
   Ship,
   Map,
   CalendarCheck,
-  User,
   Home,
   LogOut,
   Anchor,
+  CreditCard,
 } from 'lucide-react';
 import type { JSX } from 'react';
 import { routeName } from '@/constants/route-name';
@@ -40,9 +40,14 @@ export const ownerSidelinks: SideLink[] = [
     icon: <Ship size={20} />,
   },
   {
-    title: 'ownerLayout.nav.docks',
-    href: '/owner/docks',
+    title: 'ownerLayout.nav.dockMap',
+    href: '/owner/dock-map',
     icon: <Anchor size={20} />,
+  },
+  {
+    title: 'ownerLayout.nav.services',
+    href: '/owner/services',
+    icon: <CalendarCheck size={20} />,
   },
   {
     title: 'ownerLayout.nav.tours',
@@ -50,14 +55,9 @@ export const ownerSidelinks: SideLink[] = [
     icon: <Map size={20} />,
   },
   {
-    title: 'ownerLayout.nav.bookings',
-    href: routeName.ownerBookings,
-    icon: <CalendarCheck size={20} />,
-  },
-  {
-    title: 'ownerLayout.nav.profile',
-    href: routeName.ownerProfile,
-    icon: <User size={20} />,
+    title: 'ownerLayout.nav.revenue',
+    href: '/owner/revenue',
+    icon: <CreditCard size={20} />,
   },
 ];
 

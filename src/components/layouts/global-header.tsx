@@ -7,6 +7,7 @@ import {
   MapPin,
   ChevronDown,
   LayoutDashboard,
+  Wallet,
 } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';
@@ -104,7 +105,7 @@ export default function GlobalHeader({
         <div className="flex items-center gap-4">
           <TranslationToggle />
 
-          {!isOwner && (
+          {!isOwner && !user?.hasOwnerProfile && (
             <Link
               to={routeName.becomeOwner}
               className="hidden items-center rounded-full px-3 py-2 text-sm font-semibold transition-colors hover:bg-white/5 hover:text-[#00F0FF] sm:inline-flex"
@@ -223,6 +224,16 @@ export default function GlobalHeader({
                   >
                     <MapPin size={16} />
                     {t('header.user.myTours')}
+                  </Link>
+                  <Link
+                    to={routeName.wallet}
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
+                    style={{ color: '#ecf0ff' }}
+                    role="menuitem"
+                  >
+                    <Wallet size={16} />
+                    Ví của tôi
                   </Link>
 
                   <div

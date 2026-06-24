@@ -1,5 +1,5 @@
 import api from './api';
-import type { BoatCabin } from './boatService';
+import type { BoatCabin, ApiResponse } from './boatService';
 
 export interface CreateCabinDto {
   name: string;
@@ -10,17 +10,28 @@ export interface CreateCabinDto {
 }
 
 export const cabinService = {
-  getAll: (boatId: string) => api.get<BoatCabin[]>(`/boats/${boatId}/cabins`).then((r) => r.data),
+  getAll: (boatId: string) =>
+    api
+      .get<ApiResponse<BoatCabin[]>>(`/admin/boats/${boatId}/cabins`)
+      .then((r) => r.data.result),
 
   getById: (boatId: string, id: string) =>
-    api.get<BoatCabin>(`/boats/${boatId}/cabins/${id}`).then((r) => r.data),
+    api
+      .get<ApiResponse<BoatCabin>>(`/admin/boats/${boatId}/cabins/${id}`)
+      .then((r) => r.data.result),
 
   create: (boatId: string, dto: CreateCabinDto) =>
-    api.post<BoatCabin>(`/boats/${boatId}/cabins`, dto).then((r) => r.data),
+    api
+      .post<ApiResponse<BoatCabin>>(`/admin/boats/${boatId}/cabins`, dto)
+      .then((r) => r.data.result),
 
   update: (boatId: string, id: string, dto: CreateCabinDto) =>
-    api.put<BoatCabin>(`/boats/${boatId}/cabins/${id}`, dto).then((r) => r.data),
+    api
+      .put<ApiResponse<BoatCabin>>(`/admin/boats/${boatId}/cabins/${id}`, dto)
+      .then((r) => r.data.result),
 
   delete: (boatId: string, id: string) =>
-    api.delete(`/boats/${boatId}/cabins/${id}`).then((r) => r.data),
+    api
+      .delete<ApiResponse<any>>(`/admin/boats/${boatId}/cabins/${id}`)
+      .then((r) => r.data.result),
 };

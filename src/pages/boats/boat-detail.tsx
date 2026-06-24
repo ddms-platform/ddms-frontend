@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -19,6 +20,8 @@ import { StatusBadge } from '@/components/badges';
 import ImageCarousel from '@/components/shared/image-carousel';
 import { Button } from '@/components/ui/button';
 import { routeName } from '@/constants/route-name';
+import { boatService, type Boat } from '@/services/boatService';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 interface BoatSpec {
   icon: React.ElementType;
@@ -26,17 +29,27 @@ interface BoatSpec {
   value: string;
 }
 
-interface BoatAmenity {
-  icon: string;
-  label: string;
-}
-
-const MOCK_BOATS_DATA: Record<string, any> = {};
-
 export default function BoatDetailPage() {
   const { t } = useTranslation();
   const { boatId } = useParams();
-  const boat = MOCK_BOATS_DATA[boatId || ''];
+
+  const [boat, setBoat] = useState<Boat | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!boatId) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoading(true);
+    boatService
+      .getByIdPublic(boatId)
+      .then((data) => setBoat(data))
+      .catch((err) => console.error('Failed to load boat:', err))
+      .finally(() => setLoading(false));
+  }, [boatId]);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   if (!boat) {
     return (
@@ -78,14 +91,14 @@ export default function BoatDetailPage() {
     {
       icon: Users,
       label: t('boatDetail.specs.capacity'),
-      value: `${boat.capacity} ${t('booking.guests.people')}`,
+      value: `${boat.maxPassengers} ${t('booking.guests.people')}`,
     },
-    { icon: Gauge, label: t('boatDetail.specs.speed'), value: boat.speed },
-    { icon: Anchor, label: t('boatDetail.specs.length'), value: boat.length },
+    { icon: Gauge, label: t('boatDetail.specs.speed'), value: 'N/A' },
+    { icon: Anchor, label: t('boatDetail.specs.length'), value: 'N/A' },
     {
       icon: Calendar,
       label: t('boatDetail.specs.yearBuilt'),
-      value: `${boat.yearBuilt}`,
+      value: new Date(boat.createdAt).getFullYear().toString(),
     },
   ];
 
@@ -101,14 +114,16 @@ export default function BoatDetailPage() {
       />
 
       {/* Hero Gallery */}
-      <div className="mt-4">
-        <ImageCarousel
-          images={boat.images}
-          getAltText={(i) =>
-            `${boat.name} - ${t('tour.gallery.photo')} ${i + 1}`
-          }
-        />
-      </div>
+      {boat.images && boat.images.length > 0 && (
+        <div className="mt-4">
+          <ImageCarousel
+            images={boat.images.map((img) => img.imageUrl)}
+            getAltText={(i) =>
+              `${boat.name} - ${t('tour.gallery.photo')} ${i + 1}`
+            }
+          />
+        </div>
+      )}
 
       {/* Header */}
       <div className="mt-6 flex flex-wrap items-start justify-between gap-4">
@@ -120,15 +135,17 @@ export default function BoatDetailPage() {
             >
               {boat.name}
             </h1>
-            <span
-              className="rounded-md px-2.5 py-1 text-xs font-semibold"
-              style={{
-                backgroundColor: 'rgba(0,240,255,0.12)',
-                color: '#00F0FF',
-              }}
-            >
-              {boatTypeLabel}
-            </span>
+            {boat.type && (
+              <span
+                className="rounded-md px-2.5 py-1 text-xs font-semibold"
+                style={{
+                  backgroundColor: 'rgba(0,240,255,0.12)',
+                  color: '#00F0FF',
+                }}
+              >
+                {boatTypeLabel}
+              </span>
+            )}
           </div>
           <p
             className="mt-2 flex items-center gap-1.5 text-sm"
@@ -142,11 +159,11 @@ export default function BoatDetailPage() {
         <div className="flex items-center gap-4">
           <StatusBadge
             label={
-              boat.available
+              boat.status === 'running'
                 ? t('booking.boat.available')
                 : t('booking.boat.unavailable')
             }
-            variant={boat.available ? 'available' : 'unavailable'}
+            variant={boat.status === 'running' ? 'available' : 'unavailable'}
           />
           <div
             className="flex items-center gap-2 rounded-xl px-4 py-2"
@@ -154,10 +171,10 @@ export default function BoatDetailPage() {
           >
             <Star size={16} fill="#FFD700" style={{ color: '#FFD700' }} />
             <span className="text-base font-bold" style={{ color: '#ffffff' }}>
-              {boat.rating}
+              5.0
             </span>
             <span className="text-xs" style={{ color: '#ecf0ff' }}>
-              ({boat.totalTrips} {t('boatDetail.trips')})
+              (0 {t('boatDetail.trips')})
             </span>
           </div>
         </div>
@@ -218,42 +235,13 @@ export default function BoatDetailPage() {
               className="mt-3 text-sm leading-relaxed"
               style={{ color: '#ecf0ff' }}
             >
-              {boat.longDescription}
+              Thuyền {boat.name} cung cấp trải nghiệm tuyệt vời. Sức chứa tối đa
+              lên đến {boat.maxPassengers} khách.
             </p>
           </div>
 
-          {/* Amenities */}
-          <div
-            className="rounded-2xl p-6"
-            style={{ backgroundColor: '#112240' }}
-          >
-            <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
-              {t('boatDetail.amenities')}
-            </h2>
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {boat.amenities.map((amenity, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 rounded-xl p-3 transition-all hover:scale-[1.02]"
-                  style={{
-                    backgroundColor: 'rgba(0,240,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                  }}
-                >
-                  <span className="text-lg">{amenity.icon}</span>
-                  <span
-                    className="text-sm font-medium"
-                    style={{ color: '#ffffff' }}
-                  >
-                    {amenity.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Schedule */}
-          {boat.schedule.length > 0 && (
+          {/* Amenities (Services) */}
+          {boat.services && boat.services.length > 0 && (
             <div
               className="rounded-2xl p-6"
               style={{ backgroundColor: '#112240' }}
@@ -262,29 +250,29 @@ export default function BoatDetailPage() {
                 className="text-lg font-semibold"
                 style={{ color: '#ffffff' }}
               >
-                {t('boatDetail.schedule')}
+                {t('boatDetail.amenities')}
               </h2>
-              <div className="mt-4 space-y-3">
-                {boat.schedule.map((s, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between rounded-xl p-3"
-                    style={{
-                      backgroundColor: 'rgba(255,255,255,0.03)',
-                      border: '1px solid rgba(255,255,255,0.06)',
-                    }}
-                  >
-                    <span
-                      className="text-sm font-medium"
-                      style={{ color: '#ffffff' }}
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {boat.services
+                  .filter((s) => s.isActive)
+                  .map((service) => (
+                    <div
+                      key={service.id}
+                      className="flex items-center gap-3 rounded-xl p-3 transition-all hover:scale-[1.02]"
+                      style={{
+                        backgroundColor: 'rgba(0,240,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                      }}
                     >
-                      {s.day}
-                    </span>
-                    <span className="text-sm" style={{ color: '#00F0FF' }}>
-                      {s.time}
-                    </span>
-                  </div>
-                ))}
+                      <span className="text-lg">⭐</span>
+                      <span
+                        className="text-sm font-medium"
+                        style={{ color: '#ffffff' }}
+                      >
+                        {service.name}
+                      </span>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
@@ -317,14 +305,14 @@ export default function BoatDetailPage() {
                     color: '#0A192F',
                   }}
                 >
-                  {boat.captain.name.charAt(0)}
+                  C
                 </div>
                 <div>
                   <p className="font-semibold" style={{ color: '#ffffff' }}>
-                    {boat.captain.name}
+                    Captain
                   </p>
                   <p className="text-xs" style={{ color: '#ecf0ff' }}>
-                    {boat.captain.experience}
+                    N/A
                   </p>
                 </div>
               </div>
@@ -366,7 +354,7 @@ export default function BoatDetailPage() {
                   className="mt-1 text-lg font-bold"
                   style={{ color: '#ffffff' }}
                 >
-                  {boat.totalTrips.toLocaleString()}
+                  0
                 </p>
                 <p className="text-xs" style={{ color: '#ecf0ff' }}>
                   {t('boatDetail.totalTrips')}
@@ -386,7 +374,7 @@ export default function BoatDetailPage() {
                   className="mt-1 text-lg font-bold"
                   style={{ color: '#ffffff' }}
                 >
-                  {boat.rating}
+                  5.0
                 </p>
                 <p className="text-xs" style={{ color: '#ecf0ff' }}>
                   {t('boatDetail.rating')}
@@ -400,7 +388,7 @@ export default function BoatDetailPage() {
             />
 
             {/* CTA */}
-            {boat.available ? (
+            {boat.status === 'running' ? (
               <div className="space-y-3">
                 <Button
                   variant="cyan"

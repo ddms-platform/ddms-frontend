@@ -70,7 +70,7 @@ export default function BecomeOwnerPage() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                to={routeName.signUp}
+                to={routeName.ownerRegistration}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
                 style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
               >
@@ -215,7 +215,7 @@ export default function BecomeOwnerPage() {
               {t('becomeOwner.requirements.subtitle')}
             </p>
             <Link
-              to={routeName.signUp}
+              to={routeName.ownerRegistration}
               className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
               style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
             >

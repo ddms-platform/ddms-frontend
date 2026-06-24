@@ -15,12 +15,13 @@ export interface AuthContextType {
   user: User | null;
   login: (token: string, user: User) => void;
   logout: () => void;
+  reloadUser: () => Promise<void>;
 }
 
 const TOKEN_KEY = localStorageKey.ACCESS_TOKEN;
 const USER_KEY = localStorageKey.USER;
 const REFRESH_TOKEN_KEY = localStorageKey.REFRESH_TOKEN;
-const USER_ROLES: UserRole[] = ['user', 'owner'];
+const USER_ROLES: UserRole[] = ['user', 'owner', 'admin'];
 
 function isUserRole(role: unknown): role is UserRole {
   return typeof role === 'string' && USER_ROLES.includes(role as UserRole);
@@ -46,9 +47,14 @@ function normalizeUser(rawUser: unknown): User | null {
     name,
     email,
     roles: roles.length > 0 ? roles : ['user'],
-    ...(typeof user.avatar_url === 'string'
+    ...(typeof user.avatar_url === 'string' && user.avatar_url !== 'null'
       ? { avatar_url: user.avatar_url }
-      : {}),
+      : typeof user.avatarUrl === 'string' && user.avatarUrl !== 'null'
+        ? { avatar_url: user.avatarUrl }
+        : {}),
+    ...(typeof user.phone === 'string' ? { phone: user.phone } : {}),
+    ...(typeof user.address === 'string' ? { address: user.address } : {}),
+    ...(user.hasOwnerProfile === true ? { hasOwnerProfile: true } : {}),
   };
 }
 
@@ -114,6 +120,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const reloadUser = useCallback(async () => {
+    try {
+      const res = await AuthServices.getProfile();
+      if (res.status === 200 && res.data?.code === 1000 && res.data.result) {
+        const fresh = normalizeUser(res.data.result);
+        if (fresh) {
+          setUser(fresh);
+          localStorage.setItem(USER_KEY, JSON.stringify(fresh));
+        }
+      }
+    } catch (err) {
+      console.error('Failed to reload user', err);
+    }
+  }, []);
+
   const login = useCallback((newToken: string, newUser: User) => {
     const normalizedUser = normalizeUser(newUser);
     if (!normalizedUser) return;
@@ -133,8 +154,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ isAuthenticated, user, login, logout }),
-    [isAuthenticated, user, login, logout],
+    () => ({ isAuthenticated, user, login, logout, reloadUser }),
+    [isAuthenticated, user, login, logout, reloadUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

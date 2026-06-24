@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Search,
@@ -8,314 +8,16 @@ import {
   Heart,
   SlidersHorizontal,
   X,
+  Loader2,
 } from 'lucide-react';
 import Pagination from '@/components/shared/pagination';
-import { formatPrice, getLocalizedField } from '@/lib/utils';
-import { usePagination } from '@/hooks/use-pagination';
+import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-
-const ALL_TOURS = [
-  {
-    id: 1,
-    image:
-      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop',
-    title_vn: 'Tour Sông Hàn Về Đêm',
-    title_en: 'Han River Night Tour',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 350000,
-    rating: 4.9,
-    reviews: 128,
-    duration_vn: '2 giờ',
-    duration_en: '2 hours',
-    category: 'cruise',
-  },
-  {
-    id: 2,
-    image:
-      'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&h=400&fit=crop',
-    title_vn: 'Khám Phá Ngũ Hành Sơn',
-    title_en: 'Marble Mountains Discovery',
-    location_vn: 'Ngũ Hành Sơn, Đà Nẵng',
-    location_en: 'Marble Mountains, Da Nang',
-    price: 500000,
-    rating: 4.8,
-    reviews: 96,
-    duration_vn: '3 giờ',
-    duration_en: '3 hours',
-    category: 'sightseeing',
-  },
-  {
-    id: 3,
-    image:
-      'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?w=600&h=400&fit=crop',
-    title_vn: 'Du Thuyền Cầu Rồng',
-    title_en: 'Dragon Bridge Cruise',
-    location_vn: 'Cầu Rồng, Đà Nẵng',
-    location_en: 'Dragon Bridge, Da Nang',
-    price: 450000,
-    rating: 4.7,
-    reviews: 203,
-    duration_vn: '2.5 giờ',
-    duration_en: '2.5 hours',
-    category: 'cruise',
-  },
-  {
-    id: 4,
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&h=400&fit=crop',
-    title_vn: 'Tour Hoàng Hôn Sông Hàn',
-    title_en: 'Han River Sunset Tour',
-    location_vn: 'Bến Bạch Đằng, Đà Nẵng',
-    location_en: 'Bach Dang Wharf, Da Nang',
-    price: 400000,
-    rating: 4.9,
-    reviews: 167,
-    duration_vn: '1.5 giờ',
-    duration_en: '1.5 hours',
-    category: 'sunset',
-  },
-  {
-    id: 5,
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop',
-    title_vn: 'Tiệc BBQ Trên Thuyền',
-    title_en: 'BBQ Party on Boat',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 750000,
-    rating: 4.6,
-    reviews: 54,
-    duration_vn: '3 giờ',
-    duration_en: '3 hours',
-    category: 'dinner',
-  },
-  {
-    id: 6,
-    image:
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop',
-    title_vn: 'Tour Gia Đình Sông Hàn',
-    title_en: 'Han River Family Tour',
-    location_vn: 'Bến Bạch Đằng, Đà Nẵng',
-    location_en: 'Bach Dang Wharf, Da Nang',
-    price: 300000,
-    rating: 4.8,
-    reviews: 89,
-    duration_vn: '2 giờ',
-    duration_en: '2 hours',
-    category: 'family',
-  },
-  {
-    id: 7,
-    image:
-      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&h=400&fit=crop',
-    title_vn: 'Party Boat Đà Nẵng',
-    title_en: 'Da Nang Party Boat',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 600000,
-    rating: 4.5,
-    reviews: 72,
-    duration_vn: '4 giờ',
-    duration_en: '4 hours',
-    category: 'party',
-  },
-  {
-    id: 8,
-    image:
-      'https://images.unsplash.com/photo-1468413253725-0d5181091126?w=600&h=400&fit=crop',
-    title_vn: 'Ngắm Bình Minh Trên Sông',
-    title_en: 'River Sunrise Tour',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 280000,
-    rating: 4.9,
-    reviews: 41,
-    duration_vn: '1.5 giờ',
-    duration_en: '1.5 hours',
-    category: 'sightseeing',
-  },
-  {
-    id: 9,
-    image:
-      'https://images.unsplash.com/photo-1520942702018-0862200e6873?w=600&h=400&fit=crop',
-    title_vn: 'Tour Cù Lao Chàm',
-    title_en: 'Cham Island Tour',
-    location_vn: 'Cù Lao Chàm, Hội An',
-    location_en: 'Cham Island, Hoi An',
-    price: 900000,
-    rating: 4.8,
-    reviews: 112,
-    duration_vn: '8 giờ',
-    duration_en: '8 hours',
-    category: 'cruise',
-  },
-  {
-    id: 10,
-    image:
-      'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&h=400&fit=crop',
-    title_vn: 'Hoàng Hôn Bãi Biển Mỹ Khê',
-    title_en: 'My Khe Beach Sunset',
-    location_vn: 'Mỹ Khê, Đà Nẵng',
-    location_en: 'My Khe, Da Nang',
-    price: 250000,
-    rating: 4.7,
-    reviews: 63,
-    duration_vn: '1.5 giờ',
-    duration_en: '1.5 hours',
-    category: 'sunset',
-  },
-  {
-    id: 11,
-    image:
-      'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&h=400&fit=crop',
-    title_vn: 'Du Thuyền VIP Sông Hàn',
-    title_en: 'VIP Han River Cruise',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 1200000,
-    rating: 4.9,
-    reviews: 34,
-    duration_vn: '3 giờ',
-    duration_en: '3 hours',
-    category: 'dinner',
-  },
-  {
-    id: 12,
-    image:
-      'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=600&h=400&fit=crop',
-    title_vn: 'Tour Chèo SUP Sông Hàn',
-    title_en: 'Han River SUP Tour',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 350000,
-    rating: 4.6,
-    reviews: 47,
-    duration_vn: '2 giờ',
-    duration_en: '2 hours',
-    category: 'family',
-  },
-  {
-    id: 13,
-    image:
-      'https://images.unsplash.com/photo-1517627043994-b991abb62fc8?w=600&h=400&fit=crop',
-    title_vn: 'Đêm Nhạc Trên Du Thuyền',
-    title_en: 'Live Music Cruise Night',
-    location_vn: 'Bến Bạch Đằng, Đà Nẵng',
-    location_en: 'Bach Dang Wharf, Da Nang',
-    price: 550000,
-    rating: 4.4,
-    reviews: 28,
-    duration_vn: '3 giờ',
-    duration_en: '3 hours',
-    category: 'party',
-  },
-  {
-    id: 14,
-    image:
-      'https://images.unsplash.com/photo-1528127269322-539801943592?w=600&h=400&fit=crop',
-    title_vn: 'Tour Cầu Vàng Bà Nà',
-    title_en: 'Golden Bridge Ba Na Tour',
-    location_vn: 'Bà Nà Hills, Đà Nẵng',
-    location_en: 'Ba Na Hills, Da Nang',
-    price: 800000,
-    rating: 4.9,
-    reviews: 256,
-    duration_vn: '6 giờ',
-    duration_en: '6 hours',
-    category: 'sightseeing',
-  },
-  {
-    id: 15,
-    image:
-      'https://images.unsplash.com/photo-1504681869696-d977211a5f4c?w=600&h=400&fit=crop',
-    title_vn: 'Tour Câu Cá Sông Hàn',
-    title_en: 'Han River Fishing Tour',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 320000,
-    rating: 4.3,
-    reviews: 19,
-    duration_vn: '4 giờ',
-    duration_en: '4 hours',
-    category: 'family',
-  },
-  {
-    id: 16,
-    image:
-      'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&h=400&fit=crop',
-    title_vn: 'Ăn Tối Trên Sông Hàn',
-    title_en: 'Dinner on Han River',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 680000,
-    rating: 4.7,
-    reviews: 85,
-    duration_vn: '2.5 giờ',
-    duration_en: '2.5 hours',
-    category: 'dinner',
-  },
-  {
-    id: 17,
-    image:
-      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=400&fit=crop',
-    title_vn: 'Sunrise Tour Sơn Trà',
-    title_en: 'Son Tra Sunrise Tour',
-    location_vn: 'Bán đảo Sơn Trà, Đà Nẵng',
-    location_en: 'Son Tra Peninsula, Da Nang',
-    price: 380000,
-    rating: 4.8,
-    reviews: 73,
-    duration_vn: '3 giờ',
-    duration_en: '3 hours',
-    category: 'sightseeing',
-  },
-  {
-    id: 18,
-    image:
-      'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&h=400&fit=crop',
-    title_vn: 'Du Thuyền Đêm Trăng',
-    title_en: 'Moonlight Cruise',
-    location_vn: 'Sông Hàn, Đà Nẵng',
-    location_en: 'Han River, Da Nang',
-    price: 420000,
-    rating: 4.6,
-    reviews: 58,
-    duration_vn: '2 giờ',
-    duration_en: '2 hours',
-    category: 'cruise',
-  },
-  {
-    id: 19,
-    image:
-      'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=600&h=400&fit=crop',
-    title_vn: 'Pool Party Thuyền Buồm',
-    title_en: 'Sailboat Pool Party',
-    location_vn: 'Biển Mỹ Khê, Đà Nẵng',
-    location_en: 'My Khe Beach, Da Nang',
-    price: 850000,
-    rating: 4.5,
-    reviews: 31,
-    duration_vn: '5 giờ',
-    duration_en: '5 hours',
-    category: 'party',
-  },
-  {
-    id: 20,
-    image:
-      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop',
-    title_vn: 'Tour Gia Đình Cù Lao Chàm',
-    title_en: 'Cham Island Family Tour',
-    location_vn: 'Cù Lao Chàm, Hội An',
-    location_en: 'Cham Island, Hoi An',
-    price: 750000,
-    rating: 4.8,
-    reviews: 94,
-    duration_vn: '7 giờ',
-    duration_en: '7 hours',
-    category: 'family',
-  },
-];
+import {
+  tourService,
+  type TourSearchItemResponse,
+} from '@/services/tourService';
+import { useDebounce } from '@/hooks/use-debounce';
 
 const CATEGORIES = [
   { key: 'all', icon: '🌊' },
@@ -330,54 +32,84 @@ const CATEGORIES = [
 const SORT_OPTIONS = ['rating', 'priceAsc', 'priceDesc'] as const;
 
 export default function TourListPage() {
-  const { t, i18n } = useTranslation();
-  const lang = i18n.language; // 'vn' | 'en'
-  const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get('location') || '',
+  );
+  const debouncedSearch = useDebounce(searchQuery, 500);
+
   const [activeCategory, setActiveCategory] = useState('all');
   const [sortBy, setSortBy] = useState<(typeof SORT_OPTIONS)[number]>('rating');
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  const toggleWishlist = (id: number) => {
+  const [tours, setTours] = useState<TourSearchItemResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  // Sync searchQuery with URL params if it changes
+  useEffect(() => {
+    const loc = searchParams.get('location');
+    if (loc !== null && loc !== searchQuery) {
+      setSearchQuery(loc);
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
+
+  const fetchTours = async () => {
+    setLoading(true);
+    try {
+      const apiSortBy = sortBy === 'rating' ? 'rating' : 'price';
+      const apiSortOrder = sortBy === 'priceAsc' ? 'asc' : 'desc';
+
+      const res = await tourService.searchTours({
+        page: currentPage,
+        pageSize: 8,
+        sortBy: apiSortBy,
+        sortOrder: apiSortOrder,
+        location: debouncedSearch || undefined, // use search query as location/name filter
+      });
+
+      setTours(res.items || []);
+      setTotalPages(res.totalPages || 1);
+      setTotalRecords(res.totalItems || 0);
+    } catch (error) {
+      console.error('Failed to fetch tours:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTours();
+  }, [currentPage, debouncedSearch, sortBy, activeCategory]);
+
+  const toggleWishlist = (id: string) => {
     setWishlist((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
 
-  // Filter & Sort
-  const filtered = ALL_TOURS.filter((tour) => {
-    const matchSearch =
-      !searchQuery ||
-      getLocalizedField(tour, 'title', lang)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      getLocalizedField(tour, 'location', lang)
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-    const matchCategory =
-      activeCategory === 'all' || tour.category === activeCategory;
-    return matchSearch && matchCategory;
-  });
-
-  if (sortBy === 'rating') filtered.sort((a, b) => b.rating - a.rating);
-  if (sortBy === 'priceAsc') filtered.sort((a, b) => a.price - b.price);
-  if (sortBy === 'priceDesc') filtered.sort((a, b) => b.price - a.price);
-
-  const {
-    currentPage,
-    totalPages,
-    paginatedItems: paginatedTours,
-    goToPage,
-    resetPage,
-  } = usePagination(filtered, { itemsPerPage: 8 });
-
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat);
-    resetPage();
+    setCurrentPage(1);
   };
+
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-    resetPage();
+    setCurrentPage(1);
+  };
+
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0 && mins > 0) return `${hours}h ${mins}m`;
+    if (hours > 0) return `${hours} ${t('tourList.hours', 'giờ')}`;
+    return `${mins} ${t('tourList.minutes', 'phút')}`;
   };
 
   return (
@@ -391,7 +123,7 @@ export default function TourListPage() {
           {t('tourList.title')}
         </h1>
         <p className="mt-2 text-sm" style={{ color: '#ecf0ff' }}>
-          {t('tourList.subtitle', { count: filtered.length })}
+          {t('tourList.subtitle', { count: totalRecords })}
         </p>
       </div>
 
@@ -422,7 +154,10 @@ export default function TourListPage() {
         <div className="flex gap-3">
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+            onChange={(e) => {
+              setSortBy(e.target.value as typeof sortBy);
+              setCurrentPage(1);
+            }}
             className="rounded-xl border px-4 py-3 text-sm font-medium outline-none"
             style={{ borderColor: 'rgba(255,255,255,0.15)', color: '#ffffff' }}
           >
@@ -469,10 +204,14 @@ export default function TourListPage() {
       </div>
 
       {/* Tour Grid */}
-      {filtered.length > 0 ? (
+      {loading ? (
+        <div className="flex flex-col items-center py-20 text-center">
+          <Loader2 size={36} className="animate-spin text-[#00F0FF]" />
+        </div>
+      ) : tours.length > 0 ? (
         <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {paginatedTours.map((tour) => (
+            {tours.map((tour) => (
               <Link
                 key={tour.id}
                 to={`/tours/${tour.id}`}
@@ -482,10 +221,10 @@ export default function TourListPage() {
                   boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
                 }}
               >
-                <div className="relative aspect-16/11 overflow-hidden">
+                <div className="relative aspect-16/11 overflow-hidden bg-[#1a2e4c]">
                   <img
-                    src={tour.image}
-                    alt={getLocalizedField(tour, 'title', lang)}
+                    src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop"
+                    alt={tour.name}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <button
@@ -514,10 +253,11 @@ export default function TourListPage() {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2">
                     <h3
-                      className="text-base font-semibold"
+                      className="line-clamp-1 text-base font-semibold"
                       style={{ color: '#ffffff' }}
+                      title={tour.name}
                     >
-                      {getLocalizedField(tour, 'title', lang)}
+                      {tour.name}
                     </h3>
                     <div className="flex shrink-0 items-center gap-1">
                       <Star
@@ -529,7 +269,7 @@ export default function TourListPage() {
                         className="text-sm font-medium"
                         style={{ color: '#ffffff' }}
                       >
-                        {tour.rating}
+                        {tour.avgRating.toFixed(1)}
                       </span>
                     </div>
                   </div>
@@ -537,11 +277,13 @@ export default function TourListPage() {
                     className="mt-1 flex items-center gap-1 text-sm"
                     style={{ color: '#ecf0ff' }}
                   >
-                    <MapPin size={13} />
-                    {getLocalizedField(tour, 'location', lang)}
+                    <MapPin size={13} className="shrink-0" />
+                    <span className="line-clamp-1">
+                      {tour.location || 'N/A'}
+                    </span>
                   </p>
                   <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
-                    {getLocalizedField(tour, 'duration', lang)} · {tour.reviews}{' '}
+                    {formatDuration(tour.durationMinutes)} · {tour.totalReviews}{' '}
                     {t('tourList.reviews')}
                   </p>
                   <p
@@ -567,7 +309,7 @@ export default function TourListPage() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={goToPage}
+              onPageChange={setCurrentPage}
             />
           </div>
         </>

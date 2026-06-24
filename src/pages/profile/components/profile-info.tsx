@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { User, Mail, Phone, MapPin, Save, X, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/use-auth';
+import { toast } from 'sonner';
+import { AuthServices } from '@/services/auth-service';
 
 interface ProfileField {
   key: string;
@@ -12,27 +15,47 @@ interface ProfileField {
 
 export default function ProfileInfo() {
   const { t } = useTranslation();
+  const { user, reloadUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
   const [fields, setFields] = useState<ProfileField[]>([
-    { key: 'fullName', icon: User, type: 'text', value: 'Nguyễn Tuấn' },
+    { key: 'fullName', icon: User, type: 'text', value: '' },
     {
       key: 'email',
       icon: Mail,
       type: 'email',
-      value: 'tuan.nguyen@example.com',
+      value: '',
     },
-    { key: 'phone', icon: Phone, type: 'tel', value: '0903 123 456' },
-    { key: 'address', icon: MapPin, type: 'text', value: 'Đà Nẵng, Việt Nam' },
+    { key: 'phone', icon: Phone, type: 'tel', value: 'N/A' },
+    { key: 'address', icon: MapPin, type: 'text', value: 'N/A' },
   ]);
 
-  const [editValues, setEditValues] = useState<string[]>(
-    fields.map((f) => f.value),
-  );
+  useEffect(() => {
+    if (user) {
+      setFields([
+        { key: 'fullName', icon: User, type: 'text', value: user.name || '' },
+        {
+          key: 'email',
+          icon: Mail,
+          type: 'email',
+          value: user.email || '',
+        },
+        { key: 'phone', icon: Phone, type: 'tel', value: user.phone || 'N/A' },
+        {
+          key: 'address',
+          icon: MapPin,
+          type: 'text',
+          value: user.address || 'N/A',
+        },
+      ]);
+    }
+  }, [user]);
+
+  const [editValues, setEditValues] = useState<string[]>([]);
 
   const handleEdit = () => {
-    setEditValues(fields.map((f) => f.value));
+    setEditValues(fields.map((f) => (f.value === 'N/A' ? '' : f.value)));
     setIsEditing(true);
   };
 
@@ -42,11 +65,38 @@ export default function ProfileInfo() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    // TODO: API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setFields((prev) => prev.map((f, i) => ({ ...f, value: editValues[i] })));
-    setIsEditing(false);
-    setIsSaving(false);
+    try {
+      const fullName = editValues[0]?.trim();
+      const phone = editValues[2]?.trim();
+      const address = editValues[3]?.trim();
+
+      const res = await AuthServices.updateProfile({
+        fullName,
+        phone,
+        address,
+      });
+      if (res.status === 200) {
+        setFields((prev) =>
+          prev.map((f, i) => {
+            const val = editValues[i]?.trim();
+            return {
+              ...f,
+              value: val || (['phone', 'address'].includes(f.key) ? 'N/A' : ''),
+            };
+          }),
+        );
+        await reloadUser();
+        toast.success(t('profile.updateSuccess') || 'Cập nhật thành công');
+        setIsEditing(false);
+      } else {
+        toast.error('Cập nhật thất bại');
+      }
+    } catch (error) {
+      toast.error('Lỗi kết nối khi cập nhật');
+    } finally {
+      setIsEditing(false);
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -124,7 +174,11 @@ export default function ProfileInfo() {
                 {isEditing ? (
                   <input
                     type={field.type}
-                    value={editValues[index]}
+                    value={
+                      editValues[index] !== undefined
+                        ? editValues[index]
+                        : field.value
+                    }
                     onChange={(e) =>
                       setEditValues((prev) => {
                         const next = [...prev];
@@ -137,11 +191,16 @@ export default function ProfileInfo() {
                       borderColor: 'rgba(255,255,255,0.15)',
                       color: '#ffffff',
                     }}
+                    disabled={field.key === 'email'} // Usually email isn't editable like this
                   />
                 ) : (
                   <div
                     className="w-full rounded-lg py-3 pl-11 pr-4 text-sm font-medium"
-                    style={{ backgroundColor: '#112240', color: '#ffffff' }}
+                    style={{
+                      backgroundColor: '#112240',
+                      color: '#ffffff',
+                      opacity: field.key === 'email' ? 0.7 : 1,
+                    }}
                   >
                     {field.value}
                   </div>

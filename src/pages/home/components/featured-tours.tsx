@@ -1,65 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Star, ChevronRight, Heart } from 'lucide-react';
+import { MapPin, Star, ChevronRight, Heart, Loader2 } from 'lucide-react';
 import { routeName } from '@/constants/route-name';
 import { formatPrice } from '@/lib/utils';
-
-const FEATURED_TOURS = [
-  {
-    id: 1,
-    image:
-      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop',
-    title: 'Tour Sông Hàn Về Đêm',
-    location: 'Sông Hàn, Đà Nẵng',
-    price: 350000,
-    rating: 4.9,
-    reviews: 128,
-    duration: '2 giờ',
-  },
-  {
-    id: 2,
-    image:
-      'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=600&h=400&fit=crop',
-    title: 'Khám Phá Ngũ Hành Sơn',
-    location: 'Ngũ Hành Sơn, Đà Nẵng',
-    price: 500000,
-    rating: 4.8,
-    reviews: 96,
-    duration: '3 giờ',
-  },
-  {
-    id: 3,
-    image:
-      'https://images.unsplash.com/photo-1540611025311-01df3cef54b5?w=600&h=400&fit=crop',
-    title: 'Du Thuyền Cầu Rồng',
-    location: 'Cầu Rồng, Đà Nẵng',
-    price: 450000,
-    rating: 4.7,
-    reviews: 203,
-    duration: '2.5 giờ',
-  },
-  {
-    id: 4,
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&h=400&fit=crop',
-    title: 'Tour Hoàng Hôn Sông Hàn',
-    location: 'Bến Bạch Đằng, Đà Nẵng',
-    price: 400000,
-    rating: 4.9,
-    reviews: 167,
-    duration: '1.5 giờ',
-  },
-];
+import {
+  tourService,
+  type TourSearchItemResponse,
+} from '@/services/tourService';
 
 export default function FeaturedTours() {
   const { t } = useTranslation();
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>([]);
+  const [tours, setTours] = useState<TourSearchItemResponse[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const toggleWishlist = (id: number) => {
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const res = await tourService.searchTours({
+          pageSize: 4,
+          sortBy: 'rating',
+          sortOrder: 'desc',
+        });
+        setTours(res.items || []);
+      } catch (error) {
+        console.error('Failed to fetch featured tours:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeatured();
+  }, []);
+
+  const toggleWishlist = (id: string) => {
     setWishlist((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
+  };
+
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0 && mins > 0) return `${hours}h ${mins}m`;
+    if (hours > 0) return `${hours} ${t('home.tours.hours', 'giờ')}`;
+    return `${mins} ${t('home.tours.minutes', 'phút')}`;
   };
 
   return (
@@ -86,91 +71,110 @@ export default function FeaturedTours() {
         </Link>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {FEATURED_TOURS.map((tour) => (
-          <Link
-            key={tour.id}
-            to={`/tours/${tour.id}`}
-            className="group overflow-hidden rounded-2xl transition-all hover:shadow-lg"
-            style={{
-              backgroundColor: '#112240',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-            }}
-          >
-            {/* Image */}
-            <div className="relative aspect-16/11 overflow-hidden">
-              <img
-                src={tour.image}
-                alt={tour.title}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleWishlist(tour.id);
-                }}
-                className="absolute right-3 top-3 rounded-full p-2 transition-all hover:scale-110"
-                style={{
-                  backgroundColor: 'rgba(0,240,255,0.15)',
-                  backdropFilter: 'blur(8px)',
-                }}
-              >
-                <Heart
-                  size={18}
-                  fill={wishlist.includes(tour.id) ? '#ff385c' : 'none'}
-                  style={{
-                    color: wishlist.includes(tour.id) ? '#ff385c' : '#ffffff',
-                  }}
+      {loading ? (
+        <div className="flex h-40 items-center justify-center">
+          <Loader2 size={32} className="animate-spin text-[#00F0FF]" />
+        </div>
+      ) : tours.length === 0 ? (
+        <div className="flex h-40 items-center justify-center text-[#ecf0ff]">
+          Không có tour nào nổi bật.
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {tours.map((tour) => (
+            <Link
+              key={tour.id}
+              to={`/tours/${tour.id}`}
+              className="group overflow-hidden rounded-2xl transition-all hover:shadow-lg"
+              style={{
+                backgroundColor: '#112240',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              }}
+            >
+              {/* Image */}
+              <div className="relative aspect-16/11 overflow-hidden bg-[#1a2e4c]">
+                <img
+                  src={
+                    tour.imageUrl ||
+                    'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop'
+                  }
+                  alt={tour.name}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-              </button>
-            </div>
-
-            {/* Details */}
-            <div className="p-4">
-              <div className="flex items-start justify-between gap-2">
-                <h3
-                  className="text-base font-semibold"
-                  style={{ color: '#ffffff' }}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleWishlist(tour.id);
+                  }}
+                  className="absolute right-3 top-3 rounded-full p-2 transition-all hover:scale-110"
+                  style={{
+                    backgroundColor: 'rgba(0,240,255,0.15)',
+                    backdropFilter: 'blur(8px)',
+                  }}
                 >
-                  {tour.title}
-                </h3>
-                <div className="flex shrink-0 items-center gap-1">
-                  <Star size={14} fill="#ffc107" style={{ color: '#ffc107' }} />
-                  <span
-                    className="text-sm font-medium"
-                    style={{ color: '#ffffff' }}
-                  >
-                    {tour.rating}
-                  </span>
-                </div>
+                  <Heart
+                    size={18}
+                    fill={wishlist.includes(tour.id) ? '#ff385c' : 'none'}
+                    style={{
+                      color: wishlist.includes(tour.id) ? '#ff385c' : '#ffffff',
+                    }}
+                  />
+                </button>
               </div>
-              <p
-                className="mt-1 flex items-center gap-1 text-sm"
-                style={{ color: '#ecf0ff' }}
-              >
-                <MapPin size={13} />
-                {tour.location}
-              </p>
-              <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
-                {tour.duration} · {tour.reviews} {t('home.tours.reviews')}
-              </p>
-              <p
-                className="mt-3 text-base font-semibold"
-                style={{ color: '#00F0FF' }}
-              >
-                {formatPrice(tour.price)}
-                <span
-                  className="text-sm font-normal"
+
+              {/* Details */}
+              <div className="p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <h3
+                    className="line-clamp-1 text-base font-semibold"
+                    style={{ color: '#ffffff' }}
+                    title={tour.name}
+                  >
+                    {tour.name}
+                  </h3>
+                  <div className="flex shrink-0 items-center gap-1">
+                    <Star
+                      size={14}
+                      fill="#ffc107"
+                      style={{ color: '#ffc107' }}
+                    />
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: '#ffffff' }}
+                    >
+                      {tour.avgRating.toFixed(1)}
+                    </span>
+                  </div>
+                </div>
+                <p
+                  className="mt-1 flex items-center gap-1 text-sm"
                   style={{ color: '#ecf0ff' }}
                 >
-                  {' '}
-                  / {t('home.tours.perPerson')}
-                </span>
-              </p>
-            </div>
-          </Link>
-        ))}
-      </div>
+                  <MapPin size={13} className="shrink-0" />
+                  <span className="line-clamp-1">{tour.location || 'N/A'}</span>
+                </p>
+                <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
+                  {formatDuration(tour.durationMinutes)} · {tour.totalReviews}{' '}
+                  {t('home.tours.reviews')}
+                </p>
+                <p
+                  className="mt-3 text-base font-semibold"
+                  style={{ color: '#00F0FF' }}
+                >
+                  {formatPrice(tour.price)}
+                  <span
+                    className="text-sm font-normal"
+                    style={{ color: '#ecf0ff' }}
+                  >
+                    {' '}
+                    / {t('home.tours.perPerson')}
+                  </span>
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

@@ -107,22 +107,36 @@
     "welcome": "Welcome to DDMS Dashboard",
     "tabs": {
       "all": "All trips",
+      "pending": "Pending",
       "upcoming": "Upcoming",
       "completed": "Completed"
     },
     "status": {
+      "PENDING": "Pending",
       "UPCOMING": "Upcoming",
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled"
     },
     "bookingRef": "Booking ID",
     "guests": "guest(s)",
+    "payNow": "Pay Now",
     "cancelBooking": "Cancel booking",
     "writeReview": "Write review",
     "viewDetails": "View details",
     "emptyTitle": "No trips booked... yet!",
     "emptyDescription": "Time to dust off your bags and start planning your next adventure.",
-    "exploreBtn": "Start searching"
+    "exploreBtn": "Start searching",
+    "cancelModal": {
+      "title": "Confirm Booking Cancellation",
+      "refundEligible": "Are you sure you want to cancel this booking? Your tour will be cancelled and you will receive a 100% refund of {{price}} to your wallet because the cancellation is more than 2 days (48 hours) before departure.",
+      "noRefund": "Are you sure you want to cancel this booking? Note: You will NOT RECEIVE A REFUND because the cancellation is less than 2 days (48 hours) before departure.",
+      "closeBtn": "Close",
+      "confirmBtn": "Confirm Cancel",
+      "cancellingBtn": "Cancelling...",
+      "successRefunded": "Cancelled booking successfully. You received a refund of {{price}} to your wallet!",
+      "successNoRefund": "Cancelled booking successfully. (No refund due to close departure date)",
+      "error": "An error occurred while cancelling the booking."
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -604,7 +618,11 @@
     "nav": {
       "dashboard": "Dashboard",
       "boats": "Boat Management",
+      "dockMap": "Dock Map",
+      "services": "Services & Maintenance",
+      "tourServices": "Tour Services",
       "tours": "Tour Management",
+      "revenue": "Payments & Revenue",
       "bookings": "Bookings",
       "profile": "Business Profile"
     },
@@ -748,6 +766,229 @@
         "add": "Add schedule",
         "empty": "No maintenance scheduled.",
         "default": "Maintenance"
+      }
+    }
+  },
+  "boatTypes": {
+    "yacht": "Yacht",
+    "cruise": "Cruise Ship",
+    "speedboat": "Speedboat",
+    "ferry": "Ferry",
+    "sail": "Sailboat",
+    "wooden": "Wooden Boat",
+    "restaurant": "Restaurant Ship",
+    "unclassified": "Unclassified"
+  },
+  "profitChart": {
+    "title": "Profit Trend",
+    "subtitle": "Aggregated real-time system data",
+    "month": "MONTH",
+    "quarter": "QUARTER",
+    "year": "YEAR",
+    "export": "Export",
+    "csvTime": "Time",
+    "csvRevenue": "Revenue (VND)",
+    "csvFileName": "revenue",
+    "months": {
+      "JAN": "Jan",
+      "FEB": "Feb",
+      "MAR": "Mar",
+      "APR": "Apr",
+      "MAY": "May",
+      "JUN": "Jun",
+      "JUL": "Jul",
+      "AUG": "Aug",
+      "SEP": "Sep",
+      "OCT": "Oct",
+      "NOV": "Nov",
+      "DEC": "Dec"
+    }
+  },
+  "adminMaintenance": {
+    "title": "Approve Maintenance Requests (Admin)",
+    "subtitle": "Review and approve maintenance registrations sent by boat owners to Marina Superport.",
+    "searchPlaceholder": "Search by boat name, service...",
+    "showCount": "Showing {{count}} of {{total}} requests",
+    "emptyFiltered": "No matching requests found.",
+    "empty": "No maintenance requests pending approval.",
+    "scheduledDate": "Scheduled Date",
+    "estimatedEndTime": "Estimated End Time",
+    "reason": "Reason for Maintenance",
+    "requestTime": "Requested at: {{time}}",
+    "reject": "Reject",
+    "approve": "Approve",
+    "toast": {
+      "fetchError": "Failed to load maintenance requests list",
+      "approveSuccess": "Maintenance request approved successfully",
+      "approveError": "Approval failed",
+      "rejectSuccess": "Maintenance request rejected successfully",
+      "rejectError": "Rejection failed"
+    }
+  },
+  "maintenanceServices": {
+    "title": "Register Services & Maintenance",
+    "subtitle": "Professional maintenance management system for your fleet.",
+    "step1": "Select boat for service",
+    "step2": "Select service type",
+    "boatsCount": "There are {{count}} boats moored",
+    "loadingBoats": "Loading boats list...",
+    "emptyBoats": "You don't have any boats yet.",
+    "loadingServices": "Loading services list...",
+    "summaryTitle": "Request Summary",
+    "selectedBoat": "SELECTED BOAT",
+    "noBoatSelected": "No boat selected",
+    "servicesCount": "SERVICES ({{count}})",
+    "noServicesSelected": "No services selected",
+    "priceSurvey": "Survey for quotation",
+    "totalEstimate": "Estimated Total",
+    "confirmBtn": "Confirm Registration",
+    "cancelBtn": "Cancel",
+    "supportTitle": "Need technical support?",
+    "supportDesc": "Contact the Marina Command technical team via Hotline: 1900 1234 or internal chat channel for direct consultation on specialized maintenance packages.",
+    "boatStatus": {
+      "idle": "ACTIVE",
+      "maintenance": "NEEDS MAINTENANCE",
+      "broken": "BROKEN",
+      "in_use": "RUNNING"
+    },
+    "pierSlot": "{{pier}} • Slot {{slot}}",
+    "notDocked": "Not docked",
+    "toast": {
+      "fetchError": "Failed to load data",
+      "selectBoatError": "Please select a boat",
+      "selectServiceError": "Please select at least 1 service",
+      "registerSuccess": "Registered service successfully!"
+    }
+  },
+  "ownerTours": {
+    "title": "Tour Management",
+    "loadingData": "Loading data...",
+    "stats": {
+      "title": "Revenue & Bookings Analysis (By Tour)",
+      "bookingsCount": "Bookings (By Tour)",
+      "bookingsCountUnit": "{{count}} bookings",
+      "bookingsCountLabel": "Bookings: ",
+      "totalRevenue": "Revenue VND (By Tour)",
+      "totalRevenueLabel": "Revenue: ",
+      "noData": "No data available"
+    },
+    "calendar": {
+      "title": "Event Schedule - Month {{month}}, {{year}}",
+      "viewMonth": "MONTH",
+      "viewWeek": "WEEK",
+      "viewDay": "DAY",
+      "createTourBtn": "CREATE TOUR",
+      "weekdays": {
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun"
+      },
+      "next7DaysTitle": "Next 7 Days Schedule",
+      "noSchedulesNext7Days": "No schedules in the next week.",
+      "todayTitle": "Today's Schedule ({{date}})",
+      "noSchedulesToday": "No schedules for today."
+    },
+    "recentBookings": {
+      "title": "Recent Bookings",
+      "viewAll": "VIEW ALL",
+      "tableHeaders": {
+        "bookingId": "BOOKING ID",
+        "customer": "CUSTOMER",
+        "serviceBoat": "SERVICE / BOAT",
+        "time": "TIME",
+        "value": "VALUE",
+        "status": "STATUS",
+        "action": "ACTION"
+      },
+      "empty": "No recent bookings.",
+      "boatPrefix": "Boat: {{name}}",
+      "status": {
+        "paid": "PAID",
+        "pending": "PENDING",
+        "cancelled": "CANCELLED"
+      },
+      "actions": {
+        "noAction": "No action",
+        "confirm": "Confirm",
+        "reject": "Reject",
+        "complete": "Complete",
+        "cancel": "Cancel"
+      }
+    },
+    "createModal": {
+      "title": "Create Tour Schedule",
+      "selectBoat": "Select Boat",
+      "selectBoatPlaceholder": "-- Select your boat --",
+      "selectTour": "Select Tour (Approved Tours only)",
+      "selectTourPlaceholder": "-- Select Tour --",
+      "noTourWarning": "This boat has no tours approved by Admin yet. Please wait for approval or add more in Boat Management.",
+      "startDate": "Start Date",
+      "startTime": "Departure Time",
+      "endDate": "End Date",
+      "endTime": "End Time",
+      "cancelBtn": "Cancel",
+      "saveBtn": "Save Schedule",
+      "savingBtn": "Creating...",
+      "validationError": "Please fill in all start/end date and time information!",
+      "createSuccess": "Tour schedule created successfully!",
+      "createError": "Error creating tour schedule",
+      "connectionError": "Connection error while creating tour schedule"
+    },
+    "cancelModal": {
+      "title": "Cancel / Reject Booking",
+      "warningMessage": "You are requesting to cancel booking #{{bookingId}} for customer {{customerName}}.",
+      "reasonLabel": "Cancellation Reason (Required)",
+      "reasonPlaceholder": "Enter detailed reason...",
+      "cancelBtn": "Cancel",
+      "confirmCancelBtn": "Confirm Cancel"
+    }
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "subtitle": "Manage your refund balance and make withdrawal requests to your bank account.",
+    "updateBtn": "Update",
+    "balanceCard": {
+      "title": "Wallet Balance",
+      "available": "Available balance"
+    },
+    "form": {
+      "title": "Request Withdrawal To Bank",
+      "bankName": "Bank Name",
+      "bankNamePlaceholder": "E.g., Vietcombank, MB Bank...",
+      "accountNumber": "Account Number",
+      "accountNumberPlaceholder": "Enter account number",
+      "accountName": "Account Holder Name (No Diacritics)",
+      "accountNamePlaceholder": "E.g., NGUYEN VAN A",
+      "amount": "Withdrawal Amount (đ)",
+      "amountPlaceholder": "Enter amount to withdraw",
+      "maxWithdraw": "Maximum withdrawable: {{balance}}",
+      "maxWithdrawBtn": "Withdraw Max",
+      "submitBtn": "Send Withdrawal Request",
+      "submittingBtn": "Processing request...",
+      "validation": {
+        "fetchError": "Failed to load your wallet information.",
+        "amountError": "Withdrawal amount must be greater than 0.",
+        "insufficientBalance": "Insufficient wallet balance.",
+        "emptyBankInfo": "Please enter all bank details.",
+        "successToast": "Withdrawal request of {{amount}} is being processed!",
+        "errorToast": "Withdrawal request failed."
+      }
+    },
+    "history": {
+      "title": "Withdrawal History",
+      "bank": "Bank:",
+      "account": "Account:",
+      "holder": "Holder:",
+      "date": "Requested Date:",
+      "empty": "No withdrawal transactions yet.",
+      "status": {
+        "pending": "Processing",
+        "approved": "Success",
+        "rejected": "Rejected"
       }
     }
   }

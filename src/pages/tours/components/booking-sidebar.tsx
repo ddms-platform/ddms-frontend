@@ -5,7 +5,7 @@ import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 interface BookingSidebarProps {
-  tourId: number;
+  tourId: string;
   price: number;
   currency?: string;
 }
