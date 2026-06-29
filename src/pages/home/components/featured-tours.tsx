@@ -9,8 +9,12 @@ import {
   type TourSearchItemResponse,
 } from '@/services/tourService';
 
+import { useAuth } from '@/hooks/use-auth';
+import { wishlistService } from '@/services/wishlistService';
+
 export default function FeaturedTours() {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [tours, setTours] = useState<TourSearchItemResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,10 +37,33 @@ export default function FeaturedTours() {
     fetchFeatured();
   }, []);
 
-  const toggleWishlist = (id: string) => {
+  useEffect(() => {
+    if (user) {
+      wishlistService.getWishlistedTourIds().then(setWishlist).catch(console.error);
+    } else {
+      setWishlist([]);
+    }
+  }, [user]);
+
+  const toggleWishlist = async (id: string) => {
+    if (!user) {
+      window.dispatchEvent(new CustomEvent('auth-required'));
+      return;
+    }
+    // Optimistic UI update
     setWishlist((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
+    try {
+      await wishlistService.toggleWishlist(id);
+      window.dispatchEvent(new Event('wishlist-updated'));
+    } catch (error) {
+      console.error(error);
+      // Revert on error
+      setWishlist((prev) =>
+        prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+      );
+    }
   };
 
   const formatDuration = (minutes: number) => {

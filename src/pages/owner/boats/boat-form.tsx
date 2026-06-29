@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Save, Ship, Layers, Wrench, Loader2 } from 'lucide-react';
@@ -18,6 +18,7 @@ import ServiceTab, {
 import MaintenanceTab from './maintenance-tab';
 import BoatBasicInfoSection from './boat-form/BoatBasicInfoSection';
 import BoatImagesSection from './boat-form/BoatImagesSection';
+import { Api } from '@/services/axios';
 
 type Tab = 'basic' | 'services' | 'maintenance';
 
@@ -146,27 +147,42 @@ export default function BoatForm({
   const validate = () => {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = 'Tên tàu không được để trống';
+    if (!type) e.type = 'Loại tàu không được để trống';
     if (!maxPassengers || Number(maxPassengers) < 1)
       e.maxPassengers = 'Sức chứa phải lớn hơn 0';
+    if (boatImages.length === 0) {
+      e.images = 'Vui lòng thêm ít nhất 1 hình ảnh tàu';
+      toast.error('Vui lòng thêm ít nhất 1 hình ảnh tàu');
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
+  const [createdBoatId, setCreatedBoatId] = useState<string | null>(null);
+  
+  const isSavingRef = useRef(false);
+
   const handleSave = async () => {
+    if (isSavingRef.current) return;
     if (!validate()) {
       setActiveTab('basic');
       return;
     }
+    
+    isSavingRef.current = true;
     setSaving(true);
     try {
-      let savedBoatId = boatId;
+      const effectiveBoatId = boatId || createdBoatId;
+      const effectiveIsEdit = isEdit || !!createdBoatId;
+      let savedBoatId = effectiveBoatId;
       const dto = { name, type, maxPassengers: Number(maxPassengers), status };
 
-      if (isEdit && boatId) {
-        await boatService.updateByOwner(boatId, dto);
+      if (effectiveIsEdit && effectiveBoatId) {
+        await boatService.updateByOwner(effectiveBoatId, dto);
       } else {
         const created = await boatService.createByOwner(dto);
         savedBoatId = created.id;
+        setCreatedBoatId(created.id);
       }
 
       if (!savedBoatId) throw new Error('Không lấy được ID tàu');
@@ -215,17 +231,11 @@ export default function BoatForm({
 
         await Promise.all(
           payloads.map((payload) =>
-            fetch(
-              `${import.meta.env.VITE_API_URL || 'https://localhost:7161'}/api/owner/services/register`,
-              {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-              },
-            ).then((res) => {
-              if (!res.ok) throw new Error('Lỗi khi đăng ký dịch vụ');
-            }),
-          ),
+            Api.post('/owner/services/register', payload).catch((err) => {
+              console.error(err);
+              throw new Error('Lỗi khi đăng ký dịch vụ');
+            })
+          )
         );
       }
 
@@ -262,6 +272,7 @@ export default function BoatForm({
         err instanceof Error ? err.message : 'Lưu thất bại, vui lòng thử lại',
       );
     } finally {
+      isSavingRef.current = false;
       setSaving(false);
     }
   };
@@ -389,6 +400,7 @@ export default function BoatForm({
 
             <BoatImagesSection
               images={boatImages}
+              error={errors.images}
               onFileChange={handleFileChange}
               onRemove={handleRemoveImage}
             />

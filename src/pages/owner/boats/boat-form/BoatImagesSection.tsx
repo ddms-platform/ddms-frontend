@@ -8,12 +8,14 @@ interface BoatImage {
 
 interface BoatImagesSectionProps {
   images: BoatImage[];
+  error?: string;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onRemove: (index: number) => void;
 }
 
 const BoatImagesSection = ({
   images,
+  error,
   onFileChange,
   onRemove,
 }: BoatImagesSectionProps) => (
@@ -21,7 +23,7 @@ const BoatImagesSection = ({
     className="rounded-2xl p-6"
     style={{
       backgroundColor: '#112240',
-      border: '1px solid rgba(255,255,255,0.04)',
+      border: `1px solid ${error ? '#EF4444' : 'rgba(255,255,255,0.04)'}`,
     }}
   >
     <div className="flex items-center justify-between mb-4">
@@ -67,7 +69,7 @@ const BoatImagesSection = ({
     ) : (
       <div
         className="relative flex flex-col items-center rounded-xl border-2 border-dashed py-12 bg-slate-800/20 hover:border-cyan-500/50 transition-colors group cursor-pointer"
-        style={{ borderColor: 'rgba(255,255,255,0.1)' }}
+        style={{ borderColor: error ? '#EF4444' : 'rgba(255,255,255,0.1)' }}
       >
         <input
           type="file"
@@ -78,10 +80,10 @@ const BoatImagesSection = ({
         />
         <ImageIcon
           size={40}
-          style={{ color: 'rgba(0,240,255,0.3)' }}
+          style={{ color: error ? '#EF4444' : 'rgba(0,240,255,0.3)' }}
           className="mb-4 group-hover:scale-110 transition-transform"
         />
-        <p className="mt-3 text-sm" style={{ color: '#ecf0ff' }}>
+        <p className="mt-3 text-sm" style={{ color: error ? '#EF4444' : '#ecf0ff' }}>
           Kéo thả hoặc nhấn vào đây để tải ảnh tàu lên
         </p>
         <p className="text-xs text-slate-500 mt-1">
@@ -89,6 +91,7 @@ const BoatImagesSection = ({
         </p>
       </div>
     )}
+    {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
   </div>
 );
 
