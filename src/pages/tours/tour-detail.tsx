@@ -23,6 +23,7 @@ import {
   type TourItemResponse,
   type TourImageItemResponse,
 } from '@/services/tourService';
+import WeatherWidget from '@/components/shared/weather-widget';
 
 export default function TourDetailPage() {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ export default function TourDetailPage() {
   const [tour, setTour] = useState<TourItemResponse | null>(null);
   const [images, setImages] = useState<TourImageItemResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasFutureSchedules, setHasFutureSchedules] = useState(true);
 
   // Selections for dynamic pricing
   const [selectedClassId, setSelectedClassId] = useState<string>('');
@@ -73,12 +75,20 @@ export default function TourDetailPage() {
     const fetchTourData = async () => {
       setLoading(true);
       try {
-        const [tourData, imagesData] = await Promise.all([
+        const [tourData, imagesData, schedulesData] = await Promise.all([
           tourService.getPublicTourById(id),
           tourService.getTourImages(id).catch(() => []),
+          tourService.getTourSchedules(id).catch(() => []),
         ]);
+
+        const now = new Date();
+        const futureSchedules = (schedulesData || []).filter(
+          (s: any) => new Date(s.start_time) > now,
+        );
+
         setTour(tourData);
         setImages(imagesData);
+        setHasFutureSchedules(futureSchedules.length > 0);
       } catch (error) {
         console.error('Failed to fetch tour details:', error);
       } finally {
@@ -144,6 +154,13 @@ export default function TourDetailPage() {
             reviews={tour.totalReviews}
             description={tour.description || ''}
           />
+
+          {/* Weather Widget for Mobile only */}
+          {tour.location && (
+            <div className="mt-8 block lg:hidden">
+              <WeatherWidget location={tour.location} />
+            </div>
+          )}
 
           {/* Lộ trình (Itinerary) */}
           {tour.routes && tour.routes.length > 0 && (
@@ -349,8 +366,13 @@ export default function TourDetailPage() {
         </div>
 
         {/* Right: Booking Sidebar */}
-        <div className="hidden lg:block">
-          <BookingSidebar tourId={tour.id} price={finalPrice} />
+        <div className="hidden lg:block space-y-6">
+          <BookingSidebar
+            tourId={tour.id}
+            price={finalPrice}
+            isClosed={!hasFutureSchedules}
+          />
+          {tour.location && <WeatherWidget location={tour.location} />}
         </div>
       </div>
 
@@ -372,11 +394,17 @@ export default function TourDetailPage() {
             / {t('tour.booking.perPerson')}
           </span>
         </div>
-        <Button variant="cyan" size="action" asChild>
-          <Link to={`/tours/${tour.id}/booking`}>
-            {t('tour.booking.bookNow')}
-          </Link>
-        </Button>
+        {!hasFutureSchedules ? (
+          <Button variant="secondary" size="action" disabled>
+            Tạm đóng
+          </Button>
+        ) : (
+          <Button variant="cyan" size="action" asChild>
+            <Link to={`/tours/${tour.id}/booking`}>
+              {t('tour.booking.bookNow')}
+            </Link>
+          </Button>
+        )}
       </div>
     </div>
   );

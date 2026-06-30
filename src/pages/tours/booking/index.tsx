@@ -39,8 +39,24 @@ export default function BookingPage() {
           tourService.getPublicTourById(id),
           tourService.getTourSchedules(id).catch(() => []),
         ]);
+        const now = new Date();
+        now.setHours(0, 0, 0, 0); // Ignore time, only compare date
+
+        console.log('DEBUG: schedulesData from API:', schedulesData);
+
+        const futureSchedules = (schedulesData || []).filter((s: any) => {
+          const startTime = new Date(s.start_time);
+          console.log(
+            `DEBUG: checking schedule ${s.start_time}, is it > now?`,
+            startTime > now,
+          );
+          return startTime >= now;
+        });
+
+        console.log('DEBUG: futureSchedules:', futureSchedules);
+
         setTour(tourData);
-        setSchedules(schedulesData || []);
+        setSchedules(futureSchedules);
       } catch (error) {
         console.error('Failed to fetch booking details:', error);
       } finally {
@@ -135,6 +151,25 @@ export default function BookingPage() {
     return (
       <div className="flex h-[60vh] items-center justify-center text-white">
         Không tìm thấy thông tin tour. Vui lòng thử lại sau.
+      </div>
+    );
+  }
+
+  if (schedules.length === 0) {
+    return (
+      <div className="flex h-[60vh] flex-col items-center justify-center text-white gap-4">
+        <h2 className="text-2xl font-bold">Tạm đóng</h2>
+        <p className="text-gray-400 text-center max-w-md">
+          Tour này hiện tại chưa có lịch trình khởi hành mới. Vui lòng quay lại
+          sau hoặc chọn một tour khác.
+        </p>
+        <Button
+          variant="outline"
+          className="mt-4"
+          onClick={() => window.history.back()}
+        >
+          Quay lại
+        </Button>
       </div>
     );
   }

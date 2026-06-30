@@ -8,9 +8,14 @@ interface BookingSidebarProps {
   tourId: string;
   price: number;
   currency?: string;
+  isClosed?: boolean;
 }
 
-export default function BookingSidebar({ tourId, price }: BookingSidebarProps) {
+export default function BookingSidebar({
+  tourId,
+  price,
+  isClosed,
+}: BookingSidebarProps) {
   const { t } = useTranslation();
 
   return (
@@ -38,9 +43,13 @@ export default function BookingSidebar({ tourId, price }: BookingSidebarProps) {
           <span style={{ color: '#ecf0ff' }}>
             {t('tour.booking.availability')}
           </span>
-          <span className="font-medium" style={{ color: '#34A853' }}>
-            {t('tour.booking.available')}
-          </span>
+          {isClosed ? (
+            <span className="font-medium text-red-500">Tạm đóng</span>
+          ) : (
+            <span className="font-medium" style={{ color: '#34A853' }}>
+              {t('tour.booking.available')}
+            </span>
+          )}
         </div>
         <div className="flex items-center justify-between text-sm">
           <span style={{ color: '#ecf0ff' }}>
@@ -54,9 +63,22 @@ export default function BookingSidebar({ tourId, price }: BookingSidebarProps) {
 
       <div className="my-5 h-px" style={{ backgroundColor: '#112240' }} />
 
-      <Button variant="cyan" size="action-lg" className="w-full" asChild>
-        <Link to={`/tours/${tourId}/booking`}>{t('tour.booking.bookNow')}</Link>
-      </Button>
+      {isClosed ? (
+        <Button
+          variant="secondary"
+          size="action-lg"
+          className="w-full"
+          disabled
+        >
+          Tạm đóng
+        </Button>
+      ) : (
+        <Button variant="cyan" size="action-lg" className="w-full" asChild>
+          <Link to={`/tours/${tourId}/booking`}>
+            {t('tour.booking.bookNow')}
+          </Link>
+        </Button>
+      )}
 
       <Button
         variant="dark-outline"

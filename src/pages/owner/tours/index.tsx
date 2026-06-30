@@ -102,9 +102,23 @@ const OwnerToursPage = () => {
     }
   };
 
-  const currentDate = new Date();
+  const [currentDate, setCurrentDate] = useState(new Date());
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
+
+  const handlePrevMonth = () => {
+    setCurrentDate((prev) => {
+      // Set to the 1st of the previous month to avoid day-rollover issues
+      return new Date(prev.getFullYear(), prev.getMonth() - 1, 1);
+    });
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate((prev) => {
+      // Set to the 1st of the next month to avoid day-rollover issues
+      return new Date(prev.getFullYear(), prev.getMonth() + 1, 1);
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -223,6 +237,8 @@ const OwnerToursPage = () => {
             viewMode={viewMode}
             onViewModeChange={setViewMode}
             onCreateClick={() => setShowCreateModal(true)}
+            onPrev={handlePrevMonth}
+            onNext={handleNextMonth}
           />
 
           <RecentBookingsTable

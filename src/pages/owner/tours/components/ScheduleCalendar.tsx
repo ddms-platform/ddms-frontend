@@ -1,4 +1,4 @@
-import { Calendar, Plus } from 'lucide-react';
+import { Calendar, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 type ViewMode = 'month' | 'week' | 'day';
@@ -11,6 +11,8 @@ interface ScheduleCalendarProps {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
   onCreateClick: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
 }
 
 const ScheduleCalendar = ({
@@ -21,6 +23,8 @@ const ScheduleCalendar = ({
   viewMode,
   onViewModeChange,
   onCreateClick,
+  onPrev,
+  onNext,
 }: ScheduleCalendarProps) => {
   const { t, i18n } = useTranslation();
 
@@ -221,12 +225,28 @@ const ScheduleCalendar = ({
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <div className="flex items-center gap-3">
           <Calendar className="w-5 h-5 text-cyan-400" />
-          <h2 className="text-xl font-bold text-white">
-            {t('ownerTours.calendar.title', {
-              month: currentMonth,
-              year: currentYear,
-            })}
-          </h2>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onPrev}
+              className="p-1 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors"
+              title={t('common.prev', 'Trước')}
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <h2 className="text-xl font-bold text-white min-w-55 text-center">
+              {t('ownerTours.calendar.title', {
+                month: currentMonth,
+                year: currentYear,
+              })}
+            </h2>
+            <button
+              onClick={onNext}
+              className="p-1 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors"
+              title={t('common.next', 'Sau')}
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
         <div className="flex items-center gap-4 mt-4 sm:mt-0">
           <div className="flex bg-slate-800 rounded-lg p-1">
