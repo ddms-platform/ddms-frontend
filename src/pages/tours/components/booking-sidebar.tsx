@@ -3,20 +3,27 @@ import { useTranslation } from 'react-i18next';
 import { Heart } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/use-auth';
 
 interface BookingSidebarProps {
   tourId: string;
   price: number;
   currency?: string;
   isClosed?: boolean;
+  createdBy?: string;
 }
 
 export default function BookingSidebar({
   tourId,
   price,
   isClosed,
+  createdBy,
 }: BookingSidebarProps) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+
+  const isOwner =
+    (user as any)?.id && createdBy && (user as any).id === createdBy;
 
   return (
     <div
@@ -71,6 +78,15 @@ export default function BookingSidebar({
           disabled
         >
           Tạm đóng
+        </Button>
+      ) : isOwner ? (
+        <Button
+          variant="secondary"
+          size="action-lg"
+          className="w-full bg-gray-500 text-white cursor-not-allowed hover:bg-gray-500"
+          disabled
+        >
+          Tour của bạn
         </Button>
       ) : (
         <Button variant="cyan" size="action-lg" className="w-full" asChild>

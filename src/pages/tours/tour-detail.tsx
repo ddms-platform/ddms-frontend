@@ -24,10 +24,12 @@ import {
   type TourImageItemResponse,
 } from '@/services/tourService';
 import WeatherWidget from '@/components/shared/weather-widget';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function TourDetailPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
 
   const [tour, setTour] = useState<TourItemResponse | null>(null);
   const [images, setImages] = useState<TourImageItemResponse[]>([]);
@@ -357,11 +359,7 @@ export default function TourDetailPage() {
           )}
 
           <div className="mt-8">
-            <TourReviews
-              reviews={[]} // Mock empty reviews for now
-              averageRating={tour.avgRating}
-              totalReviews={tour.totalReviews}
-            />
+            <TourReviews tourId={tour.id} />
           </div>
         </div>
 
@@ -371,6 +369,7 @@ export default function TourDetailPage() {
             tourId={tour.id}
             price={finalPrice}
             isClosed={!hasFutureSchedules}
+            createdBy={tour.createdBy}
           />
           {tour.location && <WeatherWidget location={tour.location} />}
         </div>
@@ -397,6 +396,15 @@ export default function TourDetailPage() {
         {!hasFutureSchedules ? (
           <Button variant="secondary" size="action" disabled>
             Tạm đóng
+          </Button>
+        ) : (user as any)?.id === tour.createdBy ? (
+          <Button
+            variant="secondary"
+            size="action"
+            className="bg-gray-500 text-white cursor-not-allowed hover:bg-gray-500"
+            disabled
+          >
+            Tour của bạn
           </Button>
         ) : (
           <Button variant="cyan" size="action" asChild>
