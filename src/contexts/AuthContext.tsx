@@ -44,6 +44,7 @@ function normalizeUser(rawUser: unknown): User | null {
   const roles = Array.isArray(user.roles) ? user.roles.filter(isUserRole) : [];
 
   return {
+    id: typeof user.id === 'string' ? user.id : undefined,
     name,
     email,
     roles: roles.length > 0 ? roles : ['user'],
