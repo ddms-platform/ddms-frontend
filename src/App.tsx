@@ -42,6 +42,7 @@ const ProfilePage = lazy(() => import('@/pages/profile/index'));
 const TourDetailPage = lazy(() => import('@/pages/tours/tour-detail'));
 const TourListPage = lazy(() => import('@/pages/tours/tour-list'));
 const BookingPage = lazy(() => import('@/pages/tours/booking'));
+const WishlistPage = lazy(() => import('@/pages/customer/wishlist/index'));
 const BoatDetailPage = lazy(() => import('@/pages/boats/boat-detail'));
 const AdminMaintenancePage = lazy(
   () => import('@/pages/owner/boats/admin-maintenance'),
@@ -209,6 +210,14 @@ export default function App() {
                       element={
                         <Suspense fallback={<PageLoader />}>
                           <MyToursPage />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="/wishlist"
+                      element={
+                        <Suspense fallback={<PageLoader />}>
+                          <WishlistPage />
                         </Suspense>
                       }
                     />

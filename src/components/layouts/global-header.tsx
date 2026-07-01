@@ -8,6 +8,7 @@ import {
   ChevronDown,
   LayoutDashboard,
   Wallet,
+  Heart,
 } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
 import { performLogout } from '@/lib/auth-session';
 import logo from '@/assets/logo.png';
+import { wishlistService } from '@/services/wishlistService';
 
 interface NavLink {
   label: string;
@@ -37,6 +39,21 @@ export default function GlobalHeader({
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [wishlistCount, setWishlistCount] = useState(0);
+
+  const fetchWishlistCount = () => {
+    if (user) {
+      wishlistService.getWishlistedTourIds().then(ids => setWishlistCount(ids.length)).catch(console.error);
+    } else {
+      setWishlistCount(0);
+    }
+  };
+
+  useEffect(() => {
+    fetchWishlistCount();
+    window.addEventListener('wishlist-updated', fetchWishlistCount);
+    return () => window.removeEventListener('wishlist-updated', fetchWishlistCount);
+  }, [user]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -112,6 +129,21 @@ export default function GlobalHeader({
               style={{ color: '#ecf0ff' }}
             >
               {t('becomeOwner.navLink')}
+            </Link>
+          )}
+
+          {isAuthenticated && (
+            <Link
+              to="/wishlist"
+              className="relative flex items-center justify-center rounded-full p-2 transition-all hover:bg-white/5 active:scale-[0.97]"
+              title={t('nav.wishlist', 'Wishlist')}
+            >
+              <Heart size={20} style={{ color: '#ff385c' }} />
+              {wishlistCount > 0 && (
+                <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff385c] text-[10px] font-bold text-white">
+                  {wishlistCount > 99 ? '99+' : wishlistCount}
+                </span>
+              )}
             </Link>
           )}
 
