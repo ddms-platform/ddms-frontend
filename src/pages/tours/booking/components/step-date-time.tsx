@@ -28,39 +28,20 @@ export default function StepDateTime({
   // ── 1. Group Schedules (Include mock fallback) ──
   const displaySchedules = useMemo(() => {
     if (schedules && schedules.length > 0) {
-      // Filter scheduled slots starting in the future (or all scheduled slots for flexibility)
-      const futureSchedules = schedules.filter((s) => s.status === 'scheduled');
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      // Filter scheduled slots starting in the future
+      const futureSchedules = schedules.filter((s) => {
+        if (s.status !== 'scheduled') return false;
+        const d = new Date(s.start_time);
+        return d >= now;
+      });
+
       if (futureSchedules.length > 0) return futureSchedules;
     }
 
-    // Fallback mock schedules if database has none
-    const mocks: any[] = [];
-    const now = new Date();
-    for (let i = 1; i <= 6; i++) {
-      const day = new Date();
-      day.setDate(now.getDate() + i);
-      const times = [
-        { start: '08:00', end: '10:00' },
-        { start: '14:30', end: '16:30' },
-        { start: '18:00', end: '20:00' },
-        { start: '20:30', end: '22:30' },
-      ];
-      times.forEach((timeStr, idx) => {
-        const startStr = `${day.toISOString().split('T')[0]}T${timeStr.start}:00`;
-        const endStr = `${day.toISOString().split('T')[0]}T${timeStr.end}:00`;
-        mocks.push({
-          id: `mock-schedule-${i}-${idx}`,
-          tour_id: 'mock-tour',
-          boat_id: 'mock-boat',
-          boatName: 'Du thuyền Hoàng Gia',
-          start_time: startStr,
-          end_time: endStr,
-          maxCapacity: 45,
-          status: 'scheduled',
-        });
-      });
-    }
-    return mocks;
+    return [];
   }, [schedules]);
 
   // Group by Date string
