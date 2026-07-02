@@ -6,7 +6,6 @@ import { wishlistService } from '@/services/wishlistService';
 import type { TourSearchItemResponse } from '@/services/tourService';
 import { formatPrice } from '@/lib/utils';
 import { routeName } from '@/constants/route-name';
-import GlobalHeader from '@/components/layouts/global-header';
 
 export default function WishlistPage() {
   const { t } = useTranslation();

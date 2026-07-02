@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   Wallet,
   MessageSquare,
+  Heart,
 } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';

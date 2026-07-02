@@ -52,16 +52,16 @@ const OwnerToursPage = () => {
         cancelReason: reason,
       });
 
-      if (res.isSuccess) {
+      if (res.code === 0) {
         // Refresh dashboard data
         const refreshData = await tourService.getToursDashboardRecentBookings();
-        if (refreshData.isSuccess) {
+        if (refreshData.code === 0) {
           setRecentBookings(refreshData.result);
         }
 
         // Also refresh stats to update charts
         const statsData = await tourService.getToursDashboardStats();
-        if (statsData.isSuccess) {
+        if (statsData.code === 0) {
           const parsedStats = statsData.result.map((s: any, index: number) => ({
             ...s,
             fill: COLORS[index % COLORS.length],
@@ -131,7 +131,7 @@ const OwnerToursPage = () => {
             tourService.getToursDashboardResources(),
           ]);
 
-        if (resourcesRes?.isSuccess) {
+        if (resourcesRes?.code === 0) {
           setResources(resourcesRes.result.boats);
           if (resourcesRes.result.boats.length > 0) {
             setSelectedBoatId(resourcesRes.result.boats[0].id);
@@ -140,7 +140,7 @@ const OwnerToursPage = () => {
             }
           }
         }
-        if (statsRes?.isSuccess) {
+        if (statsRes?.code === 0) {
           const parsedStats = statsRes.result.map((s: any, index: number) => ({
             ...s,
             fill: COLORS[index % COLORS.length],
@@ -149,8 +149,8 @@ const OwnerToursPage = () => {
           }));
           setStats(parsedStats);
         }
-        if (schedulesRes?.isSuccess) setSchedules(schedulesRes.result);
-        if (bookingsRes?.isSuccess) setRecentBookings(bookingsRes.result);
+        if (schedulesRes?.code === 0) setSchedules(schedulesRes.result);
+        if (bookingsRes?.code === 0) setRecentBookings(bookingsRes.result);
       } catch (error) {
         console.error('Error fetching dashboard data', error);
         toast.error(
@@ -186,7 +186,7 @@ const OwnerToursPage = () => {
         endTime: endDateTime,
       });
 
-      if (res.isSuccess) {
+      if (res.code === 0) {
         setShowCreateModal(false);
         setScheduleDate('');
         setScheduleTime('');
@@ -200,7 +200,7 @@ const OwnerToursPage = () => {
           currentMonth,
           currentYear,
         );
-        if (schedulesRes?.isSuccess) setSchedules(schedulesRes.result);
+        if (schedulesRes?.code === 0) setSchedules(schedulesRes.result);
       } else {
         toast.error(res.message || t('ownerTours.createModal.createError'));
       }
