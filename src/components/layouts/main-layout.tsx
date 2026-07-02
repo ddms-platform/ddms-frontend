@@ -23,10 +23,10 @@ export default function MainLayout() {
       style={{ backgroundColor: '#0A192F' }}
     >
       <GlobalHeader navLinks={navLinks} />
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col">
         <Outlet />
       </main>
-      <GlobalFooter />
+      {location.pathname !== '/inbox' && <GlobalFooter />}
     </div>
   );
 }

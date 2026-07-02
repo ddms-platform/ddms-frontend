@@ -7,6 +7,7 @@ import {
   LogOut,
   Anchor,
   CreditCard,
+  MessageSquare,
 } from 'lucide-react';
 import type { JSX } from 'react';
 import { routeName } from '@/constants/route-name';
@@ -58,6 +59,11 @@ export const ownerSidelinks: SideLink[] = [
     title: 'ownerLayout.nav.revenue',
     href: '/owner/revenue',
     icon: <CreditCard size={20} />,
+  },
+  {
+    title: 'ownerLayout.nav.inbox',
+    href: routeName.inbox,
+    icon: <MessageSquare size={20} />,
   },
 ];
 

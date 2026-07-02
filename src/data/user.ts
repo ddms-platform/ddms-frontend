@@ -1,6 +1,7 @@
 export type UserRole = 'user' | 'owner' | 'admin';
 
 export interface User {
+  id?: string;
   name: string;
   email: string;
   roles: UserRole[];

@@ -610,6 +610,8 @@
       "ownerDashboard": "Dashboard chủ thuyền",
       "profile": "Hồ sơ cá nhân",
       "myTours": "Tour của tôi",
+      "wallet": "Ví của tôi",
+      "inbox": "Tin nhắn",
       "logout": "Đăng xuất"
     }
   },
@@ -624,6 +626,7 @@
       "tours": "Quản lý Tour",
       "revenue": "Thanh toán & Doanh thu",
       "bookings": "Booking",
+      "inbox": "Tin nhắn",
       "profile": "Cài đặt hệ thống"
     },
     "backHome": "Về trang chủ",
@@ -990,6 +993,37 @@
         "approved": "Thành công",
         "rejected": "Từ chối"
       }
+    }
+  },
+  "chat": {
+    "inboxTitle": "Hộp thư tin nhắn",
+    "noConversations": "Không có cuộc trò chuyện nào",
+    "noConversationsDesc": "Hãy liên hệ với chủ tàu từ trang chi tiết lịch trình của bạn.",
+    "noConversationSelected": "Không có cuộc trò chuyện nào được chọn",
+    "noConversationSelectedDesc": "Chọn một cuộc trò chuyện từ cột bên trái để bắt đầu nhắn tin.",
+    "inputPlaceholder": "Nhập nội dung tin nhắn...",
+    "bookingInfo": "Thông tin Booking",
+    "tourService": "Tour dịch vụ",
+    "bookingCodeLabel": "Mã đơn",
+    "statusLabel": "Trạng thái",
+    "statusBooked": "Đã đặt",
+    "standardLabel": "Tiêu chuẩn",
+    "activeState": "Hoạt động",
+    "paymentLabel": "Thanh toán",
+    "realtimeState": "Thời gian thực",
+    "rulesNotice": "Mọi thỏa thuận qua chat cần tuân thủ Điều khoản & Quy định của DDMS.",
+    "loadingConvs": "Đang tải cuộc hội thoại...",
+    "chatWithOwner": "Chat với chủ tàu",
+    "connecting": "Đang kết nối...",
+    "noMessagesYet": "Chưa có tin nhắn",
+    "tourPrefix": "Tour:",
+    "bookingPrefix": "Đơn đặt:",
+    "chatDefaultTitle": "Trò chuyện",
+    "firstMessagePrompt": "Hãy gửi tin nhắn đầu tiên để bắt đầu trò chuyện",
+    "errors": {
+      "loadConversations": "Không thể tải danh sách cuộc hội thoại.",
+      "loadMessages": "Không thể tải lịch sử tin nhắn.",
+      "sendMessage": "Không thể gửi tin nhắn. Vui lòng thử lại."
     }
   }
 }

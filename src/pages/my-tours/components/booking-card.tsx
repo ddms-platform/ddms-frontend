@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Calendar, Users, MapPin } from 'lucide-react';
+import { Calendar, Users, MapPin, MessageCircle } from 'lucide-react';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { bookingService } from '@/services/bookingService';
+import { chatService } from '@/services/chatService';
 import { toast } from 'sonner';
 
 export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
@@ -91,9 +92,24 @@ export default function BookingCard({
 }: BookingCardProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const navigate = useNavigate();
 
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [isStartingChat, setIsStartingChat] = useState(false);
+
+  const handleStartChat = async () => {
+    setIsStartingChat(true);
+    try {
+      const conv = await chatService.startConversation(booking.id);
+      navigate(`/inbox?conversationId=${conv.id}`);
+    } catch (error: any) {
+      console.error('Failed to start chat:', error);
+      toast.error('Không thể bắt đầu trò chuyện với chủ tàu.');
+    } finally {
+      setIsStartingChat(false);
+    }
+  };
 
   // Parse departure date to check refund eligibility (>= 48 hours away)
   const departureDate = new Date(
@@ -289,6 +305,15 @@ export default function BookingCard({
               {t('dashboard.writeReview')}
             </Button>
           )}
+          <Button
+            variant="dark-outline"
+            size="action"
+            onClick={handleStartChat}
+            disabled={isStartingChat}
+            title={t('chat.chatWithOwner', 'Chat với chủ tàu')}
+          >
+            {isStartingChat ? '...' : <MessageCircle size={14} />}
+          </Button>
         </div>
       </div>
 
@@ -333,6 +358,19 @@ export default function BookingCard({
             </Link>
           </Button>
         )}
+        <Button
+          variant="dark-outline"
+          size="action"
+          className="w-full rounded-xl flex items-center justify-center gap-1.5"
+          onClick={handleStartChat}
+          disabled={isStartingChat}
+          style={{ borderColor: 'rgba(255, 255, 255, 0.15)' }}
+        >
+          <MessageCircle size={14} className="text-[#00F0FF]" />
+          {isStartingChat
+            ? t('chat.connecting', 'Đang kết nối...')
+            : t('chat.chatWithOwner', 'Chat với chủ tàu')}
+        </Button>
       </div>
 
       {/* Cancellation Modal */}

@@ -610,6 +610,8 @@
       "ownerDashboard": "Owner Dashboard",
       "profile": "My Profile",
       "myTours": "My Tours",
+      "wallet": "My Wallet",
+      "inbox": "Messages",
       "logout": "Sign out"
     }
   },
@@ -624,6 +626,7 @@
       "tours": "Tour Management",
       "revenue": "Payments & Revenue",
       "bookings": "Bookings",
+      "inbox": "Messages",
       "profile": "Business Profile"
     },
     "backHome": "Back to home",
@@ -990,6 +993,37 @@
         "approved": "Success",
         "rejected": "Rejected"
       }
+    }
+  },
+  "chat": {
+    "inboxTitle": "Inbox",
+    "noConversations": "No conversations",
+    "noConversationsDesc": "Contact the boat owner from your itinerary details.",
+    "noConversationSelected": "No conversation selected",
+    "noConversationSelectedDesc": "Select a conversation from the left sidebar to start messaging.",
+    "inputPlaceholder": "Type a message...",
+    "bookingInfo": "Booking Information",
+    "tourService": "Tour Service",
+    "bookingCodeLabel": "Booking Code",
+    "statusLabel": "Status",
+    "statusBooked": "Booked",
+    "standardLabel": "Standard",
+    "activeState": "Active",
+    "paymentLabel": "Payment",
+    "realtimeState": "Real-time",
+    "rulesNotice": "All agreements via chat must comply with DDMS Terms & Regulations.",
+    "loadingConvs": "Loading conversations...",
+    "chatWithOwner": "Chat with owner",
+    "connecting": "Connecting...",
+    "noMessagesYet": "No messages yet",
+    "tourPrefix": "Tour:",
+    "bookingPrefix": "Booking:",
+    "chatDefaultTitle": "Chat",
+    "firstMessagePrompt": "Send the first message to start the conversation",
+    "errors": {
+      "loadConversations": "Failed to load conversations.",
+      "loadMessages": "Failed to load messages.",
+      "sendMessage": "Failed to send message. Please try again."
     }
   }
 }

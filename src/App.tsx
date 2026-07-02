@@ -48,6 +48,7 @@ const AdminMaintenancePage = lazy(
   () => import('@/pages/owner/boats/admin-maintenance'),
 );
 const OwnerRevenuePage = lazy(() => import('@/pages/owner/revenue/index'));
+const InboxPage = lazy(() => import('@/pages/inbox/index'));
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -226,6 +227,14 @@ export default function App() {
                       element={
                         <Suspense fallback={<PageLoader />}>
                           <WalletPage />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path={routeName.inbox}
+                      element={
+                        <Suspense fallback={<PageLoader />}>
+                          <InboxPage />
                         </Suspense>
                       }
                     />

@@ -8,7 +8,7 @@ import {
   ChevronDown,
   LayoutDashboard,
   Wallet,
-  Heart,
+  MessageSquare,
 } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import { Button } from '@/components/ui/button';
@@ -80,11 +80,11 @@ export default function GlobalHeader({
   // Avatar initials from user name
   const initials = user?.name
     ? user.name
-        .split(' ')
-        .map((w) => w[0])
-        .join('')
-        .slice(0, 2)
-        .toUpperCase()
+      .split(' ')
+      .map((w) => w[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
     : '?';
   const isOwner = user?.roles.includes('owner') ?? false;
 
@@ -265,7 +265,17 @@ export default function GlobalHeader({
                     role="menuitem"
                   >
                     <Wallet size={16} />
-                    Ví của tôi
+                    {t('header.user.wallet', 'Ví của tôi')}
+                  </Link>
+                  <Link
+                    to={routeName.inbox}
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
+                    style={{ color: '#ecf0ff' }}
+                    role="menuitem"
+                  >
+                    <MessageSquare size={16} />
+                    {t('header.user.inbox', 'Tin nhắn')}
                   </Link>
 
                   <div

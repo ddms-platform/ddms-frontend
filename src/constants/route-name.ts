@@ -37,4 +37,5 @@ export const routeName = Object.freeze({
   maintenance: '/maintenance',
   dashboard: '/dashboard',
   wallet: '/wallet',
+  inbox: '/inbox',
 });
