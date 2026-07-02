@@ -84,6 +84,7 @@ export interface TourItemResponse {
   faqs: TourFaqResponse[];
   classes: TourClassResponse[];
   services: TourServiceResponse[];
+  createdBy?: string;
   createdAt: string;
   updatedAt: string;
 }
