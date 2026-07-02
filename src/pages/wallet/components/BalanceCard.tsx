@@ -9,26 +9,26 @@ const BalanceCard = ({ balance }: { balance: number }) => {
     <div
       className="relative overflow-hidden rounded-2xl border p-6 sm:p-8 shadow-xl"
       style={{
-        borderColor: 'rgba(255, 255, 255, 0.1)',
-        background: 'linear-gradient(135deg, #112240 0%, #0d1b36 100%)',
+        borderColor: 'var(--border)',
+        backgroundColor: 'var(--ddms-bg-card)',
       }}
     >
-      <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[#00F0FF]/10 blur-3xl" />
-      <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-[#00F0FF]/5 blur-3xl" />
+      <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-ddms-secondary/10 blur-3xl" />
+      <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-ddms-secondary/5 blur-3xl" />
 
       <div className="flex items-center justify-between mb-6">
-        <span className="text-sm font-semibold tracking-wider text-[#00F0FF] uppercase">
+        <span className="text-sm font-semibold tracking-wider text-ddms-secondary uppercase">
           {t('wallet.balanceCard.title')}
         </span>
-        <Wallet className="h-6 w-6 text-[#00F0FF]" />
+        <Wallet className="h-6 w-6 text-ddms-secondary" />
       </div>
 
-      <h2 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">
+      <h2 className="text-4xl font-extrabold text-foreground tracking-tight sm:text-5xl">
         {formatPrice(balance)}
       </h2>
 
-      <div className="mt-8 flex items-center gap-2 text-xs text-slate-400">
-        <span className="h-2 w-2 rounded-full bg-[#00F0FF] animate-pulse" />
+      <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">
+        <span className="h-2 w-2 rounded-full bg-ddms-secondary animate-pulse" />
         {t('wallet.balanceCard.available')}
       </div>
     </div>

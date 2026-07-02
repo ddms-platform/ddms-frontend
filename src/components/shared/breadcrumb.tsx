@@ -31,16 +31,14 @@ export default function Breadcrumb({
               {index > 0 && (
                 <ChevronRight
                   size={14}
-                  style={{ color: 'rgba(255,255,255,0.3)' }}
-                  className="shrink-0"
+                  className="shrink-0 text-foreground/30"
                 />
               )}
 
               {isLast || !item.to ? (
                 /* Current page — no link */
                 <span
-                  className="font-medium"
-                  style={{ color: '#ffffff' }}
+                  className="font-medium text-foreground"
                   aria-current="page"
                 >
                   {item.label}
@@ -49,8 +47,7 @@ export default function Breadcrumb({
                 /* Clickable link */
                 <Link
                   to={item.to}
-                  className="flex items-center gap-1 font-medium transition-colors hover:text-[#00F0FF]"
-                  style={{ color: '#ecf0ff' }}
+                  className="flex items-center gap-1 font-medium transition-colors text-foreground/75 hover:text-ddms-secondary"
                 >
                   {isFirst && showHomeIcon && <Home size={14} />}
                   {item.label}

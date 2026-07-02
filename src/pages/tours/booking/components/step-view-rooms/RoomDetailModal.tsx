@@ -23,19 +23,11 @@ const RoomDetailModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        backdropFilter: 'blur(4px)',
-      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300 cursor-pointer"
       onClick={onClose}
     >
       <div
-        className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl"
-        style={{
-          backgroundColor: '#0d1b36',
-          border: '1px solid rgba(255,255,255,0.1)',
-        }}
+        className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-ddms-bg-card shadow-2xl animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-300 cursor-default"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -56,7 +48,7 @@ const RoomDetailModal = ({
           <div className="flex items-start justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold" style={{ color: '#ffffff' }}>
+                <h2 className="text-xl font-bold text-foreground">
                   {room.name}
                 </h2>
                 <span
@@ -66,9 +58,9 @@ const RoomDetailModal = ({
                       room.type === 'vip'
                         ? 'rgba(255,215,0,0.9)'
                         : room.type === 'deluxe'
-                          ? 'rgba(0,240,255,0.9)'
+                          ? 'rgba(0,119,182,0.9)'
                           : 'rgba(255,255,255,0.85)',
-                    color: '#0A192F',
+                    color: room.type === 'standard' ? '#0a2540' : '#ffffff',
                   }}
                 >
                   {room.type === 'vip'
@@ -86,25 +78,22 @@ const RoomDetailModal = ({
                 >
                   {room.rating}
                 </span>
-                <span className="text-xs" style={{ color: '#ecf0ff' }}>
+                <span className="text-xs text-muted-foreground">
                   ({room.reviewCount} {t('rooms.reviews')})
                 </span>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold" style={{ color: '#00F0FF' }}>
+              <p className="text-2xl font-bold text-ddms-secondary">
                 {formatPrice(room.price)}
               </p>
-              <p className="text-xs" style={{ color: '#ecf0ff' }}>
+              <p className="text-xs text-muted-foreground">
                 / {t('rooms.perNight')}
               </p>
             </div>
           </div>
 
-          <p
-            className="mt-4 text-sm leading-relaxed"
-            style={{ color: '#ecf0ff' }}
-          >
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             {room.description}
           </p>
 
@@ -128,12 +117,7 @@ const RoomDetailModal = ({
             ].map((item, i) => (
               <span
                 key={i}
-                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.04)',
-                  color: '#ecf0ff',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                }}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium bg-muted text-foreground border border-border"
               >
                 <span>{item.icon}</span>
                 {item.label}
@@ -143,27 +127,20 @@ const RoomDetailModal = ({
 
           <div
             className="my-5 h-px"
-            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+            style={{ backgroundColor: 'var(--border)' }}
           />
 
-          <h3 className="text-sm font-semibold" style={{ color: '#ffffff' }}>
+          <h3 className="text-sm font-semibold text-foreground">
             {t('booking.rooms.amenitiesLabel')}
           </h3>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
             {room.amenities.map(({ icon: AIcon, label }, i) => (
               <div
                 key={i}
-                className="flex items-center gap-2 rounded-lg px-3 py-2.5"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                }}
+                className="flex items-center gap-2 rounded-lg px-3 py-2.5 bg-muted border border-border"
               >
-                <AIcon size={16} style={{ color: '#00F0FF' }} />
-                <span
-                  className="text-xs font-medium"
-                  style={{ color: '#ecf0ff' }}
-                >
+                <AIcon size={16} className="text-ddms-secondary" />
+                <span className="text-xs font-medium text-foreground">
                   {label}
                 </span>
               </div>
@@ -172,10 +149,10 @@ const RoomDetailModal = ({
 
           <div
             className="my-5 h-px"
-            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+            style={{ backgroundColor: 'var(--border)' }}
           />
 
-          <h3 className="text-sm font-semibold" style={{ color: '#ffffff' }}>
+          <h3 className="text-sm font-semibold text-foreground">
             {t('booking.rooms.ratingOverview')}
           </h3>
           <div className="mt-3 flex items-start gap-6">
@@ -195,7 +172,7 @@ const RoomDetailModal = ({
                       color:
                         s <= Math.round(room.rating)
                           ? '#FFD700'
-                          : 'rgba(255,255,255,0.2)',
+                          : 'var(--border)',
                     }}
                   />
                 ))}
@@ -213,10 +190,7 @@ const RoomDetailModal = ({
                 const pct = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
                 return (
                   <div key={stars} className="flex items-center gap-2">
-                    <span
-                      className="flex w-6 items-center gap-0.5 text-[10px] font-medium"
-                      style={{ color: '#ecf0ff' }}
-                    >
+                    <span className="flex w-6 items-center gap-0.5 text-[10px] font-medium text-muted-foreground">
                       {stars}
                       <Star
                         size={8}
@@ -226,17 +200,14 @@ const RoomDetailModal = ({
                     </span>
                     <div
                       className="flex-1 h-2 rounded-full overflow-hidden"
-                      style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+                      style={{ backgroundColor: 'var(--border)' }}
                     >
                       <div
                         className="h-full rounded-full transition-all"
                         style={{ width: `${pct}%`, backgroundColor: '#FFD700' }}
                       />
                     </div>
-                    <span
-                      className="w-7 text-right text-[10px]"
-                      style={{ color: '#ecf0ff' }}
-                    >
+                    <span className="w-7 text-right text-[10px] text-muted-foreground">
                       {count}
                     </span>
                   </div>
@@ -247,44 +218,35 @@ const RoomDetailModal = ({
 
           <div
             className="my-5 h-px"
-            style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+            style={{ backgroundColor: 'var(--border)' }}
           />
 
-          <h3 className="text-sm font-semibold" style={{ color: '#ffffff' }}>
+          <h3 className="text-sm font-semibold text-foreground">
             {t('booking.rooms.reviewsLabel')} ({room.reviews.length})
           </h3>
           <div className="mt-3 space-y-3">
             {room.reviews.map((rev) => (
               <div
                 key={rev.id}
-                className="rounded-xl p-3.5"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                }}
+                className="rounded-xl p-3.5 bg-muted border border-border"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
                       style={{
-                        background: 'linear-gradient(135deg, #00F0FF, #00d4e0)',
-                        color: '#0A192F',
+                        background:
+                          'linear-gradient(135deg, var(--ddms-secondary), var(--ring))',
+                        color: 'var(--primary-foreground)',
                       }}
                     >
                       {rev.name.charAt(0)}
                     </div>
                     <div>
-                      <span
-                        className="text-sm font-medium"
-                        style={{ color: '#ffffff' }}
-                      >
+                      <span className="text-sm font-medium text-foreground">
                         {rev.name}
                       </span>
-                      <p
-                        className="text-[10px]"
-                        style={{ color: 'rgba(255,255,255,0.4)' }}
-                      >
+                      <p className="text-[10px] text-muted-foreground/60">
                         {rev.date}
                       </p>
                     </div>
@@ -296,19 +258,13 @@ const RoomDetailModal = ({
                         size={10}
                         fill={s <= rev.rating ? '#FFD700' : 'transparent'}
                         style={{
-                          color:
-                            s <= rev.rating
-                              ? '#FFD700'
-                              : 'rgba(255,255,255,0.15)',
+                          color: s <= rev.rating ? '#FFD700' : 'var(--border)',
                         }}
                       />
                     ))}
                   </div>
                 </div>
-                <p
-                  className="mt-2 text-xs leading-relaxed"
-                  style={{ color: '#ecf0ff' }}
-                >
+                <p className="mt-2 text-xs leading-relaxed text-foreground/80">
                   {rev.comment}
                 </p>
               </div>
@@ -317,9 +273,9 @@ const RoomDetailModal = ({
 
           <div className="mt-6 flex gap-3">
             <Button
-              variant="dark-outline"
+              variant="outline"
               size="action"
-              className="flex-1"
+              className="flex-1 text-foreground border-foreground/30 hover:bg-foreground/5"
               onClick={onClose}
             >
               {t('booking.rooms.closeModal')}
@@ -335,8 +291,8 @@ const RoomDetailModal = ({
               style={
                 isSelected
                   ? {
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                      color: '#ffffff',
+                      backgroundColor: 'var(--border)',
+                      color: 'var(--foreground)',
                     }
                   : undefined
               }

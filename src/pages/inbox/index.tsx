@@ -17,6 +17,9 @@ import { chatService } from '@/services/chatService';
 import { chatSignalRService } from '@/services/chatSignalRService';
 import type { ConversationResponse, MessageResponse } from '@/interfaces/chat';
 import { toast } from 'sonner';
+import Breadcrumb, {
+  type BreadcrumbItem,
+} from '@/components/shared/breadcrumb';
 
 export default function InboxPage() {
   const { t } = useTranslation();
@@ -182,35 +185,47 @@ export default function InboxPage() {
     }
   };
 
+  const isOwner = user?.roles.includes('owner') ?? false;
+
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: t('nav.home', 'Trang chủ'), to: '/' },
+  ];
+
+  if (isOwner) {
+    breadcrumbItems.push({
+      label: t('header.user.ownerDashboard', 'Dashboard chủ thuyền'),
+      to: '/owner',
+    });
+  }
+
+  breadcrumbItems.push({
+    label: t('chat.inboxTitle', 'Hộp thư tin nhắn'),
+  });
+
   return (
     <div
       className="flex flex-1 overflow-hidden"
       style={{
         height: 'calc(100vh - 80px)', // Adjust based on header height
-        backgroundColor: '#0A192F',
+        backgroundColor: 'var(--ddms-bg-main)',
       }}
     >
-      <div className="container mx-auto px-4 py-4 flex flex-1 overflow-hidden">
-        <div
-          className="flex flex-1 rounded-2xl border overflow-hidden"
-          style={{
-            borderColor: 'rgba(255, 255, 255, 0.08)',
-            backgroundColor: '#112240',
-          }}
-        >
+      <div className="container mx-auto px-4 py-4 flex flex-col flex-1 overflow-hidden">
+        {/* Breadcrumb */}
+        <div className="shrink-0 mb-3">
+          <Breadcrumb items={breadcrumbItems} />
+        </div>
+
+        <div className="flex flex-1 rounded-2xl border overflow-hidden border-border bg-ddms-bg-card shadow-sm">
           {/* 1. Sidebar - Conversations List */}
           <div
-            className={`w-full md:w-80 flex flex-col border-r overflow-hidden transition-all ${
+            className={`w-full md:w-80 flex flex-col border-r border-border overflow-hidden transition-all ${
               activeConversation ? 'hidden md:flex' : 'flex'
             }`}
-            style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
           >
-            <div
-              className="p-4 border-b flex items-center justify-between"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
-            >
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <MessageSquare className="h-5 w-5 text-[#00F0FF]" />
+            <div className="p-4 border-b border-border flex items-center justify-between">
+              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
+                <MessageSquare className="h-5 w-5 text-ddms-secondary" />
                 {t('chat.inboxTitle', 'Hộp thư tin nhắn')}
               </h2>
             </div>
@@ -218,18 +233,18 @@ export default function InboxPage() {
             <div className="flex-1 overflow-y-auto p-2 space-y-1">
               {loadingConvs ? (
                 <div className="flex flex-col items-center justify-center py-10 space-y-2">
-                  <Loader2 className="h-6 w-6 text-[#00F0FF] animate-spin" />
-                  <span className="text-sm text-slate-400">
+                  <Loader2 className="h-6 w-6 text-ddms-secondary animate-spin" />
+                  <span className="text-sm text-muted-foreground">
                     {t('chat.loadingConvs', 'Đang tải cuộc hội thoại...')}
                   </span>
                 </div>
               ) : conversations.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center px-4">
-                  <Inbox className="h-12 w-12 text-slate-500 mb-2" />
-                  <p className="text-sm font-semibold text-slate-300">
+                  <Inbox className="h-12 w-12 text-muted-foreground/60 mb-2" />
+                  <p className="text-sm font-semibold text-foreground">
                     {t('chat.noConversations', 'Không có cuộc trò chuyện nào')}
                   </p>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {t(
                       'chat.noConversationsDesc',
                       'Hãy liên hệ với chủ tàu từ trang chi tiết lịch trình của bạn.',
@@ -249,9 +264,11 @@ export default function InboxPage() {
                           navigate('/inbox', { replace: true });
                         }
                       }}
-                      className="w-full text-left p-3 rounded-xl flex items-center gap-3 hover:bg-[#1d2d50] transition-colors relative"
+                      className="w-full text-left p-3 rounded-xl flex items-center gap-3 hover:bg-foreground/5 transition-colors relative"
                       style={{
-                        backgroundColor: isSelected ? '#1e293b' : 'transparent',
+                        backgroundColor: isSelected
+                          ? 'var(--border)'
+                          : 'transparent',
                       }}
                     >
                       {/* Avatar */}
@@ -260,10 +277,10 @@ export default function InboxPage() {
                           <img
                             src={c.partnerAvatar}
                             alt={c.partnerName}
-                            className="h-10 w-10 rounded-full object-cover border border-slate-700"
+                            className="h-10 w-10 rounded-full object-cover border border-border"
                           />
                         ) : (
-                          <div className="h-10 w-10 rounded-full bg-slate-800 flex items-center justify-center text-white border border-slate-700">
+                          <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center text-foreground border border-border">
                             <UserIcon size={18} />
                           </div>
                         )}
@@ -277,11 +294,11 @@ export default function InboxPage() {
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-bold text-slate-200 truncate">
+                          <span className="text-sm font-bold text-foreground truncate">
                             {c.partnerName}
                           </span>
                           {c.lastMessageAt && (
-                            <span className="text-[10px] text-slate-400">
+                            <span className="text-[10px] text-muted-foreground">
                               {new Date(c.lastMessageAt).toLocaleTimeString(
                                 [],
                                 {
@@ -293,13 +310,13 @@ export default function InboxPage() {
                           )}
                         </div>
                         <p
-                          className={`text-xs truncate mt-0.5 ${c.unreadCount > 0 ? 'text-white font-bold' : 'text-slate-400'}`}
+                          className={`text-xs truncate mt-0.5 ${c.unreadCount > 0 ? 'text-foreground font-bold' : 'text-muted-foreground'}`}
                         >
                           {c.lastMessage ||
                             t('chat.noMessagesYet', 'Chưa có tin nhắn')}
                         </p>
                         {c.tourName && (
-                          <span className="inline-block mt-1 text-[9px] px-1.5 py-0.5 rounded bg-slate-800 text-[#00F0FF] truncate max-w-full">
+                          <span className="inline-block mt-1 text-[9px] px-1.5 py-0.5 rounded bg-muted text-ddms-secondary truncate max-w-full">
                             {t('chat.tourPrefix', 'Tour:')} {c.tourName}
                           </span>
                         )}
@@ -313,20 +330,17 @@ export default function InboxPage() {
 
           {/* 2. Main Pane - Active Chat Window */}
           <div
-            className={`flex-1 flex flex-col overflow-hidden ${
+            className={`flex-1 flex flex-col overflow-hidden bg-ddms-bg-card ${
               !activeConversation ? 'hidden md:flex' : 'flex'
             }`}
           >
             {activeConversation ? (
               <>
                 {/* Chat Header */}
-                <div
-                  className="p-4 border-b flex items-center gap-3 bg-[#13284f]"
-                  style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
-                >
+                <div className="p-4 border-b border-border flex items-center gap-3 bg-muted">
                   <button
                     onClick={() => setActiveConversation(null)}
-                    className="md:hidden p-1 text-slate-300 hover:text-white rounded-lg hover:bg-slate-800"
+                    className="md:hidden p-1 text-muted-foreground hover:text-foreground rounded-lg hover:bg-foreground/5"
                   >
                     <ArrowLeft size={20} />
                   </button>
@@ -335,19 +349,19 @@ export default function InboxPage() {
                     <img
                       src={activeConversation.partnerAvatar}
                       alt={activeConversation.partnerName}
-                      className="h-9 w-9 rounded-full object-cover border border-slate-700"
+                      className="h-9 w-9 rounded-full object-cover border border-border"
                     />
                   ) : (
-                    <div className="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-white border border-slate-700">
+                    <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center text-foreground border border-border">
                       <UserIcon size={16} />
                     </div>
                   )}
 
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-bold text-white truncate">
+                    <h3 className="text-sm font-bold text-foreground truncate">
                       {activeConversation.partnerName}
                     </h3>
-                    <p className="text-[11px] text-[#00F0FF] truncate">
+                    <p className="text-[11px] text-ddms-secondary truncate">
                       {activeConversation.bookingCode
                         ? `${t('chat.bookingPrefix', 'Đơn đặt:')} #${activeConversation.bookingCode}`
                         : t('chat.chatDefaultTitle', 'Trò chuyện')}
@@ -356,14 +370,14 @@ export default function InboxPage() {
                 </div>
 
                 {/* Messages Body */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0a152b]">
+                <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-ddms-bg-main">
                   {loadingMessages ? (
                     <div className="flex items-center justify-center h-full">
-                      <Loader2 className="h-8 w-8 text-[#00F0FF] animate-spin" />
+                      <Loader2 className="h-8 w-8 text-ddms-secondary animate-spin" />
                     </div>
                   ) : messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center p-6 text-slate-400">
-                      <MessageSquare className="h-10 w-10 text-slate-600 mb-2" />
+                    <div className="flex flex-col items-center justify-center h-full text-center p-6 text-muted-foreground">
+                      <MessageSquare className="h-10 w-10 text-muted-foreground/50 mb-2" />
                       <p className="text-sm">
                         {t(
                           'chat.firstMessagePrompt',
@@ -385,10 +399,10 @@ export default function InboxPage() {
                                 <img
                                   src={msg.senderAvatar}
                                   alt={msg.senderName}
-                                  className="h-7 w-7 rounded-full object-cover border border-slate-700"
+                                  className="h-7 w-7 rounded-full object-cover border border-border"
                                 />
                               ) : (
-                                <div className="h-7 w-7 rounded-full bg-slate-800 flex items-center justify-center text-white border border-slate-700 text-xs">
+                                <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center text-foreground border border-border text-xs">
                                   <UserIcon size={12} />
                                 </div>
                               )}
@@ -397,12 +411,8 @@ export default function InboxPage() {
 
                           <div className="flex flex-col max-w-[70%]">
                             <div
-                              className="rounded-2xl px-4 py-2.5 text-sm shadow-sm wrap-break-word"
+                              className={`rounded-2xl px-4 py-2.5 text-sm shadow-sm wrap-break-word ${isMe ? 'bg-ddms-secondary text-primary-foreground' : 'bg-ddms-bg-card text-foreground border border-border'}`}
                               style={{
-                                backgroundColor: isMe
-                                  ? '#00F0FF'
-                                  : 'rgba(255, 255, 255, 0.08)',
-                                color: isMe ? '#0A192F' : '#f8fafc',
                                 borderRadius: isMe
                                   ? '20px 20px 4px 20px'
                                   : '20px 20px 20px 4px',
@@ -411,7 +421,7 @@ export default function InboxPage() {
                               {msg.body}
                             </div>
                             <span
-                              className={`text-[9px] text-slate-400 mt-1 ${
+                              className={`text-[9px] text-muted-foreground mt-1 ${
                                 isMe ? 'text-right' : 'text-left'
                               }`}
                             >
@@ -431,8 +441,7 @@ export default function InboxPage() {
                 {/* Message Input */}
                 <form
                   onSubmit={handleSendMessage}
-                  className="p-3 border-t flex items-center gap-2 bg-[#112240]"
-                  style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
+                  className="p-3 border-t border-border flex items-center gap-2 bg-muted"
                 >
                   <input
                     type="text"
@@ -442,12 +451,12 @@ export default function InboxPage() {
                       'chat.inputPlaceholder',
                       'Nhập nội dung tin nhắn...',
                     )}
-                    className="flex-1 bg-[#0a192f] text-white text-sm px-4 py-2.5 rounded-xl border border-slate-800 focus:outline-none focus:ring-1 focus:ring-[#00F0FF] transition-all"
+                    className="flex-1 bg-ddms-bg-main text-foreground text-sm px-4 py-2.5 rounded-xl border border-border focus:outline-none focus:ring-1 focus:ring-ddms-secondary transition-all"
                   />
                   <button
                     type="submit"
                     disabled={!inputText.trim() || sending}
-                    className="p-2.5 rounded-xl bg-[#00F0FF] text-[#0A192F] hover:opacity-90 disabled:opacity-50 transition-opacity flex items-center justify-center"
+                    className="p-2.5 rounded-xl bg-ddms-secondary text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-opacity flex items-center justify-center"
                   >
                     {sending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -458,15 +467,15 @@ export default function InboxPage() {
                 </form>
               </>
             ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-8">
-                <MessageSquare className="h-16 w-16 text-slate-700 mb-2" />
-                <h3 className="text-lg font-bold text-slate-300">
+              <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8">
+                <MessageSquare className="h-16 w-16 text-muted-foreground/50 mb-2" />
+                <h3 className="text-lg font-bold text-foreground">
                   {t(
                     'chat.noConversationSelected',
                     'Không có cuộc trò chuyện nào được chọn',
                   )}
                 </h3>
-                <p className="text-sm mt-1 text-slate-500">
+                <p className="text-sm mt-1 text-muted-foreground/80">
                   {t(
                     'chat.noConversationSelectedDesc',
                     'Chọn một cuộc trò chuyện từ cột bên trái để bắt đầu nhắn tin.',
@@ -478,50 +487,44 @@ export default function InboxPage() {
 
           {/* 3. Right Pane - Context Booking Sidebar (Premium) */}
           {activeConversation && activeConversation.bookingId && (
-            <div
-              className="hidden lg:flex w-64 border-l flex-col p-4 space-y-4 overflow-y-auto"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
-            >
-              <h3
-                className="text-sm font-bold text-white uppercase tracking-wider border-b pb-2 mb-2"
-                style={{ borderColor: 'rgba(255,255,255,0.08)' }}
-              >
+            <div className="hidden lg:flex w-64 border-l border-border flex-col p-4 space-y-4 overflow-y-auto">
+              <h3 className="text-sm font-bold text-foreground uppercase tracking-wider border-b border-border pb-2 mb-2">
                 {t('chat.bookingInfo', 'Thông tin Booking')}
               </h3>
 
               <div className="space-y-3 text-xs">
                 {activeConversation.tourName && (
                   <div>
-                    <span className="text-slate-400 block mb-1">
+                    <span className="text-muted-foreground block mb-1">
                       {t('chat.tourService', 'Tour dịch vụ')}
                     </span>
-                    <div className="font-semibold text-slate-200 bg-[#1d2d50] p-2 rounded-lg border border-slate-800">
+                    <div className="font-semibold text-foreground bg-muted p-2 rounded-lg border border-border">
                       {activeConversation.tourName}
                     </div>
                   </div>
                 )}
 
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-[#182746] p-2.5 rounded-xl border border-slate-800/40">
-                    <span className="text-slate-400 block text-[10px] uppercase">
+                  <div className="bg-muted p-2.5 rounded-xl border border-border">
+                    <span className="text-muted-foreground block text-[10px] uppercase">
                       {t('chat.bookingCodeLabel', 'Mã đơn')}
                     </span>
-                    <span className="font-bold text-[#00F0FF]">
+                    <span className="font-bold text-ddms-secondary">
                       #{activeConversation.bookingCode}
                     </span>
                   </div>
-                  <div className="bg-[#182746] p-2.5 rounded-xl border border-slate-800/40">
-                    <span className="text-slate-400 block text-[10px] uppercase">
+                  <div className="bg-muted p-2.5 rounded-xl border border-border">
+                    <span className="text-muted-foreground block text-[10px] uppercase">
                       {t('chat.statusLabel', 'Trạng thái')}
                     </span>
-                    <span className="font-bold text-emerald-400">
+                    <span className="font-bold text-emerald-500">
                       {t('chat.statusBooked', 'Đã đặt')}
                     </span>
                   </div>
                 </div>
 
-                <div className="bg-[#182746] p-3 rounded-xl border border-slate-800/40 space-y-2">
-                  <div className="flex justify-between items-center text-slate-300">
+                <div className="bg-muted p-3 rounded-xl border border-border space-y-2">
+                  <div className="flex justify-between items-center text-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar size={12} />{' '}
                       {t('chat.standardLabel', 'Tiêu chuẩn')}
@@ -530,22 +533,19 @@ export default function InboxPage() {
                       {t('chat.activeState', 'Hoạt động')}
                     </span>
                   </div>
-                  <div
-                    className="flex justify-between items-center text-slate-300 border-t pt-2"
-                    style={{ borderColor: 'rgba(255,255,255,0.08)' }}
-                  >
+                  <div className="flex justify-between items-center text-foreground border-t border-border pt-2">
                     <span className="flex items-center gap-1">
                       <DollarSign size={12} />{' '}
                       {t('chat.paymentLabel', 'Thanh toán')}
                     </span>
-                    <span className="font-bold text-slate-100">
+                    <span className="font-bold text-foreground">
                       {t('chat.realtimeState', 'Thời gian thực')}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-auto bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-amber-400 text-[11px] flex gap-2">
+              <div className="mt-auto bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-amber-500 text-[11px] flex gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>
                   {t(

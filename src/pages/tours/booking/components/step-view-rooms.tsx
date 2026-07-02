@@ -24,10 +24,10 @@ export default function StepViewRooms({
 
   return (
     <div>
-      <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
+      <h2 className="text-lg font-semibold text-foreground">
         {t('booking.rooms.title')}
       </h2>
-      <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
+      <p className="mt-1 text-sm text-muted-foreground">
         {t('booking.rooms.subtitle', { boat: selectedBoatName })}
       </p>
 
@@ -47,14 +47,14 @@ export default function StepViewRooms({
 
       {selectedRoom && (
         <div
-          className="mt-4 rounded-xl p-3 flex items-center gap-3"
+          className="mt-4 rounded-xl p-3 flex items-center gap-3 border"
           style={{
-            backgroundColor: 'rgba(0,240,255,0.06)',
-            border: '1px solid rgba(0,240,255,0.2)',
+            backgroundColor: 'var(--secondary)',
+            borderColor: 'var(--border)',
           }}
         >
-          <Check size={16} style={{ color: '#00F0FF' }} />
-          <span className="text-sm" style={{ color: '#ffffff' }}>
+          <Check size={16} className="text-ddms-secondary" />
+          <span className="text-sm text-foreground">
             {t('booking.rooms.selected')}: <strong>{selectedRoom.name}</strong>{' '}
             — {formatPrice(selectedRoom.price)}
           </span>

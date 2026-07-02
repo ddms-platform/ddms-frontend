@@ -76,13 +76,13 @@ export default function MaintenanceServicesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B132B] p-6 lg:p-8 font-sans text-slate-100 pb-24">
+    <div className="min-h-screen bg-ddms-bg-owner p-6 lg:p-8 font-sans text-foreground pb-24">
       <div className="max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
             {t('maintenanceServices.title')}
           </h1>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted-foreground">
             {t('maintenanceServices.subtitle')}
           </p>
         </div>

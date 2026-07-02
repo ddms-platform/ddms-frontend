@@ -19,10 +19,10 @@ interface WithdrawalFormProps {
 }
 
 const inputClass =
-  'w-full rounded-xl border px-4 py-2.5 text-sm bg-[#0a192f] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF] transition-all';
-const inputStyle = { borderColor: 'rgba(255, 255, 255, 0.1)' };
+  'w-full rounded-xl border px-4 py-2.5 text-sm bg-ddms-bg-main text-foreground focus:outline-none focus:ring-1 focus:ring-ddms-secondary transition-all';
+const inputStyle = { borderColor: 'var(--border)' };
 const labelClass =
-  'block text-xs font-semibold text-[#ecf0ff] uppercase tracking-wider mb-2';
+  'block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2';
 
 const WithdrawalForm = ({
   balance,
@@ -44,16 +44,16 @@ const WithdrawalForm = ({
     <div
       className="rounded-2xl border p-6 shadow-md"
       style={{
-        borderColor: 'rgba(255, 255, 255, 0.08)',
-        backgroundColor: '#112240',
+        borderColor: 'var(--border)',
+        backgroundColor: 'var(--ddms-bg-card)',
       }}
     >
       <div
         className="flex items-center gap-2 mb-6 border-b pb-4"
-        style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+        style={{ borderColor: 'var(--border)' }}
       >
-        <Landmark className="h-5 w-5 text-[#00F0FF]" />
-        <h3 className="text-lg font-bold text-white">
+        <Landmark className="h-5 w-5 text-ddms-secondary" />
+        <h3 className="text-lg font-bold text-foreground">
           {t('wallet.form.title')}
         </h3>
       </div>
@@ -122,14 +122,14 @@ const WithdrawalForm = ({
             className={inputClass}
             style={inputStyle}
           />
-          <div className="mt-2 flex justify-between text-xs text-slate-400">
+          <div className="mt-2 flex justify-between text-xs text-muted-foreground">
             <span>
               {t('wallet.form.maxWithdraw', { balance: formatPrice(balance) })}
             </span>
             <button
               type="button"
               onClick={() => onAmountChange(balance.toString())}
-              className="text-[#00F0FF] hover:underline"
+              className="text-ddms-secondary hover:underline"
             >
               {t('wallet.form.maxWithdrawBtn')}
             </button>

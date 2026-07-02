@@ -32,61 +32,49 @@ export default function BookingSuccess({
         <CheckCircle2 size={40} color="#ffffff" />
       </div>
       <h1
-        className="text-[28px] font-bold"
-        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+        className="text-[28px] font-bold text-foreground"
+        style={{ letterSpacing: '-0.44px' }}
       >
         {t('booking.success.title')}
       </h1>
-      <p className="mt-3 text-sm leading-relaxed" style={{ color: '#ecf0ff' }}>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
         {t('booking.success.description')}
       </p>
 
-      <div
-        className="mt-8 rounded-2xl p-6 text-left"
-        style={{ backgroundColor: '#112240' }}
-      >
+      <div className="mt-8 rounded-2xl p-6 text-left border bg-ddms-bg-card border-border">
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>
+            <span className="text-muted-foreground">
               {t('booking.summary.tour')}
             </span>
-            <span className="font-medium" style={{ color: '#ffffff' }}>
-              {tourName}
-            </span>
+            <span className="font-medium text-foreground">{tourName}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>
+            <span className="text-muted-foreground">
               {t('booking.summary.date')}
             </span>
-            <span className="font-medium" style={{ color: '#ffffff' }}>
+            <span className="font-medium text-foreground">
               {formatDate(selectedDate)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>
+            <span className="text-muted-foreground">
               {t('booking.summary.time')}
             </span>
-            <span className="font-medium" style={{ color: '#ffffff' }}>
-              {selectedTime}
-            </span>
+            <span className="font-medium text-foreground">{selectedTime}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span style={{ color: '#ecf0ff' }}>
+            <span className="text-muted-foreground">
               {t('booking.summary.guests')}
             </span>
-            <span className="font-medium" style={{ color: '#ffffff' }}>
-              {guests}
-            </span>
+            <span className="font-medium text-foreground">{guests}</span>
           </div>
-          <div
-            className="h-px"
-            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
-          />
+          <div className="h-px bg-border my-2" />
           <div className="flex justify-between">
-            <span className="font-semibold" style={{ color: '#ffffff' }}>
+            <span className="font-semibold text-foreground">
               {t('booking.summary.total')}
             </span>
-            <span className="font-bold" style={{ color: '#00F0FF' }}>
+            <span className="font-bold text-ddms-secondary">
               {formatPrice(totalPrice)}
             </span>
           </div>
@@ -99,7 +87,12 @@ export default function BookingSuccess({
             {t('booking.success.viewBookings')}
           </Link>
         </Button>
-        <Button variant="dark-outline" size="action-lg" asChild>
+        <Button
+          variant="outline"
+          size="action-lg"
+          className="text-foreground border-foreground/30 hover:bg-foreground/5"
+          asChild
+        >
           <Link to={routeName.home}>{t('booking.success.backHome')}</Link>
         </Button>
       </div>

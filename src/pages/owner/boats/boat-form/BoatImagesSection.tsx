@@ -22,16 +22,14 @@ const BoatImagesSection = ({
   <div
     className="rounded-2xl p-6"
     style={{
-      backgroundColor: '#112240',
-      border: `1px solid ${error ? '#EF4444' : 'rgba(255,255,255,0.04)'}`,
+      backgroundColor: 'var(--ddms-bg-card)',
+      border: `1px solid ${error ? '#EF4444' : 'var(--border)'}`,
     }}
   >
     <div className="flex items-center justify-between mb-4">
-      <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
-        Hình ảnh tàu
-      </h2>
+      <h2 className="text-base font-semibold text-foreground">Hình ảnh tàu</h2>
       {images.length > 0 && (
-        <label className="text-sm text-cyan-400 hover:text-cyan-300 font-semibold cursor-pointer flex items-center gap-1">
+        <label className="text-sm text-ddms-secondary hover:text-ddms-secondary/80 font-semibold cursor-pointer flex items-center gap-1">
           + Thêm ảnh
           <input
             type="file"
@@ -49,7 +47,7 @@ const BoatImagesSection = ({
         {images.map((img, i) => (
           <div
             key={i}
-            className="relative aspect-video rounded-xl overflow-hidden group border border-slate-800"
+            className="relative aspect-video rounded-xl overflow-hidden group border border-border"
           >
             <img
               src={img.imageUrl}
@@ -68,8 +66,9 @@ const BoatImagesSection = ({
       </div>
     ) : (
       <div
-        className="relative flex flex-col items-center rounded-xl border-2 border-dashed py-12 bg-slate-800/20 hover:border-cyan-500/50 transition-colors group cursor-pointer"
-        style={{ borderColor: error ? '#EF4444' : 'rgba(255,255,255,0.1)' }}
+        className={`relative flex flex-col items-center rounded-xl border-2 border-dashed py-12 bg-foreground/5 hover:border-ddms-secondary/50 transition-colors group cursor-pointer ${
+          error ? 'border-red-500' : 'border-border'
+        }`}
       >
         <input
           type="file"
@@ -80,13 +79,14 @@ const BoatImagesSection = ({
         />
         <ImageIcon
           size={40}
-          style={{ color: error ? '#EF4444' : 'rgba(0,240,255,0.3)' }}
-          className="mb-4 group-hover:scale-110 transition-transform"
+          className={`mb-4 group-hover:scale-110 transition-transform ${error ? 'text-red-500' : 'text-ddms-secondary/50'}`}
         />
-        <p className="mt-3 text-sm" style={{ color: error ? '#EF4444' : '#ecf0ff' }}>
+        <p
+          className={`mt-3 text-sm ${error ? 'text-red-500' : 'text-foreground'}`}
+        >
           Kéo thả hoặc nhấn vào đây để tải ảnh tàu lên
         </p>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Hỗ trợ JPG, PNG (Tối đa 5MB)
         </p>
       </div>

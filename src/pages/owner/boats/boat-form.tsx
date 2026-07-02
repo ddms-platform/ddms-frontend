@@ -159,7 +159,7 @@ export default function BoatForm({
   };
 
   const [createdBoatId, setCreatedBoatId] = useState<string | null>(null);
-  
+
   const isSavingRef = useRef(false);
 
   const handleSave = async () => {
@@ -168,7 +168,7 @@ export default function BoatForm({
       setActiveTab('basic');
       return;
     }
-    
+
     isSavingRef.current = true;
     setSaving(true);
     try {
@@ -234,8 +234,8 @@ export default function BoatForm({
             Api.post('/owner/services/register', payload).catch((err) => {
               console.error(err);
               throw new Error('Lỗi khi đăng ký dịch vụ');
-            })
-          )
+            }),
+          ),
         );
       }
 
@@ -301,11 +301,7 @@ export default function BoatForm({
   if (loadingBoat) {
     return (
       <div className="flex h-96 items-center justify-center">
-        <Loader2
-          size={32}
-          className="animate-spin"
-          style={{ color: '#00F0FF' }}
-        />
+        <Loader2 size={32} className="animate-spin text-ddms-secondary" />
       </div>
     );
   }
@@ -313,34 +309,37 @@ export default function BoatForm({
   return (
     <div className="px-4 py-6 lg:px-8 pb-24">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div
+        className={`flex items-center justify-between ${onClose ? 'pr-12 sm:pr-16' : ''}`}
+      >
         <div className="flex items-center gap-3">
           {onClose ? (
             <Button variant="ghost" size="icon" onClick={onClose}>
-              <ArrowLeft size={18} style={{ color: '#ecf0ff' }} />
+              <ArrowLeft size={18} className="text-foreground" />
             </Button>
           ) : (
             <Button variant="ghost" size="icon" asChild>
               <Link to={routeName.ownerBoats}>
-                <ArrowLeft size={18} style={{ color: '#ecf0ff' }} />
+                <ArrowLeft size={18} className="text-foreground" />
               </Link>
             </Button>
           )}
           <div>
-            <h1 className="text-xl font-bold" style={{ color: '#ffffff' }}>
+            <h1 className="text-xl font-bold text-foreground">
               {isEdit
                 ? t('ownerBoats.form.editTitle', { name: boat?.name ?? '' })
                 : t('ownerBoats.form.createTitle')}
             </h1>
-            <p className="text-xs" style={{ color: '#ecf0ff' }}>
+            <p className="text-xs text-muted-foreground">
               Cập nhật thông tin, hình ảnh và các dịch vụ của tàu
             </p>
           </div>
         </div>
         <Button
+          type="button"
           variant="cyan"
           size="action"
-          className="gap-2 shadow-[0_0_15px_rgba(0,240,255,0.3)]"
+          className="gap-2"
           onClick={handleSave}
           disabled={saving}
         >
@@ -354,28 +353,21 @@ export default function BoatForm({
       </div>
 
       {/* Tabs */}
-      <div
-        className="mt-6 flex gap-1 overflow-x-auto rounded-xl p-1"
-        style={{
-          backgroundColor: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.04)',
-        }}
-      >
+      <div className="mt-6 flex gap-1 overflow-x-auto rounded-xl p-1 bg-muted border border-border">
         {TABS.map(({ id, label, icon: Icon, count }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
-            className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all"
-            style={{
-              backgroundColor:
-                activeTab === id ? 'rgba(0,240,255,0.1)' : 'transparent',
-              color: activeTab === id ? '#00F0FF' : '#ecf0ff',
-            }}
+            className={`flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
+              activeTab === id
+                ? 'bg-border text-ddms-secondary'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
           >
             <Icon size={16} />
             {label}
             {count !== undefined && (
-              <span className="ml-1 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">
+              <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] text-foreground">
                 {count}
               </span>
             )}

@@ -35,7 +35,7 @@ const BookingsTab = ({
   <div className="overflow-x-auto">
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+        <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
           <th className="py-3 px-4">Mã đơn đặt</th>
           <th className="py-3 px-4">Tên Tour</th>
           <th className="py-3 px-4">Khách hàng</th>
@@ -44,40 +44,45 @@ const BookingsTab = ({
           <th className="py-3 px-4 text-right">Tổng giá</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-slate-800/50 text-sm">
+      <tbody className="divide-y divide-border/60 text-sm text-foreground/80">
         {summary?.bookings.length === 0 ? (
           <tr>
-            <td colSpan={6} className="text-center py-10 text-slate-500">
+            <td colSpan={6} className="text-center py-10 text-muted-foreground">
               Không có doanh thu đặt tour nào.
             </td>
           </tr>
         ) : (
           summary?.bookings.map((b) => (
-            <tr key={b.bookingId} className="hover:bg-slate-800/20">
-              <td className="py-3.5 px-4 font-mono text-xs text-slate-400">
+            <tr
+              key={b.bookingId}
+              className="hover:bg-muted/30 transition-colors"
+            >
+              <td className="py-3.5 px-4 font-mono text-xs text-muted-foreground">
                 {b.bookingId.substring(0, 8)}...
               </td>
-              <td className="py-3.5 px-4 font-semibold text-slate-200">
+              <td className="py-3.5 px-4 font-semibold text-foreground">
                 {b.tourName}
               </td>
-              <td className="py-3.5 px-4 text-slate-300">{b.customerName}</td>
-              <td className="py-3.5 px-4 text-slate-400">
+              <td className="py-3.5 px-4 text-foreground/90">
+                {b.customerName}
+              </td>
+              <td className="py-3.5 px-4 text-muted-foreground">
                 {new Date(b.bookingDate).toLocaleDateString('vi-VN')}
               </td>
               <td className="py-3.5 px-4">
                 <Badge
                   className={
                     b.status === 'completed'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:text-emerald-400'
                       : b.status === 'paid'
-                        ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                        : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                        ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20 dark:text-blue-400'
+                        : 'bg-amber-500/10 text-amber-600 border border-amber-500/20 dark:text-amber-400'
                   }
                 >
                   {b.status.toUpperCase()}
                 </Badge>
               </td>
-              <td className="py-3.5 px-4 text-right font-bold text-slate-200">
+              <td className="py-3.5 px-4 text-right font-bold text-foreground">
                 {formatVND(b.totalPrice)}
               </td>
             </tr>
@@ -98,35 +103,42 @@ const CommissionsTab = ({
   <div className="overflow-x-auto">
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+        <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
           <th className="py-3 px-4">Mã đơn đặt</th>
           <th className="py-3 px-4">Tên Tour</th>
           <th className="py-3 px-4 text-right">Tổng giá trị đơn</th>
           <th className="py-3 px-4 text-right">Tỷ lệ</th>
-          <th className="py-3 px-4 text-right text-cyan-400">
+          <th className="py-3 px-4 text-right text-ddms-secondary">
             Hoa hồng phát sinh
           </th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-slate-800/50 text-sm">
+      <tbody className="divide-y divide-border/60 text-sm text-foreground/80">
         {summary?.bookings.length === 0 ? (
           <tr>
-            <td colSpan={5} className="text-center py-10 text-slate-500">
+            <td colSpan={5} className="text-center py-10 text-muted-foreground">
               Không có phát sinh phí hoa hồng nào.
             </td>
           </tr>
         ) : (
           summary?.bookings.map((b) => (
-            <tr key={b.bookingId} className="hover:bg-slate-800/20">
-              <td className="py-3.5 px-4 font-mono text-xs text-slate-400">
+            <tr
+              key={b.bookingId}
+              className="hover:bg-muted/30 transition-colors"
+            >
+              <td className="py-3.5 px-4 font-mono text-xs text-muted-foreground">
                 {b.bookingId.substring(0, 8)}...
               </td>
-              <td className="py-3.5 px-4 text-slate-200">{b.tourName}</td>
-              <td className="py-3.5 px-4 text-right text-slate-300">
+              <td className="py-3.5 px-4 text-foreground font-semibold">
+                {b.tourName}
+              </td>
+              <td className="py-3.5 px-4 text-right text-foreground/90">
                 {formatVND(b.totalPrice)}
               </td>
-              <td className="py-3.5 px-4 text-right text-slate-400">8%</td>
-              <td className="py-3.5 px-4 text-right font-bold text-cyan-400">
+              <td className="py-3.5 px-4 text-right text-muted-foreground">
+                8%
+              </td>
+              <td className="py-3.5 px-4 text-right font-bold text-ddms-secondary">
                 {formatVND(b.commission)}
               </td>
             </tr>
@@ -147,43 +159,48 @@ const MaintenancesTab = ({
   <div className="overflow-x-auto">
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+        <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
           <th className="py-3 px-4">Tên tàu</th>
           <th className="py-3 px-4">Dịch vụ sửa chữa / bảo trì</th>
           <th className="py-3 px-4">Bắt đầu</th>
           <th className="py-3 px-4">Kết thúc</th>
           <th className="py-3 px-4">Trạng thái</th>
-          <th className="py-3 px-4 text-right text-cyan-400">
+          <th className="py-3 px-4 text-right text-ddms-secondary">
             Chi phí dịch vụ
           </th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-slate-800/50 text-sm">
+      <tbody className="divide-y divide-border/60 text-sm text-foreground/80">
         {summary?.maintenances.length === 0 ? (
           <tr>
-            <td colSpan={6} className="text-center py-10 text-slate-500">
+            <td colSpan={6} className="text-center py-10 text-muted-foreground">
               Chưa có bản ghi bảo trì nào được duyệt tính phí.
             </td>
           </tr>
         ) : (
           summary?.maintenances.map((m) => (
-            <tr key={m.maintenanceId} className="hover:bg-slate-800/20">
-              <td className="py-3.5 px-4 font-semibold text-slate-200">
+            <tr
+              key={m.maintenanceId}
+              className="hover:bg-muted/30 transition-colors"
+            >
+              <td className="py-3.5 px-4 font-semibold text-foreground">
                 {m.boatName}
               </td>
-              <td className="py-3.5 px-4 text-slate-300">{m.serviceName}</td>
-              <td className="py-3.5 px-4 text-slate-400">
+              <td className="py-3.5 px-4 text-foreground/90">
+                {m.serviceName}
+              </td>
+              <td className="py-3.5 px-4 text-muted-foreground">
                 {new Date(m.startTime).toLocaleString('vi-VN')}
               </td>
-              <td className="py-3.5 px-4 text-slate-400">
+              <td className="py-3.5 px-4 text-muted-foreground">
                 {new Date(m.endTime).toLocaleString('vi-VN')}
               </td>
               <td className="py-3.5 px-4">
-                <Badge className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <Badge className="bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:text-emerald-400">
                   {m.status.toUpperCase()}
                 </Badge>
               </td>
-              <td className="py-3.5 px-4 text-right font-bold text-cyan-400">
+              <td className="py-3.5 px-4 text-right font-bold text-ddms-secondary">
                 {formatVND(m.amount)}
               </td>
             </tr>
@@ -204,35 +221,35 @@ const DocksTab = ({
   <div className="overflow-x-auto">
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+        <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
           <th className="py-3 px-4">Tên tàu</th>
           <th className="py-3 px-4">Số đăng ký</th>
           <th className="py-3 px-4">Tháng hoạt động bến</th>
-          <th className="py-3 px-4 text-right text-cyan-400">
+          <th className="py-3 px-4 text-right text-ddms-secondary">
             Đơn giá thuê / tháng
           </th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-slate-800/50 text-sm">
+      <tbody className="divide-y divide-border/60 text-sm text-foreground/80">
         {summary?.dockRentals.length === 0 ? (
           <tr>
-            <td colSpan={4} className="text-center py-10 text-slate-500">
+            <td colSpan={4} className="text-center py-10 text-muted-foreground">
               Chưa có bản ghi hoạt động bến nào.
             </td>
           </tr>
         ) : (
           summary?.dockRentals.map((d, index) => (
-            <tr key={index} className="hover:bg-slate-800/20">
-              <td className="py-3.5 px-4 font-semibold text-slate-200">
+            <tr key={index} className="hover:bg-muted/30 transition-colors">
+              <td className="py-3.5 px-4 font-semibold text-foreground">
                 {d.boatName}
               </td>
-              <td className="py-3.5 px-4 text-slate-300">
+              <td className="py-3.5 px-4 text-foreground/90">
                 {d.registrationNumber || 'N/A'}
               </td>
-              <td className="py-3.5 px-4 text-slate-200">
+              <td className="py-3.5 px-4 text-foreground/80">
                 Tháng {d.month} / {d.year}
               </td>
-              <td className="py-3.5 px-4 text-right font-bold text-cyan-400">
+              <td className="py-3.5 px-4 text-right font-bold text-ddms-secondary">
                 {formatVND(d.amount)}
               </td>
             </tr>
@@ -253,7 +270,7 @@ const HistoryTab = ({
   <div className="overflow-x-auto">
     <table className="w-full text-left border-collapse">
       <thead>
-        <tr className="border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
+        <tr className="border-b border-border text-muted-foreground text-xs uppercase tracking-wider">
           <th className="py-3 px-4">Mã tham chiếu PayOS</th>
           <th className="py-3 px-4">Mô tả giao dịch</th>
           <th className="py-3 px-4">Ngày tạo</th>
@@ -262,34 +279,39 @@ const HistoryTab = ({
           <th className="py-3 px-4 text-right">Số tiền</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-slate-800/50 text-sm">
+      <tbody className="divide-y divide-border/60 text-sm text-foreground/80">
         {summary?.paymentHistory.length === 0 ? (
           <tr>
-            <td colSpan={6} className="text-center py-10 text-slate-500">
+            <td colSpan={6} className="text-center py-10 text-muted-foreground">
               Bạn chưa thực hiện giao dịch thanh toán nào.
             </td>
           </tr>
         ) : (
           summary?.paymentHistory.map((p) => (
-            <tr key={p.paymentId} className="hover:bg-slate-800/20">
-              <td className="py-3.5 px-4 font-mono text-xs text-slate-400">
+            <tr
+              key={p.paymentId}
+              className="hover:bg-muted/30 transition-colors"
+            >
+              <td className="py-3.5 px-4 font-mono text-xs text-muted-foreground">
                 {p.payosOrderCode}
               </td>
-              <td className="py-3.5 px-4 text-slate-200">{p.description}</td>
-              <td className="py-3.5 px-4 text-slate-400">
+              <td className="py-3.5 px-4 text-foreground font-semibold">
+                {p.description}
+              </td>
+              <td className="py-3.5 px-4 text-muted-foreground">
                 {new Date(p.createdAt).toLocaleString('vi-VN')}
               </td>
-              <td className="py-3.5 px-4 text-slate-400">
+              <td className="py-3.5 px-4 text-muted-foreground">
                 {p.paidAt ? new Date(p.paidAt).toLocaleString('vi-VN') : '-'}
               </td>
               <td className="py-3.5 px-4">
                 <Badge
                   className={
                     p.status === 'paid'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:text-emerald-400'
                       : p.status === 'cancelled'
-                        ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                        : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                        ? 'bg-rose-500/10 text-rose-600 border border-rose-500/20 dark:text-rose-400'
+                        : 'bg-amber-500/10 text-amber-600 border border-amber-500/20 dark:text-amber-400'
                   }
                 >
                   {p.status === 'paid'
@@ -299,7 +321,7 @@ const HistoryTab = ({
                       : 'CHỜ THANH TOÁN'}
                 </Badge>
               </td>
-              <td className="py-3.5 px-4 text-right font-bold text-slate-200">
+              <td className="py-3.5 px-4 text-right font-bold text-foreground">
                 {formatVND(p.amount)}
               </td>
             </tr>
@@ -317,16 +339,16 @@ const RevenueDetailTabs = ({
   formatVND,
 }: RevenueDetailTabsProps) => {
   return (
-    <div className="bg-[#111C3A] rounded-2xl border border-slate-800/60 overflow-hidden shadow-lg">
-      <div className="flex border-b border-slate-800 overflow-x-auto whitespace-nowrap bg-slate-900/40">
+    <div className="bg-ddms-bg-card rounded-2xl border border-border overflow-hidden shadow-lg">
+      <div className="flex border-b border-border overflow-x-auto whitespace-nowrap bg-muted/40">
         {TAB_DEFS.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => onTabChange(key)}
             className={`px-6 py-4 text-sm font-semibold cursor-pointer border-b-2 transition-all flex items-center gap-2 ${
               activeTab === key
-                ? 'border-cyan-500 text-cyan-400 bg-[#111C3A]/50'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-ddms-secondary text-ddms-secondary bg-ddms-bg-card'
+                : 'border-transparent text-muted-foreground hover:text-foreground'
             }`}
           >
             <Icon className="w-4 h-4" /> {label}

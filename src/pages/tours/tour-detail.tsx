@@ -8,7 +8,6 @@ import TourReviews from './components/tour-reviews';
 import BookingSidebar from './components/booking-sidebar';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -25,6 +24,7 @@ import {
 } from '@/services/tourService';
 import WeatherWidget from '@/components/shared/weather-widget';
 import { useAuth } from '@/hooks/use-auth';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function TourDetailPage() {
   const { t } = useTranslation();
@@ -102,8 +102,85 @@ export default function TourDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 size={40} className="animate-spin text-[#00F0FF]" />
+      <div className="mx-auto max-w-7xl px-6 py-8 space-y-6 animate-pulse text-foreground">
+        {/* Breadcrumb Skeleton */}
+        <Skeleton className="h-4 w-64" />
+
+        {/* Gallery Slider Skeleton */}
+        <Skeleton className="h-100 w-full rounded-2xl" />
+
+        {/* Split Content Layout Skeleton */}
+        <div className="grid gap-10 lg:grid-cols-[1fr_380px]">
+          {/* Left Details Skeleton */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-4 w-1/3" />
+            </div>
+
+            {/* Weather + Stats Widget Skeleton */}
+            <div className="flex gap-4 p-4 bg-ddms-bg-card border border-border rounded-xl">
+              <Skeleton className="h-12 w-24 rounded-lg" />
+              <Skeleton className="h-12 w-32 rounded-lg" />
+              <Skeleton className="h-12 w-32 rounded-lg" />
+            </div>
+
+            {/* Description Paragraphs Skeleton */}
+            <div className="space-y-3">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+              <Skeleton className="h-4 w-2/3" />
+            </div>
+
+            {/* Services/Schedule List Skeletons */}
+            <div className="space-y-3 pt-4">
+              <Skeleton className="h-6 w-48" />
+              <div className="grid grid-cols-2 gap-4">
+                <Skeleton className="h-10 w-full rounded-lg" />
+                <Skeleton className="h-10 w-full rounded-lg" />
+                <Skeleton className="h-10 w-full rounded-lg" />
+                <Skeleton className="h-10 w-full rounded-lg" />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar Booking Skeleton */}
+          <div className="h-112.5 bg-ddms-bg-card border border-border rounded-2xl p-6 shadow-sm space-y-6 flex flex-col justify-between">
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-4 w-16" />
+              </div>
+
+              {/* Datepicker/Input skeletons */}
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <Skeleton className="h-3 w-16" />
+                  <Skeleton className="h-10 w-full rounded-xl" />
+                </div>
+                <div className="space-y-1">
+                  <Skeleton className="h-3 w-28" />
+                  <Skeleton className="h-10 w-full rounded-xl" />
+                </div>
+              </div>
+
+              {/* Summary values skeleton */}
+              <div className="space-y-2 pt-2 border-t border-border">
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-12" />
+                </div>
+                <div className="flex justify-between">
+                  <Skeleton className="h-4 w-28" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              </div>
+            </div>
+
+            <Skeleton className="h-12 w-full rounded-xl" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -167,21 +244,18 @@ export default function TourDetailPage() {
           {/* Lộ trình (Itinerary) */}
           {tour.routes && tour.routes.length > 0 && (
             <div className="mt-8">
-              <h2
-                className="text-xl font-bold mb-4"
-                style={{ color: '#ffffff' }}
-              >
+              <h2 className="text-xl font-bold mb-4 text-foreground">
                 Lộ trình chuyến đi
               </h2>
               <div className="space-y-4">
                 {tour.routes.map((route, idx) => (
                   <div key={route.id} className="relative pl-6">
                     <div className="absolute left-0 top-1 h-full w-px bg-[#34A853]"></div>
-                    <div className="absolute -left-1 top-1.5 h-2.5 w-2.5 rounded-full bg-[#00F0FF]"></div>
-                    <h3 className="font-semibold text-[#ecf0ff]">
+                    <div className="absolute -left-1 top-1.5 h-2.5 w-2.5 rounded-full bg-ddms-secondary"></div>
+                    <h3 className="font-semibold text-foreground">
                       {idx + 1}. {route.name}
                     </h3>
-                    <p className="text-sm text-[#00F0FF] mb-1">
+                    <p className="text-sm text-ddms-secondary mb-1">
                       {route.startPoint} → {route.endPoint}
                     </p>
                     {route.description && (
@@ -198,13 +272,8 @@ export default function TourDetailPage() {
           {/* Bản đồ (Map) */}
           {tour.mapUrl && (
             <div className="mt-8">
-              <h2
-                className="text-xl font-bold mb-4"
-                style={{ color: '#ffffff' }}
-              >
-                Bản đồ
-              </h2>
-              <div className="w-full h-75 rounded-xl overflow-hidden border border-[rgba(255,255,255,0.1)]">
+              <h2 className="text-xl font-bold mb-4 text-foreground">Bản đồ</h2>
+              <div className="w-full h-75 rounded-xl overflow-hidden border border-border">
                 <iframe
                   src={tour.mapUrl}
                   width="100%"
@@ -221,10 +290,7 @@ export default function TourDetailPage() {
           {/* Hạng ghế / Phòng (Classes) */}
           {tour.classes && tour.classes.length > 0 && (
             <div className="mt-8">
-              <h2
-                className="text-xl font-bold mb-4"
-                style={{ color: '#ffffff' }}
-              >
+              <h2 className="text-xl font-bold mb-4 text-foreground">
                 Hạng ghế / Phòng nghỉ
               </h2>
               <RadioGroup
@@ -235,8 +301,8 @@ export default function TourDetailPage() {
                 {tour.classes.map((cls) => (
                   <div
                     key={cls.id}
-                    className="flex items-start space-x-3 p-4 rounded-xl border border-[rgba(255,255,255,0.1)]"
-                    style={{ backgroundColor: '#112240' }}
+                    className="flex items-start space-x-3 p-4 rounded-xl border border-border"
+                    style={{ backgroundColor: 'var(--ddms-bg-card)' }}
                   >
                     <RadioGroupItem
                       value={cls.id}
@@ -246,10 +312,10 @@ export default function TourDetailPage() {
                     <div className="grid gap-1.5 flex-1">
                       <Label
                         htmlFor={`class-${cls.id}`}
-                        className="text-base font-semibold text-[#ffffff] cursor-pointer"
+                        className="text-base font-semibold text-foreground cursor-pointer"
                       >
                         {cls.name}{' '}
-                        <span className="text-[#00F0FF] ml-2">
+                        <span className="text-ddms-secondary ml-2">
                           (
                           {cls.price > 0
                             ? '+' + formatPrice(cls.price)
@@ -284,18 +350,15 @@ export default function TourDetailPage() {
           {/* Dịch vụ đi kèm (Services) */}
           {tour.services && tour.services.length > 0 && (
             <div className="mt-8">
-              <h2
-                className="text-xl font-bold mb-4"
-                style={{ color: '#ffffff' }}
-              >
+              <h2 className="text-xl font-bold mb-4 text-foreground">
                 Dịch vụ đi kèm (Tùy chọn)
               </h2>
               <div className="grid gap-4">
                 {tour.services.map((srv) => (
                   <div
                     key={srv.id}
-                    className="flex items-start space-x-3 p-4 rounded-xl border border-[rgba(255,255,255,0.1)]"
-                    style={{ backgroundColor: '#112240' }}
+                    className="flex items-start space-x-3 p-4 rounded-xl border border-border"
+                    style={{ backgroundColor: 'var(--ddms-bg-card)' }}
                   >
                     <Checkbox
                       id={`srv-${srv.id}`}
@@ -306,7 +369,7 @@ export default function TourDetailPage() {
                     <div className="grid gap-1.5 flex-1">
                       <Label
                         htmlFor={`srv-${srv.id}`}
-                        className="text-base font-semibold text-[#ffffff] cursor-pointer"
+                        className="text-base font-semibold text-foreground cursor-pointer"
                       >
                         {srv.name}{' '}
                         <span className="text-[#34A853] ml-2">
@@ -337,16 +400,13 @@ export default function TourDetailPage() {
           {/* FAQ */}
           {tour.faqs && tour.faqs.length > 0 && (
             <div className="mt-8">
-              <h2
-                className="text-xl font-bold mb-4"
-                style={{ color: '#ffffff' }}
-              >
+              <h2 className="text-xl font-bold mb-4 text-foreground">
                 Câu hỏi thường gặp
               </h2>
               <Accordion type="single" collapsible className="w-full">
                 {tour.faqs.map((faq, idx) => (
                   <AccordionItem key={faq.id} value={`faq-${idx}`}>
-                    <AccordionTrigger className="text-left text-[#ecf0ff] hover:text-[#00F0FF]">
+                    <AccordionTrigger className="text-left text-foreground hover:text-ddms-secondary">
                       {faq.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-400">
@@ -379,16 +439,16 @@ export default function TourDetailPage() {
       <div
         className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between border-t px-6 py-4 lg:hidden"
         style={{
-          backgroundColor: '#0A192F',
-          borderColor: 'rgba(255,255,255,0.08)',
-          boxShadow: '0 -2px 10px rgba(0,0,0,0.4)',
+          backgroundColor: 'var(--ddms-bg-main)',
+          borderColor: 'var(--border)',
+          boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
         }}
       >
         <div>
-          <span className="text-lg font-bold" style={{ color: '#ffffff' }}>
+          <span className="text-lg font-bold text-foreground">
             {formatPrice(finalPrice)}
           </span>
-          <span className="text-sm" style={{ color: '#ecf0ff' }}>
+          <span className="text-sm text-foreground/80">
             {' '}
             / {t('tour.booking.perPerson')}
           </span>

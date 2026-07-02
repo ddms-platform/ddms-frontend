@@ -38,7 +38,7 @@ const ScheduleCalendar = ({
       days.push(
         <div
           key={`empty-${i}`}
-          className="min-h-30 p-2 border-r border-b border-slate-700/50 bg-slate-800/20"
+          className="min-h-30 p-2 border-r border-b border-border bg-muted/10"
         ></div>,
       );
     }
@@ -56,10 +56,10 @@ const ScheduleCalendar = ({
       days.push(
         <div
           key={`day-${i}`}
-          className={`min-h-[120px] p-2 border-r border-b border-slate-700/50 hover:bg-slate-700/30 transition-colors ${isToday ? 'ring-2 ring-cyan-500 bg-cyan-950/20' : ''}`}
+          className={`min-h-[120px] p-2 border-r border-b border-border hover:bg-muted/50 transition-colors ${isToday ? 'ring-2 ring-ddms-secondary bg-ddms-secondary/10' : ''}`}
         >
           <div
-            className={`text-sm font-semibold mb-2 ${isToday ? 'text-cyan-400' : 'text-slate-400'}`}
+            className={`text-sm font-semibold mb-2 ${isToday ? 'text-ddms-secondary' : 'text-muted-foreground'}`}
           >
             {i.toString().padStart(2, '0')}
           </div>
@@ -67,7 +67,7 @@ const ScheduleCalendar = ({
             {daySchedules.map((schedule, idx) => (
               <div
                 key={idx}
-                className="text-xs px-2 py-1 rounded bg-cyan-900/40 text-cyan-400 border border-cyan-800 truncate"
+                className="text-xs px-2 py-1 rounded bg-ddms-secondary/20 text-ddms-secondary border border-ddms-secondary/30 truncate font-semibold"
                 title={`${schedule.tourName} - ${schedule.boatName}`}
               >
                 {new Date(schedule.startTime).getHours()}h: {schedule.tourName}{' '}
@@ -98,11 +98,11 @@ const ScheduleCalendar = ({
 
     return (
       <div className="p-4 space-y-4">
-        <h3 className="text-lg font-medium text-cyan-400">
+        <h3 className="text-lg font-medium text-ddms-secondary">
           {t('ownerTours.calendar.next7DaysTitle')}
         </h3>
         {weekSchedules.length === 0 ? (
-          <p className="text-slate-400">
+          <p className="text-muted-foreground">
             {t('ownerTours.calendar.noSchedulesNext7Days')}
           </p>
         ) : (
@@ -110,26 +110,26 @@ const ScheduleCalendar = ({
             {weekSchedules.map((s, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-4 bg-slate-800/50 border border-slate-700 p-3 rounded-lg"
+                className="flex items-center gap-4 bg-muted/40 border border-border p-3 rounded-lg"
               >
                 <div className="text-center min-w-20">
-                  <div className="text-sm text-slate-400">
+                  <div className="text-sm text-muted-foreground">
                     {new Date(s.startTime).toLocaleDateString(i18n.language, {
                       weekday: 'short',
                     })}
                   </div>
-                  <div className="text-lg font-bold text-white">
+                  <div className="text-lg font-bold text-foreground">
                     {new Date(s.startTime).getDate()}
                   </div>
                 </div>
-                <div className="flex-1 border-l border-slate-600 pl-4">
-                  <div className="font-medium text-cyan-400">
+                <div className="flex-1 border-l border-border pl-4">
+                  <div className="font-medium text-ddms-secondary">
                     {s.tourName}{' '}
-                    <span className="text-slate-400 text-sm ml-2">
+                    <span className="text-muted-foreground text-sm ml-2">
                       ({s.boatName})
                     </span>
                   </div>
-                  <div className="text-sm text-slate-400 mt-1">
+                  <div className="text-sm text-muted-foreground mt-1">
                     {new Date(s.startTime).toLocaleTimeString(i18n.language, {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -162,13 +162,13 @@ const ScheduleCalendar = ({
 
     return (
       <div className="p-4 space-y-4">
-        <h3 className="text-lg font-medium text-cyan-400">
+        <h3 className="text-lg font-medium text-ddms-secondary">
           {t('ownerTours.calendar.todayTitle', {
             date: currentDate.toLocaleDateString(i18n.language),
           })}
         </h3>
         {daySchedules.length === 0 ? (
-          <p className="text-slate-400">
+          <p className="text-muted-foreground">
             {t('ownerTours.calendar.noSchedulesToday')}
           </p>
         ) : (
@@ -176,10 +176,10 @@ const ScheduleCalendar = ({
             {daySchedules.map((s, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-4 bg-slate-800/50 border border-slate-700 p-3 rounded-lg border-l-4 border-l-cyan-500"
+                className="flex items-center gap-4 bg-muted/40 border border-border p-3 rounded-lg border-l-4 border-l-ddms-secondary"
               >
                 <div className="text-center min-w-20">
-                  <div className="text-lg font-bold text-cyan-400">
+                  <div className="text-lg font-bold text-ddms-secondary">
                     {new Date(s.startTime).toLocaleTimeString(i18n.language, {
                       hour: '2-digit',
                       minute: '2-digit',
@@ -187,9 +187,9 @@ const ScheduleCalendar = ({
                   </div>
                 </div>
                 <div className="flex-1">
-                  <div className="font-medium text-white">
+                  <div className="font-medium text-foreground">
                     {s.tourName}{' '}
-                    <span className="text-slate-400 text-sm ml-2">
+                    <span className="text-muted-foreground text-sm ml-2">
                       {t('ownerTours.recentBookings.boatPrefix', {
                         name: s.boatName,
                       })}
@@ -221,19 +221,19 @@ const ScheduleCalendar = ({
   ];
 
   return (
-    <div className="bg-[#0f172a] rounded-xl border border-slate-800 p-6 shadow-xl">
+    <div className="bg-ddms-bg-card rounded-xl border border-border p-6 shadow-xl">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <div className="flex items-center gap-3">
-          <Calendar className="w-5 h-5 text-cyan-400" />
+          <Calendar className="w-5 h-5 text-ddms-secondary" />
           <div className="flex items-center gap-2">
             <button
               onClick={onPrev}
-              className="p-1 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors"
+              className="p-1 hover:bg-foreground/5 rounded-full text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               title={t('common.prev', 'Trước')}
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <h2 className="text-xl font-bold text-white min-w-55 text-center">
+            <h2 className="text-xl font-bold text-foreground min-w-55 text-center">
               {t('ownerTours.calendar.title', {
                 month: currentMonth,
                 year: currentYear,
@@ -241,7 +241,7 @@ const ScheduleCalendar = ({
             </h2>
             <button
               onClick={onNext}
-              className="p-1 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors"
+              className="p-1 hover:bg-foreground/5 rounded-full text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               title={t('common.next', 'Sau')}
             >
               <ChevronRight className="w-5 h-5" />
@@ -249,12 +249,12 @@ const ScheduleCalendar = ({
           </div>
         </div>
         <div className="flex items-center gap-4 mt-4 sm:mt-0">
-          <div className="flex bg-slate-800 rounded-lg p-1">
+          <div className="flex bg-muted rounded-lg p-1">
             {viewModes.map(({ mode, label }) => (
               <button
                 key={mode}
                 onClick={() => onViewModeChange(mode)}
-                className={`px-4 py-1.5 text-sm font-medium rounded-md ${viewMode === mode ? 'bg-cyan-500 text-slate-900' : 'text-slate-400 hover:text-white'}`}
+                className={`px-4 py-1.5 text-sm font-semibold rounded-md transition-all cursor-pointer ${viewMode === mode ? 'bg-ddms-secondary text-white shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
               >
                 {label}
               </button>
@@ -262,7 +262,7 @@ const ScheduleCalendar = ({
           </div>
           <button
             onClick={onCreateClick}
-            className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-4 py-1.5 rounded-md font-bold transition-colors shadow-[0_0_10px_rgba(0,240,255,0.3)]"
+            className="flex items-center gap-2 bg-ddms-secondary hover:bg-ddms-secondary/90 text-white px-4 py-1.5 rounded-md font-bold transition-colors cursor-pointer shadow-md shadow-ddms-secondary/15"
           >
             <Plus size={18} />
             {t('ownerTours.calendar.createTourBtn')}
@@ -270,14 +270,14 @@ const ScheduleCalendar = ({
         </div>
       </div>
 
-      <div className="border border-slate-700/50 rounded-lg overflow-hidden bg-[#131c31] min-h-100">
+      <div className="border border-border rounded-lg overflow-hidden bg-muted/20 min-h-100">
         {viewMode === 'month' && (
           <>
-            <div className="grid grid-cols-7 border-b border-slate-700/50 bg-slate-800/50">
+            <div className="grid grid-cols-7 border-b border-border bg-muted/60">
               {weekdays.map((day) => (
                 <div
                   key={day}
-                  className="py-3 text-center text-sm font-medium text-slate-300 border-r border-slate-700/50 last:border-0"
+                  className="py-3 text-center text-sm font-semibold text-muted-foreground border-r border-border last:border-0"
                 >
                   {day}
                 </div>

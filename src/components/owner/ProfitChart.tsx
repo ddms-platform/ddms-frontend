@@ -85,25 +85,25 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
   };
 
   return (
-    <div className="bg-[#111C3A] rounded-2xl border border-slate-800/60 shadow-lg p-6 w-full">
+    <div className="bg-ddms-bg-card rounded-2xl border border-border shadow-lg p-6 w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
             {t('profitChart.title')}
           </h2>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             {t('profitChart.subtitle')}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex bg-slate-800/50 p-1 rounded-lg border border-slate-700/50">
+          <div className="flex bg-muted p-1 rounded-lg border border-border">
             <button
               onClick={() => setFilter('month')}
               className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-colors ${
                 filter === 'month'
-                  ? 'bg-cyan-400 text-[#0B132B]'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-ddms-secondary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {t('profitChart.month')}
@@ -112,8 +112,8 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
               onClick={() => setFilter('quarter')}
               className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-colors ${
                 filter === 'quarter'
-                  ? 'bg-cyan-400 text-[#0B132B]'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-ddms-secondary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {t('profitChart.quarter')}
@@ -122,8 +122,8 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
               onClick={() => setFilter('year')}
               className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-colors ${
                 filter === 'year'
-                  ? 'bg-cyan-400 text-[#0B132B]'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-ddms-secondary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               {t('profitChart.year')}
@@ -131,7 +131,7 @@ export default function ProfitChart({ data = [] }: ProfitChartProps) {
           </div>
           <button
             onClick={handleExport}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-ddms-bg-main text-foreground border border-border hover:bg-foreground/5 transition-colors"
             title={t('profitChart.export')}
           >
             <Download className="w-3.5 h-3.5" />

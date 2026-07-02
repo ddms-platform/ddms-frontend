@@ -110,15 +110,15 @@ export default function ReviewFormModal({
     setVideoFiles((prev) => prev.filter((_, i) => i !== idx));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="bg-[#112240] w-full max-w-lg rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div className="flex justify-between items-center p-5 border-b border-gray-700">
-          <h2 className="text-xl font-semibold text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-300">
+      <div className="bg-ddms-bg-card border border-border w-full max-w-lg rounded-xl shadow-xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 slide-in-from-bottom-4 duration-300">
+        <div className="flex justify-between items-center p-5 border-b border-border">
+          <h2 className="text-xl font-semibold text-foreground">
             {initialData ? 'Sửa đánh giá' : 'Viết đánh giá'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition"
+            className="text-muted-foreground hover:text-foreground transition cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -127,22 +127,22 @@ export default function ReviewFormModal({
         <div className="p-5 overflow-y-auto">
           <form id="review-form" onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-muted-foreground mb-2">
                 Đánh giá của bạn <span className="text-red-500">*</span>
               </label>
-              <div className="flex gap-1">
+              <div className="flex gap-1.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => setRating(i + 1)}
-                    className="focus:outline-none transition-transform hover:scale-110"
+                    className="focus:outline-none transition-transform hover:scale-115 cursor-pointer"
                   >
                     <Star
                       size={28}
                       fill={i < rating ? '#EAB308' : 'none'}
                       className={
-                        i < rating ? 'text-yellow-500' : 'text-gray-500'
+                        i < rating ? 'text-yellow-500' : 'text-muted-foreground'
                       }
                     />
                   </button>
@@ -151,14 +151,14 @@ export default function ReviewFormModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-muted-foreground mb-2">
                 Bình luận <span className="text-red-500">*</span>
               </label>
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 rows={4}
-                className="w-full bg-[#0a192f] border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full bg-ddms-bg-main border border-border rounded-lg p-3 text-foreground focus:ring-2 focus:ring-ddms-secondary outline-none transition-all"
                 placeholder="Chia sẻ trải nghiệm của bạn về tour này..."
               />
             </div>
@@ -291,12 +291,12 @@ export default function ReviewFormModal({
           </form>
         </div>
 
-        <div className="p-5 border-t border-gray-700 flex justify-end gap-3 bg-[#0a192f]">
+        <div className="p-5 border-t border-border flex justify-end gap-3 bg-muted/40">
           <button
             type="button"
             onClick={onClose}
             disabled={submitting}
-            className="px-4 py-2 rounded-lg text-gray-300 hover:bg-gray-800 transition"
+            className="px-4 py-2 rounded-lg text-muted-foreground hover:bg-muted transition cursor-pointer font-medium"
           >
             Hủy
           </button>
@@ -304,7 +304,7 @@ export default function ReviewFormModal({
             type="submit"
             form="review-form"
             disabled={submitting}
-            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-6 py-2 bg-ddms-secondary hover:bg-ddms-secondary/90 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer font-bold shadow-md shadow-ddms-secondary/15"
           >
             {submitting
               ? 'Đang gửi...'

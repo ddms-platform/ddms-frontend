@@ -124,12 +124,12 @@ export default function SignUpPage() {
         </Link>
         <div className="space-y-2 text-center">
           <h1
-            className="text-[28px] font-bold leading-[1.43]"
-            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+            className="text-[28px] font-bold leading-[1.43] text-foreground"
+            style={{ letterSpacing: '-0.44px' }}
           >
             {t('auth.signUp.title')}
           </h1>
-          <p className="text-sm leading-[1.43]" style={{ color: '#ecf0ff' }}>
+          <p className="text-sm leading-[1.43] text-muted-foreground">
             {t('auth.signUp.description')}
           </p>
         </div>
@@ -150,17 +150,11 @@ export default function SignUpPage() {
       </div>
 
       <div className="relative flex items-center">
-        <div
-          className="flex-1"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
-        />
-        <span className="px-4 text-xs font-medium" style={{ color: '#ecf0ff' }}>
+        <div className="flex-1 border-t border-border" />
+        <span className="px-4 text-xs font-medium text-muted-foreground">
           {t('auth.signUp.orSignUpWithEmail')}
         </span>
-        <div
-          className="flex-1"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
-        />
+        <div className="flex-1 border-t border-border" />
       </div>
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
@@ -194,8 +188,7 @@ export default function SignUpPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
-                style={{ color: '#ecf0ff' }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors text-muted-foreground hover:text-foreground"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -239,8 +232,7 @@ export default function SignUpPage() {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
-              style={{ color: '#ecf0ff' }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors text-muted-foreground hover:text-foreground"
               aria-label={
                 showConfirmPassword ? 'Hide password' : 'Show password'
               }
@@ -262,36 +254,29 @@ export default function SignUpPage() {
                   e.target.checked ? undefined : t('validation.termsRequired'),
                 );
               }}
-              className="mt-0.5 h-4 w-4 cursor-pointer rounded accent-[#00F0FF]"
+              className="mt-0.5 h-4 w-4 cursor-pointer rounded accent-ddms-secondary"
             />
             <label
               htmlFor="terms"
-              className="cursor-pointer text-sm leading-relaxed"
-              style={{ color: '#ecf0ff' }}
+              className="cursor-pointer text-sm leading-relaxed text-muted-foreground"
             >
               {t('auth.signUp.agreeToTerms')}{' '}
               <Link
                 to={routeName.terms}
-                className="font-medium underline underline-offset-4 transition-colors"
-                style={{ color: '#ffffff' }}
+                className="font-medium underline underline-offset-4 transition-colors text-foreground"
               >
                 {t('auth.signUp.termsOfService')}
               </Link>{' '}
               {t('auth.signUp.and')}{' '}
               <Link
                 to={routeName.privacy}
-                className="font-medium underline underline-offset-4 transition-colors"
-                style={{ color: '#ffffff' }}
+                className="font-medium underline underline-offset-4 transition-colors text-foreground"
               >
                 {t('auth.signUp.privacyPolicy')}
               </Link>
             </label>
           </div>
-          {termsError && (
-            <p className="text-xs" style={{ color: '#c13515' }}>
-              {termsError}
-            </p>
-          )}
+          {termsError && <p className="text-xs text-rose-500">{termsError}</p>}
         </div>
 
         <Button
@@ -311,12 +296,11 @@ export default function SignUpPage() {
         </Button>
       </form>
 
-      <p className="text-center text-sm" style={{ color: '#ecf0ff' }}>
+      <p className="text-center text-sm text-muted-foreground">
         {t('auth.signUp.alreadyHaveAccount')}?{' '}
         <Link
           to={routeName.signIn}
-          className="font-semibold transition-colors hover:underline"
-          style={{ color: '#00F0FF' }}
+          className="font-semibold transition-colors hover:underline text-ddms-secondary"
         >
           {t('auth.signUp.signInLink')}
         </Link>

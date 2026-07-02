@@ -11,21 +11,17 @@ export default function TranslationToggle() {
   return (
     <button
       onClick={toggleLanguage}
-      className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition-all hover:shadow-md active:scale-95"
+      className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition-all hover:shadow-md active:scale-95 text-foreground"
       style={{
-        borderColor: 'rgba(255,255,255,0.15)',
-        color: '#ffffff',
-        backgroundColor: '#112240',
+        borderColor: 'var(--border)',
+        backgroundColor: 'var(--ddms-bg-card)',
       }}
       aria-label="Toggle language"
     >
       <Globe size={16} />
       <span>{language === 'VN' ? 'VI' : 'EN'}</span>
-      <span
-        className="h-4 w-px"
-        style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-      />
-      <span className="text-xs" style={{ color: '#ecf0ff' }}>
+      <span className="h-4 w-px" style={{ backgroundColor: 'var(--border)' }} />
+      <span className="text-xs text-foreground/80">
         {language === 'VN' ? 'English' : 'Tiếng Việt'}
       </span>
     </button>

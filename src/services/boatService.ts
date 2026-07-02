@@ -86,6 +86,7 @@ export interface ApiResponse<T> {
   code: number;
   result: T;
   message?: string;
+  isSuccess: boolean;
 }
 
 export interface CreateBoatDto {

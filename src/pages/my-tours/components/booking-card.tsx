@@ -162,8 +162,8 @@ export default function BookingCard({
     <div
       className="flex flex-col gap-4 rounded-2xl border p-4 transition-all hover:shadow-md sm:flex-row sm:gap-6 sm:p-5"
       style={{
-        borderColor: 'rgba(255,255,255,0.1)',
-        backgroundColor: '#112240',
+        borderColor: 'var(--border)',
+        backgroundColor: 'var(--ddms-bg-card)',
       }}
     >
       {/* Thumbnail */}
@@ -188,10 +188,7 @@ export default function BookingCard({
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              <span
-                className="text-xs font-medium uppercase tracking-wider"
-                style={{ color: '#ecf0ff' }}
-              >
+              <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 {t('dashboard.bookingRef')}: #DDMS-{booking.id}
               </span>
               <BookingStatusBadge
@@ -199,10 +196,7 @@ export default function BookingCard({
                 className="hidden py-0.5 sm:inline-block"
               />
             </div>
-            <h3
-              className="text-lg font-bold leading-tight line-clamp-2"
-              style={{ color: '#ffffff' }}
-            >
+            <h3 className="text-lg font-bold leading-tight line-clamp-2 text-foreground">
               {getLocalizedField(
                 {
                   title_vn: booking.tourTitle_vn,
@@ -212,10 +206,7 @@ export default function BookingCard({
                 lang,
               )}
             </h3>
-            <p
-              className="mt-1 flex items-center gap-1 text-sm"
-              style={{ color: '#ecf0ff' }}
-            >
+            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
               <MapPin size={14} />
               {getLocalizedField(
                 {
@@ -229,13 +220,10 @@ export default function BookingCard({
           </div>
 
           <div className="hidden text-right sm:block">
-            <span
-              className="block text-lg font-bold"
-              style={{ color: '#ffffff' }}
-            >
+            <span className="block text-lg font-bold text-foreground">
               {formatPrice(booking.totalPrice)}
             </span>
-            <span className="text-sm" style={{ color: '#ecf0ff' }}>
+            <span className="text-sm text-muted-foreground">
               {booking.guests} {t('dashboard.guests')}
             </span>
           </div>
@@ -243,43 +231,25 @@ export default function BookingCard({
 
         {/* Date & Time */}
         <div className="mt-4 flex flex-wrap gap-4 text-sm sm:mt-auto">
-          <div
-            className="flex items-center gap-1.5 font-medium"
-            style={{ color: '#ffffff' }}
-          >
-            <Calendar size={16} style={{ color: '#ecf0ff' }} />
+          <div className="flex items-center gap-1.5 font-medium text-foreground">
+            <Calendar size={16} className="text-muted-foreground" />
             {formatDate(booking.date)}
           </div>
-          <div
-            className="flex items-center gap-1.5 font-medium"
-            style={{ color: '#ffffff' }}
-          >
-            <div
-              className="h-1.5 w-1.5 rounded-full"
-              style={{ backgroundColor: '#ecf0ff' }}
-            />
+          <div className="flex items-center gap-1.5 font-medium text-foreground">
+            <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
             {booking.time}
           </div>
-          <div
-            className="flex items-center gap-1.5 font-medium sm:hidden"
-            style={{ color: '#ffffff' }}
-          >
-            <Users size={16} style={{ color: '#ecf0ff' }} />
+          <div className="flex items-center gap-1.5 font-medium sm:hidden text-foreground">
+            <Users size={16} className="text-muted-foreground" />
             {booking.guests}
           </div>
         </div>
       </div>
 
       {/* Actions & Mobile Price */}
-      <div
-        className="mt-2 flex items-center justify-between border-t pt-4 sm:hidden"
-        style={{ borderColor: 'rgba(255,255,255,0.08)' }}
-      >
+      <div className="mt-2 flex items-center justify-between border-t pt-4 sm:hidden border-border">
         <div>
-          <span
-            className="block text-lg font-bold"
-            style={{ color: '#ffffff' }}
-          >
+          <span className="block text-lg font-bold text-foreground">
             {formatPrice(booking.totalPrice)}
           </span>
         </div>
@@ -293,21 +263,27 @@ export default function BookingCard({
           )}
           {booking.status === 'UPCOMING' && (
             <Button
-              variant="dark-outline"
+              variant="outline"
               size="action"
+              className="text-foreground border-foreground/30 hover:bg-foreground/5"
               onClick={() => setIsCancelModalOpen(true)}
             >
               {t('dashboard.cancelBooking')}
             </Button>
           )}
           {booking.status === 'COMPLETED' && (
-            <Button variant="dark-outline" size="action">
+            <Button
+              variant="outline"
+              size="action"
+              className="text-foreground border-foreground/30 hover:bg-foreground/5"
+            >
               {t('dashboard.writeReview')}
             </Button>
           )}
           <Button
-            variant="dark-outline"
+            variant="outline"
             size="action"
+            className="text-foreground border-foreground/30 hover:bg-foreground/5"
             onClick={handleStartChat}
             disabled={isStartingChat}
             title={t('chat.chatWithOwner', 'Chat với chủ tàu')}
@@ -332,9 +308,9 @@ export default function BookingCard({
         )}
         {booking.status === 'UPCOMING' && (
           <Button
-            variant="dark-outline"
+            variant="outline"
             size="action"
-            className="w-full rounded-xl"
+            className="w-full rounded-xl text-foreground border-foreground/30 hover:bg-foreground/5"
             onClick={() => setIsCancelModalOpen(true)}
           >
             {t('dashboard.cancelBooking')}
@@ -347,10 +323,9 @@ export default function BookingCard({
         )}
         {(booking.status === 'CANCELLED' || !booking.status) && (
           <Button
-            variant="dark-outline"
+            variant="outline"
             size="action"
-            className="w-full rounded-xl"
-            style={{ backgroundColor: '#112240' }}
+            className="w-full rounded-xl text-foreground border-foreground/30 hover:bg-foreground/5 bg-ddms-bg-card"
             asChild
           >
             <Link to={`/tours/${booking.tourId}`}>
@@ -359,14 +334,13 @@ export default function BookingCard({
           </Button>
         )}
         <Button
-          variant="dark-outline"
+          variant="outline"
           size="action"
-          className="w-full rounded-xl flex items-center justify-center gap-1.5"
+          className="w-full rounded-xl flex items-center justify-center gap-1.5 text-foreground border-foreground/30 hover:bg-foreground/5"
           onClick={handleStartChat}
           disabled={isStartingChat}
-          style={{ borderColor: 'rgba(255, 255, 255, 0.15)' }}
         >
-          <MessageCircle size={14} className="text-[#00F0FF]" />
+          <MessageCircle size={14} className="text-ddms-secondary" />
           {isStartingChat
             ? t('chat.connecting', 'Đang kết nối...')
             : t('chat.chatWithOwner', 'Chat với chủ tàu')}
@@ -377,20 +351,16 @@ export default function BookingCard({
       {isCancelModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
           <div
-            className="w-full max-w-md overflow-hidden rounded-2xl border p-6 shadow-2xl scale-in"
+            className="w-full max-w-md overflow-hidden rounded-2xl border p-6 shadow-2xl scale-in text-foreground"
             style={{
-              backgroundColor: '#112240',
-              borderColor: 'rgba(255, 255, 255, 0.12)',
-              color: '#ffffff',
+              backgroundColor: 'var(--ddms-bg-card)',
+              borderColor: 'var(--border)',
             }}
           >
-            <h3 className="text-xl font-bold mb-4" style={{ color: '#00F0FF' }}>
+            <h3 className="text-xl font-bold mb-4 text-ddms-secondary">
               {t('dashboard.cancelModal.title')}
             </h3>
-            <div
-              className="text-sm leading-relaxed mb-6"
-              style={{ color: '#ecf0ff' }}
-            >
+            <div className="text-sm leading-relaxed mb-6 text-muted-foreground">
               {eligibleForRefund ? (
                 <p>
                   {t('dashboard.cancelModal.refundEligible', {
@@ -403,7 +373,8 @@ export default function BookingCard({
             </div>
             <div className="flex justify-end gap-3">
               <Button
-                variant="dark-outline"
+                variant="outline"
+                className="text-foreground border-foreground/30 hover:bg-foreground/5"
                 onClick={() => setIsCancelModalOpen(false)}
                 disabled={isCancelling}
               >
@@ -415,7 +386,7 @@ export default function BookingCard({
                 disabled={isCancelling}
                 className={
                   !eligibleForRefund
-                    ? 'bg-rose-600 hover:bg-rose-500 text-white'
+                    ? 'bg-rose-600 hover:bg-rose-500 text-white border-0'
                     : ''
                 }
               >

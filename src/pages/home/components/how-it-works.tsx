@@ -14,18 +14,21 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-16"
-      style={{ backgroundColor: '#112240' }}
+      className="py-16 border-t border-b"
+      style={{
+        backgroundColor: 'var(--ddms-bg-main)',
+        borderColor: 'var(--border)',
+      }}
     >
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12 text-center">
           <h2
-            className="text-[28px] font-bold leading-[1.43]"
-            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+            className="text-[28px] font-bold leading-[1.43] text-foreground"
+            style={{ letterSpacing: '-0.44px' }}
           >
             {t('home.howItWorks.title')}
           </h2>
-          <p className="mt-2 text-sm" style={{ color: '#ecf0ff' }}>
+          <p className="mt-2 text-sm text-foreground/80">
             {t('home.howItWorks.subtitle')}
           </p>
         </div>
@@ -34,16 +37,17 @@ export default function HowItWorks() {
           {STEPS.map(({ icon: Icon, step }) => (
             <div
               key={step}
-              className="flex flex-col items-center rounded-2xl p-8 text-center transition-all hover:shadow-lg"
+              className="flex flex-col items-center rounded-2xl p-8 text-center border transition-all hover:shadow-lg"
               style={{
-                backgroundColor: '#0A192F',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                backgroundColor: 'var(--ddms-bg-card)',
+                borderColor: 'var(--border)',
               }}
             >
               <div
                 className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
                 style={{
-                  background: 'linear-gradient(135deg, #00F0FF, #00d4e0)',
+                  background:
+                    'linear-gradient(135deg, var(--ddms-secondary), #00d4e0)',
                 }}
               >
                 <Icon size={28} color="#ffffff" />
@@ -51,23 +55,17 @@ export default function HowItWorks() {
               <span
                 className="mb-2 text-xs font-bold"
                 style={{
-                  color: '#00F0FF',
+                  color: 'var(--ddms-secondary)',
                   letterSpacing: '0.32px',
                   textTransform: 'uppercase',
                 }}
               >
                 {t('home.howItWorks.stepLabel', { step })}
               </span>
-              <h3
-                className="text-lg font-semibold"
-                style={{ color: '#ffffff' }}
-              >
+              <h3 className="text-lg font-semibold text-foreground">
                 {t(`home.howItWorks.step${step}Title`)}
               </h3>
-              <p
-                className="mt-2 text-sm leading-relaxed"
-                style={{ color: '#ecf0ff' }}
-              >
+              <p className="mt-2 text-sm leading-relaxed text-foreground/80">
                 {t(`home.howItWorks.step${step}Desc`)}
               </p>
             </div>

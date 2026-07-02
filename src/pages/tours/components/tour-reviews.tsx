@@ -102,9 +102,9 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
   };
 
   return (
-    <div className="mt-10 bg-[#112240] p-6 rounded-2xl shadow-sm border border-gray-700">
+    <div className="mt-10 bg-ddms-bg-card p-6 rounded-2xl shadow-sm border border-border">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-2xl font-semibold text-white">
+        <h3 className="text-2xl font-semibold text-foreground">
           Đánh giá từ khách hàng{' '}
           {data?.totalCount ? `(${data.totalCount})` : ''}
         </h3>
@@ -125,7 +125,7 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
           {data.reviews.map((review) => (
             <div
               key={review.id}
-              className="border-b border-gray-700 pb-6 last:border-0"
+              className="border-b border-border pb-6 last:border-0"
             >
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
@@ -136,12 +136,12 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
                       className="w-10 h-10 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-gray-300">
+                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-foreground/80">
                       <User size={20} />
                     </div>
                   )}
                   <div>
-                    <p className="font-semibold text-white">
+                    <p className="font-semibold text-foreground">
                       {review.userName}
                     </p>
                     <div className="flex items-center gap-2 mt-1">
@@ -176,7 +176,7 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
                 )}
               </div>
 
-              <p className="mt-3 text-[#ecf0ff] whitespace-pre-wrap text-sm leading-relaxed">
+              <p className="mt-3 text-foreground/80 whitespace-pre-wrap text-sm leading-relaxed">
                 {review.comment}
               </p>
 
@@ -188,7 +188,7 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
                       key={`img-${idx}`}
                       src={url}
                       alt="Review attachment"
-                      className="h-24 w-24 object-cover rounded-lg border border-gray-600"
+                      className="h-24 w-24 object-cover rounded-lg border border-border"
                     />
                   ))}
                   {review.videoUrls?.map((url, idx) => (
@@ -196,7 +196,7 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
                       key={`vid-${idx}`}
                       src={url}
                       controls
-                      className="h-24 w-32 object-cover rounded-lg border border-gray-600 bg-black"
+                      className="h-24 w-32 object-cover rounded-lg border border-border bg-black"
                     />
                   ))}
                 </div>
@@ -209,15 +209,17 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
               <button
                 disabled={pageIndex === 1}
                 onClick={() => fetchReviews(pageIndex - 1)}
-                className="px-3 py-1 bg-gray-800 text-white rounded disabled:opacity-50"
+                className="px-3 py-1 bg-muted text-foreground border border-border rounded disabled:opacity-50"
               >
                 Trước
               </button>
-              <span className="text-white px-3 py-1">Trang {pageIndex}</span>
+              <span className="text-foreground px-3 py-1">
+                Trang {pageIndex}
+              </span>
               <button
                 disabled={pageIndex * data.pageSize >= data.totalCount}
                 onClick={() => fetchReviews(pageIndex + 1)}
-                className="px-3 py-1 bg-gray-800 text-white rounded disabled:opacity-50"
+                className="px-3 py-1 bg-muted text-foreground border border-border rounded disabled:opacity-50"
               >
                 Sau
               </button>
@@ -225,7 +227,7 @@ export default function TourReviews({ tourId }: TourReviewsProps) {
           )}
         </div>
       ) : (
-        <div className="text-center py-10 text-gray-400 bg-[#0a192f] rounded-xl border border-gray-700">
+        <div className="text-center py-10 text-gray-400 bg-ddms-bg-main rounded-xl border border-border">
           <p>Chưa có đánh giá nào cho tour này.</p>
         </div>
       )}

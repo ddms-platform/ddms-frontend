@@ -12,6 +12,7 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 import ProfitChart from '@/components/owner/ProfitChart';
 import BoatForm from '@/pages/owner/boats/boat-form';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function OwnerDashboard() {
   const { t } = useTranslation();
@@ -50,37 +51,37 @@ export default function OwnerDashboard() {
       label: t('ownerBoats.stats.total'),
       value: stats?.total || 0,
       icon: Ship,
-      color: 'text-cyan-400',
+      color: 'text-cyan-600 dark:text-cyan-400',
     },
     {
       label: t('ownerBoats.stats.running'),
       value: stats?.running || 0,
       icon: TrendingUp,
-      color: 'text-emerald-400',
+      color: 'text-emerald-600 dark:text-emerald-400',
     },
     {
       label: t('ownerBoats.stats.idle'),
       value: stats?.idle || 0,
       icon: Layers,
-      color: 'text-yellow-400',
+      color: 'text-amber-600 dark:text-yellow-400',
     },
     {
       label: 'Tổng số Cabin',
       value: stats?.totalCabins || 0,
       icon: Map,
-      color: 'text-purple-400',
+      color: 'text-purple-600 dark:text-purple-400',
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B132B] p-6 lg:p-8 font-sans text-slate-100">
+    <div className="min-h-screen bg-ddms-bg-owner p-6 lg:p-8 font-sans text-foreground">
       {/* Header section */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
             Xin chào, {user?.name || 'Admiral'}
           </h1>
-          <div className="flex items-center text-sm text-slate-400">
+          <div className="flex items-center text-sm text-muted-foreground">
             <Map className="w-4 h-4 mr-2 text-cyan-500" />
             <span>Bến tàu quốc tế Marina Bay</span>
           </div>
@@ -88,8 +89,48 @@ export default function OwnerDashboard() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-20">
-          <div className="w-8 h-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="space-y-8">
+          {/* Stats skeleton */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="p-5 rounded-2xl bg-ddms-bg-card border border-border shadow-sm space-y-3"
+              >
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-4 w-28" />
+                  <Skeleton className="h-5 w-5 rounded-full" />
+                </div>
+                <Skeleton className="h-8 w-16" />
+              </div>
+            ))}
+          </div>
+
+          {/* Main content header skeleton */}
+          <div className="flex items-center justify-between mt-8">
+            <Skeleton className="h-6 w-40" />
+            <Skeleton className="h-4 w-20" />
+          </div>
+
+          {/* Boat list skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="bg-ddms-bg-card rounded-2xl border border-border overflow-hidden shadow-sm p-5 space-y-4"
+              >
+                <Skeleton className="h-40 w-full rounded-xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+                <div className="pt-2 flex justify-between">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         <>
@@ -98,10 +139,10 @@ export default function OwnerDashboard() {
             {STATS_CARDS.map((s, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-2xl bg-[#111C3A] border border-slate-800/60 shadow-lg"
+                className="p-5 rounded-2xl bg-ddms-bg-card border border-border shadow-lg"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-slate-400 uppercase tracking-wider">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
                     {s.label}
                   </p>
                   <s.icon className={`w-5 h-5 ${s.color}`} />
@@ -128,12 +169,12 @@ export default function OwnerDashboard() {
             </div>
 
             {boats.length === 0 ? (
-              <div className="bg-[#111C3A] rounded-2xl border border-slate-800/60 p-10 text-center shadow-lg">
-                <Ship className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-                <h4 className="text-lg font-medium text-slate-300">
+              <div className="bg-ddms-bg-card rounded-2xl border border-border p-10 text-center shadow-lg">
+                <Ship className="w-12 h-12 text-muted-foreground/60 mx-auto mb-4" />
+                <h4 className="text-lg font-medium text-foreground">
                   Bạn chưa có tàu nào
                 </h4>
-                <p className="text-sm text-slate-500 mt-2">
+                <p className="text-sm text-muted-foreground mt-2">
                   Hãy đăng ký tàu mới để bắt đầu quản lý
                 </p>
                 <Button
@@ -148,9 +189,9 @@ export default function OwnerDashboard() {
                 {boats.map((boat) => (
                   <div
                     key={boat.id}
-                    className="bg-[#111C3A] rounded-2xl border border-slate-800/60 overflow-hidden shadow-lg group"
+                    className="bg-ddms-bg-card rounded-2xl border border-border overflow-hidden shadow-lg group"
                   >
-                    <div className="h-40 bg-slate-800 relative overflow-hidden flex items-center justify-center">
+                    <div className="h-40 bg-muted relative overflow-hidden flex items-center justify-center">
                       {boat.thumbnailUrl ? (
                         <img
                           src={boat.thumbnailUrl}
@@ -158,7 +199,7 @@ export default function OwnerDashboard() {
                           className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
                         />
                       ) : (
-                        <Ship className="w-12 h-12 text-slate-600" />
+                        <Ship className="w-12 h-12 text-muted-foreground/60" />
                       )}
                       {boat.status === 'running' ? (
                         <Badge className="absolute top-3 right-3 bg-emerald-500/90 hover:bg-emerald-500 text-white border-none shadow-sm">
@@ -175,10 +216,10 @@ export default function OwnerDashboard() {
                     </div>
                     <div className="p-5">
                       <div className="mb-2">
-                        <h4 className="text-lg font-bold text-white line-clamp-1">
+                        <h4 className="text-lg font-bold text-foreground line-clamp-1">
                           {boat.name}
                         </h4>
-                        <p className="text-xs text-slate-400 capitalize">
+                        <p className="text-xs text-muted-foreground capitalize">
                           {boat.type
                             ? t(`boatTypes.${boat.type.toLowerCase()}`, {
                                 defaultValue: boat.type,
@@ -188,20 +229,20 @@ export default function OwnerDashboard() {
                               })}
                         </p>
                       </div>
-                      <div className="mt-4 space-y-2 text-sm text-slate-300">
+                      <div className="mt-4 space-y-2 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
-                          <Layers className="w-4 h-4 text-slate-500" />
+                          <Layers className="w-4 h-4 text-muted-foreground/60" />
                           <span>{boat.cabinCount} Cabins</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4 text-slate-500" />
+                          <TrendingUp className="w-4 h-4 text-muted-foreground/60" />
                           <span>{boat.serviceCount} Dịch vụ</span>
                         </div>
                       </div>
                       <div className="mt-5 flex gap-2">
                         <Button
-                          variant="secondary"
-                          className="w-full bg-slate-800 hover:bg-slate-700 text-white border-none cursor-pointer"
+                          variant="outline"
+                          className="w-full text-foreground border-foreground/30 hover:bg-foreground/5 cursor-pointer"
                           onClick={() => setSelectedBoatIdForModal(boat.id)}
                         >
                           CHI TIẾT
@@ -227,14 +268,11 @@ export default function OwnerDashboard() {
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setSelectedBoatIdForModal(null)}
           />
-          <div
-            className="relative z-10 w-full max-w-5xl bg-[#0b132b] border border-slate-800 rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]"
-            style={{ border: '1px solid rgba(255,255,255,0.08)' }}
-          >
+          <div className="relative z-10 w-full max-w-5xl bg-ddms-bg-owner border border-border rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]">
             <div className="absolute top-6 right-6 z-20">
               <button
                 onClick={() => setSelectedBoatIdForModal(null)}
-                className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-full transition-colors"
+                className="p-1.5 bg-muted hover:bg-foreground/10 text-muted-foreground hover:text-foreground rounded-full border border-border transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

@@ -3,39 +3,67 @@
 /* ===== Light Mode ===== */
 :root {
   --font-size: 16px;
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
+  --background: #f0f7fd;
+  --foreground: #0a2540;
+  --primary: #0a2540;
+  --primary-foreground: #ffffff;
+  --secondary: #e2eef9;
+  --secondary-foreground: #0a2540;
+  --muted: #e6eff7;
+  --muted-foreground: #5a7d9a;
+  --accent: #eaf1f8;
+  --accent-foreground: #0a2540;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
+  --border: rgba(10, 37, 64, 0.08);
   --input: transparent;
-  --ring: oklch(0.708 0 0);
+  --ring: #0096c7;
   --radius: 0.625rem;
 
   /* === DDMS Design System Colors === */
-  --ddms-primary: #0a192f;
-  --ddms-secondary: #00f0ff;
+  --ddms-primary: #0a2540;
+  --ddms-secondary: #0096c7;
   --ddms-tertiary: #ffffff;
-  --ddms-neutral: #112240;
-  --ddms-label: #ecf0ff;
-  /* thêm các biến khác tùy project */
+  --ddms-neutral: #f0f7fd;
+  --ddms-label: #334155;
+  --ddms-bg-main: #edf4fa;
+  --ddms-bg-card: #ffffff;
+  --ddms-bg-owner: #f0f7fd;
+  --ddms-accent: #e8f0f6;
+  --ddms-bg-header: #003a70;
+  --ddms-bg-header-glass: rgba(0, 58, 112, 0.6);
+  --ddms-text-header: #ffffff;
 }
 
 /* ===== Dark Mode ===== */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  /* ... override tương ứng */
+  --background: #030d1b;
+  --foreground: #f1f5f9;
+  --primary: #ffffff;
+  --primary-foreground: #030d1b;
+  --secondary: #0c2340;
+  --secondary-foreground: #f1f5f9;
+  --muted: #0d2443;
+  --muted-foreground: #94a3b8;
+  --accent: #0c2340;
+  --accent-foreground: #f1f5f9;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #00f0ff;
+
+  /* === DDMS Design System Colors === */
+  --ddms-primary: #030d1b;
+  --ddms-secondary: #00f0ff;
+  --ddms-tertiary: #ffffff;
+  --ddms-neutral: #08172d;
+  --ddms-label: #ecf0ff;
+  --ddms-bg-main: #030d1b;
+  --ddms-bg-card: #08172d;
+  --ddms-bg-owner: #020914;
+  --ddms-accent: #0a2e5c;
+  --ddms-bg-header: #030d1b;
+  --ddms-bg-header-glass: rgba(3, 13, 27, 0.6);
+  --ddms-text-header: #f1f5f9;
 }
 
 /* ===== Map CSS vars → Tailwind tokens ===== */
@@ -59,12 +87,20 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --color-ddms-primary: var(--ddms-primary);
+  --color-ddms-secondary: var(--ddms-secondary);
+  --color-ddms-neutral: var(--ddms-neutral);
+  --color-ddms-bg-main: var(--ddms-bg-main);
+  --color-ddms-bg-card: var(--ddms-bg-card);
+  --color-ddms-bg-owner: var(--ddms-bg-owner);
+  --color-ddms-accent: var(--ddms-accent);
 }
 
 /* ===== Base typography ===== */
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 transition-colors duration-300;
   }
   body {
     @apply bg-background text-foreground;
@@ -84,4 +120,40 @@
     font-size: var(--text-lg);
     font-weight: 500;
   }
+}
+
+/* ===== Premium Block Separation & Soft Depth ===== */
+.bg-ddms-bg-card {
+  box-shadow:
+    0 10px 30px -10px rgba(10, 37, 64, 0.05),
+    0 1px 3px -1px rgba(10, 37, 64, 0.02) !important;
+  border-color: rgba(10, 37, 64, 0.04) !important;
+}
+
+.dark .bg-ddms-bg-card {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Sidebar and Header layout refinements */
+aside.border-r {
+  border-color: rgba(10, 37, 64, 0.04) !important;
+  box-shadow:
+    6px 0 25px -5px rgba(10, 37, 64, 0.07),
+    2px 0 8px -4px rgba(10, 37, 64, 0.04) !important;
+}
+
+.dark aside.border-r {
+  border-color: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: 4px 0 24px -4px rgba(0, 0, 0, 0.4) !important;
+}
+
+header {
+  border-bottom: none !important;
+  box-shadow: 0 4px 20px -4px rgba(10, 37, 64, 0.03) !important;
+}
+
+.dark header {
+  border-bottom: none !important;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4) !important;
 }
