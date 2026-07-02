@@ -14,9 +14,9 @@ interface BoatBasicInfoSectionProps {
 }
 
 const inputStyle = {
-  backgroundColor: 'rgba(255,255,255,0.04)',
-  borderColor: 'rgba(255,255,255,0.08)',
-  color: '#fff',
+  backgroundColor: 'var(--ddms-bg-main)',
+  borderColor: 'var(--border)',
+  color: 'var(--foreground)',
 };
 
 const BoatBasicInfoSection = ({
@@ -35,19 +35,16 @@ const BoatBasicInfoSection = ({
     <div
       className="rounded-2xl p-6"
       style={{
-        backgroundColor: '#112240',
-        border: '1px solid rgba(255,255,255,0.04)',
+        backgroundColor: 'var(--ddms-bg-card)',
+        border: '1px solid var(--border)',
       }}
     >
-      <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+      <h2 className="text-base font-semibold text-foreground">
         {t('ownerBoats.form.basic.title')}
       </h2>
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div>
-          <label
-            className="mb-1.5 block text-xs font-medium"
-            style={{ color: '#ecf0ff' }}
-          >
+          <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
             {t('ownerBoats.form.basic.name')} *
           </label>
           <Input
@@ -56,7 +53,7 @@ const BoatBasicInfoSection = ({
             placeholder={t('ownerBoats.form.basic.namePlaceholder')}
             style={{
               ...inputStyle,
-              borderColor: errors.name ? '#EF4444' : 'rgba(255,255,255,0.08)',
+              borderColor: errors.name ? '#EF4444' : 'var(--border)',
             }}
           />
           {errors.name && (
@@ -64,10 +61,7 @@ const BoatBasicInfoSection = ({
           )}
         </div>
         <div>
-          <label
-            className="mb-1.5 block text-xs font-medium"
-            style={{ color: '#ecf0ff' }}
-          >
+          <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
             {t('ownerBoats.form.basic.type')} *
           </label>
           <select
@@ -85,7 +79,11 @@ const BoatBasicInfoSection = ({
                     ? bt.name_en
                     : bt.name_vi;
               return (
-                <option key={bt.code} value={bt.code} style={{ color: '#000' }}>
+                <option
+                  key={bt.code}
+                  value={bt.code}
+                  className="bg-ddms-bg-card text-foreground"
+                >
                   {displayName}
                 </option>
               );
@@ -93,10 +91,7 @@ const BoatBasicInfoSection = ({
           </select>
         </div>
         <div>
-          <label
-            className="mb-1.5 block text-xs font-medium"
-            style={{ color: '#ecf0ff' }}
-          >
+          <label className="mb-1.5 block text-xs font-medium text-muted-foreground">
             {t('ownerBoats.form.basic.capacity')} *
           </label>
           <Input
@@ -106,9 +101,7 @@ const BoatBasicInfoSection = ({
             placeholder={t('ownerBoats.form.basic.capacityPlaceholder')}
             style={{
               ...inputStyle,
-              borderColor: errors.maxPassengers
-                ? '#EF4444'
-                : 'rgba(255,255,255,0.08)',
+              borderColor: errors.maxPassengers ? '#EF4444' : 'var(--border)',
             }}
           />
           {errors.maxPassengers && (

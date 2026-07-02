@@ -200,7 +200,7 @@ export default function OwnerRegistrationPage() {
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 rounded bg-[#00F0FF] text-[#0A192F] text-[14px] font-bold uppercase tracking-wide hover:bg-[#00d4e0] transition-colors disabled:opacity-70 flex items-center gap-2"
+              className="px-8 py-3 rounded bg-ddms-secondary text-ddms-primary text-[14px] font-bold uppercase tracking-wide hover:bg-[#00d4e0] transition-colors disabled:opacity-70 flex items-center gap-2"
             >
               {loading ? (
                 <LoadingSpinner />

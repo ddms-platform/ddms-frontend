@@ -35,23 +35,23 @@ const BoatPickerStep = ({
   return (
     <section>
       <div className="flex justify-between items-end mb-4">
-        <h2 className="text-lg font-bold text-white flex items-center gap-3">
-          <span className="w-8 h-8 rounded-full bg-cyan-500 text-[#0B132B] flex items-center justify-center font-black text-sm">
+        <h2 className="text-lg font-bold text-foreground flex items-center gap-3">
+          <span className="w-8 h-8 rounded-full bg-ddms-secondary text-white flex items-center justify-center font-black text-sm">
             1
           </span>
           {t('maintenanceServices.step1')}
         </h2>
-        <span className="text-xs text-slate-400 italic">
+        <span className="text-xs text-muted-foreground italic">
           {t('maintenanceServices.boatsCount', { count: boats.length })}
         </span>
       </div>
 
       {loading ? (
-        <div className="text-slate-400 text-sm p-4 bg-slate-800/30 rounded-xl border border-slate-700">
+        <div className="text-muted-foreground text-sm p-4 bg-muted rounded-xl border border-border">
           {t('maintenanceServices.loadingBoats')}
         </div>
       ) : boats.length === 0 ? (
-        <div className="text-amber-400 text-sm p-4 border border-amber-500/20 bg-amber-500/10 rounded-xl">
+        <div className="text-amber-600 dark:text-amber-400 text-sm p-4 border border-amber-500/20 bg-amber-500/10 rounded-xl">
           {t('maintenanceServices.emptyBoats')}
         </div>
       ) : (
@@ -65,19 +65,22 @@ const BoatPickerStep = ({
               idle: {
                 text: t('maintenanceServices.boatStatus.idle'),
                 color:
-                  'text-emerald-400 bg-emerald-400/10 border-emerald-500/30',
+                  'text-emerald-600 bg-emerald-500/10 border-emerald-500/20 dark:text-emerald-400',
               },
               maintenance: {
                 text: t('maintenanceServices.boatStatus.maintenance'),
-                color: 'text-yellow-400 bg-yellow-400/10 border-yellow-500/30',
+                color:
+                  'text-amber-600 bg-amber-500/10 border-amber-500/20 dark:text-amber-400',
               },
               broken: {
                 text: t('maintenanceServices.boatStatus.broken'),
-                color: 'text-red-400 bg-red-400/10 border-red-500/30',
+                color:
+                  'text-red-600 bg-red-500/10 border-red-500/20 dark:text-red-400',
               },
               in_use: {
                 text: t('maintenanceServices.boatStatus.in_use'),
-                color: 'text-blue-400 bg-blue-400/10 border-blue-500/30',
+                color:
+                  'text-blue-600 bg-blue-500/10 border-blue-500/20 dark:text-blue-400',
               },
             };
             const sc = statusConfig[boat.status] || statusConfig.idle;
@@ -90,14 +93,14 @@ const BoatPickerStep = ({
                 key={boat.id}
                 type="button"
                 onClick={() => onSelectBoat(boat)}
-                className={`text-left p-4 rounded-2xl border transition-all duration-300 relative overflow-hidden group ${
+                className={`text-left p-4 rounded-2xl border transition-all duration-300 relative overflow-hidden group cursor-pointer ${
                   isSelected
-                    ? 'border-cyan-400 bg-[#111C3A] shadow-[0_0_20px_rgba(34,211,238,0.15)] ring-1 ring-cyan-400/50'
-                    : 'border-slate-800/80 bg-[#111C3A]/50 hover:bg-[#111C3A] hover:border-slate-700'
+                    ? 'border-ddms-secondary bg-ddms-secondary/5 shadow-[0_0_15px_rgba(0,150,199,0.08)] ring-1 ring-ddms-secondary/30'
+                    : 'border-border bg-ddms-bg-card hover:bg-muted/30 hover:border-border'
                 }`}
               >
                 <div className="flex gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-slate-800 overflow-hidden border border-slate-700/50 shrink-0">
+                  <div className="w-16 h-16 rounded-xl bg-muted overflow-hidden border border-border shrink-0">
                     {boat.thumbnailUrl ? (
                       <img
                         src={boat.thumbnailUrl}
@@ -105,16 +108,14 @@ const BoatPickerStep = ({
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-600 font-bold text-xs">
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground font-bold text-xs">
                         NO IMG
                       </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                      <h3
-                        className={`font-bold truncate text-base ${isSelected ? 'text-cyan-50' : 'text-slate-100'}`}
-                      >
+                      <h3 className="font-bold truncate text-base text-foreground">
                         {boat.name}
                       </h3>
                       <span
@@ -123,13 +124,13 @@ const BoatPickerStep = ({
                         {sc.text}
                       </span>
                     </div>
-                    <p className="text-xs font-mono text-cyan-500/70 mb-3">
+                    <p className="text-xs font-mono text-ddms-secondary mb-3">
                       {boat.type?.toUpperCase()} • #
                       {boat.id.substring(0, 6).toUpperCase()}
                     </p>
 
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-auto">
-                      <MapPin className="w-3.5 h-3.5 text-cyan-500" />
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-auto">
+                      <MapPin className="w-3.5 h-3.5 text-ddms-secondary" />
                       <span className="truncate">
                         {t('maintenanceServices.pierSlot', {
                           pier: mockSlot.pier,
@@ -139,7 +140,7 @@ const BoatPickerStep = ({
                     </div>
                   </div>
                 </div>
-                <div className="absolute inset-0 bg-linear-to-r from-cyan-500/0 via-cyan-500/0 to-cyan-500/0 group-hover:via-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-r from-ddms-secondary/0 via-ddms-secondary/0 to-ddms-secondary/0 group-hover:via-ddms-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               </button>
             );
           })}

@@ -42,9 +42,9 @@ const ServicePickerStep = ({
       className={`transition-all duration-500 ${!hasSelectedBoat ? 'opacity-40 grayscale pointer-events-none' : 'opacity-100'}`}
     >
       <div className="flex justify-between items-end mb-4">
-        <h2 className="text-lg font-bold text-white flex items-center gap-3">
+        <h2 className="text-lg font-bold text-foreground flex items-center gap-3">
           <span
-            className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm transition-colors ${hasSelectedBoat ? 'bg-cyan-500 text-[#0B132B]' : 'bg-slate-800 text-slate-500'}`}
+            className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm transition-colors ${hasSelectedBoat ? 'bg-ddms-secondary text-white' : 'bg-muted text-muted-foreground'}`}
           >
             2
           </span>
@@ -53,7 +53,7 @@ const ServicePickerStep = ({
       </div>
 
       {loading ? (
-        <div className="text-slate-400 text-sm p-4 bg-slate-800/30 rounded-xl border border-slate-700">
+        <div className="text-muted-foreground text-sm p-4 bg-muted rounded-xl border border-border">
           {t('maintenanceServices.loadingServices')}
         </div>
       ) : (
@@ -67,21 +67,21 @@ const ServicePickerStep = ({
                 key={srv.id}
                 type="button"
                 onClick={() => onToggleService(srv.id)}
-                className={`flex flex-col items-center justify-center p-6 rounded-2xl border transition-all duration-300 text-center gap-4 ${
+                className={`flex flex-col items-center justify-center p-6 rounded-2xl border transition-all duration-300 text-center gap-4 cursor-pointer ${
                   isSelected
-                    ? 'border-cyan-400 bg-[#0F223D] text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.1)]'
-                    : 'border-slate-800/80 bg-[#111C3A] text-slate-400 hover:border-slate-700 hover:bg-[#132042]'
+                    ? 'border-ddms-secondary bg-ddms-secondary/10 text-ddms-secondary shadow-md shadow-ddms-secondary/5'
+                    : 'border-border bg-ddms-bg-card text-muted-foreground hover:border-border hover:bg-muted/40 hover:text-foreground'
                 }`}
               >
                 <div
-                  className={`p-3 rounded-xl transition-colors ${isSelected ? 'bg-cyan-500/20' : 'bg-slate-800/50'}`}
+                  className={`p-3 rounded-xl transition-colors ${isSelected ? 'bg-ddms-secondary/20' : 'bg-muted'}`}
                 >
                   <IconComp
-                    className={`w-8 h-8 ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`}
+                    className={`w-8 h-8 ${isSelected ? 'text-ddms-secondary' : 'text-muted-foreground'}`}
                   />
                 </div>
                 <span
-                  className={`text-sm font-bold leading-tight ${isSelected ? 'text-cyan-50' : 'text-slate-300'}`}
+                  className={`text-sm font-bold leading-tight ${isSelected ? 'text-ddms-secondary' : 'text-foreground/80'}`}
                 >
                   {srv.name}
                 </span>

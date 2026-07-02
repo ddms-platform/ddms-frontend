@@ -217,11 +217,11 @@ export default function ServiceTab({
       {services.map((srv, index) => (
         <div
           key={srv.id}
-          className="relative bg-[#0A1128] border border-slate-700 rounded-xl p-6 mb-6"
+          className="relative bg-ddms-bg-card border border-border rounded-xl p-6 mb-6"
         >
-          <div className="flex justify-between items-start mb-6 pb-4 border-b border-slate-800/50">
-            <h2 className="text-xl font-black tracking-wide text-white flex items-center gap-2">
-              <span className="bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-md text-sm border border-cyan-500/30">
+          <div className="flex justify-between items-start mb-6 pb-4 border-b border-border">
+            <h2 className="text-xl font-black tracking-wide text-foreground flex items-center gap-2">
+              <span className="bg-ddms-secondary/20 text-ddms-secondary px-3 py-1 rounded-md text-sm border border-ddms-secondary/30">
                 #{index + 1}
               </span>
               CẤU HÌNH DỊCH VỤ
@@ -239,15 +239,15 @@ export default function ServiceTab({
             )}
           </div>
 
-          <div className="mb-8 bg-slate-800/20 p-4 rounded-xl border border-slate-700/50">
-            <label className="text-sm font-medium text-slate-300 block mb-3">
+          <div className="mb-8 bg-muted/50 p-4 rounded-xl border border-border">
+            <label className="text-sm font-medium text-muted-foreground block mb-3">
               Phân Loại Dịch Vụ
             </label>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => updateService(srv.id, 'serviceType', 'cruise')}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'cruise' ? 'bg-cyan-500 text-[#0B132B] shadow-[0_0_15px_rgba(0,240,255,0.4)]' : 'bg-slate-800/80 text-slate-400 border border-slate-700 hover:bg-slate-700'}`}
+                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'cruise' ? 'bg-ddms-secondary text-primary-foreground' : 'bg-ddms-bg-main text-muted-foreground border border-border hover:bg-foreground/5'}`}
               >
                 Tour Ngắn
               </button>
@@ -256,14 +256,14 @@ export default function ServiceTab({
                 onClick={() =>
                   updateService(srv.id, 'serviceType', 'complex_tour')
                 }
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'complex_tour' ? 'bg-purple-500 text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]' : 'bg-slate-800/80 text-slate-400 border border-slate-700 hover:bg-slate-700'}`}
+                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'complex_tour' ? 'bg-purple-600 text-white' : 'bg-ddms-bg-main text-muted-foreground border border-border hover:bg-foreground/5'}`}
               >
                 Tour Dài Ngày
               </button>
               <button
                 type="button"
                 onClick={() => updateService(srv.id, 'serviceType', 'dinner')}
-                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'dinner' ? 'bg-yellow-500 text-[#0B132B] shadow-[0_0_15px_rgba(234,179,8,0.4)]' : 'bg-slate-800/80 text-slate-400 border border-slate-700 hover:bg-slate-700'}`}
+                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'dinner' ? 'bg-amber-500 text-black' : 'bg-ddms-bg-main text-muted-foreground border border-border hover:bg-foreground/5'}`}
               >
                 Ăn Tối
               </button>
@@ -273,7 +273,7 @@ export default function ServiceTab({
                   onClick={() =>
                     updateService(srv.id, 'serviceType', 'fishing')
                   }
-                  className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'fishing' ? 'bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'bg-slate-800/80 text-slate-400 border border-slate-700 hover:bg-slate-700'}`}
+                  className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'fishing' ? 'bg-blue-600 text-white' : 'bg-ddms-bg-main text-muted-foreground border border-border hover:bg-foreground/5'}`}
                 >
                   Câu Mực Đêm
                 </button>
@@ -284,7 +284,7 @@ export default function ServiceTab({
                   onClick={() =>
                     updateService(srv.id, 'serviceType', 'speedboat')
                   }
-                  className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'speedboat' ? 'bg-emerald-500 text-[#0B132B] shadow-[0_0_15px_rgba(16,185,129,0.4)]' : 'bg-slate-800/80 text-slate-400 border border-slate-700 hover:bg-slate-700'}`}
+                  className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${srv.serviceType === 'speedboat' ? 'bg-emerald-600 text-white' : 'bg-ddms-bg-main text-muted-foreground border border-border hover:bg-foreground/5'}`}
                 >
                   Thuê Ca Nô
                 </button>
@@ -295,13 +295,13 @@ export default function ServiceTab({
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-300">
+                <label className="text-sm font-medium text-muted-foreground">
                   Tên dịch vụ / Tour
                 </label>
                 <Input
                   required
                   placeholder="VD: Tour Ngắm Hoàng Hôn"
-                  className="bg-[#0B132B] border-slate-700 mt-1 text-white"
+                  className="bg-ddms-bg-main border-border mt-1 text-foreground"
                   value={srv.name}
                   onChange={(e) =>
                     updateService(srv.id, 'name', e.target.value)
@@ -309,14 +309,14 @@ export default function ServiceTab({
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-300">
+                <label className="text-sm font-medium text-muted-foreground">
                   Giá vé cơ bản / Vé lên tàu (VNĐ)
                 </label>
                 <Input
                   required
                   type="number"
                   placeholder="200000"
-                  className="bg-[#0B132B] border-slate-700 mt-1 text-white"
+                  className="bg-ddms-bg-main border-border mt-1 text-foreground"
                   value={srv.basePrice}
                   onChange={(e) =>
                     updateService(srv.id, 'basePrice', e.target.value)
@@ -325,13 +325,13 @@ export default function ServiceTab({
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-300">
+              <label className="text-sm font-medium text-muted-foreground">
                 Mô tả tóm tắt
               </label>
               <Textarea
                 required
                 placeholder="Mô tả dịch vụ của bạn..."
-                className="bg-[#0B132B] border-slate-700 mt-1 h-27 resize-none text-white"
+                className="bg-ddms-bg-main border-border mt-1 h-27 resize-none text-foreground"
                 value={srv.description}
                 onChange={(e) =>
                   updateService(srv.id, 'description', e.target.value)
@@ -342,8 +342,8 @@ export default function ServiceTab({
 
           {renderDynamicFields(srv)}
 
-          <div className="space-y-4 border-t border-slate-800 pt-6 mt-6">
-            <h3 className="text-lg font-semibold text-green-400 flex items-center gap-2 mb-2">
+          <div className="space-y-4 border-t border-border pt-6 mt-6">
+            <h3 className="text-lg font-semibold text-emerald-600 dark:text-green-400 flex items-center gap-2 mb-2">
               <MessageCircleQuestion className="w-5 h-5" /> Câu hỏi thường gặp
               (FAQs)
             </h3>
@@ -367,7 +367,7 @@ export default function ServiceTab({
                 type="button"
                 variant="outline"
                 onClick={() => handleAddDynamicArrayItem(srv.id, 'faqs')}
-                className="w-full border-dashed border-slate-700 bg-transparent text-green-400 hover:bg-slate-800"
+                className="w-full border-dashed border-border bg-transparent text-emerald-600 dark:text-green-400 hover:bg-foreground/5"
               >
                 <Plus className="w-4 h-4 mr-2" /> Thêm Câu Hỏi Khác
               </Button>
@@ -380,7 +380,7 @@ export default function ServiceTab({
         type="button"
         variant="outline"
         onClick={handleAddService}
-        className="w-full border-dashed border-cyan-500/50 text-cyan-400 bg-cyan-500/5 hover:bg-cyan-500/10 py-8"
+        className="w-full border-dashed border-ddms-secondary/50 text-ddms-secondary bg-ddms-secondary/5 hover:bg-ddms-secondary/10 py-8"
       >
         <Plus className="w-5 h-5 mr-2" /> THÊM MỘT DỊCH VỤ KHÁC CHO TÀU NÀY
       </Button>

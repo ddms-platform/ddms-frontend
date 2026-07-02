@@ -18,6 +18,7 @@ import { boatService, type BoatListItem } from '@/services/boatService';
 import { getBoatTypes, type IBoatType } from '@/services/system-service';
 import BoatCard from './boat-card';
 import BoatTable from './boat-table';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type FilterStatus = 'all' | BoatStatus;
 type ViewMode = 'grid' | 'table';
@@ -100,12 +101,12 @@ export default function OwnerBoatList() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1
-            className="text-2xl font-bold"
-            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+            className="text-2xl font-bold text-foreground"
+            style={{ letterSpacing: '-0.44px' }}
           >
             {t('ownerBoats.title')}
           </h1>
-          <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
+          <p className="mt-1 text-sm text-muted-foreground">
             {t('ownerBoats.subtitle')}
           </p>
         </div>
@@ -118,8 +119,7 @@ export default function OwnerBoatList() {
           >
             <RefreshCw
               size={16}
-              className={loading ? 'animate-spin' : ''}
-              style={{ color: '#ecf0ff' }}
+              className={`text-muted-foreground ${loading ? 'animate-spin' : ''}`}
             />
           </Button>
           <Button variant="cyan" size="action" className="gap-2" asChild>
@@ -138,44 +138,36 @@ export default function OwnerBoatList() {
             label: t('ownerBoats.stats.total'),
             value: stats.total,
             icon: Ship,
-            iconColor: '#00F0FF',
-            bg: 'rgba(0,240,255,0.12)',
+            colorClass:
+              'bg-cyan-500/10 border-cyan-500/20 text-cyan-700 dark:text-cyan-400',
+            iconColor: 'text-cyan-500',
           },
           {
             label: t('ownerBoats.stats.running'),
             value: stats.running,
             icon: TrendingUp,
-            iconColor: '#10B981',
-            bg: 'rgba(16,185,129,0.12)',
+            colorClass:
+              'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400',
+            iconColor: 'text-emerald-500',
           },
           {
             label: t('ownerBoats.stats.idle'),
             value: stats.idle,
             icon: Layers,
-            iconColor: '#F59E0B',
-            bg: 'rgba(245,158,11,0.12)',
+            colorClass:
+              'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400',
+            iconColor: 'text-amber-500',
           },
         ].map((s) => (
           <div
             key={s.label}
-            className="rounded-2xl p-4 transition-all duration-200 hover:scale-[1.02]"
-            style={{
-              background: `linear-gradient(135deg, ${s.bg}, transparent)`,
-              border: '1px solid rgba(255,255,255,0.04)',
-            }}
+            className={`rounded-2xl p-4 transition-all duration-200 hover:scale-[1.02] border ${s.colorClass}`}
           >
             <div className="flex items-center gap-2">
-              <s.icon size={16} style={{ color: s.iconColor }} />
-              <span
-                className="text-xs font-medium"
-                style={{ color: '#ecf0ff' }}
-              >
-                {s.label}
-              </span>
+              <s.icon size={16} className={s.iconColor} />
+              <span className="text-xs font-medium">{s.label}</span>
             </div>
-            <p className="mt-2 text-xl font-bold" style={{ color: '#ffffff' }}>
-              {s.value}
-            </p>
+            <p className="mt-2 text-xl font-bold">{s.value}</p>
           </div>
         ))}
       </div>
@@ -186,37 +178,27 @@ export default function OwnerBoatList() {
           <div className="relative w-full sm:w-72">
             <Search
               size={16}
-              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2"
-              style={{ color: '#ecf0ff' }}
+              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
             />
             <Input
               id="boat-search"
               placeholder={t('ownerBoats.search')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-              style={{
-                backgroundColor: 'rgba(255,255,255,0.04)',
-                borderColor: 'rgba(255,255,255,0.08)',
-                color: '#ffffff',
-              }}
+              className="pl-9 bg-ddms-bg-main border-border text-foreground"
             />
           </div>
           <div className="hidden items-center gap-1 sm:flex">
-            <Filter size={13} style={{ color: '#ecf0ff' }} />
+            <Filter size={13} className="text-muted-foreground" />
             {(['all', 'running', 'idle'] as FilterStatus[]).map((s) => (
               <button
                 key={s}
                 onClick={() => setFilterStatus(s)}
-                className="rounded-full px-3 py-1.5 text-xs font-medium transition-all"
-                style={{
-                  backgroundColor:
-                    filterStatus === s
-                      ? 'rgba(0,240,255,0.15)'
-                      : 'rgba(255,255,255,0.04)',
-                  color: filterStatus === s ? '#00F0FF' : '#ecf0ff',
-                  border: `1px solid ${filterStatus === s ? 'rgba(0,240,255,0.3)' : 'rgba(255,255,255,0.06)'}`,
-                }}
+                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all border ${
+                  filterStatus === s
+                    ? 'bg-ddms-secondary/15 text-ddms-secondary border-ddms-secondary/30'
+                    : 'bg-ddms-bg-main text-muted-foreground border-border hover:bg-foreground/5'
+                }`}
               >
                 {t(`ownerBoats.filter.${s}`)}
               </button>
@@ -228,14 +210,11 @@ export default function OwnerBoatList() {
             id="boat-type-filter"
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="rounded-xl px-3 py-2 text-xs font-medium outline-none"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: '#ecf0ff',
-            }}
+            className="rounded-xl px-3 py-2 text-xs font-medium outline-none bg-ddms-bg-main border border-border text-foreground"
           >
-            <option value="all">{t('ownerBoats.filter.allTypes')}</option>
+            <option value="all" className="bg-ddms-bg-card text-foreground">
+              {t('ownerBoats.filter.allTypes')}
+            </option>
             {boatTypes.map((bt) => {
               const localizedName = t(`ownerBoats.types.${bt.code}`);
               const displayName =
@@ -245,7 +224,11 @@ export default function OwnerBoatList() {
                     ? bt.name_en
                     : bt.name_vi;
               return (
-                <option key={bt.code} value={bt.code}>
+                <option
+                  key={bt.code}
+                  value={bt.code}
+                  className="bg-ddms-bg-card text-foreground"
+                >
                   {displayName}
                 </option>
               );
@@ -278,27 +261,59 @@ export default function OwnerBoatList() {
 
       {/* Content */}
       {loading ? (
-        <div className="mt-16 flex items-center justify-center">
-          <div
-            className="h-10 w-10 animate-spin rounded-full border-2 border-t-transparent"
-            style={{ borderColor: '#00F0FF', borderTopColor: 'transparent' }}
-          />
-        </div>
+        viewMode === 'grid' ? (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="bg-ddms-bg-card rounded-2xl border border-border overflow-hidden shadow-sm p-5 space-y-4"
+              >
+                <Skeleton className="h-48 w-full rounded-xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+                <div className="pt-2 flex justify-between items-center">
+                  <Skeleton className="h-4 w-20" />
+                  <div className="flex gap-2">
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4 bg-ddms-bg-card rounded-2xl border border-border overflow-hidden shadow-sm p-6 space-y-4">
+            <div className="flex gap-4 border-b border-border pb-3">
+              <Skeleton className="h-4 w-1/6" />
+              <Skeleton className="h-4 w-1/6" />
+              <Skeleton className="h-4 w-1/6" />
+              <Skeleton className="h-4 w-1/6" />
+              <Skeleton className="h-4 w-1/6" />
+              <Skeleton className="h-4 w-1/6 ml-auto" />
+            </div>
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <div key={idx} className="flex gap-4 py-2 items-center">
+                <Skeleton className="h-4 w-1/6" />
+                <Skeleton className="h-4 w-1/6" />
+                <Skeleton className="h-4 w-1/6" />
+                <Skeleton className="h-4 w-1/6" />
+                <Skeleton className="h-4 w-1/6" />
+                <Skeleton className="h-8 w-16 ml-auto" />
+              </div>
+            ))}
+          </div>
+        )
       ) : filteredBoats.length === 0 ? (
         <div className="mt-16 flex flex-col items-center text-center">
-          <div
-            className="flex h-20 w-20 items-center justify-center rounded-full"
-            style={{ backgroundColor: 'rgba(0,240,255,0.08)' }}
-          >
-            <Ship size={36} style={{ color: '#00F0FF' }} />
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-ddms-secondary/10">
+            <Ship size={36} className="text-ddms-secondary" />
           </div>
-          <h3
-            className="mt-4 text-lg font-semibold"
-            style={{ color: '#ffffff' }}
-          >
+          <h3 className="mt-4 text-lg font-semibold text-foreground">
             {t('ownerBoats.empty.title')}
           </h3>
-          <p className="mt-1 text-sm" style={{ color: '#ecf0ff' }}>
+          <p className="mt-1 text-sm text-muted-foreground">
             {isFiltered
               ? t('ownerBoats.empty.filtered')
               : t('ownerBoats.empty.noBoats')}

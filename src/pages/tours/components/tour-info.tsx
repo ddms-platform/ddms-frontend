@@ -40,57 +40,48 @@ export default function TourInfo({
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1
-            className="text-[28px] font-bold leading-[1.43]"
-            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+            className="text-[28px] font-bold leading-[1.43] text-foreground"
+            style={{ letterSpacing: '-0.44px' }}
           >
             {title}
           </h1>
-          <p
-            className="mt-2 flex items-center gap-1.5 text-sm"
-            style={{ color: '#ecf0ff' }}
-          >
+          <p className="mt-2 flex items-center gap-1.5 text-sm text-foreground/80">
             <MapPin size={15} />
             {location}
           </p>
         </div>
         <div
-          className="flex shrink-0 items-center gap-2 rounded-xl px-4 py-2"
+          className="flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 border"
           style={{
-            backgroundColor: '#112240',
+            backgroundColor: 'var(--ddms-bg-card)',
+            borderColor: 'var(--border)',
           }}
         >
-          <Star size={16} fill="#ffffff" style={{ color: '#ffffff' }} />
-          <span className="text-base font-bold" style={{ color: '#ffffff' }}>
-            {rating}
-          </span>
-          <span className="text-sm" style={{ color: '#ecf0ff' }}>
-            ({reviews})
-          </span>
+          <Star size={16} fill="#ffc107" style={{ color: '#ffc107' }} />
+          <span className="text-base font-bold text-foreground">{rating}</span>
+          <span className="text-sm text-foreground/75">({reviews})</span>
         </div>
       </div>
 
       {/* Divider */}
-      <div className="my-6 h-px" style={{ backgroundColor: '#112240' }} />
+      <div className="my-6 h-px" style={{ backgroundColor: 'var(--border)' }} />
 
       {/* Quick Details */}
       <div className="grid grid-cols-3 gap-4">
         {details.map(({ icon: Icon, label, value }) => (
           <div
             key={label}
-            className="flex flex-col items-center rounded-xl p-4 text-center"
-            style={{ backgroundColor: '#112240' }}
+            className="flex flex-col items-center rounded-xl p-4 text-center border"
+            style={{
+              backgroundColor: 'var(--ddms-bg-card)',
+              borderColor: 'var(--border)',
+            }}
           >
-            <Icon size={22} style={{ color: '#00F0FF' }} />
-            <span
-              className="mt-2 text-xs font-medium"
-              style={{ color: '#ecf0ff' }}
-            >
+            <Icon size={22} className="text-ddms-secondary" />
+            <span className="mt-2 text-xs font-medium text-foreground/75">
               {label}
             </span>
-            <span
-              className="mt-0.5 text-sm font-semibold"
-              style={{ color: '#ffffff' }}
-            >
+            <span className="mt-0.5 text-sm font-semibold text-foreground">
               {value}
             </span>
           </div>
@@ -98,20 +89,17 @@ export default function TourInfo({
       </div>
 
       {/* Divider */}
-      <div className="my-6 h-px" style={{ backgroundColor: '#112240' }} />
+      <div className="my-6 h-px" style={{ backgroundColor: 'var(--border)' }} />
 
       {/* Description */}
       <div>
         <h2
-          className="text-lg font-semibold"
-          style={{ color: '#ffffff', letterSpacing: '-0.18px' }}
+          className="text-lg font-semibold text-foreground"
+          style={{ letterSpacing: '-0.18px' }}
         >
           {t('tour.info.about')}
         </h2>
-        <p
-          className="mt-3 text-sm leading-relaxed"
-          style={{ color: '#ecf0ff' }}
-        >
+        <p className="mt-3 text-sm leading-relaxed text-foreground/80">
           {description}
         </p>
       </div>

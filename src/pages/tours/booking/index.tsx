@@ -210,23 +210,24 @@ export default function BookingPage() {
 
       {/* Title */}
       <h1
-        className="text-[28px] font-bold"
-        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+        className="text-[28px] font-bold text-foreground"
+        style={{ letterSpacing: '-0.44px' }}
       >
         {t('booking.title')}
       </h1>
-      <p className="mt-1 text-sm text-[#00F0FF]">{tour.name}</p>
+      <p className="mt-1 text-sm text-ddms-secondary">{tour.name}</p>
 
       {/* Step Indicator */}
       <StepIndicator currentStep={step} hasRooms={hasRooms} />
 
       {/* Step Content */}
       <div
-        className="mt-8 rounded-2xl p-6 sm:p-8"
+        className="mt-8 rounded-2xl p-6 sm:p-8 border"
         style={{
-          backgroundColor: '#112240',
+          backgroundColor: 'var(--ddms-bg-card)',
+          borderColor: 'var(--border)',
           boxShadow:
-            'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
+            'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.05) 0px 4px 8px',
         }}
       >
         {step === 1 && (
@@ -316,9 +317,9 @@ export default function BookingPage() {
       <div className="mt-6 flex gap-3">
         {step > 1 && (
           <Button
-            variant="dark-outline"
+            variant="outline"
             size="action-lg"
-            className="flex-1"
+            className="flex-1 text-foreground border-foreground/30 hover:bg-foreground/5"
             onClick={handleBack}
           >
             {t('booking.back')}

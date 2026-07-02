@@ -33,7 +33,7 @@ const MethodSelector = ({
   onClearError: () => void;
 }) => (
   <div className="space-y-4 text-center">
-    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
       Chọn phương thức thanh toán
     </p>
     <div className="grid gap-3 pt-2">
@@ -42,20 +42,20 @@ const MethodSelector = ({
           onSelect('vietqr');
           onClearError();
         }}
-        className="group flex flex-col items-center justify-center rounded-xl border p-4 transition-all hover:scale-[1.02] hover:border-[#00F0FF]/40 active:scale-95"
+        className="group flex flex-col items-center justify-center rounded-xl border p-4 transition-all hover:scale-[1.02] hover:border-ddms-secondary/40 active:scale-95 cursor-pointer"
         style={{
-          backgroundColor: '#112240',
-          borderColor: 'rgba(255,255,255,0.08)',
+          backgroundColor: 'var(--ddms-bg-card)',
+          borderColor: 'var(--border)',
         }}
       >
         <QrCode
           size={32}
-          className="text-[#00F0FF] transition-transform group-hover:scale-110"
+          className="text-ddms-secondary transition-transform group-hover:scale-110"
         />
-        <span className="mt-2 text-sm font-bold text-white">
+        <span className="mt-2 text-sm font-bold text-foreground">
           Cổng VietQR (Chuyển khoản nhanh)
         </span>
-        <span className="text-[10px] text-gray-400 mt-1">
+        <span className="text-[10px] text-muted-foreground mt-1">
           Hỗ trợ tất cả ứng dụng ngân hàng Việt Nam
         </span>
       </button>
@@ -65,20 +65,20 @@ const MethodSelector = ({
           onSelect('payos');
           onClearError();
         }}
-        className="group flex flex-col items-center justify-center rounded-xl border p-4 transition-all hover:scale-[1.02] hover:border-[#00F0FF]/40 active:scale-95"
+        className="group flex flex-col items-center justify-center rounded-xl border p-4 transition-all hover:scale-[1.02] hover:border-ddms-secondary/40 active:scale-95 cursor-pointer"
         style={{
-          backgroundColor: '#112240',
-          borderColor: 'rgba(255,255,255,0.08)',
+          backgroundColor: 'var(--ddms-bg-card)',
+          borderColor: 'var(--border)',
         }}
       >
         <CreditCard
           size={32}
-          className="text-[#38bdf8] transition-transform group-hover:scale-110"
+          className="text-sky-500 transition-transform group-hover:scale-110"
         />
-        <span className="mt-2 text-sm font-bold text-white">
+        <span className="mt-2 text-sm font-bold text-foreground">
           Ví PayOS (Mã QR & Link thanh toán)
         </span>
-        <span className="text-[10px] text-gray-400 mt-1">
+        <span className="text-[10px] text-muted-foreground mt-1">
           Thanh toán tự động siêu tốc qua PayOS
         </span>
       </button>
@@ -104,14 +104,14 @@ const VietQRPanel = ({
   onSubmit: () => void;
 }) => (
   <div className="space-y-4 animate-fade-in">
-    <div className="flex items-center gap-2 pb-2 border-b border-white/6">
+    <div className="flex items-center gap-2 pb-2 border-b border-border">
       <button
         onClick={onBack}
-        className="text-gray-400 hover:text-white transition-colors"
+        className="text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft size={16} />
       </button>
-      <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
+      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
         Thanh toán VietQR
       </span>
     </div>
@@ -130,41 +130,43 @@ const VietQRPanel = ({
       </div>
     )}
 
-    <div className="space-y-2 text-xs text-gray-300 bg-slate-900/40 p-3 rounded-xl border border-white/4">
+    <div className="space-y-2 text-xs text-foreground/80 bg-muted p-3 rounded-xl border border-border">
       <div className="flex justify-between">
         <span>Ngân hàng:</span>
-        <span className="font-semibold text-white">
+        <span className="font-semibold text-foreground">
           MB Bank (Ngân hàng Quân Đội)
         </span>
       </div>
       <div className="flex justify-between">
         <span>Số tài khoản:</span>
-        <span className="font-semibold text-white font-mono">0935566373</span>
+        <span className="font-semibold text-foreground font-mono">
+          0935566373
+        </span>
       </div>
       <div className="flex justify-between">
         <span>Chủ tài khoản:</span>
-        <span className="font-semibold text-white">DDMS PORTAL</span>
+        <span className="font-semibold text-foreground">DDMS PORTAL</span>
       </div>
       <div className="flex justify-between">
         <span>Nội dung CK:</span>
-        <span className="font-bold text-[#00F0FF]">{`DATTOUR ${displayCode}`}</span>
+        <span className="font-bold text-ddms-secondary">{`DATTOUR ${displayCode}`}</span>
       </div>
       <div className="flex justify-between">
         <span>Số tiền:</span>
-        <span className="font-bold text-[#10B981]">
+        <span className="font-bold text-emerald-500">
           {formatPrice(totalPrice)}
         </span>
       </div>
     </div>
 
-    <div className="pt-2 border-t border-white/6 flex flex-col gap-2">
-      <div className="flex items-center justify-between text-[10px] text-gray-400">
+    <div className="pt-2 border-t border-border flex flex-col gap-2">
+      <div className="flex items-center justify-between text-[10px] text-muted-foreground">
         <span>Giả lập ngân hàng xác nhận:</span>
         <span
           className={
             webhookReceived
-              ? 'text-emerald-400 font-bold'
-              : 'text-amber-400 font-bold'
+              ? 'text-emerald-500 font-bold'
+              : 'text-amber-500 font-bold'
           }
         >
           {webhookReceived
@@ -180,7 +182,7 @@ const VietQRPanel = ({
               `[Giả lập Webhook] Đã nhận được thông báo chuyển tiền thành công số tiền ${formatPrice(totalPrice)} cho đơn hàng ${displayCode}! Bây giờ bạn có thể nhấn "Đã chuyển khoản".`,
             );
           }}
-          className="w-full text-center py-1.5 px-3 rounded-lg text-[10px] font-bold border transition-all active:scale-95 cursor-pointer bg-[#10b981]/10 border-[#10b981]/30 text-[#10B981]"
+          className="w-full text-center py-1.5 px-3 rounded-lg text-[10px] font-bold border transition-all active:scale-95 cursor-pointer bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
         >
           ⚡ Giả lập nhận tiền thành công (Developer Test)
         </button>
@@ -190,9 +192,9 @@ const VietQRPanel = ({
     <div className="flex gap-2 pt-2">
       <Button
         onClick={onBack}
-        variant="dark-outline"
+        variant="outline"
         size="action"
-        className="flex-1"
+        className="flex-1 text-foreground border-foreground/30 hover:bg-foreground/5"
       >
         Quay lại
       </Button>
@@ -226,14 +228,14 @@ const PayOSPanel = ({
   onSubmit: () => void;
 }) => (
   <div className="space-y-4 animate-fade-in">
-    <div className="flex items-center gap-2 pb-2 border-b border-white/6">
+    <div className="flex items-center gap-2 pb-2 border-b border-border">
       <button
         onClick={onBack}
-        className="text-gray-400 hover:text-white transition-colors"
+        className="text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft size={16} />
       </button>
-      <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
+      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
         Cổng PayOS
       </span>
     </div>
@@ -246,7 +248,7 @@ const PayOSPanel = ({
           className="w-full h-auto"
         />
       </div>
-      <p className="text-[10px] text-gray-400 mt-2 font-medium">
+      <p className="text-[10px] text-muted-foreground mt-2 font-medium">
         Quét mã QR PayOS để thanh toán tự động
       </p>
     </div>
@@ -257,25 +259,27 @@ const PayOSPanel = ({
       </div>
     )}
 
-    <div className="space-y-1 text-[11px] text-center text-gray-300">
+    <div className="space-y-1 text-[11px] text-center text-muted-foreground">
       <p>
         Số tiền cần thanh toán:{' '}
-        <strong className="text-[#00F0FF]">{formatPrice(totalPrice)}</strong>
+        <strong className="text-ddms-secondary">
+          {formatPrice(totalPrice)}
+        </strong>
       </p>
       <p>
         Mã đơn hàng PayOS:{' '}
-        <strong className="text-white font-mono">#{displayCode}</strong>
+        <strong className="text-foreground font-mono">#{displayCode}</strong>
       </p>
     </div>
 
-    <div className="pt-2 border-t border-white/6 flex flex-col gap-2">
-      <div className="flex items-center justify-between text-[10px] text-gray-400">
+    <div className="pt-2 border-t border-border flex flex-col gap-2">
+      <div className="flex items-center justify-between text-[10px] text-muted-foreground">
         <span>Trạng thái giao dịch PayOS:</span>
         <span
           className={
             webhookReceived
-              ? 'text-emerald-400 font-bold'
-              : 'text-amber-400 font-bold'
+              ? 'text-emerald-500 font-bold'
+              : 'text-amber-500 font-bold'
           }
         >
           {webhookReceived ? 'Thành công (Paid)' : 'Chờ thanh toán (Pending)'}
@@ -289,7 +293,7 @@ const PayOSPanel = ({
               `[Giả lập Webhook] PayOS thông báo: Đơn hàng #${displayCode} đã thanh toán thành công số tiền ${formatPrice(totalPrice)}! Bây giờ bạn có thể nhấn "Tôi đã thanh toán".`,
             );
           }}
-          className="w-full text-center py-1.5 px-3 rounded-lg text-[10px] font-bold border transition-all active:scale-95 cursor-pointer bg-[#38bdf8]/10 border-[#38bdf8]/30 text-[#38bdf8]"
+          className="w-full text-center py-1.5 px-3 rounded-lg text-[10px] font-bold border transition-all active:scale-95 cursor-pointer bg-sky-500/10 border-sky-500/30 text-sky-500"
         >
           ⚡ Giả lập cổng PayOS thanh toán thành công
         </button>
@@ -308,9 +312,10 @@ const PayOSPanel = ({
             `Đang chuyển hướng đến cổng thanh toán PayOS để thanh toán đơn hàng ${displayCode}. Bạn đã thanh toán thành công trên cổng PayOS! Nhấn OK để quay lại trang đối soát.`,
           );
         }}
-        className="inline-flex h-10 items-center justify-center rounded-lg px-4 text-xs font-bold text-[#0A192F] transition-all active:scale-95"
+        className="inline-flex h-10 items-center justify-center rounded-lg px-4 text-xs font-bold text-primary-foreground transition-all active:scale-95"
         style={{
-          background: 'linear-gradient(135deg, #38bdf8, #00f0ff)',
+          background:
+            'linear-gradient(135deg, var(--ddms-secondary), var(--ring))',
         }}
       >
         Mở link thanh toán PayOS
@@ -319,9 +324,9 @@ const PayOSPanel = ({
       <div className="flex gap-2">
         <Button
           onClick={onBack}
-          variant="dark-outline"
+          variant="outline"
           size="action"
-          className="flex-1"
+          className="flex-1 text-foreground border-foreground/30 hover:bg-foreground/5"
         >
           Quay lại
         </Button>
@@ -361,35 +366,37 @@ const PaymentPanel = ({
     <div
       className="rounded-xl border p-5 flex flex-col justify-center min-h-87.5 transition-all"
       style={{
-        borderColor: 'rgba(255,255,255,0.06)',
-        backgroundColor: '#0d1b36',
+        borderColor: 'var(--border)',
+        backgroundColor: 'var(--ddms-bg-main)',
       }}
     >
       {isCreatingBooking ? (
         <div className="flex flex-col items-center justify-center text-center p-6 space-y-3 animate-fade-in">
-          <Loader2 className="h-10 w-10 animate-spin text-[#00F0FF]" />
-          <h3 className="text-sm font-bold text-white">
+          <Loader2 className="h-10 w-10 animate-spin text-ddms-secondary" />
+          <h3 className="text-sm font-bold text-foreground">
             Đang khởi tạo giao dịch đặt tour...
           </h3>
-          <p className="text-xs text-gray-400">Vui lòng chờ trong giây lát.</p>
+          <p className="text-xs text-muted-foreground">
+            Vui lòng chờ trong giây lát.
+          </p>
         </div>
       ) : isPaid ? (
         <div className="flex flex-col items-center justify-center text-center p-6 space-y-3 animate-fade-in">
-          <CheckCircle2 size={56} className="text-[#10B981] animate-bounce" />
-          <h3 className="text-lg font-bold text-white">
+          <CheckCircle2 size={56} className="text-emerald-500 animate-bounce" />
+          <h3 className="text-lg font-bold text-foreground">
             Thanh toán thành công!
           </h3>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-muted-foreground">
             Đang hoàn tất lưu thông tin đặt chỗ...
           </p>
         </div>
       ) : isVerifying ? (
         <div className="flex flex-col items-center justify-center text-center p-6 space-y-3">
-          <Loader2 className="h-10 w-10 animate-spin text-[#00F0FF]" />
-          <h3 className="text-sm font-bold text-white">
+          <Loader2 className="h-10 w-10 animate-spin text-ddms-secondary" />
+          <h3 className="text-sm font-bold text-foreground">
             Đang kiểm tra giao dịch...
           </h3>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-muted-foreground">
             Đang truy vấn trạng thái thanh toán từ hệ thống đối soát...
           </p>
         </div>

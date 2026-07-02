@@ -37,9 +37,14 @@ export async function performLogout(contextLogout: () => void): Promise<void> {
 
 export function mapProfileToUser(profile: IProfileRes): User {
   return {
+    id: profile.id,
     name: profile.fullName,
     email: profile.email,
     roles: (profile.roles?.length ? profile.roles : ['user']) as User['roles'],
+    avatar_url: profile.avatarUrl,
+    phone: profile.phone,
+    address: profile.address,
+    hasOwnerProfile: profile.hasOwnerProfile,
   };
 }
 

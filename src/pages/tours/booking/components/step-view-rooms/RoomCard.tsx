@@ -23,8 +23,10 @@ const RoomCard = ({
       onClick={onToggle}
       className="group relative w-full overflow-hidden rounded-xl border text-left transition-all hover:shadow-lg active:scale-[0.99]"
       style={{
-        borderColor: isSelected ? '#00F0FF' : 'rgba(255,255,255,0.1)',
-        backgroundColor: isSelected ? 'rgba(0,240,255,0.06)' : '#0d1b36',
+        borderColor: isSelected ? 'var(--ddms-secondary)' : 'var(--border)',
+        backgroundColor: isSelected
+          ? 'var(--secondary)'
+          : 'var(--ddms-bg-main)',
       }}
     >
       <div className="flex flex-col sm:flex-row">
@@ -41,9 +43,9 @@ const RoomCard = ({
                 room.type === 'vip'
                   ? 'rgba(255,215,0,0.9)'
                   : room.type === 'deluxe'
-                    ? 'rgba(0,240,255,0.9)'
+                    ? 'rgba(0,119,182,0.9)'
                     : 'rgba(255,255,255,0.85)',
-              color: '#0A192F',
+              color: room.type === 'standard' ? '#0a2540' : '#ffffff',
             }}
           >
             {room.type === 'vip'
@@ -65,15 +67,12 @@ const RoomCard = ({
             {room.availableRooms}/{room.totalRooms} {t('rooms.available')}
           </div>
           {isSelected && (
-            <div
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(0,240,255,0.15)' }}
-            >
+            <div className="absolute inset-0 flex items-center justify-center bg-ddms-secondary/15">
               <div
                 className="flex h-10 w-10 items-center justify-center rounded-full"
-                style={{ backgroundColor: '#00F0FF' }}
+                style={{ backgroundColor: 'var(--ddms-secondary)' }}
               >
-                <Check size={20} style={{ color: '#112240' }} />
+                <Check size={20} className="text-primary-foreground" />
               </div>
             </div>
           )}
@@ -82,9 +81,7 @@ const RoomCard = ({
         <div className="flex-1 p-4">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="font-semibold" style={{ color: '#ffffff' }}>
-                {room.name}
-              </h3>
+              <h3 className="font-semibold text-foreground">{room.name}</h3>
               <div className="mt-1 flex items-center gap-1.5">
                 <Star size={12} fill="#FFD700" style={{ color: '#FFD700' }} />
                 <span
@@ -93,25 +90,22 @@ const RoomCard = ({
                 >
                   {room.rating}
                 </span>
-                <span className="text-xs" style={{ color: '#ecf0ff' }}>
+                <span className="text-xs text-muted-foreground">
                   ({room.reviewCount} {t('rooms.reviews')})
                 </span>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-lg font-bold" style={{ color: '#00F0FF' }}>
+              <p className="text-lg font-bold text-ddms-secondary">
                 {formatPrice(room.price)}
               </p>
-              <p className="text-[10px]" style={{ color: '#ecf0ff' }}>
+              <p className="text-[10px] text-muted-foreground">
                 / {t('rooms.perNight')}
               </p>
             </div>
           </div>
 
-          <p
-            className="mt-2 text-xs leading-relaxed"
-            style={{ color: '#ecf0ff' }}
-          >
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
             {room.description}
           </p>
 
@@ -131,12 +125,7 @@ const RoomCard = ({
             ].map((item, i) => (
               <span
                 key={i}
-                className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.04)',
-                  color: '#ecf0ff',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                }}
+                className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium bg-muted text-foreground border border-border"
               >
                 <span>{item.icon}</span>
                 {item.label}
@@ -148,18 +137,14 @@ const RoomCard = ({
             {room.amenities.slice(0, 4).map(({ icon: AIcon, label }, i) => (
               <span
                 key={i}
-                className="flex items-center gap-1 text-[10px]"
-                style={{ color: '#ecf0ff' }}
+                className="flex items-center gap-1 text-[10px] text-muted-foreground"
               >
-                <AIcon size={12} style={{ color: '#00F0FF' }} />
+                <AIcon size={12} className="text-ddms-secondary" />
                 {label}
               </span>
             ))}
             {room.amenities.length > 4 && (
-              <span
-                className="text-[10px] font-medium"
-                style={{ color: 'rgba(255,255,255,0.4)' }}
-              >
+              <span className="text-[10px] font-medium text-muted-foreground/60">
                 +{room.amenities.length - 4}
               </span>
             )}
@@ -167,15 +152,14 @@ const RoomCard = ({
 
           <div
             className="mt-3 border-t pt-3"
-            style={{ borderColor: 'rgba(255,255,255,0.06)' }}
+            style={{ borderColor: 'var(--border)' }}
           >
             <span
               onClick={(e) => {
                 e.stopPropagation();
                 onViewDetail();
               }}
-              className="inline-flex items-center gap-1.5 text-xs font-medium transition-all hover:underline cursor-pointer"
-              style={{ color: '#00F0FF' }}
+              className="inline-flex items-center gap-1.5 text-xs font-medium transition-all hover:underline cursor-pointer text-ddms-secondary"
             >
               <Info size={12} />
               {t('booking.rooms.viewDetail')}

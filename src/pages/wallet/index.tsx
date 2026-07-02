@@ -102,22 +102,17 @@ export default function WalletPage() {
     <div className="mx-auto max-w-5xl px-6 py-8 sm:py-12">
       <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
             {t('wallet.title')}
           </h1>
-          <p className="mt-2 text-base text-[#ecf0ff]">
+          <p className="mt-2 text-base text-muted-foreground">
             {t('wallet.subtitle')}
           </p>
         </div>
         <button
           onClick={fetchData}
           disabled={isLoading}
-          className="flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-50"
-          style={{
-            borderColor: 'rgba(255, 255, 255, 0.1)',
-            backgroundColor: '#112240',
-            color: '#ffffff',
-          }}
+          className="flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer disabled:opacity-50 text-foreground border-foreground/30 hover:bg-foreground/5 bg-ddms-bg-card"
         >
           <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
           {t('wallet.updateBtn')}

@@ -43,20 +43,21 @@ const SummaryPanel = ({
   return (
     <div className="space-y-4">
       <div
-        className="flex items-center gap-3.5 rounded-xl p-4 border border-[rgba(255,255,255,0.06)]"
-        style={{ backgroundColor: '#0d1b36' }}
+        className="flex items-center gap-3.5 rounded-xl p-4 border border-border"
+        style={{ backgroundColor: 'var(--ddms-bg-main)' }}
       >
         <div
           className="flex h-11 w-11 items-center justify-center rounded-lg"
           style={{
-            background: 'linear-gradient(135deg, #00F0FF, #00b4c0)',
+            background:
+              'linear-gradient(135deg, var(--ddms-secondary), var(--ring))',
           }}
         >
-          <Ship size={20} className="text-[#0A192F]" />
+          <Ship size={20} className="text-primary-foreground" />
         </div>
         <div>
-          <p className="font-bold text-white leading-tight">{tour.name}</p>
-          <p className="text-xs text-[#00F0FF] mt-0.5">
+          <p className="font-bold text-foreground leading-tight">{tour.name}</p>
+          <p className="text-xs text-ddms-secondary mt-0.5">
             Thời lượng: {Math.floor(tour.durationMinutes / 60)} giờ{' '}
             {tour.durationMinutes % 60 > 0
               ? `${tour.durationMinutes % 60} phút`
@@ -68,67 +69,69 @@ const SummaryPanel = ({
       <div
         className="rounded-xl border p-4 space-y-3"
         style={{
-          borderColor: 'rgba(255,255,255,0.06)',
-          backgroundColor: '#0d1b36',
+          borderColor: 'var(--border)',
+          backgroundColor: 'var(--ddms-bg-main)',
         }}
       >
         <div className="flex justify-between text-xs sm:text-sm">
-          <span className="text-gray-400">Ngày khởi hành</span>
-          <span className="font-semibold text-white">
+          <span className="text-muted-foreground">Ngày khởi hành</span>
+          <span className="font-semibold text-foreground">
             {formatDateString(selectedDate)}
           </span>
         </div>
         <div className="flex justify-between text-xs sm:text-sm">
-          <span className="text-gray-400">Giờ xuất phát</span>
-          <span className="font-semibold text-white">{selectedTime}</span>
+          <span className="text-muted-foreground">Giờ xuất phát</span>
+          <span className="font-semibold text-foreground">{selectedTime}</span>
         </div>
         <div className="flex justify-between text-xs sm:text-sm">
-          <span className="text-gray-400">Số lượng khách</span>
-          <span className="font-semibold text-white">
+          <span className="text-muted-foreground">Số lượng khách</span>
+          <span className="font-semibold text-foreground">
             {guests} {t('booking.guests.people', 'người')}
           </span>
         </div>
         {selectedSchedule?.boatName && (
           <div className="flex justify-between text-xs sm:text-sm">
-            <span className="text-gray-400">Du thuyền vận hành</span>
-            <span className="font-semibold text-white">
+            <span className="text-muted-foreground">Du thuyền vận hành</span>
+            <span className="font-semibold text-foreground">
               {selectedSchedule.boatName}
             </span>
           </div>
         )}
         {selectedRoom && (
           <div className="flex justify-between text-xs sm:text-sm">
-            <span className="text-gray-400">Phòng nghỉ / Hạng ghế</span>
-            <span className="font-semibold text-[#00F0FF]">
+            <span className="text-muted-foreground">Phòng nghỉ / Hạng ghế</span>
+            <span className="font-semibold text-ddms-secondary">
               {selectedRoom.name}
             </span>
           </div>
         )}
 
-        <div className="h-px bg-white/6 my-2" />
+        <div className="h-px bg-border my-2" />
 
         <div className="flex justify-between text-xs sm:text-sm">
-          <span className="text-gray-400">
+          <span className="text-muted-foreground">
             Vé tour ({formatPrice(tour.price)} × {guests})
           </span>
-          <span className="font-semibold text-white">
+          <span className="font-semibold text-foreground">
             {formatPrice(tourPrice)}
           </span>
         </div>
         {selectedRoom && (
           <div className="flex justify-between text-xs sm:text-sm">
-            <span className="text-gray-400">Phụ phí phòng/ghế</span>
-            <span className="font-semibold text-white">
+            <span className="text-muted-foreground">Phụ phí phòng/ghế</span>
+            <span className="font-semibold text-foreground">
               {formatPrice(roomPrice)}
             </span>
           </div>
         )}
 
-        <div className="h-px bg-white/6 my-2" />
+        <div className="h-px bg-border my-2" />
 
         <div className="flex justify-between items-baseline pt-1">
-          <span className="font-bold text-white">Tổng tiền thanh toán</span>
-          <span className="text-xl font-black text-[#00F0FF]">
+          <span className="font-bold text-foreground">
+            Tổng tiền thanh toán
+          </span>
+          <span className="text-xl font-black text-ddms-secondary">
             {formatPrice(totalPrice)}
           </span>
         </div>

@@ -28,8 +28,8 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
     <div
       className="group overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.01]"
       style={{
-        backgroundColor: '#112240',
-        border: '1px solid rgba(255,255,255,0.04)',
+        backgroundColor: 'var(--ddms-bg-card)',
+        border: '1px solid var(--border)',
         boxShadow: 'rgba(0,0,0,0.08) 0px 2px 8px',
       }}
     >
@@ -42,11 +42,8 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div
-            className="flex h-full w-full items-center justify-center"
-            style={{ backgroundColor: 'rgba(0,240,255,0.04)' }}
-          >
-            <Ship size={48} style={{ color: 'rgba(0,240,255,0.3)' }} />
+          <div className="flex h-full w-full items-center justify-center bg-ddms-secondary/5">
+            <Ship size={48} className="text-ddms-secondary/30" />
           </div>
         )}
 
@@ -70,17 +67,11 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
       {/* Body */}
       <div className="p-4">
         <div>
-          <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+          <h3 className="text-base font-semibold text-foreground">
             {boat.name}
           </h3>
           {boat.type && (
-            <span
-              className="mt-0.5 inline-block rounded-md px-2 py-0.5 text-[11px] font-medium"
-              style={{
-                backgroundColor: 'rgba(0,240,255,0.08)',
-                color: '#00F0FF',
-              }}
-            >
+            <span className="mt-0.5 inline-block rounded-md px-2 py-0.5 text-[11px] font-medium bg-ddms-secondary/10 text-ddms-secondary">
               {(() => {
                 const localizedName = t(`ownerBoats.types.${boat.type}`);
                 if (
@@ -122,17 +113,13 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
           ].map((s) => (
             <div
               key={s.label}
-              className="flex flex-col items-center rounded-lg py-2"
-              style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
+              className="flex flex-col items-center rounded-lg py-2 bg-ddms-bg-main border border-border/20"
             >
-              <s.icon size={14} style={{ color: '#ecf0ff' }} />
-              <span
-                className="mt-1 text-sm font-bold"
-                style={{ color: '#ffffff' }}
-              >
+              <s.icon size={14} className="text-muted-foreground" />
+              <span className="mt-1 text-sm font-bold text-foreground">
                 {s.value}
               </span>
-              <span className="text-[10px]" style={{ color: '#ecf0ff' }}>
+              <span className="text-[10px] text-muted-foreground">
                 {s.label}
               </span>
             </div>
@@ -146,7 +133,12 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
               {t('ownerBoats.card.edit')}
             </Link>
           </Button>
-          <Button variant="dark-outline" size="sm" className="gap-1.5" asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-1.5 text-foreground border-foreground/30 hover:bg-foreground/5"
+            asChild
+          >
             <Link to={`/boats/${boat.id}`}>
               <Eye size={13} />
             </Link>

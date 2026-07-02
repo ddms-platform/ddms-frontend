@@ -18,10 +18,7 @@ export default function MainLayout() {
     : [];
 
   return (
-    <div
-      className="flex min-h-screen flex-col"
-      style={{ backgroundColor: '#0A192F' }}
-    >
+    <div className="flex min-h-screen flex-col bg-ddms-bg-main">
       <GlobalHeader navLinks={navLinks} />
       <main className="flex-1 flex flex-col">
         <Outlet />

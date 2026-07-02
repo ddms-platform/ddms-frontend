@@ -8,6 +8,7 @@ import CreateScheduleModal from './components/CreateScheduleModal';
 import RecentBookingsTable from './components/RecentBookingsTable';
 import DashboardCharts from './components/DashboardCharts';
 import ScheduleCalendar from './components/ScheduleCalendar';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042', '#8884d8'];
 
@@ -215,15 +216,59 @@ const OwnerToursPage = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex items-center gap-3 mb-6">
-        <MapIcon className="w-8 h-8 text-cyan-400" />
-        <h1 className="text-3xl font-bold text-white tracking-tight">
+        <MapIcon className="w-8 h-8 text-ddms-secondary" />
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">
           {t('ownerTours.title')}
         </h1>
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center items-center h-64 text-cyan-400">
-          {t('ownerTours.loadingData')}
+        <div className="space-y-6">
+          {/* Charts Card Skeleton */}
+          <div className="bg-ddms-bg-card rounded-xl border border-border p-6 shadow-sm space-y-6">
+            <div className="flex items-center gap-3">
+              <Skeleton className="w-5 h-5 rounded-full" />
+              <Skeleton className="h-6 w-56" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <Skeleton className="h-4 w-40 mx-auto" />
+                <Skeleton className="h-60 w-full rounded-xl" />
+              </div>
+              <div className="space-y-4">
+                <Skeleton className="h-4 w-40 mx-auto" />
+                <Skeleton className="h-60 w-full rounded-xl" />
+              </div>
+            </div>
+          </div>
+
+          {/* Calendar Card Skeleton */}
+          <div className="bg-ddms-bg-card rounded-xl border border-border p-6 shadow-sm space-y-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-5 h-5 rounded-full" />
+                <Skeleton className="h-6 w-32" />
+              </div>
+              <div className="flex gap-2">
+                <Skeleton className="h-8 w-24 rounded-lg" />
+                <Skeleton className="h-8 w-28 rounded-lg" />
+              </div>
+            </div>
+            <Skeleton className="h-96 w-full rounded-xl" />
+          </div>
+
+          {/* Table Card Skeleton */}
+          <div className="bg-ddms-bg-card rounded-xl border border-border p-6 shadow-sm space-y-4">
+            <div className="flex justify-between items-center">
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-4 w-20" />
+            </div>
+            <div className="space-y-3">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
         </div>
       ) : (
         <>

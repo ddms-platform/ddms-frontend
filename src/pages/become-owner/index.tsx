@@ -15,7 +15,7 @@ const HERO_IMAGE =
   'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1600&h=900&fit=crop';
 
 const cardShadow =
-  'rgba(0,0,0,0.22) 0px 8px 24px, rgba(255,255,255,0.06) 0px 0px 0px 1px';
+  'rgba(0,0,0,0.08) 0px 8px 24px, rgba(0,0,0,0.04) 0px 0px 0px 1px';
 
 const benefits = [
   { icon: Ship, key: 'manageTours' },
@@ -39,11 +39,11 @@ export default function BecomeOwnerPage() {
   const { t } = useTranslation();
 
   return (
-    <div style={{ backgroundColor: '#0A192F', color: '#ffffff' }}>
+    <div className="bg-background text-foreground min-h-screen">
       <section
         className="relative min-h-140 overflow-hidden"
         style={{
-          backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.68) 0%, rgba(0,0,0,0.42) 48%, rgba(0,0,0,0.08) 100%), url(${HERO_IMAGE})`,
+          backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.5) 48%, rgba(0,0,0,0.1) 100%), url(${HERO_IMAGE})`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}
@@ -72,7 +72,10 @@ export default function BecomeOwnerPage() {
               <Link
                 to={routeName.ownerRegistration}
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
-                style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
+                style={{
+                  backgroundColor: 'var(--ddms-secondary)',
+                  color: '#ffffff',
+                }}
               >
                 {t('becomeOwner.hero.primaryCta')}
                 <ArrowRight size={18} />
@@ -93,15 +96,12 @@ export default function BecomeOwnerPage() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 max-w-2xl">
             <h2
-              className="text-[28px] font-bold leading-[1.43]"
-              style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+              className="text-[28px] font-bold leading-[1.43] text-foreground"
+              style={{ letterSpacing: '-0.44px' }}
             >
               {t('becomeOwner.benefits.title')}
             </h2>
-            <p
-              className="mt-2 text-sm leading-relaxed"
-              style={{ color: '#ecf0ff' }}
-            >
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {t('becomeOwner.benefits.subtitle')}
             </p>
           </div>
@@ -110,28 +110,26 @@ export default function BecomeOwnerPage() {
             {benefits.map(({ icon: Icon, key }) => (
               <article
                 key={key}
-                className="rounded-2xl p-6"
-                style={{ backgroundColor: '#112240', boxShadow: cardShadow }}
+                className="rounded-2xl p-6 bg-ddms-bg-card border border-border/60 transition-all duration-300 hover:shadow-md"
+                style={{ boxShadow: cardShadow }}
               >
                 <div
                   className="mb-5 flex h-12 w-12 items-center justify-center rounded-full"
                   style={{
-                    background: 'linear-gradient(135deg, #00F0FF, #00d4e0)',
-                    color: '#0A192F',
+                    background:
+                      'linear-gradient(135deg, var(--ddms-secondary), #00d4e0)',
+                    color: '#ffffff',
                   }}
                 >
-                  <Icon size={22} />
+                  <Icon size={22} className="text-white" />
                 </div>
                 <h3
-                  className="text-xl font-semibold leading-tight"
-                  style={{ color: '#ffffff', letterSpacing: '-0.18px' }}
+                  className="text-xl font-semibold leading-tight text-foreground"
+                  style={{ letterSpacing: '-0.18px' }}
                 >
                   {t(`becomeOwner.benefits.items.${key}.title`)}
                 </h3>
-                <p
-                  className="mt-3 text-sm leading-relaxed"
-                  style={{ color: '#ecf0ff' }}
-                >
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                   {t(`becomeOwner.benefits.items.${key}.description`)}
                 </p>
               </article>
@@ -140,19 +138,16 @@ export default function BecomeOwnerPage() {
         </div>
       </section>
 
-      <section className="px-6 py-16" style={{ backgroundColor: '#112240' }}>
+      <section className="px-6 py-16 bg-muted/30 border-y border-border/40">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 max-w-2xl">
             <h2
-              className="text-[28px] font-bold leading-[1.43]"
-              style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+              className="text-[28px] font-bold leading-[1.43] text-foreground"
+              style={{ letterSpacing: '-0.44px' }}
             >
               {t('becomeOwner.process.title')}
             </h2>
-            <p
-              className="mt-2 text-sm leading-relaxed"
-              style={{ color: '#ecf0ff' }}
-            >
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {t('becomeOwner.process.subtitle')}
             </p>
           </div>
@@ -161,36 +156,31 @@ export default function BecomeOwnerPage() {
             {processSteps.map(({ icon: Icon, key }, index) => (
               <article
                 key={key}
-                className="rounded-2xl p-6"
-                style={{ backgroundColor: '#0A192F', boxShadow: cardShadow }}
+                className="rounded-2xl p-6 bg-ddms-bg-card border border-border/60 transition-all duration-300 hover:shadow-md"
+                style={{ boxShadow: cardShadow }}
               >
                 <div className="mb-5 flex items-center justify-between">
                   <div
                     className="flex h-12 w-12 items-center justify-center rounded-full"
                     style={{
-                      background: 'linear-gradient(135deg, #00F0FF, #00d4e0)',
-                      color: '#0A192F',
+                      background:
+                        'linear-gradient(135deg, var(--ddms-secondary), #00d4e0)',
+                      color: '#ffffff',
                     }}
                   >
-                    <Icon size={22} />
+                    <Icon size={22} className="text-white" />
                   </div>
-                  <span
-                    className="text-sm font-semibold"
-                    style={{ color: '#00F0FF' }}
-                  >
+                  <span className="text-sm font-semibold text-ddms-secondary">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                 </div>
                 <h3
-                  className="text-xl font-semibold leading-tight"
-                  style={{ color: '#ffffff', letterSpacing: '-0.18px' }}
+                  className="text-xl font-semibold leading-tight text-foreground"
+                  style={{ letterSpacing: '-0.18px' }}
                 >
                   {t(`becomeOwner.process.steps.${key}.title`)}
                 </h3>
-                <p
-                  className="mt-3 text-sm leading-relaxed"
-                  style={{ color: '#ecf0ff' }}
-                >
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                   {t(`becomeOwner.process.steps.${key}.description`)}
                 </p>
               </article>
@@ -203,21 +193,21 @@ export default function BecomeOwnerPage() {
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div>
             <h2
-              className="text-[28px] font-bold leading-[1.43]"
-              style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+              className="text-[28px] font-bold leading-[1.43] text-foreground"
+              style={{ letterSpacing: '-0.44px' }}
             >
               {t('becomeOwner.requirements.title')}
             </h2>
-            <p
-              className="mt-2 text-sm leading-relaxed"
-              style={{ color: '#ecf0ff' }}
-            >
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {t('becomeOwner.requirements.subtitle')}
             </p>
             <Link
               to={routeName.ownerRegistration}
               className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold transition-all hover:shadow-lg active:scale-[0.98]"
-              style={{ backgroundColor: '#00F0FF', color: '#0A192F' }}
+              style={{
+                backgroundColor: 'var(--ddms-secondary)',
+                color: '#ffffff',
+              }}
             >
               {t('becomeOwner.requirements.cta')}
               <ArrowRight size={18} />
@@ -228,29 +218,17 @@ export default function BecomeOwnerPage() {
             {requirements.map(({ icon: Icon, key }) => (
               <article
                 key={key}
-                className="flex gap-4 rounded-2xl p-5"
-                style={{ backgroundColor: '#112240', boxShadow: cardShadow }}
+                className="flex gap-4 rounded-2xl p-5 bg-ddms-bg-card border border-border/60 transition-all duration-300 hover:shadow-md"
+                style={{ boxShadow: cardShadow }}
               >
-                <div
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-                  style={{
-                    backgroundColor: 'rgba(0,240,255,0.1)',
-                    color: '#00F0FF',
-                  }}
-                >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ddms-secondary/10 text-ddms-secondary">
                   <Icon size={20} />
                 </div>
                 <div>
-                  <h3
-                    className="text-base font-semibold"
-                    style={{ color: '#ffffff' }}
-                  >
+                  <h3 className="text-base font-semibold text-foreground">
                     {t(`becomeOwner.requirements.items.${key}.title`)}
                   </h3>
-                  <p
-                    className="mt-1 text-sm leading-relaxed"
-                    style={{ color: '#ecf0ff' }}
-                  >
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                     {t(`becomeOwner.requirements.items.${key}.description`)}
                   </p>
                 </div>

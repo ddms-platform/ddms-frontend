@@ -24,8 +24,8 @@ const RevenueChart = ({ data, formatVND }: RevenueChartProps) => {
   if (data.length === 0) return null;
 
   return (
-    <div className="bg-[#111C3A] rounded-2xl border border-slate-800/60 p-6 mb-8 shadow-lg">
-      <h3 className="text-lg font-bold text-white mb-6 border-l-4 border-cyan-500 pl-3">
+    <div className="bg-ddms-bg-card rounded-2xl border border-border p-6 mb-8 shadow-lg">
+      <h3 className="text-lg font-bold text-foreground mb-6 border-l-4 border-ddms-secondary pl-3">
         Xu hướng Tài chính
       </h3>
       <div className="h-80 w-full">
@@ -44,17 +44,22 @@ const RevenueChart = ({ data, formatVND }: RevenueChartProps) => {
                 <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-            <XAxis dataKey="name" stroke="#9ca3af" fontSize={11} />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis
+              dataKey="name"
+              stroke="hsl(var(--muted-foreground))"
+              fontSize={11}
+            />
             <YAxis
-              stroke="#9ca3af"
+              stroke="hsl(var(--muted-foreground))"
               fontSize={11}
               tickFormatter={(v) => `${v / 1000000}M`}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#111C3A',
-                borderColor: '#374151',
+                backgroundColor: 'var(--popover)',
+                borderColor: 'var(--border)',
+                color: 'var(--popover-foreground)',
                 borderRadius: '12px',
               }}
               formatter={(value: any) => [formatVND(value as number), '']}

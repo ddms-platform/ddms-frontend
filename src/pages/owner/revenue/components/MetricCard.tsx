@@ -25,13 +25,13 @@ const MetricCard = ({
   bgIcon: BgIcon,
   bgIconColor,
   variant = 'default',
-  labelColor = 'text-slate-400',
+  labelColor = 'text-muted-foreground',
   footer,
 }: MetricCardProps) => {
   const outerClass =
     variant === 'highlight'
-      ? 'p-5 rounded-2xl bg-linear-to-br from-[#1b1e35] to-[#122340] border border-cyan-500/30 shadow-lg relative overflow-hidden'
-      : 'p-5 rounded-2xl bg-[#111C3A] border border-slate-800/60 shadow-lg relative overflow-hidden group';
+      ? 'p-5 rounded-2xl bg-linear-to-br from-ddms-bg-card to-muted/80 border border-ddms-secondary/30 shadow-lg relative overflow-hidden'
+      : 'p-5 rounded-2xl bg-ddms-bg-card border border-border shadow-lg relative overflow-hidden group';
 
   return (
     <div className={outerClass}>

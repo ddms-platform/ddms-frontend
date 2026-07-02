@@ -97,10 +97,10 @@ export default function StepDateTime({
 
   return (
     <div>
-      <h2 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
+      <h2 className="text-lg font-semibold text-foreground">
         {t('booking.dateTime.title', 'Chọn ngày và giờ khởi hành')}
       </h2>
-      <p className="mt-1 text-sm text-gray-400">
+      <p className="mt-1 text-sm text-muted-foreground">
         {t(
           'booking.dateTime.subtitle',
           'Chọn ngày khởi hành và khung giờ di chuyển phù hợp cho chuyến du ngoạn của bạn',
@@ -109,10 +109,10 @@ export default function StepDateTime({
 
       {/* Date Selector Row */}
       <div className="mt-6">
-        <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-[#00F0FF]">
+        <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-ddms-secondary">
           1. {t('booking.dateTime.selectDate', 'Chọn ngày di chuyển')}
         </label>
-        <div className="flex gap-2.5 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-700">
+        <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-thin scrollbar-thumb-slate-700">
           {sortedDates.map((dateStr) => {
             const isActive = activeDate === dateStr;
             const { weekday, dayNum, month } = getDayLabel(dateStr);
@@ -120,24 +120,21 @@ export default function StepDateTime({
               <button
                 key={dateStr}
                 onClick={() => setActiveDate(dateStr)}
-                className="flex min-w-17.5 flex-col items-center rounded-xl border py-2.5 transition-all active:scale-95"
-                style={{
-                  borderColor: isActive ? '#00F0FF' : 'rgba(255,255,255,0.1)',
-                  backgroundColor: isActive
-                    ? 'rgba(0,240,255,0.08)'
-                    : '#0d1b36',
-                }}
+                className={`flex min-w-18 flex-col items-center rounded-2xl border py-3 transition-all duration-300 active:scale-95 cursor-pointer hover:border-ddms-secondary/40 hover:-translate-y-0.5 ${
+                  isActive
+                    ? 'bg-ddms-secondary/10 border-ddms-secondary text-ddms-secondary shadow-sm shadow-ddms-secondary/15'
+                    : 'bg-ddms-bg-card border-border text-foreground'
+                }`}
               >
-                <span className="text-[10px] font-bold text-gray-400">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
                   {weekday}
                 </span>
-                <span
-                  className="text-lg font-extrabold my-0.5"
-                  style={{ color: isActive ? '#00F0FF' : '#ffffff' }}
-                >
+                <span className="text-xl font-extrabold my-1 leading-none">
                   {dayNum}
                 </span>
-                <span className="text-[10px] text-gray-400">{month}</span>
+                <span className="text-[10px] text-muted-foreground font-medium">
+                  {month}
+                </span>
               </button>
             );
           })}
@@ -147,16 +144,16 @@ export default function StepDateTime({
       {/* Slots Selection Row */}
       {activeDate && (
         <div className="mt-8">
-          <div className="flex items-center justify-between mb-3">
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#00F0FF]">
+          <div className="flex items-center justify-between mb-4">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-ddms-secondary">
               2. {t('booking.dateTime.selectTime', 'Chọn giờ khởi hành')}
             </label>
-            <span className="text-xs text-gray-400 font-medium">
+            <span className="text-xs text-muted-foreground font-semibold bg-muted px-2.5 py-1 rounded-full border border-border">
               {formatDateHeader(activeDate)}
             </span>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {slotsForActiveDate.map((sched) => {
               const isSelected = selectedSchedule?.id === sched.id;
               const startTime = new Date(sched.start_time);
@@ -173,39 +170,37 @@ export default function StepDateTime({
                 <button
                   key={sched.id}
                   onClick={() => onSelectSchedule(sched)}
-                  className="flex items-center gap-3.5 rounded-xl border p-4 text-left transition-all active:scale-[0.99] hover:border-[#00F0FF]/40"
-                  style={{
-                    borderColor: isSelected
-                      ? '#00F0FF'
-                      : 'rgba(255,255,255,0.08)',
-                    backgroundColor: isSelected
-                      ? 'rgba(0,240,255,0.05)'
-                      : '#0d1b36',
-                  }}
+                  className={`flex items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 active:scale-[0.99] cursor-pointer hover:border-ddms-secondary/40 hover:-translate-y-0.5 ${
+                    isSelected
+                      ? 'bg-ddms-secondary/10 border-ddms-secondary text-ddms-secondary shadow-sm shadow-ddms-secondary/15 scale-[1.01]'
+                      : 'bg-ddms-bg-card border-border text-foreground'
+                  }`}
                 >
                   <div
-                    className="flex h-10 w-10 items-center justify-center rounded-lg"
-                    style={{
-                      backgroundColor: isSelected
-                        ? 'rgba(0,240,255,0.15)'
-                        : 'rgba(255,255,255,0.04)',
-                    }}
+                    className={`flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-300 ${
+                      isSelected
+                        ? 'bg-ddms-secondary/20 border-ddms-secondary/30'
+                        : 'bg-muted border-border'
+                    }`}
                   >
                     <Clock
-                      size={18}
-                      style={{ color: isSelected ? '#00F0FF' : '#94a3b8' }}
+                      size={20}
+                      className={
+                        isSelected
+                          ? 'text-ddms-secondary animate-pulse'
+                          : 'text-muted-foreground'
+                      }
                     />
                   </div>
                   <div className="flex-1">
                     <p
-                      className="text-base font-bold"
-                      style={{ color: isSelected ? '#00F0FF' : '#ffffff' }}
+                      className={`text-base font-extrabold tracking-tight transition-colors ${isSelected ? 'text-ddms-secondary' : 'text-foreground'}`}
                     >
                       {formattedTime}
                     </p>
                     {sched.boatName && (
-                      <div className="mt-0.5 flex items-center gap-1 text-[11px] text-gray-400">
-                        <Ship size={10} />
+                      <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground font-medium">
+                        <Ship size={12} className="text-muted-foreground/80" />
                         <span>{sched.boatName}</span>
                       </div>
                     )}

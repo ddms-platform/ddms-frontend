@@ -129,12 +129,12 @@ export default function SignInPage() {
         </Link>
         <div className="space-y-2 text-center">
           <h1
-            className="text-[28px] font-bold leading-[1.43]"
-            style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+            className="text-[28px] font-bold leading-[1.43] text-foreground"
+            style={{ letterSpacing: '-0.44px' }}
           >
             {t('auth.signIn.title')}
           </h1>
-          <p className="text-sm leading-[1.43]" style={{ color: '#ecf0ff' }}>
+          <p className="text-sm leading-[1.43] text-muted-foreground">
             {t('auth.signIn.description')}
           </p>
         </div>
@@ -161,8 +161,7 @@ export default function SignInPage() {
           labelExtra={
             <Link
               to={routeName.forgotPassword}
-              className="text-sm font-medium transition-colors hover:underline"
-              style={{ color: '#00F0FF' }}
+              className="text-sm font-medium transition-colors hover:underline text-ddms-secondary"
             >
               {t('auth.signIn.forgotPassword')}
             </Link>
@@ -171,8 +170,7 @@ export default function SignInPage() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors"
-              style={{ color: '#ecf0ff' }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 transition-colors text-muted-foreground hover:text-foreground"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -198,17 +196,11 @@ export default function SignInPage() {
       </form>
 
       <div className="relative flex items-center">
-        <div
-          className="flex-1"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
-        />
-        <span className="px-4 text-xs font-medium" style={{ color: '#ecf0ff' }}>
+        <div className="flex-1 border-t border-border" />
+        <span className="px-4 text-xs font-medium text-muted-foreground">
           {t('auth.signIn.orContinueWith')}
         </span>
-        <div
-          className="flex-1"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}
-        />
+        <div className="flex-1 border-t border-border" />
       </div>
 
       <div className="flex justify-center [&>div]:w-full">
@@ -225,12 +217,11 @@ export default function SignInPage() {
         />
       </div>
 
-      <p className="text-center text-sm" style={{ color: '#ecf0ff' }}>
+      <p className="text-center text-sm text-muted-foreground">
         {t('auth.signIn.dontHaveAccount')}?{' '}
         <Link
           to={routeName.signUp}
-          className="font-semibold transition-colors hover:underline"
-          style={{ color: '#00F0FF' }}
+          className="font-semibold transition-colors hover:underline text-ddms-secondary"
         >
           {t('auth.signIn.signUpLink')}
         </Link>

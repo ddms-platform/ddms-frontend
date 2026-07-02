@@ -141,10 +141,10 @@ export default function StepConfirm({
   return (
     <div className="space-y-6 font-sans">
       <div>
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-lg font-semibold text-foreground">
           {t('booking.confirm.title', 'Xác nhận thông tin & Thanh toán')}
         </h2>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-muted-foreground">
           {t(
             'booking.confirm.subtitle',
             'Vui lòng kiểm tra kỹ lộ trình và thanh toán để hoàn tất đặt chỗ.',

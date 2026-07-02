@@ -8,21 +8,21 @@ interface FaqRowProps {
 }
 
 const FaqRow = ({ faq, onChange }: FaqRowProps) => (
-  <div className="flex flex-col gap-2 bg-slate-800/30 p-3 rounded-lg border border-slate-700/50">
+  <div className="flex flex-col gap-2 bg-muted/30 p-3 rounded-lg border border-border">
     <div>
-      <label className="text-xs text-slate-400">Câu hỏi (Q)</label>
+      <label className="text-xs text-muted-foreground">Câu hỏi (Q)</label>
       <Input
         placeholder="VD: Tour có đón trả khách tại khách sạn không?"
-        className="bg-[#0B132B] border-slate-700 mt-1"
+        className="bg-ddms-bg-main border-border text-foreground mt-1"
         value={faq.question}
         onChange={(e) => onChange('question', e.target.value)}
       />
     </div>
     <div>
-      <label className="text-xs text-slate-400">Trả lời (A)</label>
+      <label className="text-xs text-muted-foreground">Trả lời (A)</label>
       <Textarea
         placeholder="VD: Có, chúng tôi đón khách tại các khách sạn trung tâm..."
-        className="bg-[#0B132B] border-slate-700 mt-1 h-15"
+        className="bg-ddms-bg-main border-border text-foreground mt-1 h-15"
         value={faq.answer}
         onChange={(e) => onChange('answer', e.target.value)}
       />

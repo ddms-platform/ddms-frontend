@@ -103,7 +103,7 @@ export default function ProfileInfo() {
     <div
       className="rounded-2xl p-6 sm:p-8"
       style={{
-        backgroundColor: '#0A192F',
+        backgroundColor: 'var(--ddms-bg-card)',
         boxShadow:
           'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
       }}
@@ -111,18 +111,17 @@ export default function ProfileInfo() {
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <h3
-          className="text-lg font-semibold"
-          style={{ color: '#ffffff', letterSpacing: '-0.18px' }}
+          className="text-lg font-semibold text-foreground"
+          style={{ letterSpacing: '-0.18px' }}
         >
           {t('profile.personalInfo')}
         </h3>
         {!isEditing ? (
           <Button
-            variant="dark-outline"
+            variant="outline"
             size="action"
-            className="gap-2"
+            className="gap-2 text-foreground border-foreground/30 hover:bg-foreground/5 bg-ddms-bg-main"
             onClick={handleEdit}
-            style={{ backgroundColor: '#112240' }}
           >
             <Pencil size={14} />
             {t('profile.edit')}
@@ -130,9 +129,9 @@ export default function ProfileInfo() {
         ) : (
           <div className="flex gap-2">
             <Button
-              variant="dark-outline"
+              variant="outline"
               size="action"
-              className="gap-1.5"
+              className="gap-1.5 text-foreground border-foreground/30 hover:bg-foreground/5"
               onClick={handleCancel}
             >
               <X size={14} />
@@ -158,17 +157,11 @@ export default function ProfileInfo() {
           const Icon = field.icon;
           return (
             <div key={field.key}>
-              <label
-                className="mb-1.5 block text-sm font-medium"
-                style={{ color: '#ffffff' }}
-              >
+              <label className="mb-1.5 block text-sm font-medium text-foreground">
                 {t(`profile.fields.${field.key}`)}
               </label>
               <div className="relative">
-                <div
-                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2"
-                  style={{ color: '#ecf0ff' }}
-                >
+                <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
                   <Icon size={18} />
                 </div>
                 {isEditing ? (
@@ -186,19 +179,15 @@ export default function ProfileInfo() {
                         return next;
                       })
                     }
-                    className="w-full rounded-lg border py-3 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:ring-2"
-                    style={{
-                      borderColor: 'rgba(255,255,255,0.15)',
-                      color: '#ffffff',
-                    }}
+                    className="w-full rounded-lg border py-3 pl-11 pr-4 text-sm font-medium outline-none transition-all focus:ring-2 bg-ddms-bg-main border-border text-foreground focus:ring-ddms-secondary"
                     disabled={field.key === 'email'} // Usually email isn't editable like this
                   />
                 ) : (
                   <div
-                    className="w-full rounded-lg py-3 pl-11 pr-4 text-sm font-medium"
+                    className="w-full rounded-lg py-3 pl-11 pr-4 text-sm font-medium border border-border"
                     style={{
-                      backgroundColor: '#112240',
-                      color: '#ffffff',
+                      backgroundColor: 'var(--ddms-bg-main)',
+                      color: 'var(--foreground)',
                       opacity: field.key === 'email' ? 0.7 : 1,
                     }}
                   >

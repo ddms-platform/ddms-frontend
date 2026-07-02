@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,8 +10,11 @@ import {
   Wallet,
   MessageSquare,
   Heart,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
+import useTheme from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
@@ -37,24 +40,38 @@ export default function GlobalHeader({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [wishlistCount, setWishlistCount] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const fetchWishlistCount = () => {
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const fetchWishlistCount = useCallback(() => {
     if (user) {
-      wishlistService.getWishlistedTourIds().then(ids => setWishlistCount(ids.length)).catch(console.error);
+      wishlistService
+        .getWishlistedTourIds()
+        .then((ids) => setWishlistCount(ids.length))
+        .catch(console.error);
     } else {
-      setWishlistCount(0);
+      Promise.resolve().then(() => setWishlistCount(0));
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchWishlistCount();
     window.addEventListener('wishlist-updated', fetchWishlistCount);
-    return () => window.removeEventListener('wishlist-updated', fetchWishlistCount);
-  }, [user]);
+    return () =>
+      window.removeEventListener('wishlist-updated', fetchWishlistCount);
+  }, [fetchWishlistCount]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -91,10 +108,19 @@ export default function GlobalHeader({
 
   return (
     <header
-      className="sticky top-0 z-50"
+      className="sticky top-0 z-50 transition-all duration-300"
       style={{
-        backgroundColor: transparent ? 'transparent' : '#0A192F',
-        boxShadow: transparent ? 'none' : '0 1px 0 rgba(255,255,255,0.08)',
+        backgroundColor: transparent
+          ? 'transparent'
+          : isScrolled
+            ? 'var(--ddms-bg-header-glass)'
+            : 'var(--ddms-bg-header)',
+        backdropFilter: !transparent && isScrolled ? 'blur(20px)' : 'none',
+        boxShadow: transparent
+          ? 'none'
+          : isScrolled
+            ? '0 4px 20px -5px rgba(10, 37, 64, 0.08), 0 1px 0 var(--border)'
+            : '0 10px 25px -5px rgba(10, 37, 64, 0.12), 0 8px 16px -8px rgba(10, 37, 64, 0.1), 0 1px 0 var(--border)',
       }}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -110,8 +136,8 @@ export default function GlobalHeader({
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium transition-colors hover:text-[#00F0FF]"
-                style={{ color: '#ecf0ff' }}
+                className="text-sm font-medium transition-colors hover:text-ddms-secondary"
+                style={{ color: 'var(--ddms-text-header)' }}
               >
                 {link.label}
               </a>
@@ -121,13 +147,21 @@ export default function GlobalHeader({
 
         {/* Right Actions */}
         <div className="flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center rounded-full p-2 transition-all hover:bg-white/5 active:scale-[0.97]"
+            style={{ color: 'var(--ddms-text-header)' }}
+            title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          >
+            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
           <TranslationToggle />
 
           {!isOwner && !user?.hasOwnerProfile && (
             <Link
               to={routeName.becomeOwner}
-              className="hidden items-center rounded-full px-3 py-2 text-sm font-semibold transition-colors hover:bg-white/5 hover:text-[#00F0FF] sm:inline-flex"
-              style={{ color: '#ecf0ff' }}
+              className="hidden items-center rounded-full px-3 py-2 text-sm font-semibold transition-colors hover:bg-white/5 hover:text-ddms-secondary sm:inline-flex"
+              style={{ color: 'var(--ddms-text-header)' }}
             >
               {t('becomeOwner.navLink')}
             </Link>
@@ -170,8 +204,9 @@ export default function GlobalHeader({
                   <div
                     className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
                     style={{
-                      background: 'linear-gradient(135deg, #00F0FF, #00d4e0)',
-                      color: '#0A192F',
+                      background:
+                        'linear-gradient(135deg, var(--ddms-secondary), #00d4e0)',
+                      color: 'var(--ddms-primary)',
                     }}
                   >
                     {initials}
@@ -181,7 +216,7 @@ export default function GlobalHeader({
                 {/* Name + chevron (hidden on mobile) */}
                 <span
                   className="hidden text-sm font-medium sm:inline"
-                  style={{ color: '#ffffff' }}
+                  style={{ color: 'var(--ddms-text-header)' }}
                 >
                   {user?.name || 'User'}
                 </span>
@@ -189,7 +224,7 @@ export default function GlobalHeader({
                   size={14}
                   className="transition-transform duration-200"
                   style={{
-                    color: '#ecf0ff',
+                    color: 'var(--ddms-text-header)',
                     transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                   }}
                 />
@@ -200,8 +235,8 @@ export default function GlobalHeader({
                 <div
                   className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl py-1 shadow-xl"
                   style={{
-                    backgroundColor: '#112240',
-                    border: '1px solid rgba(255,255,255,0.08)',
+                    backgroundColor: 'var(--ddms-bg-card)',
+                    border: '1px solid var(--border)',
                     animation: 'fadeInDown 0.15s ease-out',
                   }}
                   role="menu"
@@ -209,18 +244,15 @@ export default function GlobalHeader({
                   {/* User info */}
                   <div
                     className="border-b px-4 py-3"
-                    style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+                    style={{ borderColor: 'var(--border)' }}
                   >
                     <p
                       className="text-sm font-semibold"
-                      style={{ color: '#ffffff' }}
+                      style={{ color: 'var(--foreground)' }}
                     >
                       {user?.name || 'User'}
                     </p>
-                    <p
-                      className="mt-0.5 truncate text-xs"
-                      style={{ color: '#ecf0ff' }}
-                    >
+                    <p className="mt-0.5 truncate text-xs text-slate-400">
                       {user?.email || ''}
                     </p>
                   </div>
@@ -231,7 +263,7 @@ export default function GlobalHeader({
                       to={routeName.owner}
                       onClick={() => setDropdownOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
-                      style={{ color: '#ecf0ff' }}
+                      style={{ color: 'var(--foreground)' }}
                       role="menuitem"
                     >
                       <LayoutDashboard size={16} />
@@ -242,7 +274,7 @@ export default function GlobalHeader({
                     to={routeName.profile}
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
-                    style={{ color: '#ecf0ff' }}
+                    style={{ color: 'var(--foreground)' }}
                     role="menuitem"
                   >
                     <User size={16} />
@@ -252,7 +284,7 @@ export default function GlobalHeader({
                     to={routeName.myTours}
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
-                    style={{ color: '#ecf0ff' }}
+                    style={{ color: 'var(--foreground)' }}
                     role="menuitem"
                   >
                     <MapPin size={16} />
@@ -262,7 +294,7 @@ export default function GlobalHeader({
                     to={routeName.wallet}
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
-                    style={{ color: '#ecf0ff' }}
+                    style={{ color: 'var(--foreground)' }}
                     role="menuitem"
                   >
                     <Wallet size={16} />
@@ -272,7 +304,7 @@ export default function GlobalHeader({
                     to={routeName.inbox}
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/5"
-                    style={{ color: '#ecf0ff' }}
+                    style={{ color: 'var(--foreground)' }}
                     role="menuitem"
                   >
                     <MessageSquare size={16} />
@@ -281,7 +313,7 @@ export default function GlobalHeader({
 
                   <div
                     className="my-1 h-px"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+                    style={{ backgroundColor: 'var(--border)' }}
                   />
 
                   <button

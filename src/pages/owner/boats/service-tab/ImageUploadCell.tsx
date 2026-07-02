@@ -19,17 +19,17 @@ const ImageUploadCell = ({
 
   return (
     <div>
-      <label className="text-xs text-slate-400">{label}</label>
+      <label className="text-xs text-muted-foreground">{label}</label>
       <div className="relative mt-1">
         {imageUrl ? (
-          <div className="relative h-10 rounded-md overflow-hidden border border-slate-700 group">
+          <div className="relative h-10 rounded-md overflow-hidden border border-border group">
             <img
               src={imageUrl}
               alt={altLabel}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <label className="text-[10px] text-white cursor-pointer bg-slate-800 px-2 py-1 rounded">
+              <label className="text-[10px] text-foreground cursor-pointer bg-ddms-bg-main px-2 py-1 rounded border border-border">
                 Đổi ảnh
                 <input
                   type="file"
@@ -41,8 +41,8 @@ const ImageUploadCell = ({
             </div>
           </div>
         ) : (
-          <label className="flex items-center justify-center h-10 border border-dashed border-slate-700 rounded-md bg-[#0B132B] cursor-pointer hover:bg-slate-800/50 transition-colors">
-            <span className="text-xs text-slate-400 text-center px-2">
+          <label className="flex items-center justify-center h-10 border border-dashed border-border rounded-md bg-ddms-bg-main cursor-pointer hover:bg-foreground/5 transition-colors">
+            <span className="text-xs text-muted-foreground text-center px-2">
               Tải ảnh lên
             </span>
             <input

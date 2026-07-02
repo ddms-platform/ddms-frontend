@@ -27,48 +27,49 @@ export default function BookingSidebar({
 
   return (
     <div
-      className="sticky top-24 rounded-2xl p-6"
+      className="sticky top-24 rounded-2xl p-6 border"
       style={{
-        backgroundColor: '#112240',
+        backgroundColor: 'var(--ddms-bg-card)',
+        borderColor: 'var(--border)',
         boxShadow:
-          'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.1) 0px 4px 8px',
+          'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.05) 0px 4px 8px',
       }}
     >
       <div className="flex items-baseline gap-1">
-        <span className="text-2xl font-bold" style={{ color: '#ffffff' }}>
+        <span className="text-2xl font-bold text-foreground">
           {formatPrice(price)}
         </span>
-        <span className="text-sm" style={{ color: '#ecf0ff' }}>
+        <span className="text-sm text-foreground/80">
           / {t('tour.booking.perPerson')}
         </span>
       </div>
 
-      <div className="my-5 h-px" style={{ backgroundColor: '#112240' }} />
+      <div className="my-5 h-px" style={{ backgroundColor: 'var(--border)' }} />
 
       <div className="space-y-3">
         <div className="flex items-center justify-between text-sm">
-          <span style={{ color: '#ecf0ff' }}>
+          <span className="text-foreground/80">
             {t('tour.booking.availability')}
           </span>
           {isClosed ? (
             <span className="font-medium text-red-500">Tạm đóng</span>
           ) : (
-            <span className="font-medium" style={{ color: '#34A853' }}>
+            <span className="font-medium text-green-500">
               {t('tour.booking.available')}
             </span>
           )}
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span style={{ color: '#ecf0ff' }}>
+          <span className="text-foreground/80">
             {t('tour.booking.cancellation')}
           </span>
-          <span className="font-medium" style={{ color: '#ffffff' }}>
+          <span className="font-medium text-foreground">
             {t('tour.booking.freeCancellation')}
           </span>
         </div>
       </div>
 
-      <div className="my-5 h-px" style={{ backgroundColor: '#112240' }} />
+      <div className="my-5 h-px" style={{ backgroundColor: 'var(--border)' }} />
 
       {isClosed ? (
         <Button
@@ -97,15 +98,15 @@ export default function BookingSidebar({
       )}
 
       <Button
-        variant="dark-outline"
+        variant="outline"
         size="action"
-        className="mt-3 w-full gap-2"
+        className="mt-3 w-full gap-2 text-foreground border-foreground/30 hover:bg-foreground/5"
       >
         <Heart size={16} />
         {t('tour.booking.addWishlist')}
       </Button>
 
-      <p className="mt-4 text-center text-xs" style={{ color: '#ecf0ff' }}>
+      <p className="mt-4 text-center text-xs text-foreground/70">
         {t('tour.booking.noChargeYet')}
       </p>
     </div>

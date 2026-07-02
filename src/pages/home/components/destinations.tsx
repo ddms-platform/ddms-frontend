@@ -33,8 +33,8 @@ export default function Destinations() {
   return (
     <section id="destinations" className="mx-auto max-w-7xl px-6 py-16">
       <h2
-        className="mb-10 text-[28px] font-bold leading-[1.43]"
-        style={{ color: '#ffffff', letterSpacing: '-0.44px' }}
+        className="mb-10 text-[28px] font-bold leading-[1.43] text-foreground"
+        style={{ letterSpacing: '-0.44px' }}
       >
         {t('home.destinations.title')}
       </h2>

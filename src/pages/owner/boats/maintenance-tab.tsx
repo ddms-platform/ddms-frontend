@@ -181,18 +181,18 @@ export default function MaintenanceTab({
       {/* Phần 1: Đăng ký dịch vụ mới */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+          <h2 className="text-base font-semibold text-foreground">
             Đăng ký Dịch vụ từ Siêu Cảng Marina
           </h2>
           {selectedServices.length > 0 && (
-            <span className="text-xs bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full font-bold border border-cyan-500/30">
+            <span className="text-xs bg-ddms-secondary/20 text-ddms-secondary px-3 py-1 rounded-full font-bold border border-ddms-secondary/30">
               Đã chọn {selectedServices.length} dịch vụ
             </span>
           )}
         </div>
 
         {loadingServices ? (
-          <div className="text-slate-400 text-sm p-4 bg-slate-800/30 rounded-xl border border-slate-700">
+          <div className="text-muted-foreground text-sm p-4 bg-muted/30 rounded-xl border border-border">
             Đang tải danh mục dịch vụ...
           </div>
         ) : (
@@ -210,31 +210,31 @@ export default function MaintenanceTab({
                   className={`flex flex-col items-center justify-center p-6 rounded-2xl border transition-all duration-300 text-center gap-2 min-h-[170px]
                     ${
                       isSelected
-                        ? 'border-cyan-400 bg-[#0F223D] text-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.1)]'
-                        : 'border-slate-800/80 bg-[#111C3A] text-slate-400 hover:border-slate-700 hover:bg-[#132042]'
+                        ? 'border-ddms-secondary bg-ddms-secondary/10 text-ddms-secondary'
+                        : 'border-border bg-ddms-bg-card text-muted-foreground hover:border-foreground/30 hover:bg-foreground/5'
                     }`}
                 >
                   <div
-                    className={`p-3 rounded-xl transition-colors ${isSelected ? 'bg-cyan-500/20' : 'bg-slate-800/50'}`}
+                    className={`p-3 rounded-xl transition-colors ${isSelected ? 'bg-ddms-secondary/20' : 'bg-muted'}`}
                   >
                     <IconComp
-                      className={`w-8 h-8 ${isSelected ? 'text-cyan-400' : 'text-slate-500'}`}
+                      className={`w-8 h-8 ${isSelected ? 'text-ddms-secondary' : 'text-muted-foreground'}`}
                     />
                   </div>
                   <span
-                    className={`text-sm font-bold leading-tight ${isSelected ? 'text-cyan-50' : 'text-slate-300'}`}
+                    className={`text-sm font-bold leading-tight ${isSelected ? 'text-ddms-secondary' : 'text-foreground'}`}
                   >
                     {srv.name}
                   </span>
                   {srv.price && (
                     <span
-                      className={`text-xs ${isSelected ? 'text-cyan-500' : 'text-slate-500'}`}
+                      className={`text-xs ${isSelected ? 'text-ddms-secondary' : 'text-muted-foreground'}`}
                     >
                       {srv.price.toLocaleString('vi-VN')}đ
                     </span>
                   )}
                   {reg && (
-                    <span className="text-[10px] text-cyan-400 mt-1 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-400/20">
+                    <span className="text-[10px] text-ddms-secondary mt-1 bg-ddms-secondary/10 px-2 py-0.5 rounded border border-ddms-secondary/20">
                       {new Date(reg.scheduledDate).toLocaleDateString('vi-VN')}{' '}
                       {new Date(reg.scheduledDate).toLocaleTimeString('vi-VN', {
                         hour: '2-digit',
@@ -247,24 +247,24 @@ export default function MaintenanceTab({
             })}
           </div>
         )}
-        <p className="text-xs text-slate-500 mt-4 italic">
+        <p className="text-xs text-muted-foreground mt-4 italic">
           * Nhấn vào dịch vụ để thiết lập ngày sửa chữa. Dịch vụ sẽ được đăng ký
           khi bạn nhấn "Lưu tất cả" ở góc trên bên phải.
         </p>
       </div>
 
-      <div className="h-px bg-slate-800/80 w-full" />
+      <div className="h-px bg-border w-full" />
 
       {/* Phần 2: Lịch sử bảo trì */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+          <h2 className="text-base font-semibold text-foreground">
             {t('ownerBoats.form.maintenance.title')}
           </h2>
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5 border-slate-700 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white"
+            className="gap-1.5 border-border bg-transparent text-foreground hover:bg-foreground/5"
             disabled={!boatId}
           >
             <Plus size={14} />
@@ -276,12 +276,12 @@ export default function MaintenanceTab({
           <div
             className="flex flex-col items-center rounded-2xl py-12 text-center"
             style={{
-              backgroundColor: '#112240',
-              border: '1px solid rgba(255,255,255,0.04)',
+              backgroundColor: 'var(--ddms-bg-card)',
+              border: '1px solid var(--border)',
             }}
           >
-            <Wrench size={36} style={{ color: 'rgba(245,158,11,0.3)' }} />
-            <p className="mt-3 text-sm" style={{ color: '#ecf0ff' }}>
+            <Wrench size={36} className="text-amber-500/30" />
+            <p className="mt-3 text-sm text-muted-foreground">
               {t('ownerBoats.form.maintenance.empty')}
             </p>
           </div>
@@ -290,18 +290,18 @@ export default function MaintenanceTab({
             {maintenances.map((m) => (
               <div
                 key={m.id}
-                className="flex items-center justify-between rounded-xl p-3 border border-slate-800/50 bg-[#112240]"
+                className="flex items-center justify-between rounded-xl p-3 border border-border bg-ddms-bg-card"
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-white">
+                    <p className="text-sm font-semibold text-foreground">
                       {m.portMaintenanceServiceName ||
                         m.reason ||
                         t('ownerBoats.form.maintenance.default')}
                     </p>
                     {m.portMaintenanceServiceId && getStatusBadge(m.status)}
                   </div>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Thời gian:{' '}
                     {new Date(m.startTime).toLocaleString('vi-VN', {
                       dateStyle: 'short',
@@ -310,10 +310,11 @@ export default function MaintenanceTab({
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => handleDelete(m)}
-                  className="rounded-lg p-1.5 hover:bg-white/5"
+                  className="rounded-lg p-1.5 hover:bg-foreground/5"
                 >
-                  <Trash2 size={14} style={{ color: '#EF4444' }} />
+                  <Trash2 size={14} className="text-red-500" />
                 </button>
               </div>
             ))}
@@ -324,34 +325,34 @@ export default function MaintenanceTab({
       {/* Date Picker Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-[#0B132B] p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-4">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-ddms-bg-card p-6 shadow-2xl">
+            <h3 className="text-lg font-bold text-foreground mb-4">
               {selectedServices.some((s) => s.serviceId === activeServiceId)
                 ? 'Chỉnh sửa lịch sửa chữa'
                 : 'Đăng ký lịch sửa chữa'}
             </h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">
+                <label className="block text-xs font-semibold text-muted-foreground mb-1">
                   Ngày diễn ra
                 </label>
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-[#111C3A] px-3 py-2.5 text-sm text-white focus:border-cyan-400 outline-none"
+                  className="w-full rounded-lg border border-border bg-ddms-bg-main px-3 py-2.5 text-sm text-foreground focus:border-ddms-secondary outline-none"
                   min={new Date().toISOString().split('T')[0]}
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">
+                <label className="block text-xs font-semibold text-muted-foreground mb-1">
                   Giờ bắt đầu
                 </label>
                 <input
                   type="time"
                   value={selectedTime}
                   onChange={(e) => setSelectedTime(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-[#111C3A] px-3 py-2.5 text-sm text-white focus:border-cyan-400 outline-none"
+                  className="w-full rounded-lg border border-border bg-ddms-bg-main px-3 py-2.5 text-sm text-foreground focus:border-ddms-secondary outline-none"
                 />
               </div>
             </div>
@@ -371,7 +372,7 @@ export default function MaintenanceTab({
               <Button
                 type="button"
                 variant="outline"
-                className="border-slate-800 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white"
+                className="border-border bg-transparent text-foreground hover:bg-foreground/5"
                 onClick={() => setIsModalOpen(false)}
               >
                 Đóng

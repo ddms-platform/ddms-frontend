@@ -48,16 +48,16 @@ const WithdrawalHistory = ({ withdrawals }: WithdrawalHistoryProps) => {
       <div
         className="rounded-2xl border p-6 shadow-md flex-1 flex flex-col h-full"
         style={{
-          borderColor: 'rgba(255, 255, 255, 0.08)',
-          backgroundColor: '#112240',
+          borderColor: 'var(--border)',
+          backgroundColor: 'var(--ddms-bg-card)',
         }}
       >
         <div
           className="flex items-center gap-2 mb-6 border-b pb-4"
-          style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+          style={{ borderColor: 'var(--border)' }}
         >
-          <History className="h-5 w-5 text-[#00F0FF]" />
-          <h3 className="text-lg font-bold text-white">
+          <History className="h-5 w-5 text-ddms-secondary" />
+          <h3 className="text-lg font-bold text-foreground">
             {t('wallet.history.title')}
           </h3>
         </div>
@@ -67,43 +67,39 @@ const WithdrawalHistory = ({ withdrawals }: WithdrawalHistoryProps) => {
             withdrawals.map((w) => (
               <div
                 key={w.id}
-                className="rounded-xl border p-4 flex flex-col gap-2 transition-all hover:bg-white/5"
-                style={{
-                  borderColor: 'rgba(255,255,255,0.06)',
-                  backgroundColor: '#0d1b36',
-                }}
+                className="rounded-xl border p-4 flex flex-col gap-2 transition-all hover:bg-foreground/5 border-border bg-ddms-bg-main"
               >
                 <div className="flex justify-between items-start">
-                  <span className="font-bold text-white text-base">
+                  <span className="font-bold text-foreground text-base">
                     -{formatPrice(w.amount)}
                   </span>
                   <WithdrawalStatusBadge status={w.status} />
                 </div>
                 <div
-                  className="text-xs text-[#ecf0ff] space-y-1 mt-1 border-t pt-2"
-                  style={{ borderColor: 'rgba(255,255,255,0.06)' }}
+                  className="text-xs text-foreground/80 space-y-1 mt-1 border-t pt-2"
+                  style={{ borderColor: 'var(--border)' }}
                 >
                   <p className="flex justify-between">
-                    <span className="text-slate-400">
+                    <span className="text-muted-foreground">
                       {t('wallet.history.bank')}
                     </span>
                     <span className="font-medium">{w.bankName}</span>
                   </p>
                   <p className="flex justify-between">
-                    <span className="text-slate-400">
+                    <span className="text-muted-foreground">
                       {t('wallet.history.account')}
                     </span>
                     <span className="font-medium">{w.accountNumber}</span>
                   </p>
                   <p className="flex justify-between">
-                    <span className="text-slate-400">
+                    <span className="text-muted-foreground">
                       {t('wallet.history.holder')}
                     </span>
                     <span className="font-medium uppercase">
                       {w.accountName}
                     </span>
                   </p>
-                  <p className="flex justify-between text-[10px] text-slate-500 mt-1">
+                  <p className="flex justify-between text-[10px] text-muted-foreground/60 mt-1">
                     <span>{t('wallet.history.date')}</span>
                     <span>
                       {new Date(w.createdAt).toLocaleString(i18n.language)}
@@ -113,8 +109,8 @@ const WithdrawalHistory = ({ withdrawals }: WithdrawalHistoryProps) => {
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center py-20 text-center text-slate-500">
-              <Clock size={36} className="text-slate-600 mb-2" />
+            <div className="flex flex-col items-center justify-center py-20 text-center text-muted-foreground">
+              <Clock size={36} className="text-muted-foreground/50 mb-2" />
               <p className="text-sm">{t('wallet.history.empty')}</p>
             </div>
           )}
