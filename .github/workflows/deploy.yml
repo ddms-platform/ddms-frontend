@@ -2,13 +2,12 @@ name: Deploy Frontend to VM
 
 on:
   push:
-    branches: [ develop ]  # Cho phép cả 3 branch
+    branches: [ develop ]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -18,7 +17,11 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
             cd ~/ddms-frontend
-            git pull
+            cp .env.production /tmp/.env.production.backup 2>/dev/null || true
+            git fetch origin
+            git reset --hard origin/develop
+            git clean -fd
+            cp /tmp/.env.production.backup .env.production 2>/dev/null || true
             npm install --legacy-peer-deps
             npm run build
             sudo systemctl reload nginx
