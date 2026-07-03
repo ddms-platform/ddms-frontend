@@ -1,73 +1,208 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Search, MapPin } from 'lucide-react';
-import heroBg from '@/assets/danang_cruise_hero.jpg';
+import { useState, useRef, useEffect } from 'react';
+import { LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
+import useLanguage from '@/contexts/LanguageContext';
+
+import springVideo from '@/assets/15040488_1920_1080_30fps.mp4';
+import summerVideo from '@/assets/12742203-hd_1920_1080_24fps.mp4';
+import autumnVideo from '@/assets/15693482-hd_1920_1080_24fps.mp4';
+import winterVideo from '@/assets/12680908_1920_1080_30fps.mp4';
+
+interface MonthData {
+  key: string;
+  label: string;
+  shortLabelVN: string;
+  shortLabelEN: string;
+  title: string;
+  desc: string;
+  video: string;
+}
+
+const MONTHS: MonthData[] = [
+  {
+    key: 'mar',
+    label: 'Tháng 3 (Xuân)',
+    shortLabelVN: 'Tháng 3',
+    shortLabelEN: 'Mar',
+    title: 'Du thuyền Sông Hàn Ngày Xuân',
+    desc: 'Tận hưởng bầu trời trong lành, nắng ấm ban mai cùng hải trình ngoạn cảnh sông Hàn thanh bình.',
+    video: springVideo,
+  },
+  {
+    key: 'jun',
+    label: 'Tháng 6 (Hè)',
+    shortLabelVN: 'Tháng 6',
+    shortLabelEN: 'Jun',
+    title: 'Đêm Lễ Hội Pháo Hoa DIFF',
+    desc: 'Chiêm ngưỡng những màn trình diễn pháo hoa quốc tế rực rỡ sắc màu ngay từ boong du thuyền thượng lưu.',
+    video: summerVideo,
+  },
+  {
+    key: 'sep',
+    label: 'Tháng 9 (Thu)',
+    shortLabelVN: 'Tháng 9',
+    shortLabelEN: 'Sep',
+    title: 'Hoàng Hôn Vịnh Đà Nẵng',
+    desc: 'Say đắm trong sắc vàng tím thơ mộng của chiều tà khi du thuyền buồm lướt gió khơi vịnh Đà Nẵng.',
+    video: autumnVideo,
+  },
+  {
+    key: 'dec',
+    label: 'Tháng 12 (Đông)',
+    shortLabelVN: 'Tháng 12',
+    shortLabelEN: 'Dec',
+    title: 'Thành Phố Ánh Sáng Đêm Đông',
+    desc: 'Hành trình ngắm nhìn toàn cảnh thành phố lung linh ánh đèn phản chiếu kỳ ảo dưới dòng nước trôi lững lờ.',
+    video: winterVideo,
+  },
+];
 
 export default function HeroSection() {
-  const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState('');
+  const { language } = useLanguage();
+  const [activeMonth, setActiveMonth] = useState('mar');
+
+  // refs for calculating the sliding underline offset dynamically
+  const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
+
+  const currentData = MONTHS.find((m) => m.key === activeMonth) || MONTHS[0];
+
+  useEffect(() => {
+    const activeBtn = buttonRefs.current[activeMonth];
+    if (activeBtn) {
+      setUnderlineStyle({
+        width: activeBtn.offsetWidth,
+        left: activeBtn.offsetLeft,
+      });
+    }
+  }, [activeMonth, language]);
+
+  const handlePrevMonth = () => {
+    const currentIndex = MONTHS.findIndex((m) => m.key === activeMonth);
+    const prevIndex = (currentIndex - 1 + MONTHS.length) % MONTHS.length;
+    setActiveMonth(MONTHS[prevIndex].key);
+  };
+
+  const handleNextMonth = () => {
+    const currentIndex = MONTHS.findIndex((m) => m.key === activeMonth);
+    const nextIndex = (currentIndex + 1) % MONTHS.length;
+    setActiveMonth(MONTHS[nextIndex].key);
+  };
 
   return (
-    <section
-      className="relative overflow-hidden bg-cover bg-center min-h-130 flex items-center"
-      style={{
-        backgroundImage: `url(${heroBg})`,
-      }}
-    >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-linear-to-r from-slate-950/85 via-slate-950/50 to-transparent z-0" />
+    <section className="relative overflow-hidden h-screen flex items-center select-none">
+      {/* ── Background Video Container ── */}
+      <div className="absolute inset-0 overflow-hidden z-0">
+        <video
+          key={activeMonth}
+          src={currentData.video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out opacity-100 animate-in fade-in"
+        />
+      </div>
 
-      {/* Decorative blurred gradient blobs */}
-      <div className="absolute -right-20 -top-20 h-96 w-96 rounded-full bg-linear-to-tr from-cyan-400/20 to-blue-500/10 blur-3xl opacity-40 pointer-events-none z-10" />
-      <div className="absolute -bottom-16 left-20 h-72 w-72 rounded-full bg-linear-to-br from-amber-400/15 to-rose-400/10 blur-3xl opacity-30 pointer-events-none z-10" />
-
-      <div className="relative mx-auto max-w-7xl w-full px-6 py-20 md:py-28 z-10">
-        <div className="max-w-2xl">
+      {/* ── Main Hero Content ── */}
+      <div className="relative mx-auto max-w-7xl w-full px-6 py-24 md:py-32 z-20 flex flex-col items-center justify-center text-center">
+        <div className="max-w-4xl">
           <h1
-            className="text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-6xl"
+            className="text-4xl font-light leading-tight tracking-tight text-white md:text-5xl lg:text-7xl md:whitespace-nowrap animate-hero-title"
             style={{ letterSpacing: '-0.44px' }}
           >
-            {t('home.hero.title')}
+            {language === 'VN' ? 'Chào mừng tới Đà Nẵng' : 'Welcome to Da Nang'}
           </h1>
-          <p className="mt-6 text-lg leading-relaxed text-slate-200 md:text-xl">
-            {t('home.hero.description')}
+          <p className="mt-4 text-xs md:text-sm font-medium uppercase tracking-widest text-slate-300/90 mx-auto animate-hero-subtext">
+            {language === 'VN' ? 'Trải nghiệm nào' : 'Explore now'}
           </p>
-
-          {/* Search Bar */}
-          <div className="mt-10 flex items-center gap-3 rounded-2xl p-2 bg-white/95 dark:bg-slate-900/95 shadow-2xl border border-white/10">
-            <div className="flex flex-1 items-center gap-3 px-4">
-              <MapPin size={20} className="text-slate-500" />
-              <input
-                type="text"
-                placeholder={t('home.hero.searchPlaceholder')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full border-none bg-transparent py-3 text-sm font-medium outline-none text-slate-900 dark:text-white"
-              />
-            </div>
-            <button className="flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium text-white transition-all hover:bg-ddms-secondary/90 active:scale-[0.98] bg-ddms-secondary cursor-pointer">
-              <Search size={18} />
-              <span className="hidden sm:inline">
-                {t('home.hero.searchButton')}
-              </span>
-            </button>
-          </div>
-
-          {/* Stats */}
-          <div className="mt-10 flex gap-10">
-            {[
-              { value: '500+', label: t('home.hero.stat1') },
-              { value: '10K+', label: t('home.hero.stat2') },
-              { value: '4.9', label: t('home.hero.stat3') },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-                <p className="text-sm text-slate-300">{stat.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
+
+      {/* ── Bottom Left Timeline Navigation ── */}
+      <div className="absolute bottom-10 left-6 md:left-16 z-30 flex items-center gap-4 md:gap-6 text-white animate-timeline select-none filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.85)]">
+        {/* Grid Icon */}
+        <button className="text-white/85 hover:text-white cursor-pointer bg-transparent border-none p-0 transition-colors">
+          <LayoutGrid size={18} />
+        </button>
+
+        {/* Navigation Controls */}
+        <div className="flex items-center gap-3 md:gap-5">
+          <button
+            onClick={handlePrevMonth}
+            className="text-white/85 hover:text-white cursor-pointer bg-transparent border-none p-0 transition-colors"
+            aria-label="Previous month"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          <div className="flex items-center gap-4 md:gap-6 relative py-1">
+            {/* Sliding Active Underline */}
+            <span
+              className="absolute bottom-0 h-[2.5px] bg-ddms-secondary rounded-full transition-all duration-300 ease-out-sine"
+              style={{
+                width: `${underlineStyle.width}px`,
+                left: `${underlineStyle.left}px`,
+              }}
+            />
+
+            {MONTHS.map((m) => (
+              <button
+                key={m.key}
+                ref={(el) => {
+                  buttonRefs.current[m.key] = el;
+                }}
+                onClick={() => setActiveMonth(m.key)}
+                className={`text-sm font-semibold transition-all cursor-pointer relative py-1 bg-transparent border-none p-0 ${
+                  activeMonth === m.key
+                    ? 'text-white font-bold'
+                    : 'text-white/70 hover:text-white'
+                }`}
+              >
+                <span>
+                  {language === 'VN' ? m.shortLabelVN : m.shortLabelEN}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleNextMonth}
+            className="text-white/85 hover:text-white cursor-pointer bg-transparent border-none p-0 transition-colors"
+            aria-label="Next month"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* Entrance Animations Keyframes */}
+      <style>{`
+        @keyframes heroSlideUp {
+          from { transform: translateY(40px); opacity: 0; }
+          to   { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes heroFadeOut {
+          to { transform: translateY(-15px); opacity: 0; visibility: hidden; }
+        }
+        @keyframes timelineSlideUp {
+          from { transform: translateY(30px); opacity: 0; }
+          to   { transform: translateY(0); opacity: 1; }
+        }
+        .animate-hero-title {
+          opacity: 0;
+          animation: heroSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards,
+                     heroFadeOut 0.8s cubic-bezier(0.16, 1, 0.3, 1) 5s forwards;
+        }
+        .animate-hero-subtext {
+          opacity: 0;
+          animation: heroSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards,
+                     heroFadeOut 0.8s cubic-bezier(0.16, 1, 0.3, 1) 5.1s forwards;
+        }
+        .animate-timeline {
+          opacity: 0;
+          animation: timelineSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
+        }
+      `}</style>
     </section>
   );
 }

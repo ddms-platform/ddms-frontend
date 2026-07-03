@@ -3,33 +3,33 @@
 /* ===== Light Mode ===== */
 :root {
   --font-size: 16px;
-  --background: #f0f7fd;
-  --foreground: #0a2540;
-  --primary: #0a2540;
-  --primary-foreground: #ffffff;
-  --secondary: #e2eef9;
-  --secondary-foreground: #0a2540;
-  --muted: #e6eff7;
-  --muted-foreground: #5a7d9a;
-  --accent: #eaf1f8;
-  --accent-foreground: #0a2540;
+  --background: #003a70;
+  --foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #003a70;
+  --secondary: #002e5b;
+  --secondary-foreground: #ffffff;
+  --muted: #002244;
+  --muted-foreground: #a0b8d0;
+  --accent: #002e5b;
+  --accent-foreground: #ffffff;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
-  --border: rgba(10, 37, 64, 0.08);
-  --input: transparent;
-  --ring: #0096c7;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #00f0ff;
   --radius: 0.625rem;
 
   /* === DDMS Design System Colors === */
-  --ddms-primary: #0a2540;
-  --ddms-secondary: #0096c7;
+  --ddms-primary: #003a70;
+  --ddms-secondary: #00f0ff;
   --ddms-tertiary: #ffffff;
-  --ddms-neutral: #f0f7fd;
-  --ddms-label: #334155;
-  --ddms-bg-main: #edf4fa;
-  --ddms-bg-card: #ffffff;
-  --ddms-bg-owner: #f0f7fd;
-  --ddms-accent: #e8f0f6;
+  --ddms-neutral: #002e5b;
+  --ddms-label: #f1f5f9;
+  --ddms-bg-main: #003a70;
+  --ddms-bg-card: #002547;
+  --ddms-bg-owner: #002547;
+  --ddms-accent: #004d94;
   --ddms-bg-header: #003a70;
   --ddms-bg-header-glass: rgba(0, 58, 112, 0.6);
   --ddms-text-header: #ffffff;
@@ -150,10 +150,10 @@ aside.border-r {
 
 header {
   border-bottom: none !important;
-  box-shadow: 0 4px 20px -4px rgba(10, 37, 64, 0.03) !important;
+  box-shadow: none !important;
 }
 
 .dark header {
   border-bottom: none !important;
-  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: none !important;
 }

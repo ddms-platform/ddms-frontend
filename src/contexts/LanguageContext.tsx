@@ -22,7 +22,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const { i18n } = useTranslation();
 
   // Derive language directly from i18n state - no separate state needed
-  const language: Language = i18n.language === 'en' ? 'EN' : 'VN';
+  const language: Language = i18n.language?.toLowerCase().startsWith('en')
+    ? 'EN'
+    : 'VN';
 
   const setLanguage = useCallback(
     (lang: Language) => {
@@ -46,9 +48,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 export default function useLanguage() {
   const context = useContext(LanguageContext);
   if (context === undefined) {
-    // Return default context (VN) if provider is missing
+    // Return default context (EN) if provider is missing
     return {
-      language: 'VN' as Language,
+      language: 'EN' as Language,
       setLanguage: () => {},
     };
   }
