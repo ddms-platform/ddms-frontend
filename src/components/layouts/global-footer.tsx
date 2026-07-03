@@ -8,8 +8,7 @@ export default function GlobalFooter() {
   return (
     <footer
       style={{
-        backgroundColor: 'var(--ddms-bg-owner)',
-        borderTop: '1px solid var(--border)',
+        backgroundColor: 'var(--ddms-bg-main)',
       }}
     >
       <div className="mx-auto max-w-7xl px-6 py-12">

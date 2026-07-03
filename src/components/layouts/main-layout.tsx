@@ -19,7 +19,7 @@ export default function MainLayout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-ddms-bg-main">
-      <GlobalHeader navLinks={navLinks} />
+      <GlobalHeader navLinks={navLinks} transparent={isHome} />
       <main className="flex-1 flex flex-col">
         <Outlet />
       </main>
