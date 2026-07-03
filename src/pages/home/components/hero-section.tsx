@@ -121,24 +121,24 @@ export default function HeroSection() {
       {/* ── Bottom Left Timeline Navigation ── */}
       <div className="absolute bottom-10 left-6 md:left-16 z-30 flex items-center gap-4 md:gap-6 text-white animate-timeline select-none filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.85)]">
         {/* Grid Icon */}
-        <button className="text-white/85 hover:text-white cursor-pointer bg-transparent border-none p-0 transition-colors">
-          <LayoutGrid size={18} />
+        <button className="text-white hover:opacity-90 cursor-pointer bg-transparent border-none p-0 transition-all">
+          <LayoutGrid size={26} />
         </button>
 
         {/* Navigation Controls */}
         <div className="flex items-center gap-3 md:gap-5">
           <button
             onClick={handlePrevMonth}
-            className="text-white/85 hover:text-white cursor-pointer bg-transparent border-none p-0 transition-colors"
+            className="text-white hover:opacity-90 cursor-pointer bg-transparent border-none p-0 transition-all"
             aria-label="Previous month"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={26} />
           </button>
 
           <div className="flex items-center gap-4 md:gap-6 relative py-1">
             {/* Sliding Active Underline */}
             <span
-              className="absolute bottom-0 h-[2.5px] bg-ddms-secondary rounded-full transition-all duration-300 ease-out-sine"
+              className="absolute bottom-0 h-1 bg-ddms-secondary rounded-full transition-all duration-300 ease-out-sine"
               style={{
                 width: `${underlineStyle.width}px`,
                 left: `${underlineStyle.left}px`,
@@ -152,10 +152,10 @@ export default function HeroSection() {
                   buttonRefs.current[m.key] = el;
                 }}
                 onClick={() => setActiveMonth(m.key)}
-                className={`text-sm font-semibold transition-all cursor-pointer relative py-1 bg-transparent border-none p-0 ${
+                className={`text-2xl font-light transition-all cursor-pointer relative py-1 bg-transparent border-none p-0 text-white ${
                   activeMonth === m.key
-                    ? 'text-white font-bold'
-                    : 'text-white/70 hover:text-white'
+                    ? 'text-white font-medium text-3xl'
+                    : 'hover:opacity-85'
                 }`}
               >
                 <span>
@@ -170,7 +170,7 @@ export default function HeroSection() {
             className="text-white/85 hover:text-white cursor-pointer bg-transparent border-none p-0 transition-colors"
             aria-label="Next month"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={22} />
           </button>
         </div>
       </div>
