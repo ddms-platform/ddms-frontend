@@ -1,41 +1,31 @@
 import { useState } from 'react';
-import useLanguage from '@/contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 const SERVICES = [
   {
     icon: '🚢',
     key: 'river_tours',
-    labelVN: 'Tour Sông Hàn',
-    labelEN: 'River Tours',
   },
   {
     icon: '⛵',
     key: 'yacht_charter',
-    labelVN: 'Thuê du thuyền riêng',
-    labelEN: 'Yacht Charter',
   },
   {
     icon: '🎟️',
     key: 'port_tickets',
-    labelVN: 'Đặt vé cảng',
-    labelEN: 'Port Tickets',
   },
   {
     icon: '🏄',
     key: 'water_sports',
-    labelVN: 'Thể thao nước',
-    labelEN: 'Water Sports',
   },
   {
     icon: '📅',
     key: 'port_schedule',
-    labelVN: 'Lịch trình cảng',
-    labelEN: 'Port Schedule',
   },
 ];
 
 export default function CategoryPills() {
-  const { language } = useLanguage();
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('river_tours');
 
   return (
@@ -45,7 +35,7 @@ export default function CategoryPills() {
         <div className="flex gap-3 md:gap-5 overflow-x-auto pt-2 pb-2 justify-center items-center scrollbar-none">
           {SERVICES.map((svc) => {
             const isActive = activeTab === svc.key;
-            const label = language === 'VN' ? svc.labelVN : svc.labelEN;
+            const label = t(`home.services.${svc.key}`);
             return (
               <button
                 key={svc.key}

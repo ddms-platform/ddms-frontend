@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
 import useTheme from '@/contexts/ThemeContext';
-import useLanguage from '@/contexts/LanguageContext';
+
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
@@ -41,7 +41,7 @@ export default function GlobalHeader({
 }: GlobalHeaderProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { language } = useLanguage();
+
   const { theme, toggleTheme } = useTheme();
   const { isAuthenticated, user, logout } = useAuth();
 
@@ -469,11 +469,7 @@ export default function GlobalHeader({
               <div className="flex items-center justify-between border-b-2 border-white/20 pb-4">
                 <input
                   type="text"
-                  placeholder={
-                    language === 'VN'
-                      ? 'Nhập từ khóa tìm kiếm...'
-                      : 'Enter a search term'
-                  }
+                  placeholder={t('header.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -486,7 +482,7 @@ export default function GlobalHeader({
                   onClick={handleSearch}
                   className="flex items-center gap-2 text-ddms-secondary hover:opacity-80 font-bold transition-all hover:translate-x-1 duration-200 cursor-pointer bg-transparent border-none p-0 shrink-0 select-none text-lg md:text-xl pl-4"
                 >
-                  <span>{language === 'VN' ? 'Tìm kiếm' : 'Search'}</span>
+                  <span>{t('header.search')}</span>
                   <svg
                     className="w-5 h-5"
                     fill="none"

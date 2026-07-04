@@ -326,12 +326,22 @@
       "sightseeing": "Sightseeing",
       "dinner": "Dinner"
     },
+    "services": {
+      "river_tours": "River Tours",
+      "yacht_charter": "Yacht Charter",
+      "port_tickets": "Port Tickets",
+      "water_sports": "Water Sports",
+      "port_schedule": "Port Schedule"
+    },
     "tours": {
       "title": "Featured Tours",
       "subtitle": "The most loved waterway experiences in Da Nang",
       "viewAll": "View all",
       "reviews": "reviews",
-      "perPerson": "person"
+      "perPerson": "person",
+      "topDestinations": "Top Destinations",
+      "learnMore": "Learn more",
+      "noTours": "No featured tours available."
     },
     "howItWorks": {
       "title": "Book in 4 Easy Steps",
@@ -385,6 +395,9 @@
       "yachtDesc": "Book custom itinerary cruises with verified captains.",
       "bookNow": "Book Now",
       "reviews": "reviews"
+    },
+    "explore": {
+      "topAttractions": "Top attractions"
     },
     "timeline": {
       "mar": {
@@ -667,6 +680,8 @@
     "tours": "Tours"
   },
   "header": {
+    "search": "Search",
+    "searchPlaceholder": "Enter a search term...",
     "user": {
       "ownerDashboard": "Owner Dashboard",
       "profile": "My Profile",

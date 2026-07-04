@@ -11,7 +11,7 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 import { wishlistService } from '@/services/wishlistService';
 import { Skeleton } from '@/components/ui/skeleton';
-import useLanguage from '@/contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 const getMockTours = (language: string): TourSearchItemResponse[] => [
   {
@@ -193,7 +193,7 @@ const getMockTours = (language: string): TourSearchItemResponse[] => [
 ];
 
 export default function FeaturedTours() {
-  const { language } = useLanguage();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [tours, setTours] = useState<TourSearchItemResponse[]>([]);
@@ -217,7 +217,7 @@ export default function FeaturedTours() {
         }
 
         // Combine API results with mock tours, ensuring no duplicate IDs
-        const mockList = getMockTours(language);
+        const mockList = getMockTours(i18n.language.toUpperCase());
         const combined = [...apiTours];
         mockList.forEach((mock) => {
           if (
@@ -239,7 +239,7 @@ export default function FeaturedTours() {
       }
     };
     fetchFeatured();
-  }, [language]);
+  }, [i18n.language]);
 
   useEffect(() => {
     if (user) {
@@ -316,13 +316,13 @@ export default function FeaturedTours() {
         <div className="mb-10 flex items-center justify-between">
           <div>
             <h2 className="text-[32px] font-bold leading-tight text-white tracking-tight">
-              {language === 'EN' ? 'Top Destinations' : 'Điểm đến nổi bật'}
+              {t('home.tours.topDestinations')}
             </h2>
             <Link
               to={routeName.tours}
               className="group inline-flex items-center gap-2 text-sm font-semibold text-ddms-secondary mt-2 transition-all"
             >
-              <span>{language === 'EN' ? 'Learn more' : 'Xem tất cả'}</span>
+              <span>{t('home.tours.learnMore')}</span>
               <svg
                 className="w-6.5 h-4 transition-transform duration-300 group-hover:translate-x-2 shrink-0"
                 fill="none"
@@ -379,9 +379,7 @@ export default function FeaturedTours() {
           </div>
         ) : tours.length === 0 ? (
           <div className="flex h-40 items-center justify-center text-[#ecf0ff]/60">
-            {language === 'EN'
-              ? 'No featured tours available.'
-              : 'Không có tour nào nổi bật.'}
+            {t('home.tours.noTours')}
           </div>
         ) : (
           /* Horizontal Carousel Container */

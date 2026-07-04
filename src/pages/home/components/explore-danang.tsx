@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import useLanguage from '@/contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import { routeName } from '@/constants/route-name';
 
 const getSpots = (language: string) => [
@@ -60,8 +60,8 @@ const getSpots = (language: string) => [
 ];
 
 export default function ExploreDaNang() {
-  const { language } = useLanguage();
-  const spots = getSpots(language);
+  const { t, i18n } = useTranslation();
+  const spots = getSpots(i18n.language.toUpperCase());
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function ExploreDaNang() {
               className="animate-in fade-in slide-in-from-bottom-2 duration-700"
             >
               <span className="text-[11px] uppercase tracking-wider text-ddms-secondary font-bold mb-3 block">
-                {language === 'EN' ? 'Top attractions' : 'Địa điểm nổi bật'}
+                {t('home.explore.topAttractions')}
               </span>
               <h3 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight mb-4 whitespace-pre-line">
                 {currentSpot.title}
