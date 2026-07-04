@@ -1,7 +1,8 @@
-import useLanguage from '@/contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
+import { CyanAnimatedButton } from '@/components/common/CyanAnimatedButton';
 
 export default function BookingPromo() {
-  const { language } = useLanguage();
+  const { t } = useTranslation();
 
   const handleSearchClick = () => {
     // Simple mock search action
@@ -14,7 +15,7 @@ export default function BookingPromo() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* ── Left Column: Search Form Card ── */}
           <div
-            className="border rounded-2xl p-6 flex flex-col justify-between relative min-h-120 bg-transparent"
+            className="border rounded-2xl p-6 flex flex-col justify-between relative min-h-120 bg-[#002547]/45 backdrop-blur-md shadow-[0_0_30px_rgba(0,240,255,0.15)] hover:shadow-[0_0_45px_rgba(0,240,255,0.3)] transition-all duration-300"
             style={{ borderColor: 'var(--border)' }}
           >
             <div>
@@ -24,7 +25,7 @@ export default function BookingPromo() {
                 style={{ borderColor: 'var(--border)' }}
               >
                 <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
-                  {language === 'VN' ? 'Cảng đi' : 'Departure Port'}
+                  {t('home.promo.departurePort')}
                 </label>
                 <select className="bg-transparent text-white text-sm outline-none border-none cursor-pointer w-full font-medium scheme-dark">
                   <option
@@ -34,9 +35,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Cảng du thuyền Sông Hàn'
-                      : 'Han River Cruise Port'}
+                    {t('home.promo.portHanRiver')}
                   </option>
                   <option
                     value="bach_dang"
@@ -45,9 +44,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Bến du thuyền Bạch Đằng'
-                      : 'Bach Dang Yacht Port'}
+                    {t('home.promo.portBachDang')}
                   </option>
                   <option
                     value="tien_sa"
@@ -56,9 +53,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Cảng du thuyền Tiên Sa'
-                      : 'Tien Sa Cruise Port'}
+                    {t('home.promo.portTienSa')}
                   </option>
                 </select>
               </div>
@@ -69,7 +64,7 @@ export default function BookingPromo() {
                 style={{ borderColor: 'var(--border)' }}
               >
                 <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
-                  {language === 'VN' ? 'Tuyến du ngoạn' : 'Route / Destination'}
+                  {t('home.promo.route')}
                 </label>
                 <select className="bg-transparent text-white text-sm outline-none border-none cursor-pointer w-full font-medium scheme-dark">
                   <option
@@ -79,9 +74,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Du ngoạn Sông Hàn (Ngắm cầu)'
-                      : 'Han River Sightseeing'}
+                    {t('home.promo.routeHanRiver')}
                   </option>
                   <option
                     value="danang_bay"
@@ -90,9 +83,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Khám phá Vịnh Đà Nẵng'
-                      : 'Danang Bay Exploration'}
+                    {t('home.promo.routeDanangBay')}
                   </option>
                   <option
                     value="hon_chao"
@@ -101,9 +92,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Tour Đảo Hòn Chảo'
-                      : 'Hon Chao Island Tour'}
+                    {t('home.promo.routeHonChao')}
                   </option>
                   <option
                     value="sunset_cruise"
@@ -112,9 +101,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Sunset Cruise (Hoàng hôn)'
-                      : 'Sunset Cruise Tour'}
+                    {t('home.promo.routeSunset')}
                   </option>
                 </select>
               </div>
@@ -125,7 +112,7 @@ export default function BookingPromo() {
                 style={{ borderColor: 'var(--border)' }}
               >
                 <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
-                  {language === 'VN' ? 'Ngày khởi hành' : 'Departure Date'}
+                  {t('home.promo.departureDate')}
                 </label>
                 <input
                   type="date"
@@ -140,7 +127,7 @@ export default function BookingPromo() {
                 style={{ borderColor: 'var(--border)' }}
               >
                 <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
-                  {language === 'VN' ? 'Số hành khách' : 'Guests'}
+                  {t('home.promo.guests')}
                 </label>
                 <select className="bg-transparent text-white text-sm outline-none border-none cursor-pointer w-full font-medium scheme-dark">
                   <option
@@ -150,9 +137,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? '1 Khách (Người lớn)'
-                      : '1 Guest (Adult)'}
+                    {t('home.promo.guest')}
                   </option>
                   <option
                     value="2"
@@ -161,9 +146,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? '2 Khách (Người lớn)'
-                      : '2 Guests (Adults)'}
+                    {t('home.promo.guests2')}
                   </option>
                   <option
                     value="3"
@@ -172,7 +155,7 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN' ? '3-4 Khách' : '3-4 Guests'}
+                    {t('home.promo.guests3')}
                   </option>
                   <option
                     value="family"
@@ -181,29 +164,17 @@ export default function BookingPromo() {
                       color: 'var(--foreground)',
                     }}
                   >
-                    {language === 'VN'
-                      ? 'Gia đình (2 Lớn + Trẻ em)'
-                      : 'Family (2 Adults + Kids)'}
+                    {t('home.promo.family')}
                   </option>
                 </select>
               </div>
             </div>
 
-            {/* Action button & Small brand logo layout in corner */}
+            {/* Action button */}
             <div className="mt-4 flex flex-col gap-6">
-              <button
-                onClick={handleSearchClick}
-                className="w-full bg-ddms-secondary text-primary-foreground hover:text-white text-center py-4 rounded-2xl font-bold tracking-wide transition-all duration-300 active:scale-[0.98] cursor-pointer shadow-md shadow-ddms-secondary/15 text-base relative overflow-hidden group/btn border-none"
-              >
-                {/* Staggered sequential slide-in horizontal background layers on hover */}
-                <div className="absolute inset-0 bg-[#00d4e0] -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-250 ease-out z-0 pointer-events-none delay-500 group-hover/btn:delay-0" />
-                <div className="absolute inset-0 bg-[#004d94] -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-250 ease-out z-0 pointer-events-none delay-[250ms] group-hover/btn:delay-[250ms]" />
-                <div className="absolute inset-0 bg-[#002244] -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-250 ease-out z-0 pointer-events-none group-hover/btn:delay-500" />
-
-                <span className="relative z-10 transition-colors duration-150 group-hover/btn:delay-[750ms]">
-                  {language === 'VN' ? 'Đặt chuyến ngay' : 'Book Now'}
-                </span>
-              </button>
+              <CyanAnimatedButton onClick={handleSearchClick}>
+                {t('home.promo.bookNow')}
+              </CyanAnimatedButton>
             </div>
           </div>
 
@@ -211,7 +182,7 @@ export default function BookingPromo() {
           {/* Card 1: DIFF Fireworks */}
           <a
             href="/tours"
-            className="flex flex-col rounded-2xl overflow-hidden border bg-transparent hover:bg-white/5 transition-all duration-300 group cursor-pointer"
+            className="flex flex-col rounded-2xl overflow-hidden border bg-[#002547]/45 backdrop-blur-md shadow-[0_0_25px_rgba(0,240,255,0.12)] hover:shadow-[0_0_35px_rgba(0,240,255,0.28)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
             style={{ borderColor: 'var(--border)' }}
           >
             <div className="h-52 overflow-hidden relative">
@@ -224,19 +195,13 @@ export default function BookingPromo() {
             </div>
             <div className="p-6 flex-1 flex flex-col gap-2">
               <span className="text-[10px] uppercase tracking-wider text-rose-400 font-bold block mb-1">
-                {language === 'VN'
-                  ? 'Trải nghiệm pháo hoa'
-                  : 'DIFF Cruise Experience'}
+                {t('home.promo.fireworksCategory')}
               </span>
               <h3 className="text-lg font-bold text-slate-100 mb-2 leading-snug">
-                {language === 'VN'
-                  ? 'Du thuyền Đêm Pháo Hoa DIFF'
-                  : 'DIFF Fireworks Night Cruise'}
+                {t('home.promo.fireworksTitle')}
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed font-light">
-                {language === 'VN'
-                  ? 'Chiêm ngưỡng những màn trình diễn pháo hoa quốc tế lộng lẫy và toàn cảnh sông Hàn lung linh từ vị trí đắc địa nhất trên boong du thuyền hạng sang.'
-                  : 'Enjoy the spectacular international fireworks display and glowing Han river lights from the premium deck of our luxury cruise ship.'}
+                {t('home.promo.fireworksDesc')}
               </p>
             </div>
           </a>
@@ -244,7 +209,7 @@ export default function BookingPromo() {
           {/* Card 2: Catamaran Sunset */}
           <a
             href="/tours"
-            className="flex flex-col rounded-2xl overflow-hidden border bg-transparent hover:bg-white/5 transition-all duration-300 group cursor-pointer"
+            className="flex flex-col rounded-2xl overflow-hidden border bg-[#002547]/45 backdrop-blur-md shadow-[0_0_25px_rgba(0,240,255,0.12)] hover:shadow-[0_0_35px_rgba(0,240,255,0.28)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
             style={{ borderColor: 'var(--border)' }}
           >
             <div className="h-52 overflow-hidden relative">
@@ -257,19 +222,13 @@ export default function BookingPromo() {
             </div>
             <div className="p-6 flex-1 flex flex-col gap-2">
               <span className="text-[10px] uppercase tracking-wider text-cyan-400 font-bold block mb-1">
-                {language === 'VN'
-                  ? 'Du thuyền hoàng hôn'
-                  : 'Private Sunset Charter'}
+                {t('home.promo.sunsetCategory')}
               </span>
               <h3 className="text-lg font-bold text-slate-100 mb-2 leading-snug">
-                {language === 'VN'
-                  ? 'Du thuyền riêng ngắm hoàng hôn Vịnh Đà Nẵng'
-                  : 'Danang Bay Catamaran Sunset Cruise'}
+                {t('home.promo.sunsetTitle')}
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed font-light">
-                {language === 'VN'
-                  ? 'Tổ chức tiệc tối lãng mạn, sự kiện cá nhân hoặc ngắm hoàng hôn buông xuống chân đèo Hải Vân trên du thuyền Catamaran riêng tư sang trọng.'
-                  : 'Organize private events, sunset dinners, or peaceful sea cruises along the Hai Van pass on our premium catamaran.'}
+                {t('home.promo.sunsetDesc')}
               </p>
             </div>
           </a>

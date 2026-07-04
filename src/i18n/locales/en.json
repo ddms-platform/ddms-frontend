@@ -308,6 +308,8 @@
       "signIn": "Sign In"
     },
     "hero": {
+      "welcome": "Welcome to Da Nang",
+      "explore": "Explore now",
       "title": "Discover Da Nang's Waterway Beauty",
       "description": "Book river cruises on the Han River, watch the Dragon Bridge breathe fire, and enjoy an unforgettable waterway journey.",
       "searchPlaceholder": "Search tours, destinations...",
@@ -350,6 +352,65 @@
       "marbleMountains": "Marble Mountains",
       "bachDang": "Bach Dang Wharf",
       "toursAvailable": "tours available"
+    },
+    "promo": {
+      "departurePort": "DEPARTURE PORT",
+      "portHanRiver": "Han River Cruise Port",
+      "portBachDang": "Bach Dang Yacht Port",
+      "portTienSa": "Tien Sa Cruise Port",
+      "route": "ROUTE / DESTINATION",
+      "routeHanRiver": "Han River Sightseeing",
+      "routeDanangBay": "Danang Bay Exploration",
+      "routeHonChao": "Hon Chao Island Tour",
+      "routeSunset": "Sunset Cruise Tour",
+      "departureDate": "DEPARTURE DATE",
+      "guests": "GUESTS",
+      "guest": "1 Guest (Adult)",
+      "guests2": "2 Guests (Adults)",
+      "guests3": "3-4 Guests",
+      "family": "Family (2 Adults + Kids)",
+      "bookNow": "Book Now",
+      "fireworksTitle": "DIFF Fireworks Night Cruise",
+      "fireworksDesc": "Enjoy the spectacular international fireworks display and glowing Han river lights from the premium deck of our luxury cruise ship.",
+      "fireworksCategory": "DIFF Cruise Experience",
+      "sunsetTitle": "Danang Bay Catamaran Sunset Cruise",
+      "sunsetDesc": "Organize private events, sunset dinners, or peaceful sea cruises along the Hai Van pass on our premium catamaran.",
+      "sunsetCategory": "Private Sunset Charter"
+    },
+    "providers": {
+      "verified": "Verified Partner",
+      "viewFleets": "View active fleets",
+      "specialDeal": "Special Deal",
+      "yachtTitle": "Private Yacht Charter",
+      "yachtDesc": "Book custom itinerary cruises with verified captains.",
+      "bookNow": "Book Now",
+      "reviews": "reviews"
+    },
+    "timeline": {
+      "mar": {
+        "shortLabel": "Mar",
+        "label": "March (Spring)",
+        "title": "Spring Han River Excursion",
+        "desc": "Enjoy clear skies and gentle morning sun on a peaceful cruise along the scenic Han River."
+      },
+      "jun": {
+        "shortLabel": "Jun",
+        "label": "June (Summer)",
+        "title": "DIFF Fireworks Festival Night",
+        "desc": "Admire international fireworks displays lighting up the night sky right from the deck."
+      },
+      "sep": {
+        "shortLabel": "Sep",
+        "label": "September (Autumn)",
+        "title": "Da Nang Bay Sunset Voyage",
+        "desc": "Sail off into the poetic golden and purple sunset as the evening breeze cools the bay."
+      },
+      "dec": {
+        "shortLabel": "Dec",
+        "label": "December (Winter)",
+        "title": "Han River Winter Light Cruise",
+        "desc": "Watch the city lights shimmer on the moving winter waters in a warm cozy onboard atmosphere."
+      }
     },
     "cta": {
       "title": "Ready for a River Adventure?",
