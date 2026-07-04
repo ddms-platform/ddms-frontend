@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Heart } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
+import { wishlistService } from '@/services/wishlistService';
 
 interface BookingSidebarProps {
   tourId: string;
@@ -21,9 +23,42 @@ export default function BookingSidebar({
 }: BookingSidebarProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
 
   const isOwner =
     (user as any)?.id && createdBy && (user as any).id === createdBy;
+
+  useEffect(() => {
+    if (user) {
+      wishlistService
+        .getWishlistedTourIds()
+        .then((ids) => {
+          setIsWishlisted(ids.includes(tourId));
+        })
+        .catch(console.error);
+    } else {
+      setIsWishlisted(false);
+    }
+  }, [tourId, user]);
+
+  const handleWishlistToggle = async () => {
+    if (!user) {
+      window.dispatchEvent(new CustomEvent('auth-required'));
+      return;
+    }
+
+    setWishlistLoading(true);
+    try {
+      await wishlistService.toggleWishlist(tourId);
+      setIsWishlisted((prev) => !prev);
+      window.dispatchEvent(new Event('wishlist-updated'));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
 
   return (
     <div
@@ -100,10 +135,18 @@ export default function BookingSidebar({
       <Button
         variant="outline"
         size="action"
-        className="mt-3 w-full gap-2 text-foreground border-foreground/30 hover:bg-foreground/5"
+        onClick={handleWishlistToggle}
+        disabled={wishlistLoading}
+        className="mt-3 w-full gap-2 text-foreground border-foreground/30 hover:bg-foreground/5 cursor-pointer"
       >
-        <Heart size={16} />
-        {t('tour.booking.addWishlist')}
+        <Heart
+          size={16}
+          fill={isWishlisted ? '#ff385c' : 'none'}
+          className={isWishlisted ? 'text-[#ff385c]' : 'text-foreground'}
+        />
+        {isWishlisted
+          ? t('tour.booking.removeWishlist')
+          : t('tour.booking.addWishlist')}
       </Button>
 
       <p className="mt-4 text-center text-xs text-foreground/70">

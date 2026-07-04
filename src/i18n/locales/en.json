@@ -510,6 +510,7 @@
       "freeCancellation": "Free cancellation",
       "bookNow": "Book Now",
       "addWishlist": "Add to wishlist",
+      "removeWishlist": "Saved to wishlist",
       "noChargeYet": "You won't be charged yet"
     }
   },
