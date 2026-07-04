@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Star } from 'lucide-react';
-import useLanguage from '@/contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import { routeName } from '@/constants/route-name';
+import { CyanAnimatedButton } from '@/components/common/CyanAnimatedButton';
 
 const getProviders = (language: string) => [
   {
@@ -85,8 +86,8 @@ const getProviders = (language: string) => [
 ];
 
 export default function FeaturedProviders() {
-  const { language } = useLanguage();
-  const providers = getProviders(language);
+  const { t, i18n } = useTranslation();
+  const providers = getProviders(i18n.language.toUpperCase());
 
   return (
     <div
@@ -94,18 +95,6 @@ export default function FeaturedProviders() {
         backgroundColor: 'var(--ddms-bg-main)',
       }}
     >
-      {/* Section Header */}
-      <div className="mx-auto max-w-7xl px-6 pt-20 pb-8">
-        <h2 className="text-[32px] font-bold leading-tight text-white tracking-tight">
-          {language === 'EN' ? 'Featured Providers' : 'Nhà cung cấp nổi bật'}
-        </h2>
-        <p className="mt-2 text-sm text-white/70">
-          {language === 'EN'
-            ? 'Discover top-rated luxury charters, cruise operators, and water sports clubs in Da Nang'
-            : 'Trải nghiệm dịch vụ đẳng cấp từ các câu lạc bộ du thuyền, hãng tàu du lịch hàng đầu Đà Nẵng'}
-        </p>
-      </div>
-
       {providers.map((p) => (
         <section key={p.id} className="py-16 bg-transparent">
           <div className="mx-auto max-w-7xl px-6">
@@ -118,9 +107,7 @@ export default function FeaturedProviders() {
                       <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
                         <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                       </svg>
-                      {language === 'EN'
-                        ? 'Verified Partner'
-                        : 'Đối tác tin cậy'}
+                      {t('home.providers.verified')}
                     </span>
                     <span className="flex items-center gap-1 text-xs font-bold text-white/90">
                       <Star
@@ -147,11 +134,7 @@ export default function FeaturedProviders() {
                   to={routeName.tours}
                   className="group inline-flex items-center gap-2 text-sm font-semibold text-ddms-secondary mt-8 transition-all"
                 >
-                  <span>
-                    {language === 'EN'
-                      ? 'View active fleets'
-                      : 'Xem các tàu hoạt động'}
-                  </span>
+                  <span>{t('home.providers.viewFleets')}</span>
                   <svg
                     className="w-6.5 h-4 transition-transform duration-300 group-hover:translate-x-2 shrink-0"
                     fill="none"
@@ -265,17 +248,13 @@ export default function FeaturedProviders() {
                 <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-blue-500/5 opacity-50 z-0 pointer-events-none" />
                 <div className="z-10 space-y-2">
                   <span className="text-[10px] uppercase tracking-wider text-ddms-secondary font-bold block">
-                    {language === 'EN' ? 'Special Deal' : 'Ưu đãi đặt sớm'}
+                    {t('home.providers.specialDeal')}
                   </span>
                   <h4 className="text-xl font-bold text-white leading-tight">
-                    {language === 'EN'
-                      ? 'Private Yacht Charter'
-                      : 'Đặt chỗ trực tiếp'}
+                    {t('home.providers.yachtTitle')}
                   </h4>
                   <p className="text-xs text-white/60 leading-relaxed font-light">
-                    {language === 'EN'
-                      ? 'Book custom itinerary cruises with verified captains.'
-                      : 'Liên hệ đặt hải trình riêng tư thiết kế theo sở thích.'}
+                    {t('home.providers.yachtDesc')}
                   </p>
                 </div>
 
@@ -283,16 +262,15 @@ export default function FeaturedProviders() {
                   <div className="text-sm font-semibold text-white/90">
                     ★ {p.rating.toFixed(1)}{' '}
                     <span className="text-xs text-white/50">
-                      ({p.totalReviews}{' '}
-                      {language === 'EN' ? 'reviews' : 'đánh giá'})
+                      ({p.totalReviews} {t('home.providers.reviews')})
                     </span>
                   </div>
-                  <Link
+                  <CyanAnimatedButton
                     to={routeName.tours}
-                    className="block text-center w-full py-2.5 rounded-xl text-xs font-bold text-black bg-white hover:bg-white/90 active:scale-95 transition-all z-10"
+                    className="py-2.5 rounded-xl text-xs"
                   >
-                    {language === 'EN' ? 'Book Now' : 'Liên hệ ngay'}
-                  </Link>
+                    {t('home.providers.bookNow')}
+                  </CyanAnimatedButton>
                 </div>
               </div>
             </div>

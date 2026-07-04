@@ -57,6 +57,14 @@ function PageLoader() {
   return <LoadingSpinner fullScreen />;
 }
 
+function HomeLoader() {
+  return (
+    <div className="fixed inset-0 bg-black flex items-center justify-center z-9999">
+      <LoadingSpinner className="text-white" />
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <ErrorBoundary>
@@ -145,7 +153,7 @@ export default function App() {
                     <Route
                       path={routeName.home}
                       element={
-                        <Suspense fallback={<PageLoader />}>
+                        <Suspense fallback={<HomeLoader />}>
                           <HomePage />
                         </Suspense>
                       }

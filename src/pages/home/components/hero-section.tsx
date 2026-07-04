@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
-import useLanguage from '@/contexts/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 import springVideo from '@/assets/15040488_1920_1080_30fps.mp4';
 import summerVideo from '@/assets/12742203-hd_1920_1080_24fps.mp4';
@@ -57,14 +57,12 @@ const MONTHS: MonthData[] = [
 ];
 
 export default function HeroSection() {
-  const { language } = useLanguage();
+  const { t } = useTranslation();
   const [activeMonth, setActiveMonth] = useState('mar');
 
   // refs for calculating the sliding underline offset dynamically
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
-
-  const currentData = MONTHS.find((m) => m.key === activeMonth) || MONTHS[0];
 
   useEffect(() => {
     const activeBtn = buttonRefs.current[activeMonth];
@@ -74,7 +72,7 @@ export default function HeroSection() {
         left: activeBtn.offsetLeft,
       });
     }
-  }, [activeMonth, language]);
+  }, [activeMonth, t]);
 
   const handlePrevMonth = () => {
     const currentIndex = MONTHS.findIndex((m) => m.key === activeMonth);
@@ -89,18 +87,25 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative overflow-hidden h-screen flex items-center select-none">
+    <section className="relative overflow-hidden h-screen flex items-center select-none bg-black">
       {/* ── Background Video Container ── */}
-      <div className="absolute inset-0 overflow-hidden z-0">
-        <video
-          key={activeMonth}
-          src={currentData.video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out opacity-100 animate-in fade-in"
-        />
+      <div className="absolute inset-0 overflow-hidden z-0 bg-black">
+        {MONTHS.map((m) => {
+          const isActive = m.key === activeMonth;
+          return (
+            <video
+              key={m.key}
+              src={m.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              }`}
+            />
+          );
+        })}
       </div>
 
       {/* ── Main Hero Content ── */}
@@ -110,10 +115,10 @@ export default function HeroSection() {
             className="text-4xl font-light leading-tight tracking-tight text-white md:text-5xl lg:text-7xl md:whitespace-nowrap animate-hero-title"
             style={{ letterSpacing: '-0.44px' }}
           >
-            {language === 'VN' ? 'Chào mừng tới Đà Nẵng' : 'Welcome to Da Nang'}
+            {t('home.hero.welcome')}
           </h1>
           <p className="mt-4 text-xs md:text-sm font-medium uppercase tracking-widest text-slate-300/90 mx-auto animate-hero-subtext">
-            {language === 'VN' ? 'Trải nghiệm nào' : 'Explore now'}
+            {t('home.hero.explore')}
           </p>
         </div>
       </div>
@@ -158,9 +163,7 @@ export default function HeroSection() {
                     : 'hover:opacity-85'
                 }`}
               >
-                <span>
-                  {language === 'VN' ? m.shortLabelVN : m.shortLabelEN}
-                </span>
+                <span>{t(`home.timeline.${m.key}.shortLabel`)}</span>
               </button>
             ))}
           </div>

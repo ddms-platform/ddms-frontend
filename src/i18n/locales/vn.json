@@ -308,6 +308,8 @@
       "signIn": "Đăng nhập"
     },
     "hero": {
+      "welcome": "Chào mừng tới Đà Nẵng",
+      "explore": "Trải nghiệm nào",
       "title": "Khám phá vẻ đẹp đường thủy Đà Nẵng",
       "description": "Đặt tour du thuyền sông Hàn, ngắm cầu Rồng phun lửa và trải nghiệm hành trình sông nước tuyệt vời.",
       "searchPlaceholder": "Tìm kiếm tour, địa điểm...",
@@ -350,6 +352,65 @@
       "marbleMountains": "Ngũ Hành Sơn",
       "bachDang": "Bến Bạch Đằng",
       "toursAvailable": "tour có sẵn"
+    },
+    "promo": {
+      "departurePort": "CẢNG KHỞI HÀNH",
+      "portHanRiver": "Cảng du thuyền Sông Hàn",
+      "portBachDang": "Bến du thuyền Bạch Đằng",
+      "portTienSa": "Cảng du thuyền Tiên Sa",
+      "route": "TUYẾN ĐƯỜNG / ĐIỂM ĐẾN",
+      "routeHanRiver": "Du ngoạn Sông Hàn (Ngắm cầu)",
+      "routeDanangBay": "Khám phá Vịnh Đà Nẵng",
+      "routeHonChao": "Tour Đảo Hòn Chảo",
+      "routeSunset": "Sunset Cruise (Hoàng hôn)",
+      "departureDate": "NGÀY KHỞI HÀNH",
+      "guests": "HÀNH KHÁCH",
+      "guest": "1 Khách (Người lớn)",
+      "guests2": "2 Khách (Người lớn)",
+      "guests3": "3-4 Khách",
+      "family": "Gia đình (2 Lớn + Trẻ em)",
+      "bookNow": "Đặt chuyến ngay",
+      "fireworksTitle": "Du thuyền Đêm Pháo Hoa DIFF",
+      "fireworksDesc": "Chiêm ngưỡng những màn trình diễn pháo hoa quốc tế lộng lẫy và toàn cảnh sông Hàn lung linh từ vị trí đắc địa nhất trên boong du thuyền hạng sang.",
+      "fireworksCategory": "Trải nghiệm pháo hoa",
+      "sunsetTitle": "Du thuyền riêng ngắm hoàng hôn Vịnh Đà Nẵng",
+      "sunsetDesc": "Tổ chức tiệc tối lãng mạn, sự kiện cá nhân hoặc ngắm hoàng hôn buông xuống chân đèo Hải Vân trên du thuyền Catamaran riêng tư sang trọng.",
+      "sunsetCategory": "Du thuyền hoàng hôn"
+    },
+    "providers": {
+      "verified": "Đối tác tin cậy",
+      "viewFleets": "Xem các tàu hoạt động",
+      "specialDeal": "Ưu đãi đặt sớm",
+      "yachtTitle": "Đặt chỗ trực tiếp",
+      "yachtDesc": "Liên hệ đặt hải trình riêng tư thiết kế theo sở thích.",
+      "bookNow": "Liên hệ ngay",
+      "reviews": "đánh giá"
+    },
+    "timeline": {
+      "mar": {
+        "shortLabel": "Tháng 3",
+        "label": "Tháng 3 (Xuân)",
+        "title": "Du thuyền Sông Hàn Ngày Xuân",
+        "desc": "Tận hưởng bầu trời trong lành, nắng ấm ban mai cùng hải trình ngoạn cảnh sông Hàn thanh bình."
+      },
+      "jun": {
+        "shortLabel": "Tháng 6",
+        "label": "Tháng 6 (Hè)",
+        "title": "Đêm Lễ Hội Pháo Hoa DIFF",
+        "desc": "Chiêm ngưỡng những màn trình diễn pháo hoa quốc tế rực rỡ sắc màu ngay từ boong du thuyền thượng lưu."
+      },
+      "sep": {
+        "shortLabel": "Tháng 9",
+        "label": "Tháng 9 (Thu)",
+        "title": "Hoàng Hôn Vịnh Đà Nẵng",
+        "desc": "Say đắm trong sắc vàng tím thơ mộng của chiều tà khi du thuyền buồm lướt gió khơi vịnh Đà Nẵng."
+      },
+      "dec": {
+        "shortLabel": "Tháng 12",
+        "label": "Tháng 12 (Đông)",
+        "title": "Thành Phố Ánh Sáng Đêm Đông",
+        "desc": "Hành trình ngắm nhìn toàn cảnh thành phố lung linh ánh đèn phản chiếu kỳ ảo dưới dòng nước trôi lững lờ."
+      }
     },
     "cta": {
       "title": "Sẵn sàng cho hành trình trên sông?",

@@ -33,12 +33,12 @@ export default function TranslationToggle() {
       {/* Dropdown Button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="inline-flex items-center gap-1.5 transition-colors cursor-pointer bg-transparent border-none p-0 text-sm font-semibold select-none header-link"
+        className="inline-flex items-center gap-1.5 transition-colors cursor-pointer bg-transparent border-none p-0 text-base font-semibold select-none header-link"
         aria-label="Select language"
       >
         <span>{language === 'VN' ? 'VI' : 'EN'}</span>
         <ChevronDown
-          size={14}
+          size={16}
           className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>

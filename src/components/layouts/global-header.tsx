@@ -155,7 +155,7 @@ export default function GlobalHeader({
           boxShadow: 'none',
         }}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-400 items-center justify-between px-6 md:px-12 py-6">
           {/* Custom Brand Logo */}
           <a
             href={routeName.home}
@@ -164,7 +164,7 @@ export default function GlobalHeader({
           >
             {/* Recreated Monogram Sail Vector Icon */}
             <svg
-              className="w-8 h-8 select-none pointer-events-none"
+              className="w-10 h-10 select-none pointer-events-none"
               style={{ color: '#E31C24' }}
               viewBox="0 0 100 80"
               fill="none"
@@ -178,20 +178,20 @@ export default function GlobalHeader({
               <path d="M45 40c10-20 25-20 25 0s15 20 15 0" />
             </svg>
             {/* Logo Text Wordmark */}
-            <span className="text-xl md:text-2xl font-semibold tracking-tight uppercase">
+            <span className="text-2xl md:text-3xl font-semibold tracking-tight uppercase">
               ddms
             </span>
           </a>
 
           {/* Nav Links */}
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-10 md:flex">
             {navLinks &&
               navLinks.length > 0 &&
               navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium transition-colors header-link"
+                  className="text-base font-semibold transition-colors header-link"
                 >
                   {link.label}
                 </a>
@@ -200,28 +200,28 @@ export default function GlobalHeader({
             {/* Search Trigger Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 text-sm font-medium transition-colors cursor-pointer bg-transparent border-none outline-none p-0 header-link"
+              className="flex items-center gap-2.5 text-base font-semibold transition-colors cursor-pointer bg-transparent border-none outline-none p-0 header-link"
             >
-              <Search size={16} />
+              <Search size={18} />
               <span>Search</span>
             </button>
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <button
               onClick={toggleTheme}
-              className="flex items-center justify-center rounded-full p-2 transition-all hover:bg-white/5 active:scale-[0.97] header-link"
+              className="flex items-center justify-center rounded-full p-2.5 transition-all hover:bg-white/5 active:scale-[0.97] header-link"
               title={theme === 'light' ? 'Dark Mode' : 'Light Mode'}
             >
-              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+              {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
             </button>
             <TranslationToggle />
 
             {!isOwner && !user?.hasOwnerProfile && (
               <Link
                 to={routeName.becomeOwner}
-                className="hidden items-center rounded-full px-3 py-2 text-sm font-semibold transition-colors hover:bg-white/5 sm:inline-flex header-link"
+                className="hidden items-center rounded-full px-4 py-2 text-base font-semibold transition-colors hover:bg-white/5 sm:inline-flex header-link"
               >
                 {t('becomeOwner.navLink')}
               </Link>
@@ -230,10 +230,10 @@ export default function GlobalHeader({
             {isAuthenticated && (
               <Link
                 to="/wishlist"
-                className="relative flex items-center justify-center rounded-full p-2 transition-all hover:bg-white/5 active:scale-[0.97]"
+                className="relative flex items-center justify-center rounded-full p-2.5 transition-all hover:bg-white/5 active:scale-[0.97]"
                 title={t('nav.wishlist', 'Wishlist')}
               >
-                <Heart size={20} style={{ color: '#ff385c' }} />
+                <Heart size={22} style={{ color: '#ff385c' }} />
                 {wishlistCount > 0 && (
                   <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff385c] text-[10px] font-bold text-white">
                     {wishlistCount > 99 ? '99+' : wishlistCount}
@@ -248,7 +248,7 @@ export default function GlobalHeader({
                 <button
                   id="user-menu-button"
                   onClick={() => setDropdownOpen((prev) => !prev)}
-                  className="flex items-center gap-2.5 rounded-full py-1.5 pl-1.5 pr-3 transition-all hover:bg-white/5 active:scale-[0.97]"
+                  className="flex items-center gap-3 rounded-full py-2 pl-2 pr-4 transition-all hover:bg-white/5 active:scale-[0.97]"
                   aria-expanded={dropdownOpen}
                   aria-haspopup="true"
                 >
@@ -257,11 +257,11 @@ export default function GlobalHeader({
                     <img
                       src={user.avatar_url}
                       alt={user.name}
-                      className="h-8 w-8 rounded-full object-cover"
+                      className="h-10 w-10 rounded-full object-cover"
                     />
                   ) : (
                     <div
-                      className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold"
+                      className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
                       style={{
                         background:
                           'linear-gradient(135deg, var(--ddms-secondary), #00d4e0)',
@@ -274,13 +274,13 @@ export default function GlobalHeader({
 
                   {/* Name + chevron (hidden on mobile) */}
                   <span
-                    className="hidden text-sm font-medium sm:inline"
+                    className="hidden text-base font-semibold sm:inline"
                     style={{ color: 'var(--ddms-text-header)' }}
                   >
                     {user?.name || 'User'}
                   </span>
                   <ChevronDown
-                    size={14}
+                    size={16}
                     className="transition-transform duration-200"
                     style={{
                       color: 'var(--ddms-text-header)',
@@ -391,7 +391,12 @@ export default function GlobalHeader({
               </div>
             ) : (
               /* ── Not logged-in: Sign In button ── */
-              <Button variant="cyan" size="action" asChild>
+              <Button
+                variant="cyan"
+                size="action"
+                className="text-base py-3 px-5 rounded-xl font-semibold"
+                asChild
+              >
                 <Link to={routeName.signIn}>{t('home.nav.signIn')}</Link>
               </Button>
             )}
