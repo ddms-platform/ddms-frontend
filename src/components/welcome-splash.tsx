@@ -4,10 +4,14 @@ import { startBackgroundAudio } from '@/lib/audio-manager';
 
 import winterVideo from '@/assets/12680908_1920_1080_30fps.mp4';
 
+const SESSION_KEY = 'ddms-splash-dismissed';
+
 export default function WelcomeSplash() {
   const { t } = useTranslation();
 
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => {
+    return sessionStorage.getItem(SESSION_KEY) === 'true';
+  });
   const [fadeOut, setFadeOut] = useState(false);
 
   // Prevent body scroll while splash is visible
@@ -27,6 +31,7 @@ export default function WelcomeSplash() {
     startBackgroundAudio();
     setFadeOut(true);
     setTimeout(() => {
+      sessionStorage.setItem(SESSION_KEY, 'true');
       setDismissed(true);
     }, 800);
   };
