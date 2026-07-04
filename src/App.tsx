@@ -4,6 +4,7 @@ import AuthLayout from '@/components/layouts/auth-layout';
 import MainLayout from '@/components/layouts/main-layout';
 import OwnerLayout from '@/components/layouts/owner-layout';
 import { ErrorBoundary } from './components/shared/error-boundary';
+import WelcomeSplash from './components/welcome-splash';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import { lazy, Suspense } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -78,6 +79,7 @@ export default function App() {
           <AuthProvider>
             <ThemeProvider>
               <LanguageProvider>
+                <WelcomeSplash />
                 <Toaster position="top-right" richColors closeButton />
                 <Routes>
                   {/* Auth Routes - own layout, no header/footer */}
