@@ -326,12 +326,22 @@
       "sightseeing": "Ngắm cảnh",
       "dinner": "Ăn tối"
     },
+    "services": {
+      "river_tours": "Tour Sông Hàn",
+      "yacht_charter": "Thuê du thuyền riêng",
+      "port_tickets": "Đặt vé cảng",
+      "water_sports": "Thể thao nước",
+      "port_schedule": "Lịch trình cảng"
+    },
     "tours": {
       "title": "Tour nổi bật",
       "subtitle": "Những trải nghiệm đường thủy được yêu thích nhất tại Đà Nẵng",
       "viewAll": "Xem tất cả",
       "reviews": "đánh giá",
-      "perPerson": "người"
+      "perPerson": "người",
+      "topDestinations": "Điểm đến nổi bật",
+      "learnMore": "Xem tất cả",
+      "noTours": "Không có tour nào nổi bật."
     },
     "howItWorks": {
       "title": "Đặt tour chỉ 4 bước",
@@ -385,6 +395,9 @@
       "yachtDesc": "Liên hệ đặt hải trình riêng tư thiết kế theo sở thích.",
       "bookNow": "Liên hệ ngay",
       "reviews": "đánh giá"
+    },
+    "explore": {
+      "topAttractions": "Địa điểm nổi bật"
     },
     "timeline": {
       "mar": {
@@ -667,6 +680,8 @@
     "tours": "Tours"
   },
   "header": {
+    "search": "Tìm kiếm",
+    "searchPlaceholder": "Nhập từ khóa tìm kiếm...",
     "user": {
       "ownerDashboard": "Dashboard chủ thuyền",
       "profile": "Hồ sơ cá nhân",
