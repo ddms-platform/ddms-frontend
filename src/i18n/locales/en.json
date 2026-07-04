@@ -1102,5 +1102,10 @@
       "loadMessages": "Failed to load messages.",
       "sendMessage": "Failed to send message. Please try again."
     }
+  },
+  "splash": {
+    "tagline": "Discover the beauty of Da Nang on the water",
+    "enter": "Explore now",
+    "soundHint": "This website has background music"
   }
 }

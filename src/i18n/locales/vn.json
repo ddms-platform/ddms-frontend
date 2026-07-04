@@ -1102,5 +1102,10 @@
       "loadMessages": "Không thể tải lịch sử tin nhắn.",
       "sendMessage": "Không thể gửi tin nhắn. Vui lòng thử lại."
     }
+  },
+  "splash": {
+    "tagline": "Khám phá vẻ đẹp Đà Nẵng trên mặt nước",
+    "enter": "Khám phá ngay",
+    "soundHint": "Trang web có nhạc nền"
   }
 }

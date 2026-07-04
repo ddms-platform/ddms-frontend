@@ -97,7 +97,7 @@ export default function FeaturedProviders() {
     >
       {providers.map((p) => (
         <section key={p.id} className="py-16 bg-transparent">
-          <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto max-w-7xl md:max-w-[80%] px-6">
             {/* Row 1: Text info & Image 1 */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 items-stretch">
               <div className="flex flex-col justify-between p-2">
@@ -152,7 +152,7 @@ export default function FeaturedProviders() {
               </div>
 
               {/* Hero Image 1 */}
-              <div className="md:col-span-2 group relative rounded-[24px] overflow-hidden h-80 md:h-95 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
+              <div className="md:col-span-2 group relative rounded-[24px] overflow-hidden h-96 md:h-125 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
                 <img
                   src={p.images[0]}
                   alt={`${p.name} Hero`}
@@ -169,7 +169,7 @@ export default function FeaturedProviders() {
 
             {/* Row 2: Image 2 (7) & Image 3 (3) */}
             <div className="grid grid-cols-1 md:grid-cols-10 gap-6 mb-6">
-              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-65 md:h-75 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
+              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
                 <img
                   src={p.images[1]}
                   alt={`${p.name} Gallery 2`}
@@ -182,7 +182,7 @@ export default function FeaturedProviders() {
                   </h4>
                 </div>
               </div>
-              <div className="md:col-span-3 group relative rounded-[24px] overflow-hidden h-65 md:h-75 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
+              <div className="md:col-span-3 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
                 <img
                   src={p.images[2]}
                   alt={`${p.name} Gallery 3`}
@@ -199,7 +199,7 @@ export default function FeaturedProviders() {
 
             {/* Row 3: Image 4 (3) & Image 5 (7) */}
             <div className="grid grid-cols-1 md:grid-cols-10 gap-6 mb-6">
-              <div className="md:col-span-3 group relative rounded-[24px] overflow-hidden h-65 md:h-75 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
+              <div className="md:col-span-3 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
                 <img
                   src={p.images[3]}
                   alt={`${p.name} Gallery 4`}
@@ -212,7 +212,7 @@ export default function FeaturedProviders() {
                   </h4>
                 </div>
               </div>
-              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-65 md:h-75 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
+              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
                 <img
                   src={p.images[4]}
                   alt={`${p.name} Gallery 5`}
@@ -229,7 +229,7 @@ export default function FeaturedProviders() {
 
             {/* Row 4: Image 6 (7) & CTA Booking Card (3) */}
             <div className="grid grid-cols-1 md:grid-cols-10 gap-6">
-              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-65 md:h-75 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
+              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
                 <img
                   src={p.images[5]}
                   alt={`${p.name} Gallery 6`}

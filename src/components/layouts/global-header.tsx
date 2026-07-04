@@ -157,8 +157,8 @@ export default function GlobalHeader({
       >
         <div className="mx-auto flex max-w-400 items-center justify-between px-6 md:px-12 py-6">
           {/* Custom Brand Logo */}
-          <a
-            href={routeName.home}
+          <Link
+            to={routeName.home}
             className="flex items-center gap-2 hover:opacity-90 select-none transition-opacity duration-200 shadow-none border-none p-0 bg-transparent"
             style={{ color: 'var(--ddms-text-header)' }}
           >
@@ -181,7 +181,7 @@ export default function GlobalHeader({
             <span className="text-2xl md:text-3xl font-semibold tracking-tight uppercase">
               ddms
             </span>
-          </a>
+          </Link>
 
           {/* Nav Links */}
           <nav className="hidden items-center gap-10 md:flex">

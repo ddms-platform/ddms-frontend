@@ -1,3 +1,4 @@
+import '@/lib/audio-manager'; // Must be first — registers interaction listeners before React renders
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles/index.css';

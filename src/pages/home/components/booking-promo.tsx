@@ -187,7 +187,7 @@ export default function BookingPromo() {
           >
             <div className="h-52 overflow-hidden relative">
               <img
-                src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=600&q=80"
+                src="https://diff.vn/wp-content/uploads/2026/07/khan-dai-scaled.jpg"
                 alt="DIFF Fireworks Night"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
