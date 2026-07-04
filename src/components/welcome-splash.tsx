@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { startBackgroundAudio } from '@/lib/audio-manager';
 
@@ -8,9 +9,13 @@ const SESSION_KEY = 'ddms-splash-dismissed';
 
 export default function WelcomeSplash() {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+
+  // Only show splash on the home page
+  const isHomePage = pathname === '/' || pathname === '';
 
   const [dismissed, setDismissed] = useState(() => {
-    return sessionStorage.getItem(SESSION_KEY) === 'true';
+    return !isHomePage || sessionStorage.getItem(SESSION_KEY) === 'true';
   });
   const [fadeOut, setFadeOut] = useState(false);
 

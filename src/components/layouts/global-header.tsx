@@ -230,12 +230,16 @@ export default function GlobalHeader({
             {isAuthenticated && (
               <Link
                 to="/wishlist"
-                className="relative flex items-center justify-center rounded-full p-2.5 transition-all hover:bg-white/5 active:scale-[0.97]"
+                className="group relative flex items-center justify-center rounded-full p-2.5 transition-all hover:bg-white/5 active:scale-[0.97]"
                 title={t('nav.wishlist', 'Wishlist')}
               >
-                <Heart size={22} style={{ color: '#ff385c' }} />
+                <Heart
+                  size={22}
+                  color="#ff385c"
+                  className="fill-transparent transition-all duration-300 group-hover:fill-[#ff385c] group-hover:scale-110"
+                />
                 {wishlistCount > 0 && (
-                  <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff385c] text-[10px] font-bold text-white">
+                  <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-[#ff385c] text-[10px] font-bold text-white transition-transform duration-300 group-hover:scale-105">
                     {wishlistCount > 99 ? '99+' : wishlistCount}
                   </span>
                 )}
