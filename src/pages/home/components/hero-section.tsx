@@ -1,11 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
-import { LayoutGrid, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  LayoutGrid,
+  ChevronLeft,
+  ChevronRight,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import springVideo from '@/assets/15040488_1920_1080_30fps.mp4';
 import summerVideo from '@/assets/12742203-hd_1920_1080_24fps.mp4';
 import autumnVideo from '@/assets/15693482-hd_1920_1080_24fps.mp4';
 import winterVideo from '@/assets/12680908_1920_1080_30fps.mp4';
+import helloVietnam from '@/assets/Hello Vietnam.mp3';
 
 interface MonthData {
   key: string;
@@ -58,11 +65,38 @@ const MONTHS: MonthData[] = [
 
 export default function HeroSection() {
   const { t } = useTranslation();
-  const [activeMonth, setActiveMonth] = useState('mar');
+  const [activeMonth, setActiveMonth] = useState('sep');
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   // refs for calculating the sliding underline offset dynamically
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const [underlineStyle, setUnderlineStyle] = useState({ width: 0, left: 0 });
+
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.pause();
+      } else {
+        const playAudio = () => {
+          audioRef.current?.play().catch((err) => {
+            console.warn(
+              'Playback blocked by browser auto-play restrictions:',
+              err,
+            );
+          });
+        };
+        playAudio();
+        // Play on first user interaction if blocked initially by browser policy
+        window.addEventListener('click', playAudio, { once: true });
+        window.addEventListener('keydown', playAudio, { once: true });
+        return () => {
+          window.removeEventListener('click', playAudio);
+          window.removeEventListener('keydown', playAudio);
+        };
+      }
+    }
+  }, [isMuted]);
 
   useEffect(() => {
     const activeBtn = buttonRefs.current[activeMonth];
@@ -90,6 +124,7 @@ export default function HeroSection() {
     <section className="relative overflow-hidden h-screen flex items-center select-none bg-black">
       {/* ── Background Video Container ── */}
       <div className="absolute inset-0 overflow-hidden z-0 bg-black">
+        <audio ref={audioRef} src={helloVietnam} loop />
         {MONTHS.map((m) => {
           const isActive = m.key === activeMonth;
           return (
@@ -176,6 +211,17 @@ export default function HeroSection() {
             <ChevronRight size={22} />
           </button>
         </div>
+      </div>
+
+      {/* ── Bottom Right Sound Control ── */}
+      <div className="absolute bottom-10 right-6 md:right-16 z-30 flex items-center gap-3 animate-timeline select-none filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.85)]">
+        <button
+          onClick={() => setIsMuted((prev) => !prev)}
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10 hover:border-white transition-all active:scale-95 bg-black/10 backdrop-blur-xs"
+          aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+        >
+          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+        </button>
       </div>
 
       {/* Entrance Animations Keyframes */}
