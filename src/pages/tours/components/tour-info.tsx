@@ -1,9 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { MapPin, Clock, Users, Ship, Star } from 'lucide-react';
+import { Clock, Users, Ship, Star } from 'lucide-react';
 
 interface TourInfoProps {
-  title: string;
-  location: string;
   duration: string;
   maxGuests: number;
   boatName: string;
@@ -13,8 +11,6 @@ interface TourInfoProps {
 }
 
 export default function TourInfo({
-  title,
-  location,
   duration,
   maxGuests,
   boatName,
@@ -36,35 +32,14 @@ export default function TourInfo({
 
   return (
     <div>
-      {/* Title & Rating */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1
-            className="text-[28px] font-bold leading-[1.43] text-foreground"
-            style={{ letterSpacing: '-0.44px' }}
-          >
-            {title}
-          </h1>
-          <p className="mt-2 flex items-center gap-1.5 text-sm text-foreground/80">
-            <MapPin size={15} />
-            {location}
-          </p>
-        </div>
-        <div
-          className="flex shrink-0 items-center gap-2 rounded-xl px-4 py-2 border"
-          style={{
-            backgroundColor: 'var(--ddms-bg-card)',
-            borderColor: 'var(--border)',
-          }}
-        >
-          <Star size={16} fill="#ffc107" style={{ color: '#ffc107' }} />
-          <span className="text-base font-bold text-foreground">{rating}</span>
-          <span className="text-sm text-foreground/75">({reviews})</span>
-        </div>
+      {/* Rating Badge */}
+      <div className="flex items-center gap-2 mb-6">
+        <Star size={18} fill="#ffc107" style={{ color: '#ffc107' }} />
+        <span className="text-lg font-bold text-foreground">{rating}</span>
+        <span className="text-sm text-foreground/75">
+          ({reviews} {t('tour.reviewsCount', 'đánh giá')})
+        </span>
       </div>
-
-      {/* Divider */}
-      <div className="my-6 h-px" style={{ backgroundColor: 'var(--border)' }} />
 
       {/* Quick Details */}
       <div className="grid grid-cols-3 gap-4">

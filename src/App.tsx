@@ -1,12 +1,18 @@
 import { Toaster } from '@/components/ui/sonner';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
 import AuthLayout from '@/components/layouts/auth-layout';
 import MainLayout from '@/components/layouts/main-layout';
 import OwnerLayout from '@/components/layouts/owner-layout';
 import { ErrorBoundary } from './components/shared/error-boundary';
 import WelcomeSplash from './components/welcome-splash';
 import ProtectedRoute from './components/routes/ProtectedRoute';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -66,6 +72,16 @@ function HomeLoader() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <ErrorBoundary>
@@ -76,6 +92,7 @@ export default function App() {
         }
       >
         <BrowserRouter>
+          <ScrollToTop />
           <AuthProvider>
             <ThemeProvider>
               <LanguageProvider>

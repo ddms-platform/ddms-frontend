@@ -8,12 +8,14 @@ export interface ImageCarouselProps {
   aspectRatio?: string;
   /** Function to generate alt text for accessibility */
   getAltText?: (index: number) => string;
+  className?: string;
 }
 
 export default function ImageCarousel({
   images,
   aspectRatio = '16/9',
   getAltText,
+  className,
 }: ImageCarouselProps) {
   const [current, setCurrent] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -42,8 +44,8 @@ export default function ImageCarousel({
 
   return (
     <div
-      className="group relative overflow-hidden rounded-2xl"
-      style={{ aspectRatio }}
+      className={`group relative overflow-hidden ${className || 'rounded-2xl'}`}
+      style={aspectRatio ? { aspectRatio } : undefined}
     >
       {/* Hide scrollbars with embedded style */}
       <style
