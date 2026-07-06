@@ -35,7 +35,24 @@ export default function OwnerRegistrationPage() {
   React.useEffect(() => {
     getBoatTypes()
       .then((res) => {
-        if (res.data) setBoatTypes(res.data);
+        let typesData = res.data as any;
+        if (typesData && typesData.data) typesData = typesData.data; // Unwrap if nested
+
+        if (Array.isArray(typesData)) {
+          setBoatTypes(typesData);
+          if (typesData.length > 0) {
+            const firstTypeCode = typesData[0].code;
+            setVessels((prev) =>
+              prev.map((v) => {
+                const typeExists = typesData.some((t) => t.code === v.Type);
+                if (!typeExists) {
+                  return { ...v, Type: firstTypeCode };
+                }
+                return v;
+              }),
+            );
+          }
+        }
       })
       .catch((err) => console.log(err));
   }, []);

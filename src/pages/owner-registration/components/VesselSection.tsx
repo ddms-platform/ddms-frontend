@@ -43,6 +43,7 @@ interface VesselSectionProps {
 const inputClass =
   'w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all placeholder:text-gray-500';
 const labelClass = 'text-[13px] font-bold text-gray-300';
+const today = new Date().toISOString().split('T')[0];
 
 const VesselSection = ({
   vessel,
@@ -99,19 +100,30 @@ const VesselSection = ({
         <select
           value={vessel.Type}
           onChange={(e) => onChange('Type', e.target.value)}
+          style={{ colorScheme: 'dark' }}
           className="w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all appearance-none cursor-pointer"
         >
           {boatTypes.length > 0 ? (
             boatTypes.map((t) => (
-              <option key={t.code} value={t.code}>
-                {t.name_vi}
+              <option
+                className="bg-[#060D17] text-white"
+                key={t.code}
+                value={t.code}
+              >
+                {t.nameVi}
               </option>
             ))
           ) : (
             <>
-              <option value="yacht">Du thuyền cá nhân (Yacht)</option>
-              <option value="catamaran">Thuyền hai thân (Catamaran)</option>
-              <option value="speedboat">Ca nô tốc độ (Speedboat)</option>
+              <option className="bg-[#060D17] text-white" value="yacht">
+                Du thuyền cá nhân (Yacht)
+              </option>
+              <option className="bg-[#060D17] text-white" value="catamaran">
+                Thuyền hai thân (Catamaran)
+              </option>
+              <option className="bg-[#060D17] text-white" value="speedboat">
+                Ca nô tốc độ (Speedboat)
+              </option>
             </>
           )}
         </select>
@@ -202,6 +214,7 @@ const VesselSection = ({
             <input
               required
               type="date"
+              min={today}
               value={vessel.ExpectedDockingDate}
               onChange={(e) => onChange('ExpectedDockingDate', e.target.value)}
               style={{ colorScheme: 'dark' }}

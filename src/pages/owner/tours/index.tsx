@@ -132,17 +132,29 @@ const OwnerToursPage = () => {
             tourService.getToursDashboardResources(),
           ]);
 
-        if (resourcesRes?.code === 0) {
-          setResources(resourcesRes.result.boats);
-          if (resourcesRes.result.boats.length > 0) {
-            setSelectedBoatId(resourcesRes.result.boats[0].id);
-            if (resourcesRes.result.boats[0].tours.length > 0) {
-              setSelectedTourId(resourcesRes.result.boats[0].tours[0].id);
+        const extractData = (res: any) => {
+          if (!res) return null;
+          if (Array.isArray(res)) return res;
+          if (res.result !== undefined) return res.result;
+          if (res.data !== undefined) return res.data;
+          if (res.items !== undefined) return res.items;
+          return res;
+        };
+
+        const resourcesData = extractData(resourcesRes);
+        if (resourcesData && Array.isArray(resourcesData.boats)) {
+          setResources(resourcesData.boats);
+          if (resourcesData.boats.length > 0) {
+            setSelectedBoatId(resourcesData.boats[0].id);
+            if (resourcesData.boats[0].tours?.length > 0) {
+              setSelectedTourId(resourcesData.boats[0].tours[0].id);
             }
           }
         }
-        if (statsRes?.code === 0) {
-          const parsedStats = statsRes.result.map((s: any, index: number) => ({
+
+        const statsData = extractData(statsRes);
+        if (Array.isArray(statsData)) {
+          const parsedStats = statsData.map((s: any, index: number) => ({
             ...s,
             fill: COLORS[index % COLORS.length],
             bookingsCount: Number(s.bookingsCount) || 0,
@@ -150,8 +162,12 @@ const OwnerToursPage = () => {
           }));
           setStats(parsedStats);
         }
-        if (schedulesRes?.code === 0) setSchedules(schedulesRes.result);
-        if (bookingsRes?.code === 0) setRecentBookings(bookingsRes.result);
+
+        const schedulesData = extractData(schedulesRes);
+        if (Array.isArray(schedulesData)) setSchedules(schedulesData);
+
+        const bookingsData = extractData(bookingsRes);
+        if (Array.isArray(bookingsData)) setRecentBookings(bookingsData);
       } catch (error) {
         console.error('Error fetching dashboard data', error);
         toast.error(

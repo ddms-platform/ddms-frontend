@@ -221,8 +221,8 @@ export default function OwnerBoatList() {
                 localizedName && !localizedName.startsWith('ownerBoats.types.')
                   ? localizedName
                   : i18n.language === 'en'
-                    ? bt.name_en
-                    : bt.name_vi;
+                    ? bt.nameEn
+                    : bt.nameVi;
               return (
                 <option
                   key={bt.code}
