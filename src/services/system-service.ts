@@ -2,8 +2,8 @@ import { Axios } from './axios';
 
 export interface IBoatType {
   code: string;
-  name_vi: string;
-  name_en: string;
+  nameVi: string;
+  nameEn: string;
 }
 
 export const getBoatTypes = () => {

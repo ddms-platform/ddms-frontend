@@ -85,8 +85,8 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
                 );
                 return foundType
                   ? i18n.language === 'en'
-                    ? foundType.name_en
-                    : foundType.name_vi
+                    ? foundType.nameEn
+                    : foundType.nameVi
                   : boat.type;
               })()}
             </span>

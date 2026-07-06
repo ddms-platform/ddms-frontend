@@ -96,8 +96,8 @@ export default function BoatTable({
                       );
                       return foundType
                         ? i18n.language === 'en'
-                          ? foundType.name_en
-                          : foundType.name_vi
+                          ? foundType.nameEn
+                          : foundType.nameVi
                         : boat.type;
                     })()}
                   </span>
