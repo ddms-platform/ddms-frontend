@@ -678,7 +678,8 @@
   },
   "nav": {
     "home": "Trang chủ",
-    "tours": "Tours"
+    "tours": "Tours",
+    "notifications": "Thông báo"
   },
   "header": {
     "search": "Tìm kiếm",
@@ -1107,5 +1108,15 @@
     "tagline": "Khám phá vẻ đẹp Đà Nẵng trên mặt nước",
     "enter": "Khám phá ngay",
     "soundHint": "Trang web có nhạc nền"
+  },
+  "notification": {
+    "title": "Thông báo",
+    "markAllRead": "Đọc tất cả",
+    "empty": "Chưa có thông báo nào",
+    "viewAll": "Xem tất cả thông báo",
+    "justNow": "Vừa xong",
+    "minutesAgo": "phút trước",
+    "hoursAgo": "giờ trước",
+    "yesterday": "Hôm qua"
   }
 }

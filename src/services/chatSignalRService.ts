@@ -6,11 +6,16 @@ class ChatSignalRService {
 
   public startConnection(
     onMessageReceived: (msg: MessageResponse) => void,
+    onNotificationReceived?: (notif: any) => void,
   ): Promise<void> {
     if (this.connection) {
       // Re-register message callback in case it changes
       this.connection.off('ReceiveMessage');
       this.connection.on('ReceiveMessage', onMessageReceived);
+      if (onNotificationReceived) {
+        this.connection.off('ReceiveNotification');
+        this.connection.on('ReceiveNotification', onNotificationReceived);
+      }
       return Promise.resolve();
     }
 
@@ -26,6 +31,12 @@ class ChatSignalRService {
 
     this.connection.on('ReceiveMessage', (message: MessageResponse) => {
       onMessageReceived(message);
+    });
+
+    this.connection.on('ReceiveNotification', (notification: any) => {
+      if (onNotificationReceived) {
+        onNotificationReceived(notification);
+      }
     });
 
     return this.connection

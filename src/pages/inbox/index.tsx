@@ -82,7 +82,6 @@ export default function InboxPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryConversationId]);
 
-  // Handle SignalR real-time messages
   useEffect(() => {
     chatSignalRService
       .startConnection((newMessage) => {
@@ -140,6 +139,7 @@ export default function InboxPage() {
     };
 
     fetchMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeConversation?.id]);
 
   // Scroll to bottom

@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import TranslationToggle from '@/components/shared/translation-toggle';
+import NotificationDropdown from './notification-dropdown';
 import useTheme from '@/contexts/ThemeContext';
 
 import { Button } from '@/components/ui/button';
@@ -245,6 +246,8 @@ export default function GlobalHeader({
                 )}
               </Link>
             )}
+
+            {isAuthenticated && <NotificationDropdown />}
 
             {isAuthenticated ? (
               /* ── Logged-in: Avatar + Dropdown ── */
