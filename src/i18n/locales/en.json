@@ -678,7 +678,8 @@
   },
   "nav": {
     "home": "Home",
-    "tours": "Tours"
+    "tours": "Tours",
+    "notifications": "Notifications"
   },
   "header": {
     "search": "Search",
@@ -1107,5 +1108,15 @@
     "tagline": "Discover the beauty of Da Nang on the water",
     "enter": "Explore now",
     "soundHint": "This website has background music"
+  },
+  "notification": {
+    "title": "Notifications",
+    "markAllRead": "Mark all as read",
+    "empty": "No notifications yet",
+    "viewAll": "View all notifications",
+    "justNow": "Just now",
+    "minutesAgo": "minutes ago",
+    "hoursAgo": "hours ago",
+    "yesterday": "Yesterday"
   }
 }
