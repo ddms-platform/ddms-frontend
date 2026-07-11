@@ -12,6 +12,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import DateInput from '@/components/ui/date-input';
+import { todayIso } from '@/lib/date-format';
 import { boatService, type BoatMaintenance } from '@/services/boatService';
 import api from '@/services/api';
 
@@ -336,12 +338,11 @@ export default function MaintenanceTab({
                 <label className="block text-xs font-semibold text-muted-foreground mb-1">
                   Ngày diễn ra
                 </label>
-                <input
-                  type="date"
+                <DateInput
                   value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
+                  onChange={setSelectedDate}
                   className="w-full rounded-lg border border-border bg-ddms-bg-main px-3 py-2.5 text-sm text-foreground focus:border-ddms-secondary outline-none"
-                  min={new Date().toISOString().split('T')[0]}
+                  min={todayIso()}
                 />
               </div>
               <div>

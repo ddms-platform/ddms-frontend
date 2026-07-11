@@ -8,8 +8,6 @@ import {
   RefreshCw,
   ChevronDown,
   ShieldAlert,
-  ShieldCheck,
-  Clock3,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -21,17 +19,21 @@ import {
   type OwnerCertificateListItem,
 } from '@/services/certificateService';
 import CertificateTab from '@/pages/owner/boats/boat-form/CertificateTab';
+import CertificateStatusChart from './CertificateStatusChart';
 
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected' | 'expired';
 
-const EXPIRY_WARNING_DAYS = 7;
+const EXPIRY_WARNING_DAYS = 30;
 
 const isExpiringSoon = (cert: OwnerCertificateListItem) => {
   if (cert.status !== 'approved') return false;
+  const iso = cert.expiryDate?.slice(0, 10);
+  if (!iso) return false;
   const diffDays = Math.ceil(
-    (new Date(cert.expiryDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24),
+    (new Date(`${iso}T00:00:00`).getTime() - Date.now()) /
+      (1000 * 60 * 60 * 24),
   );
-  return diffDays <= EXPIRY_WARNING_DAYS;
+  return diffDays >= 0 && diffDays <= EXPIRY_WARNING_DAYS;
 };
 
 export default function OwnerCertificatesPage() {
@@ -75,20 +77,6 @@ export default function OwnerCertificatesPage() {
       map.set(cert.boatId, list);
     });
     return map;
-  }, [certificates]);
-
-  const stats = useMemo(() => {
-    const pending = certificates.filter((c) => c.status === 'pending').length;
-    const rejected = certificates.filter((c) => c.status === 'rejected').length;
-    const expired = certificates.filter((c) => c.status === 'expired').length;
-    const expiringSoon = certificates.filter(isExpiringSoon).length;
-    return {
-      total: certificates.length,
-      pending,
-      rejected,
-      expired,
-      needsAttention: pending + rejected + expired + expiringSoon,
-    };
   }, [certificates]);
 
   const filteredBoats = useMemo(
@@ -148,54 +136,14 @@ export default function OwnerCertificatesPage() {
         </Button>
       </div>
 
-      {/* Stats */}
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          {
-            label: t('ownerCertificates.stats.total'),
-            value: stats.total,
-            icon: FileText,
-            colorClass:
-              'bg-cyan-500/10 border-cyan-500/20 text-cyan-700 dark:text-cyan-400',
-            iconColor: 'text-cyan-500',
-          },
-          {
-            label: t('ownerCertificates.stats.pending'),
-            value: stats.pending,
-            icon: Clock3,
-            colorClass:
-              'bg-amber-500/10 border-amber-500/20 text-amber-700 dark:text-amber-400',
-            iconColor: 'text-amber-500',
-          },
-          {
-            label: t('ownerCertificates.stats.needsAttention'),
-            value: stats.needsAttention,
-            icon: ShieldAlert,
-            colorClass:
-              'bg-red-500/10 border-red-500/20 text-red-700 dark:text-red-400',
-            iconColor: 'text-red-500',
-          },
-          {
-            label: t('ownerCertificates.stats.rejected'),
-            value: stats.rejected,
-            icon: ShieldCheck,
-            colorClass:
-              'bg-purple-500/10 border-purple-500/20 text-purple-700 dark:text-purple-400',
-            iconColor: 'text-purple-500',
-          },
-        ].map((s) => (
-          <div
-            key={s.label}
-            className={`rounded-2xl p-4 transition-all duration-200 hover:scale-[1.02] border ${s.colorClass}`}
-          >
-            <div className="flex items-center gap-2">
-              <s.icon size={16} className={s.iconColor} />
-              <span className="text-xs font-medium">{s.label}</span>
-            </div>
-            <p className="mt-2 text-xl font-bold">{s.value}</p>
-          </div>
-        ))}
-      </div>
+      {!loading && certificates.length > 0 && (
+        <CertificateStatusChart
+          certificates={certificates}
+          statusFilter={statusFilter}
+          onFilterChange={setStatusFilter}
+          isExpiringSoon={isExpiringSoon}
+        />
+      )}
 
       {/* Filters */}
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -263,6 +211,14 @@ export default function OwnerCertificatesPage() {
         <div className="mt-4 space-y-3">
           {filteredBoats.map((boat) => {
             const boatCerts = certsByBoat.get(boat.id) ?? [];
+            const visibleCerts =
+              statusFilter === 'all'
+                ? boatCerts
+                : statusFilter === 'expired'
+                  ? boatCerts.filter(
+                      (c) => c.status === 'expired' || isExpiringSoon(c),
+                    )
+                  : boatCerts.filter((c) => c.status === statusFilter);
             const attentionCount = boatCerts.filter(
               (c) =>
                 c.status === 'pending' ||
@@ -299,11 +255,11 @@ export default function OwnerCertificatesPage() {
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {t('ownerCertificates.documentCount', {
-                        count: boatCerts.length,
+                        count: visibleCerts.length,
                       })}
                     </p>
                   </div>
-                  {attentionCount > 0 && (
+                  {attentionCount > 0 && statusFilter === 'all' && (
                     <StatusBadge
                       label={t('ownerCertificates.attentionCount', {
                         count: attentionCount,
@@ -322,7 +278,11 @@ export default function OwnerCertificatesPage() {
 
                 {isExpanded && (
                   <div className="border-t border-border p-4">
-                    <CertificateTab boatId={boat.id} onChanged={fetchData} />
+                    <CertificateTab
+                      boatId={boat.id}
+                      onChanged={fetchData}
+                      statusFilter={statusFilter}
+                    />
                   </div>
                 )}
               </div>

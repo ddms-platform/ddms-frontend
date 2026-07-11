@@ -697,7 +697,8 @@
     "nav": {
       "dashboard": "Tổng quan",
       "boats": "Quản lý Đội tàu",
-      "certificates": "Giấy tờ pháp lý",
+      "certificates": "Giấy tờ tàu",
+      "ownerDocuments": "Giấy tờ chủ thuyền",
       "dockMap": "Sơ đồ bến",
       "services": "Dịch vụ & Bảo trì",
       "tourServices": "Dịch vụ Tour",
@@ -880,10 +881,12 @@
       "newFile": "Tệp giấy tờ mới",
       "cancel": "Huỷ",
       "types": {
-        "registration": "Đăng ký hàng hải",
-        "insurance": "Bảo hiểm",
-        "business_license": "Giấy phép kinh doanh",
-        "safety_cert": "Chứng nhận an toàn",
+        "registration": "Giấy chứng nhận đăng ký phương tiện thủy nội địa",
+        "insurance": "Bảo hiểm trách nhiệm dân sự",
+        "business_license": "Giấy phép kinh doanh (cũ — dùng transport_license cấp chủ thuyền)",
+        "safety_cert": "Giấy chứng nhận an toàn kỹ thuật & bảo vệ môi trường (Đăng kiểm)",
+        "crew_certificate": "Danh bạ thuyền viên / Chứng chỉ người lái",
+        "fire_safety": "Giấy chứng nhận PCCC",
         "other": "Khác"
       },
       "status": {
@@ -907,6 +910,12 @@
       "needsAttention": "Cần xử lý",
       "rejected": "Bị từ chối"
     },
+    "chart": {
+      "title": "Phân bố trạng thái giấy tờ",
+      "subtitle": "Bấm vào biểu đồ hoặc chú thích để lọc danh sách",
+      "legend": "Theo trạng thái",
+      "empty": "Chưa có dữ liệu"
+    },
     "filter": {
       "all": "Tất cả",
       "pending": "Chờ duyệt",
@@ -920,6 +929,47 @@
     }
   },
   "ownerRegistration": {
+    "title": "Đăng ký Chủ thuyền Mới",
+    "subtitle": "Hoàn tất biểu mẫu dưới đây để gia nhập hệ sinh thái quản lý cảng biển cao cấp Marina Command. Thông tin của bạn sẽ được bảo mật và xử lý bởi bộ phận vận hành cảng.",
+    "cancel": "HỦY BỎ",
+    "submit": "GỬI ĐĂNG KÝ",
+    "submitSuccess": "Đăng ký thành công!",
+    "submitError": "Đã có lỗi xảy ra.",
+    "entityTypes": {
+      "individual": "Cá nhân",
+      "business": "Doanh nghiệp",
+      "cooperative": "Hợp tác xã"
+    },
+    "ownerInfo": {
+      "title": "Thông tin chủ sở hữu",
+      "fullName": "Họ và Tên",
+      "email": "Email liên lạc",
+      "phone": "Số điện thoại",
+      "licenseNumber": "Số CCCD / Hộ chiếu",
+      "entityType": "Loại chủ thể",
+      "address": "Địa chỉ liên lạc",
+      "addressPlaceholder": "Số nhà, Tên đường, Quận/Huyện, Thành phố..."
+    },
+    "ownerDocuments": {
+      "title": "Giấy tờ chủ thuyền",
+      "hint": "CCCD/Hộ chiếu và giấy phép KD vận tải thủy là bắt buộc. GCN đăng ký doanh nghiệp bắt buộc với doanh nghiệp/HTX.",
+      "add": "Thêm giấy tờ",
+      "rowLabel": "Giấy tờ #{{index}}",
+      "remove": "Xoá giấy tờ",
+      "type": "Loại giấy tờ",
+      "expiryDate": "Ngày hết hạn (tuỳ chọn)",
+      "file": "Tệp đính kèm",
+      "uploadHint": "Chọn tệp giấy tờ",
+      "required": "Bắt buộc",
+      "missingRequired": "Vui lòng tải lên đầy đủ giấy tờ bắt buộc của chủ thuyền.",
+      "types": {
+        "national_id": "CCCD / Hộ chiếu",
+        "transport_license": "Giấy phép hoạt động vận tải",
+        "business_registration": "Giấy chứng nhận ĐKDN",
+        "residence_proof": "Giấy tờ cư trú",
+        "authorization_letter": "Giấy ủy quyền"
+      }
+    },
     "certificates": {
       "rowLabel": "Giấy tờ #{{index}}",
       "remove": "Xoá giấy tờ",
@@ -928,12 +978,42 @@
       "file": "Tệp đính kèm",
       "uploadHint": "Chọn tệp giấy tờ",
       "types": {
-        "registration": "Đăng ký hàng hải",
-        "insurance": "Bảo hiểm",
-        "business_license": "Giấy phép kinh doanh",
-        "safety_cert": "Chứng nhận an toàn",
+        "registration": "Giấy chứng nhận đăng ký phương tiện thủy nội địa",
+        "insurance": "Bảo hiểm trách nhiệm dân sự",
+        "safety_cert": "Giấy chứng nhận an toàn kỹ thuật & bảo vệ môi trường (Đăng kiểm)",
+        "crew_certificate": "Danh bạ thuyền viên / Chứng chỉ người lái",
+        "fire_safety": "Giấy chứng nhận PCCC",
         "other": "Khác"
       }
+    }
+  },
+  "ownerDocuments": {
+    "title": "Giấy tờ chủ thuyền",
+    "subtitle": "Xem và cập nhật giấy tờ pháp lý của chủ thuyền. Tải lại nếu hồ sơ bị từ chối.",
+    "refresh": "Làm mới",
+    "listTitle": "Giấy tờ đã tải lên",
+    "empty": "Chưa có giấy tờ chủ thuyền. Hãy tải lên bên dưới.",
+    "loadError": "Không thể tải giấy tờ chủ thuyền",
+    "expiresOn": "Hết hạn: {{date}}",
+    "adminNote": "Ghi chú admin: {{note}}",
+    "viewDocument": "Xem tài liệu",
+    "uploadTitle": "Tải lên hoặc thay thế giấy tờ",
+    "uploadHint": "Chọn loại đã có sẽ thay thế tệp hiện tại.",
+    "type": "Loại giấy tờ",
+    "expiryDate": "Ngày hết hạn (tuỳ chọn)",
+    "file": "Tệp đính kèm",
+    "upload": "Tải lên",
+    "replace": "Thay thế",
+    "replaceLabel": "thay thế",
+    "uploadSuccess": "Tải giấy tờ thành công",
+    "replaceSuccess": "Thay thế giấy tờ thành công",
+    "uploadError": "Không thể tải giấy tờ",
+    "types": {
+      "national_id": "CCCD / Hộ chiếu",
+      "transport_license": "Giấy phép hoạt động vận tải",
+      "business_registration": "Giấy chứng nhận ĐKDN",
+      "residence_proof": "Giấy tờ cư trú",
+      "authorization_letter": "Giấy ủy quyền"
     }
   },
   "boatTypes": {

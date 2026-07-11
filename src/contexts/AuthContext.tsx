@@ -95,14 +95,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  // On app load, if a token exists, refresh the user from `/me` so roles and
-  // profile stay in sync. A genuine 401 is handled by the axios interceptor
-  // (silent refresh or forced sign-out).
+  // On app load: refresh access token (picks up role changes e.g. owner
+  // approval) then reload profile from `/me`.
   useEffect(() => {
     if (!token) return;
     let cancelled = false;
 
     (async () => {
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
+      if (refreshToken) {
+        try {
+          const refreshRes = await AuthServices.refreshToken({ refreshToken });
+          if (
+            !cancelled &&
+            refreshRes.status === 200 &&
+            refreshRes.data?.code === 1000 &&
+            refreshRes.data.result?.token
+          ) {
+            const next = refreshRes.data.result;
+            localStorage.setItem(TOKEN_KEY, next.token);
+            localStorage.setItem(REFRESH_TOKEN_KEY, next.refreshToken);
+            setToken(next.token);
+          }
+        } catch {
+          // Keep existing access token; /me or next API call will handle auth failure.
+        }
+      }
+
+      if (cancelled) return;
+
       const res = await AuthServices.getProfile();
       if (cancelled) return;
       if (res.status === 200 && res.data?.code === 1000 && res.data.result) {

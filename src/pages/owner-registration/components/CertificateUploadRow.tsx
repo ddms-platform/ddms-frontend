@@ -4,6 +4,8 @@ import type {
   CertificateFormItem,
   CertificateTypeItem,
 } from '@/services/certificateService';
+import DateInput from '@/components/ui/date-input';
+import { todayIso } from '@/lib/date-format';
 
 interface CertificateUploadRowProps {
   certificate: CertificateFormItem;
@@ -20,8 +22,6 @@ interface CertificateUploadRowProps {
 const inputClass =
   'w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all placeholder:text-gray-500';
 const labelClass = 'text-[13px] font-bold text-gray-300';
-
-const today = new Date().toISOString().split('T')[0];
 
 export default function CertificateUploadRow({
   certificate,
@@ -83,13 +83,11 @@ export default function CertificateUploadRow({
           <label className={labelClass}>
             {t('ownerRegistration.certificates.expiryDate')}
           </label>
-          <input
+          <DateInput
             required
-            type="date"
-            min={today}
+            min={todayIso()}
             value={certificate.expiryDate}
-            onChange={(e) => onChange('expiryDate', e.target.value)}
-            style={{ colorScheme: 'dark' }}
+            onChange={(iso) => onChange('expiryDate', iso)}
             className={inputClass}
           />
         </div>

@@ -31,6 +31,7 @@ export const routeName = Object.freeze({
   ownerBoatEdit: '/owner/boats/:boatId/edit',
   ownerTours: '/owner/tours',
   ownerCertificates: '/owner/certificates',
+  ownerDocuments: '/owner/documents',
   ownerBookings: '/owner/bookings',
   ownerProfile: '/owner/profile',
 

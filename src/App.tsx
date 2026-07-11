@@ -59,6 +59,7 @@ const OwnerRevenuePage = lazy(() => import('@/pages/owner/revenue/index'));
 const OwnerCertificatesPage = lazy(
   () => import('@/pages/owner/certificates/index'),
 );
+const OwnerDocumentsPage = lazy(() => import('@/pages/owner/documents/index'));
 const InboxPage = lazy(() => import('@/pages/inbox/index'));
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -353,6 +354,14 @@ export default function App() {
                         element={
                           <Suspense fallback={<PageLoader />}>
                             <OwnerCertificatesPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.ownerDocuments}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <OwnerDocumentsPage />
                           </Suspense>
                         }
                       />

@@ -697,7 +697,8 @@
     "nav": {
       "dashboard": "Dashboard",
       "boats": "Boat Management",
-      "certificates": "Legal Documents",
+      "certificates": "Boat Documents",
+      "ownerDocuments": "Owner Documents",
       "dockMap": "Dock Map",
       "services": "Services & Maintenance",
       "tourServices": "Tour Services",
@@ -880,10 +881,12 @@
       "newFile": "New document file",
       "cancel": "Cancel",
       "types": {
-        "registration": "Maritime registration",
-        "insurance": "Insurance",
-        "business_license": "Business license",
-        "safety_cert": "Safety certificate",
+        "registration": "Maritime registration certificate",
+        "insurance": "Civil liability insurance",
+        "business_license": "Business license (legacy — use owner transport license)",
+        "safety_cert": "Technical safety & environmental protection certificate",
+        "crew_certificate": "Crew / skipper certificate",
+        "fire_safety": "Fire safety certificate",
         "other": "Other"
       },
       "status": {
@@ -907,6 +910,12 @@
       "needsAttention": "Needs attention",
       "rejected": "Rejected"
     },
+    "chart": {
+      "title": "Document status breakdown",
+      "subtitle": "Click the chart or legend to filter the list",
+      "legend": "By status",
+      "empty": "No data yet"
+    },
     "filter": {
       "all": "All",
       "pending": "Pending",
@@ -920,6 +929,47 @@
     }
   },
   "ownerRegistration": {
+    "title": "New Boat Owner Registration",
+    "subtitle": "Complete the form below to join the Marina Command port management ecosystem. Your information will be kept confidential and processed by the port operations team.",
+    "cancel": "CANCEL",
+    "submit": "SUBMIT REGISTRATION",
+    "submitSuccess": "Registration submitted successfully!",
+    "submitError": "Something went wrong.",
+    "entityTypes": {
+      "individual": "Individual",
+      "business": "Business",
+      "cooperative": "Cooperative"
+    },
+    "ownerInfo": {
+      "title": "Owner information",
+      "fullName": "Full name",
+      "email": "Contact email",
+      "phone": "Phone number",
+      "licenseNumber": "National ID / Passport number",
+      "entityType": "Entity type",
+      "address": "Contact address",
+      "addressPlaceholder": "House number, street, district, city..."
+    },
+    "ownerDocuments": {
+      "title": "Owner documents",
+      "hint": "National ID and inland waterway transport license are required. Business registration is required for businesses and cooperatives.",
+      "add": "Add document",
+      "rowLabel": "Document #{{index}}",
+      "remove": "Remove document",
+      "type": "Document type",
+      "expiryDate": "Expiry date (optional)",
+      "file": "Attachment",
+      "uploadHint": "Select document file",
+      "required": "Required",
+      "missingRequired": "Please upload all required owner documents.",
+      "types": {
+        "national_id": "National ID / Passport",
+        "transport_license": "Transport operation license",
+        "business_registration": "Business registration certificate",
+        "residence_proof": "Proof of residence",
+        "authorization_letter": "Authorization letter"
+      }
+    },
     "certificates": {
       "rowLabel": "Document #{{index}}",
       "remove": "Remove document",
@@ -928,12 +978,42 @@
       "file": "Attachment",
       "uploadHint": "Select document file",
       "types": {
-        "registration": "Maritime registration",
-        "insurance": "Insurance",
-        "business_license": "Business license",
-        "safety_cert": "Safety certificate",
+        "registration": "Inland waterway vessel registration certificate",
+        "insurance": "Civil liability insurance",
+        "safety_cert": "Technical safety & environmental protection certificate",
+        "crew_certificate": "Crew / skipper certificate",
+        "fire_safety": "Fire safety certificate",
         "other": "Other"
       }
+    }
+  },
+  "ownerDocuments": {
+    "title": "Owner documents",
+    "subtitle": "View and update your owner legal documents. Re-upload if your application was rejected.",
+    "refresh": "Refresh",
+    "listTitle": "Uploaded documents",
+    "empty": "No owner documents yet. Upload your documents below.",
+    "loadError": "Failed to load owner documents",
+    "expiresOn": "Expires: {{date}}",
+    "adminNote": "Admin note: {{note}}",
+    "viewDocument": "View document",
+    "uploadTitle": "Upload or replace document",
+    "uploadHint": "Selecting an existing type will replace the current file.",
+    "type": "Document type",
+    "expiryDate": "Expiry date (optional)",
+    "file": "Attachment",
+    "upload": "Upload",
+    "replace": "Replace",
+    "replaceLabel": "replace",
+    "uploadSuccess": "Document uploaded successfully",
+    "replaceSuccess": "Document replaced successfully",
+    "uploadError": "Failed to upload document",
+    "types": {
+      "national_id": "National ID / Passport",
+      "transport_license": "Transport operation license",
+      "business_registration": "Business registration certificate",
+      "residence_proof": "Proof of residence",
+      "authorization_letter": "Authorization letter"
     }
   },
   "boatTypes": {

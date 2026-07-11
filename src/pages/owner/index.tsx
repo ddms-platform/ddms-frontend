@@ -22,12 +22,14 @@ import {
 } from '@/services/boatService';
 import {
   certificateService,
+  type CertificateTypeItem,
   type OwnerCertificateListItem,
 } from '@/services/certificateService';
 import { useAuth } from '@/hooks/use-auth';
 import ProfitChart from '@/components/owner/ProfitChart';
 import BoatForm from '@/pages/owner/boats/boat-form';
 import { Skeleton } from '@/components/ui/skeleton';
+import { formatDisplayDate } from '@/lib/date-format';
 
 const CERT_STATUS_VARIANT: Record<
   string,
@@ -42,13 +44,15 @@ const CERT_STATUS_VARIANT: Record<
 const EXPIRY_WARNING_DAYS = 7;
 
 export default function OwnerDashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language?.startsWith('en');
   const { user } = useAuth();
   const [boats, setBoats] = useState<BoatListItem[]>([]);
   const [stats, setStats] = useState<BoatStatsResponse | null>(null);
   const [certificates, setCertificates] = useState<OwnerCertificateListItem[]>(
     [],
   );
+  const [certTypes, setCertTypes] = useState<CertificateTypeItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBoatIdForModal, setSelectedBoatIdForModal] = useState<
     string | null
@@ -57,16 +61,26 @@ export default function OwnerDashboard() {
     'basic' | 'certificates'
   >('basic');
 
+  const certTypeLabel = (code: string) => {
+    const found = certTypes.find((item) => item.code === code);
+    if (found) return isEn ? found.nameEn : found.nameVi;
+    return code;
+  };
+
   const refreshDashboardData = async () => {
     try {
-      const [statsRes, boatsRes, certsRes] = await Promise.all([
+      const [statsRes, boatsRes, certsRes, typesRes] = await Promise.all([
         boatService.getOwnerStats(),
         boatService.getOwnerBoats({ pageSize: 8 }),
         certificateService.getAllForOwner().catch(() => []),
+        certificateService
+          .getTypes('boat')
+          .catch(() => [] as CertificateTypeItem[]),
       ]);
       setStats(statsRes);
       setBoats(boatsRes.items || []);
       setCertificates(certsRes || []);
+      setCertTypes(typesRes || []);
     } catch (error) {
       console.error('Failed to fetch dashboard data', error);
     }
@@ -364,10 +378,7 @@ export default function OwnerDashboard() {
                           />
                           <div className="min-w-0">
                             <p className="text-sm font-medium text-foreground">
-                              {t(
-                                `ownerBoats.certificates.types.${cert.certificateType}`,
-                                cert.certificateType,
-                              )}
+                              {certTypeLabel(cert.certificateType)}
                               <span className="text-muted-foreground font-normal">
                                 {' '}
                                 · {cert.boatName}
@@ -375,7 +386,7 @@ export default function OwnerDashboard() {
                             </p>
                             <p className="text-xs text-muted-foreground mt-0.5">
                               {t('ownerBoats.certificates.expiresOn', {
-                                date: cert.expiryDate,
+                                date: formatDisplayDate(cert.expiryDate),
                               })}
                             </p>
                             {cert.rejectionReason && (

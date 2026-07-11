@@ -1,6 +1,8 @@
 import { Ship, Anchor, FileImage, Plus, Trash2, Info } from 'lucide-react';
 import FileUploadBox from './FileUploadBox';
 import CertificateUploadRow from './CertificateUploadRow';
+import DateInput from '@/components/ui/date-input';
+import { todayIso } from '@/lib/date-format';
 import type { IBoatType } from '@/services/system-service';
 import type {
   CertificateFormItem,
@@ -42,7 +44,6 @@ interface VesselSectionProps {
 const inputClass =
   'w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all placeholder:text-gray-500';
 const labelClass = 'text-[13px] font-bold text-gray-300';
-const today = new Date().toISOString().split('T')[0];
 
 const VesselSection = ({
   vessel,
@@ -213,17 +214,13 @@ const VesselSection = ({
         </div>
         <div className="space-y-2">
           <label className={labelClass}>Ngày dự kiến cập bến</label>
-          <div className="relative">
-            <input
-              required
-              type="date"
-              min={today}
-              value={vessel.ExpectedDockingDate}
-              onChange={(e) => onChange('ExpectedDockingDate', e.target.value)}
-              style={{ colorScheme: 'dark' }}
-              className="w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-            />
-          </div>
+          <DateInput
+            required
+            min={todayIso()}
+            value={vessel.ExpectedDockingDate}
+            onChange={(iso) => onChange('ExpectedDockingDate', iso)}
+            className={inputClass}
+          />
         </div>
       </div>
     </div>

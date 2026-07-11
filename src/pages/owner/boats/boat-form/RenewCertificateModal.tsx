@@ -2,20 +2,24 @@ import { useState } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Certificate } from '@/services/certificateService';
+import DateInput from '@/components/ui/date-input';
+import { todayIso } from '@/lib/date-format';
 
 interface RenewCertificateModalProps {
   open: boolean;
   certificate: Certificate | null;
-  isSubmitting: boolean;
+  typeLabel?: string;
+  submitting?: boolean;
+  isSubmitting?: boolean;
   onClose: () => void;
   onConfirm: (file: File, expiryDate: string) => void;
 }
 
-const today = new Date().toISOString().split('T')[0];
-
 export default function RenewCertificateModal({
   open,
   certificate,
+  typeLabel,
+  submitting,
   isSubmitting,
   onClose,
   onConfirm,
@@ -23,6 +27,7 @@ export default function RenewCertificateModal({
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [expiryDate, setExpiryDate] = useState('');
+  const busy = submitting ?? isSubmitting ?? false;
 
   if (!open || !certificate) return null;
 
@@ -56,10 +61,7 @@ export default function RenewCertificateModal({
         <div className="p-5 space-y-4">
           <p className="text-sm text-muted-foreground">
             {t('ownerBoats.certificates.renewDescription', {
-              type: t(
-                `ownerBoats.certificates.types.${certificate.certificateType}`,
-                certificate.certificateType,
-              ),
+              type: typeLabel || certificate.certificateType,
             })}
           </p>
 
@@ -67,11 +69,10 @@ export default function RenewCertificateModal({
             <label className="text-sm font-medium text-foreground">
               {t('ownerBoats.certificates.newExpiryDate')}
             </label>
-            <input
-              type="date"
-              min={today}
+            <DateInput
+              min={todayIso()}
               value={expiryDate}
-              onChange={(e) => setExpiryDate(e.target.value)}
+              onChange={setExpiryDate}
               className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ddms-secondary"
             />
           </div>
@@ -99,10 +100,10 @@ export default function RenewCertificateModal({
             <button
               type="button"
               onClick={handleConfirm}
-              disabled={!file || !expiryDate || isSubmitting}
+              disabled={!file || !expiryDate || busy}
               className="px-4 py-2 rounded-md bg-ddms-secondary text-ddms-primary text-sm font-bold disabled:opacity-50 flex items-center gap-2"
             >
-              {isSubmitting && <Loader2 size={14} className="animate-spin" />}
+              {busy && <Loader2 size={14} className="animate-spin" />}
               {t('ownerBoats.certificates.renewConfirm')}
             </button>
           </div>

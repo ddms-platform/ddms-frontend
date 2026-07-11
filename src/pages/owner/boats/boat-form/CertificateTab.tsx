@@ -17,13 +17,30 @@ import {
   type CertificateTypeItem,
 } from '@/services/certificateService';
 import RenewCertificateModal from './RenewCertificateModal';
+import DateInput from '@/components/ui/date-input';
+import { formatDisplayDate, todayIso } from '@/lib/date-format';
 
 interface CertificateTabProps {
   boatId?: string;
   onChanged?: () => void;
+  /** When set (and not `all`), only matching certs are shown and upload is hidden. */
+  statusFilter?: 'all' | 'pending' | 'approved' | 'rejected' | 'expired';
 }
 
-const today = new Date().toISOString().split('T')[0];
+const EXPIRY_WARNING_DAYS = 7;
+
+const isExpiringSoon = (cert: Certificate) => {
+  if (cert.status !== 'approved') return false;
+  const iso = cert.expiryDate?.slice(0, 10);
+  if (!iso) return false;
+  const today = todayIso();
+  const diffDays = Math.ceil(
+    (new Date(`${iso}T00:00:00`).getTime() -
+      new Date(`${today}T00:00:00`).getTime()) /
+      (1000 * 60 * 60 * 24),
+  );
+  return diffDays >= 0 && diffDays <= EXPIRY_WARNING_DAYS;
+};
 
 const STATUS_VARIANT: Record<
   string,
@@ -38,6 +55,7 @@ const STATUS_VARIANT: Record<
 export default function CertificateTab({
   boatId,
   onChanged,
+  statusFilter = 'all',
 }: CertificateTabProps) {
   const { t, i18n } = useTranslation();
   const isEn = i18n.language?.startsWith('en');
@@ -56,9 +74,9 @@ export default function CertificateTab({
     (code: string) => {
       const found = certTypes.find((t) => t.code === code);
       if (found) return isEn ? found.nameEn : found.nameVi;
-      return t(`ownerBoats.certificates.types.${code}`, code);
+      return code;
     },
-    [certTypes, isEn, t],
+    [certTypes, isEn],
   );
 
   const loadCertificates = useCallback(async () => {
@@ -67,7 +85,9 @@ export default function CertificateTab({
     try {
       const [data, types] = await Promise.all([
         certificateService.getByBoatId(boatId),
-        certificateService.getTypes().catch(() => [] as CertificateTypeItem[]),
+        certificateService
+          .getTypes('boat')
+          .catch(() => [] as CertificateTypeItem[]),
       ]);
       setCertificates(data);
       setCertTypes(types);
@@ -89,8 +109,22 @@ export default function CertificateTab({
 
   const availableTypes = useMemo(() => {
     const used = new Set(certificates.map((c) => c.certificateType));
-    return certTypes.filter((type) => !used.has(type.code));
+    return certTypes.filter(
+      (type) => !used.has(type.code) && type.isActive !== false,
+    );
   }, [certTypes, certificates]);
+
+  const visibleCertificates = useMemo(() => {
+    if (statusFilter === 'all') return certificates;
+    if (statusFilter === 'expired') {
+      return certificates.filter(
+        (c) => c.status === 'expired' || isExpiringSoon(c),
+      );
+    }
+    return certificates.filter((c) => c.status === statusFilter);
+  }, [certificates, statusFilter]);
+
+  const allowUpload = statusFilter === 'all';
 
   useEffect(() => {
     if (
@@ -168,13 +202,13 @@ export default function CertificateTab({
           {t('ownerBoats.certificates.listTitle')}
         </h3>
 
-        {certificates.length === 0 ? (
+        {visibleCertificates.length === 0 ? (
           <p className="text-sm text-muted-foreground py-4 text-center">
             {t('ownerBoats.certificates.empty')}
           </p>
         ) : (
           <div className="space-y-3">
-            {certificates.map((cert) => {
+            {visibleCertificates.map((cert) => {
               const canRenew =
                 cert.status === 'expired' || cert.status === 'rejected';
               return (
@@ -193,7 +227,7 @@ export default function CertificateTab({
                       </p>
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {t('ownerBoats.certificates.expiresOn', {
-                          date: cert.expiryDate,
+                          date: formatDisplayDate(cert.expiryDate),
                         })}
                       </p>
                       {cert.rejectionReason && (
@@ -243,7 +277,7 @@ export default function CertificateTab({
         )}
       </div>
 
-      {availableTypes.length > 0 && (
+      {allowUpload && availableTypes.length > 0 && (
         <div className="rounded-xl border border-border bg-card p-5">
           <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
             <Plus size={16} />
@@ -272,11 +306,10 @@ export default function CertificateTab({
               <label className="text-xs font-medium text-muted-foreground">
                 {t('ownerBoats.certificates.expiryDate')}
               </label>
-              <input
-                type="date"
-                min={today}
+              <DateInput
+                min={todayIso()}
                 value={newExpiry}
-                onChange={(e) => setNewExpiry(e.target.value)}
+                onChange={setNewExpiry}
                 className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
               />
             </div>
@@ -315,6 +348,9 @@ export default function CertificateTab({
       <RenewCertificateModal
         open={!!renewTarget}
         certificate={renewTarget}
+        typeLabel={
+          renewTarget ? typeLabel(renewTarget.certificateType) : undefined
+        }
         submitting={renewing}
         onClose={() => !renewing && setRenewTarget(null)}
         onConfirm={handleRenew}

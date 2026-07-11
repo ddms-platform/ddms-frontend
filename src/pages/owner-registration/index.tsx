@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AuthServices } from '@/services/auth-service';
 import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
@@ -15,6 +16,7 @@ import VesselSection, {
 import type {
   CertificateFormItem,
   CertificateTypeItem,
+  OwnerEntityType,
 } from '@/services/certificateService';
 import { certificateService } from '@/services/certificateService';
 
@@ -44,6 +46,7 @@ const buildEmptyVessel = (
 export default function OwnerRegistrationPage() {
   const navigate = useNavigate();
   const { user, reloadUser } = useAuth();
+  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
   const [boatTypes, setBoatTypes] = useState<IBoatType[]>([]);
@@ -52,11 +55,24 @@ export default function OwnerRegistrationPage() {
   >([]);
   const defaultCertType = certificateTypes[0]?.code || 'registration';
 
+  const [ownerInfo, setOwnerInfo] = useState({
+    FullName: user?.name || '',
+    Email: user?.email || '',
+    Phone: user?.phone || '',
+    LicenseNumber: '',
+    Address: user?.address || '',
+    EntityType: 'individual' as OwnerEntityType,
+  });
+
+  const [vessels, setVessels] = useState<VesselFormState[]>([
+    buildEmptyVessel('yacht'),
+  ]);
+
   React.useEffect(() => {
     getBoatTypes()
       .then((res) => {
         let typesData = res.data as any;
-        if (typesData && typesData.data) typesData = typesData.data; // Unwrap if nested
+        if (typesData && typesData.data) typesData = typesData.data;
 
         if (Array.isArray(typesData)) {
           setBoatTypes(typesData);
@@ -64,7 +80,9 @@ export default function OwnerRegistrationPage() {
             const firstTypeCode = typesData[0].code;
             setVessels((prev) =>
               prev.map((v) => {
-                const typeExists = typesData.some((t) => t.code === v.Type);
+                const typeExists = typesData.some(
+                  (t: IBoatType) => t.code === v.Type,
+                );
                 if (!typeExists) {
                   return { ...v, Type: firstTypeCode };
                 }
@@ -77,16 +95,18 @@ export default function OwnerRegistrationPage() {
       .catch((err) => console.log(err));
 
     certificateService
-      .getTypes()
+      .getTypes('boat')
       .then((types) => {
         if (Array.isArray(types) && types.length > 0) {
-          setCertificateTypes(types);
-          const firstCode = types[0].code;
+          const boatTypesOnly = types.filter((t) => t.isActive !== false);
+          const active = boatTypesOnly.length > 0 ? boatTypesOnly : types;
+          setCertificateTypes(active);
+          const firstCode = active[0].code;
           setVessels((prev) =>
             prev.map((v) => ({
               ...v,
               Certificates: v.Certificates.map((c) => {
-                const exists = types.some((t) => t.code === c.certificateType);
+                const exists = active.some((t) => t.code === c.certificateType);
                 return exists ? c : { ...c, certificateType: firstCode };
               }),
             })),
@@ -96,20 +116,11 @@ export default function OwnerRegistrationPage() {
       .catch((err) => console.log(err));
   }, []);
 
-  const [ownerInfo, setOwnerInfo] = useState({
-    FullName: user?.name || '',
-    Email: user?.email || '',
-    Phone: user?.phone || '',
-    LicenseNumber: '',
-    Address: user?.address || '',
-  });
-
-  const [vessels, setVessels] = useState<VesselFormState[]>([
-    buildEmptyVessel('yacht'),
-  ]);
-
-  const handleOwnerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOwnerInfo({ ...ownerInfo, [e.target.name]: e.target.value });
+  const handleOwnerChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setOwnerInfo({ ...ownerInfo, [name]: value });
   };
 
   const handleVesselChange = (index: number, field: string, value: any) => {
@@ -193,6 +204,7 @@ export default function OwnerRegistrationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setLoading(true);
     try {
       const formData = new FormData();
@@ -201,6 +213,7 @@ export default function OwnerRegistrationPage() {
       formData.append('Phone', ownerInfo.Phone);
       formData.append('LicenseNumber', ownerInfo.LicenseNumber);
       formData.append('Address', ownerInfo.Address);
+      formData.append('EntityType', ownerInfo.EntityType);
 
       vessels.forEach((vessel, index) => {
         formData.append(`Vessels[${index}].Name`, vessel.Name);
@@ -240,12 +253,14 @@ export default function OwnerRegistrationPage() {
 
       const res = await AuthServices.registerOwner(formData);
       if (res.status === 200) {
-        toast.success(res.data.message || 'Đăng ký thành công!');
+        toast.success(res.data.message || t('ownerRegistration.submitSuccess'));
         await reloadUser();
         navigate(routeName.home);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Đã có lỗi xảy ra.');
+      toast.error(
+        error.response?.data?.message || t('ownerRegistration.submitError'),
+      );
     } finally {
       setLoading(false);
     }
@@ -256,12 +271,10 @@ export default function OwnerRegistrationPage() {
       <div className="w-full max-w-212.5">
         <div className="mb-8">
           <h1 className="text-[28px] font-bold text-white mb-2 tracking-tight">
-            Đăng ký Chủ thuyền Mới
+            {t('ownerRegistration.title')}
           </h1>
           <p className="text-[15px] text-gray-300">
-            Hoàn tất biểu mẫu dưới đây để gia nhập hệ sinh thái quản lý cảng
-            biển cao cấp Marina Command. Thông tin của bạn sẽ được bảo mật và xử
-            lý bởi bộ phận vận hành cảng.
+            {t('ownerRegistration.subtitle')}
           </p>
         </div>
 
@@ -306,7 +319,7 @@ export default function OwnerRegistrationPage() {
               onClick={() => navigate(-1)}
               className="px-8 py-3 rounded border border-gray-600 text-[14px] font-bold text-gray-300 hover:bg-gray-800 transition-colors"
             >
-              HỦY BỎ
+              {t('ownerRegistration.cancel')}
             </button>
             <button
               type="submit"
@@ -317,7 +330,7 @@ export default function OwnerRegistrationPage() {
                 <LoadingSpinner />
               ) : (
                 <>
-                  GỬI ĐĂNG KÝ <ArrowRight size={16} />
+                  {t('ownerRegistration.submit')} <ArrowRight size={16} />
                 </>
               )}
             </button>
