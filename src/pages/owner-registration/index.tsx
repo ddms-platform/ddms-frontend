@@ -12,8 +12,24 @@ import OwnerInfoSection from './components/OwnerInfoSection';
 import VesselSection, {
   type VesselFormState,
 } from './components/VesselSection';
+import type {
+  CertificateFormItem,
+  CertificateTypeItem,
+} from '@/services/certificateService';
+import { certificateService } from '@/services/certificateService';
 
-const buildEmptyVessel = (defaultType: string): VesselFormState => ({
+const buildEmptyCertificate = (
+  defaultType = 'registration',
+): CertificateFormItem => ({
+  certificateType: defaultType,
+  file: null,
+  expiryDate: '',
+});
+
+const buildEmptyVessel = (
+  defaultType: string,
+  defaultCertType = 'registration',
+): VesselFormState => ({
   Name: '',
   Type: defaultType,
   Length: '',
@@ -22,7 +38,7 @@ const buildEmptyVessel = (defaultType: string): VesselFormState => ({
   MooringType: 'Floating',
   ExpectedDockingDate: '',
   ImageFiles: [],
-  DocumentFiles: [],
+  Certificates: [buildEmptyCertificate(defaultCertType)],
 });
 
 export default function OwnerRegistrationPage() {
@@ -31,6 +47,10 @@ export default function OwnerRegistrationPage() {
 
   const [loading, setLoading] = useState(false);
   const [boatTypes, setBoatTypes] = useState<IBoatType[]>([]);
+  const [certificateTypes, setCertificateTypes] = useState<
+    CertificateTypeItem[]
+  >([]);
+  const defaultCertType = certificateTypes[0]?.code || 'registration';
 
   React.useEffect(() => {
     getBoatTypes()
@@ -52,6 +72,25 @@ export default function OwnerRegistrationPage() {
               }),
             );
           }
+        }
+      })
+      .catch((err) => console.log(err));
+
+    certificateService
+      .getTypes()
+      .then((types) => {
+        if (Array.isArray(types) && types.length > 0) {
+          setCertificateTypes(types);
+          const firstCode = types[0].code;
+          setVessels((prev) =>
+            prev.map((v) => ({
+              ...v,
+              Certificates: v.Certificates.map((c) => {
+                const exists = types.some((t) => t.code === c.certificateType);
+                return exists ? c : { ...c, certificateType: firstCode };
+              }),
+            })),
+          );
         }
       })
       .catch((err) => console.log(err));
@@ -81,7 +120,7 @@ export default function OwnerRegistrationPage() {
 
   const handleFileChange = (
     index: number,
-    field: 'ImageFiles' | 'DocumentFiles',
+    field: 'ImageFiles',
     files: FileList | null,
   ) => {
     if (!files) return;
@@ -99,7 +138,7 @@ export default function OwnerRegistrationPage() {
 
   const handleRemoveFile = (
     vesselIndex: number,
-    field: 'ImageFiles' | 'DocumentFiles',
+    field: 'ImageFiles',
     fileIndex: number,
   ) => {
     const updated = [...vessels];
@@ -109,9 +148,43 @@ export default function OwnerRegistrationPage() {
     setVessels(updated);
   };
 
+  const handleCertificateChange = (
+    vesselIndex: number,
+    certIndex: number,
+    field: keyof CertificateFormItem,
+    value: string | File | null,
+  ) => {
+    const updated = [...vessels];
+    const certs = [...updated[vesselIndex].Certificates];
+    certs[certIndex] = { ...certs[certIndex], [field]: value };
+    updated[vesselIndex] = { ...updated[vesselIndex], Certificates: certs };
+    setVessels(updated);
+  };
+
+  const handleAddCertificate = (vesselIndex: number) => {
+    const updated = [...vessels];
+    updated[vesselIndex] = {
+      ...updated[vesselIndex],
+      Certificates: [
+        ...updated[vesselIndex].Certificates,
+        buildEmptyCertificate(defaultCertType),
+      ],
+    };
+    setVessels(updated);
+  };
+
+  const handleRemoveCertificate = (vesselIndex: number, certIndex: number) => {
+    const updated = [...vessels];
+    const certs = updated[vesselIndex].Certificates.filter(
+      (_, i) => i !== certIndex,
+    );
+    updated[vesselIndex] = { ...updated[vesselIndex], Certificates: certs };
+    setVessels(updated);
+  };
+
   const handleAddVessel = () => {
     const defaultType = boatTypes.length > 0 ? boatTypes[0].code : 'yacht';
-    setVessels([...vessels, buildEmptyVessel(defaultType)]);
+    setVessels([...vessels, buildEmptyVessel(defaultType, defaultCertType)]);
   };
 
   const handleRemoveVessel = (index: number) => {
@@ -147,9 +220,22 @@ export default function OwnerRegistrationPage() {
         vessel.ImageFiles.forEach((file) =>
           formData.append(`Vessels[${index}].ImageFiles`, file),
         );
-        vessel.DocumentFiles.forEach((file) =>
-          formData.append(`Vessels[${index}].DocumentFiles`, file),
-        );
+
+        vessel.Certificates.forEach((cert, certIndex) => {
+          if (!cert.file) return;
+          formData.append(
+            `Vessels[${index}].Certificates[${certIndex}].CertificateType`,
+            cert.certificateType,
+          );
+          formData.append(
+            `Vessels[${index}].Certificates[${certIndex}].File`,
+            cert.file,
+          );
+          formData.append(
+            `Vessels[${index}].Certificates[${certIndex}].ExpiryDate`,
+            cert.expiryDate,
+          );
+        });
       });
 
       const res = await AuthServices.registerOwner(formData);
@@ -192,6 +278,7 @@ export default function OwnerRegistrationPage() {
               index={index}
               totalCount={vessels.length}
               boatTypes={boatTypes}
+              certificateTypes={certificateTypes}
               onChange={(field, value) =>
                 handleVesselChange(index, field, value)
               }
@@ -200,6 +287,13 @@ export default function OwnerRegistrationPage() {
               }
               onRemoveFile={(field, fileIndex) =>
                 handleRemoveFile(index, field, fileIndex)
+              }
+              onCertificateChange={(certIndex, field, value) =>
+                handleCertificateChange(index, certIndex, field, value)
+              }
+              onAddCertificate={() => handleAddCertificate(index)}
+              onRemoveCertificate={(certIndex) =>
+                handleRemoveCertificate(index, certIndex)
               }
               onAddVessel={handleAddVessel}
               onRemoveVessel={() => handleRemoveVessel(index)}

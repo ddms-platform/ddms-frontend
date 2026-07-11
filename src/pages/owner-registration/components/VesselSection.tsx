@@ -1,14 +1,11 @@
-import {
-  Ship,
-  Anchor,
-  FileImage,
-  FileText,
-  Plus,
-  Trash2,
-  Info,
-} from 'lucide-react';
+import { Ship, Anchor, FileImage, Plus, Trash2, Info } from 'lucide-react';
 import FileUploadBox from './FileUploadBox';
+import CertificateUploadRow from './CertificateUploadRow';
 import type { IBoatType } from '@/services/system-service';
+import type {
+  CertificateFormItem,
+  CertificateTypeItem,
+} from '@/services/certificateService';
 
 export interface VesselFormState {
   Name: string;
@@ -19,7 +16,7 @@ export interface VesselFormState {
   MooringType: string;
   ExpectedDockingDate: string;
   ImageFiles: File[];
-  DocumentFiles: File[];
+  Certificates: CertificateFormItem[];
 }
 
 interface VesselSectionProps {
@@ -27,15 +24,17 @@ interface VesselSectionProps {
   index: number;
   totalCount: number;
   boatTypes: IBoatType[];
+  certificateTypes: CertificateTypeItem[];
   onChange: (field: string, value: any) => void;
-  onAddFiles: (
-    field: 'ImageFiles' | 'DocumentFiles',
-    files: FileList | null,
+  onAddFiles: (field: 'ImageFiles', files: FileList | null) => void;
+  onRemoveFile: (field: 'ImageFiles', fileIndex: number) => void;
+  onCertificateChange: (
+    certIndex: number,
+    field: keyof CertificateFormItem,
+    value: string | File | null,
   ) => void;
-  onRemoveFile: (
-    field: 'ImageFiles' | 'DocumentFiles',
-    fileIndex: number,
-  ) => void;
+  onAddCertificate: () => void;
+  onRemoveCertificate: (certIndex: number) => void;
   onAddVessel: () => void;
   onRemoveVessel: () => void;
 }
@@ -50,9 +49,13 @@ const VesselSection = ({
   index,
   totalCount,
   boatTypes,
+  certificateTypes,
   onChange,
   onAddFiles,
   onRemoveFile,
+  onCertificateChange,
+  onAddCertificate,
+  onRemoveCertificate,
   onAddVessel,
   onRemoveVessel,
 }: VesselSectionProps) => (
@@ -227,33 +230,49 @@ const VesselSection = ({
 
     <div className="pt-6 border-t border-gray-700/50">
       <h3 className="text-[14px] font-bold text-[#00F0FF] mb-4 flex items-center gap-2 uppercase tracking-wide">
-        <FileImage size={16} /> TÀI LIỆU & HÌNH ẢNH
+        <FileImage size={16} /> HÌNH ẢNH DU THUYỀN
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <FileUploadBox
-          files={vessel.ImageFiles}
-          accept="image/*"
-          icon={FileImage}
-          variant="image"
-          emptyTitle="Tải lên ảnh du thuyền"
-          emptyHint="Cho phép chọn nhiều ảnh (PNG, JPG)"
-          countLabel={(n) => `Đã chọn ${n} hình ảnh`}
-          addMoreLabel="Thêm ảnh"
-          onAdd={(files) => onAddFiles('ImageFiles', files)}
-          onRemove={(i) => onRemoveFile('ImageFiles', i)}
-        />
-        <FileUploadBox
-          files={vessel.DocumentFiles}
-          accept=".pdf,image/*"
-          icon={FileText}
-          variant="document"
-          emptyTitle="Giấy tờ đăng ký hàng hải"
-          emptyHint="PDF, JPG (Cho phép nhiều file)"
-          countLabel={(n) => `Đã chọn ${n} tài liệu`}
-          addMoreLabel="Thêm file"
-          onAdd={(files) => onAddFiles('DocumentFiles', files)}
-          onRemove={(i) => onRemoveFile('DocumentFiles', i)}
-        />
+      <FileUploadBox
+        files={vessel.ImageFiles}
+        accept="image/*"
+        icon={FileImage}
+        variant="image"
+        emptyTitle="Tải lên ảnh du thuyền"
+        emptyHint="Cho phép chọn nhiều ảnh (PNG, JPG)"
+        countLabel={(n) => `Đã chọn ${n} hình ảnh`}
+        addMoreLabel="Thêm ảnh"
+        onAdd={(files) => onAddFiles('ImageFiles', files)}
+        onRemove={(i) => onRemoveFile('ImageFiles', i)}
+      />
+    </div>
+
+    <div className="pt-6 border-t border-gray-700/50 mt-8">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-[14px] font-bold text-[#00F0FF] flex items-center gap-2 uppercase tracking-wide">
+          GIẤY TỜ PHÁP LÝ
+        </h3>
+        <button
+          type="button"
+          onClick={onAddCertificate}
+          className="text-[12px] text-[#00F0FF] hover:underline flex items-center gap-1"
+        >
+          <Plus size={14} /> Thêm giấy tờ
+        </button>
+      </div>
+      <div className="space-y-4">
+        {vessel.Certificates.map((cert, certIndex) => (
+          <CertificateUploadRow
+            key={certIndex}
+            certificate={cert}
+            index={certIndex}
+            canRemove={vessel.Certificates.length > 1}
+            types={certificateTypes}
+            onChange={(field, value) =>
+              onCertificateChange(certIndex, field, value)
+            }
+            onRemove={() => onRemoveCertificate(certIndex)}
+          />
+        ))}
       </div>
     </div>
   </div>

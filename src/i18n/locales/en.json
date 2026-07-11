@@ -697,6 +697,7 @@
     "nav": {
       "dashboard": "Dashboard",
       "boats": "Boat Management",
+      "certificates": "Legal Documents",
       "dockMap": "Dock Map",
       "services": "Services & Maintenance",
       "tourServices": "Tour Services",
@@ -807,7 +808,8 @@
         "cabins": "Cabins",
         "services": "Services",
         "images": "Images",
-        "maintenance": "Maintenance"
+        "maintenance": "Maintenance",
+        "certificates": "Legal Documents"
       },
       "basic": {
         "title": "Basic Information",
@@ -846,6 +848,91 @@
         "add": "Add schedule",
         "empty": "No maintenance scheduled.",
         "default": "Maintenance"
+      }
+    },
+    "compliance": {
+      "warning": "Expiring soon",
+      "hidden": "Hidden",
+      "locked": "Locked"
+    },
+    "certificates": {
+      "listTitle": "Uploaded documents",
+      "empty": "No documents yet. Upload legal certificates for this boat.",
+      "saveBoatFirst": "Please save the boat first before managing legal documents.",
+      "addTitle": "Add new document",
+      "type": "Document type",
+      "expiryDate": "Expiry date",
+      "file": "Attachment",
+      "upload": "Upload",
+      "uploadSuccess": "Document uploaded successfully",
+      "uploadError": "Failed to upload document",
+      "loadError": "Failed to load documents",
+      "expiresOn": "Expires: {{date}}",
+      "rejectionReason": "Rejection reason: {{reason}}",
+      "viewDocument": "View document",
+      "renew": "Renew",
+      "renewTitle": "Renew document",
+      "renewDescription": "Upload a new document for {{type}}",
+      "renewConfirm": "Confirm renewal",
+      "renewSuccess": "Document renewed successfully",
+      "renewError": "Failed to renew document",
+      "newExpiryDate": "New expiry date",
+      "newFile": "New document file",
+      "cancel": "Cancel",
+      "types": {
+        "registration": "Maritime registration",
+        "insurance": "Insurance",
+        "business_license": "Business license",
+        "safety_cert": "Safety certificate",
+        "other": "Other"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "expired": "Expired"
+      }
+    }
+  },
+  "ownerCertificates": {
+    "title": "Legal Document Management",
+    "subtitle": "Track and manage legal documents across your fleet",
+    "refresh": "Refresh",
+    "search": "Search by boat name...",
+    "documentCount": "{{count}} documents",
+    "attentionCount": "{{count}} need action",
+    "stats": {
+      "total": "Total documents",
+      "pending": "Pending review",
+      "needsAttention": "Needs attention",
+      "rejected": "Rejected"
+    },
+    "filter": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "expired": "Expired/Expiring"
+    },
+    "empty": {
+      "title": "No boats found",
+      "description": "Try changing your search or status filter"
+    }
+  },
+  "ownerRegistration": {
+    "certificates": {
+      "rowLabel": "Document #{{index}}",
+      "remove": "Remove document",
+      "type": "Document type",
+      "expiryDate": "Expiry date",
+      "file": "Attachment",
+      "uploadHint": "Select document file",
+      "types": {
+        "registration": "Maritime registration",
+        "insurance": "Insurance",
+        "business_license": "Business license",
+        "safety_cert": "Safety certificate",
+        "other": "Other"
       }
     }
   },

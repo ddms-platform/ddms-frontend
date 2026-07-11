@@ -697,6 +697,7 @@
     "nav": {
       "dashboard": "Tổng quan",
       "boats": "Quản lý Đội tàu",
+      "certificates": "Giấy tờ pháp lý",
       "dockMap": "Sơ đồ bến",
       "services": "Dịch vụ & Bảo trì",
       "tourServices": "Dịch vụ Tour",
@@ -807,7 +808,8 @@
         "cabins": "Phòng",
         "services": "Dịch vụ",
         "images": "Hình ảnh",
-        "maintenance": "Bảo trì"
+        "maintenance": "Bảo trì",
+        "certificates": "Giấy tờ pháp lý"
       },
       "basic": {
         "title": "Thông tin cơ bản",
@@ -846,6 +848,91 @@
         "add": "Thêm lịch",
         "empty": "Chưa có lịch bảo trì nào.",
         "default": "Bảo trì"
+      }
+    },
+    "compliance": {
+      "warning": "Sắp hết hạn",
+      "hidden": "Tạm ẩn",
+      "locked": "Đã khóa"
+    },
+    "certificates": {
+      "listTitle": "Giấy tờ đã tải lên",
+      "empty": "Chưa có giấy tờ nào. Hãy tải lên giấy tờ pháp lý cho tàu.",
+      "saveBoatFirst": "Vui lòng lưu thông tin tàu trước khi quản lý giấy tờ pháp lý.",
+      "addTitle": "Thêm giấy tờ mới",
+      "type": "Loại giấy tờ",
+      "expiryDate": "Ngày hết hạn",
+      "file": "Tệp đính kèm",
+      "upload": "Tải lên",
+      "uploadSuccess": "Tải giấy tờ thành công",
+      "uploadError": "Không thể tải giấy tờ",
+      "loadError": "Không thể tải danh sách giấy tờ",
+      "expiresOn": "Hết hạn: {{date}}",
+      "rejectionReason": "Lý do từ chối: {{reason}}",
+      "viewDocument": "Xem tài liệu",
+      "renew": "Gia hạn",
+      "renewTitle": "Gia hạn giấy tờ",
+      "renewDescription": "Tải lên giấy tờ mới cho {{type}}",
+      "renewConfirm": "Xác nhận gia hạn",
+      "renewSuccess": "Gia hạn giấy tờ thành công",
+      "renewError": "Không thể gia hạn giấy tờ",
+      "newExpiryDate": "Ngày hết hạn mới",
+      "newFile": "Tệp giấy tờ mới",
+      "cancel": "Huỷ",
+      "types": {
+        "registration": "Đăng ký hàng hải",
+        "insurance": "Bảo hiểm",
+        "business_license": "Giấy phép kinh doanh",
+        "safety_cert": "Chứng nhận an toàn",
+        "other": "Khác"
+      },
+      "status": {
+        "pending": "Chờ duyệt",
+        "approved": "Đã duyệt",
+        "rejected": "Từ chối",
+        "expired": "Hết hạn"
+      }
+    }
+  },
+  "ownerCertificates": {
+    "title": "Quản lý giấy tờ pháp lý",
+    "subtitle": "Theo dõi và quản lý toàn bộ giấy tờ pháp lý của các tàu",
+    "refresh": "Làm mới",
+    "search": "Tìm kiếm theo tên tàu...",
+    "documentCount": "{{count}} giấy tờ",
+    "attentionCount": "{{count}} cần xử lý",
+    "stats": {
+      "total": "Tổng giấy tờ",
+      "pending": "Chờ duyệt",
+      "needsAttention": "Cần xử lý",
+      "rejected": "Bị từ chối"
+    },
+    "filter": {
+      "all": "Tất cả",
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "expired": "Hết hạn/Sắp hết hạn"
+    },
+    "empty": {
+      "title": "Không tìm thấy tàu",
+      "description": "Thử thay đổi từ khóa tìm kiếm hoặc bộ lọc trạng thái"
+    }
+  },
+  "ownerRegistration": {
+    "certificates": {
+      "rowLabel": "Giấy tờ #{{index}}",
+      "remove": "Xoá giấy tờ",
+      "type": "Loại giấy tờ",
+      "expiryDate": "Ngày hết hạn",
+      "file": "Tệp đính kèm",
+      "uploadHint": "Chọn tệp giấy tờ",
+      "types": {
+        "registration": "Đăng ký hàng hải",
+        "insurance": "Bảo hiểm",
+        "business_license": "Giấy phép kinh doanh",
+        "safety_cert": "Chứng nhận an toàn",
+        "other": "Khác"
       }
     }
   },
