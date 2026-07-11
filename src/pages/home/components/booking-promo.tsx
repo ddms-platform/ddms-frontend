@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CyanAnimatedButton } from '@/components/common/CyanAnimatedButton';
+import DateInput from '@/components/ui/date-input';
 
 export default function BookingPromo() {
   const { t } = useTranslation();
+  const [departureDate, setDepartureDate] = useState('2026-07-04');
 
   const handleSearchClick = () => {
     // Simple mock search action
@@ -114,10 +117,10 @@ export default function BookingPromo() {
                 <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
                   {t('home.promo.departureDate')}
                 </label>
-                <input
-                  type="date"
-                  defaultValue="2026-07-04"
-                  className="bg-transparent text-white text-sm outline-none border-none cursor-pointer w-full font-medium scheme-dark"
+                <DateInput
+                  value={departureDate}
+                  onChange={setDepartureDate}
+                  className="bg-transparent text-white text-sm outline-none border-none w-full font-medium placeholder:text-slate-500"
                 />
               </div>
 

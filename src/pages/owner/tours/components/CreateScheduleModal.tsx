@@ -1,5 +1,6 @@
 import { Calendar, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import DateInput from '@/components/ui/date-input';
 
 interface CreateScheduleModalProps {
   open: boolean;
@@ -124,14 +125,13 @@ const CreateScheduleModal = ({
               <label className="block text-sm font-medium text-slate-300 mb-1">
                 {t('ownerTours.createModal.startDate')}
               </label>
-              <input
-                type="date"
-                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors scheme-dark"
+              <DateInput
+                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"
                 value={scheduleDate}
-                onChange={(e) => {
-                  onScheduleDateChange(e.target.value);
+                onChange={(iso) => {
+                  onScheduleDateChange(iso);
                   if (!scheduleEndDate) {
-                    onScheduleEndDateChange(e.target.value);
+                    onScheduleEndDateChange(iso);
                   }
                 }}
               />
@@ -154,11 +154,10 @@ const CreateScheduleModal = ({
               <label className="block text-sm font-medium text-slate-300 mb-1">
                 {t('ownerTours.createModal.endDate')}
               </label>
-              <input
-                type="date"
-                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors scheme-dark"
+              <DateInput
+                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"
                 value={scheduleEndDate}
-                onChange={(e) => onScheduleEndDateChange(e.target.value)}
+                onChange={onScheduleEndDateChange}
               />
             </div>
             <div>

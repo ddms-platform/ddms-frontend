@@ -67,6 +67,7 @@ export interface BoatListItem {
   type?: string;
   maxPassengers: number;
   status: 'idle' | 'running' | string;
+  complianceStatus?: 'valid' | 'warning' | 'hidden' | 'locked' | string;
   cabinCount: number;
   serviceCount: number;
   thumbnailUrl?: string;
