@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Users, MapPin, MessageCircle } from 'lucide-react';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { bookingService } from '@/services/bookingService';
 import { chatService } from '@/services/chatService';
 import { toast } from 'sonner';
 
 export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type BookingDisplayStatus = BookingStatus | 'CONFIRM_REQUIRED';
 
 export interface Booking {
   id: string;
@@ -27,7 +28,7 @@ export interface Booking {
 }
 
 interface BookingStatusBadgeProps {
-  status: BookingStatus;
+  status: BookingDisplayStatus;
   className?: string;
 }
 
@@ -37,13 +38,14 @@ function BookingStatusBadge({
 }: BookingStatusBadgeProps) {
   const { t } = useTranslation();
 
-  const getStatusConfig = (status: BookingStatus) => {
+  const getStatusConfig = (status: BookingDisplayStatus) => {
     switch (status) {
       case 'PENDING':
+      case 'CONFIRM_REQUIRED':
         return {
           bg: 'rgba(245, 158, 11, 0.15)',
           text: '#f59e0b',
-          label: t('dashboard.status.PENDING', 'Chờ thanh toán'),
+          label: t('dashboard.status.CONFIRM_REQUIRED', 'Xác nhận'),
         };
       case 'UPCOMING':
         return {
@@ -81,6 +83,35 @@ function BookingStatusBadge({
   );
 }
 
+export function getBookingEndDate(booking: Booking) {
+  const [startPart, endPart] = booking.time.split(' - ');
+  const start = new Date(`${booking.date}T${startPart || '00:00'}:00`);
+  const end = new Date(`${booking.date}T${endPart || startPart || '00:00'}:00`);
+
+  if (end.getTime() < start.getTime()) {
+    end.setDate(end.getDate() + 1);
+  }
+
+  return end;
+}
+
+export function getBookingDisplayStatus(
+  booking: Booking,
+): BookingDisplayStatus {
+  if (booking.status === 'CANCELLED') return 'CANCELLED';
+  if (booking.status === 'PENDING') return 'CONFIRM_REQUIRED';
+
+  const isExpired = getBookingEndDate(booking).getTime() < Date.now();
+  if (isExpired) return 'COMPLETED';
+
+  return booking.status;
+}
+
+export function getBookingFilterStatus(booking: Booking): BookingStatus {
+  const displayStatus = getBookingDisplayStatus(booking);
+  return displayStatus === 'CONFIRM_REQUIRED' ? 'PENDING' : displayStatus;
+}
+
 interface BookingCardProps {
   booking: Booking;
   onCancelSuccess?: () => void;
@@ -97,6 +128,7 @@ export default function BookingCard({
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
   const [isStartingChat, setIsStartingChat] = useState(false);
+  const displayStatus = getBookingDisplayStatus(booking);
 
   const handleStartChat = async () => {
     setIsStartingChat(true);
@@ -179,7 +211,7 @@ export default function BookingCard({
         />
         {/* Mobile Badges overlay */}
         <div className="absolute left-3 top-3 sm:hidden">
-          <BookingStatusBadge status={booking.status} className="py-1" />
+          <BookingStatusBadge status={displayStatus} className="py-1" />
         </div>
       </div>
 
@@ -192,7 +224,7 @@ export default function BookingCard({
                 {t('dashboard.bookingRef')}: #DDMS-{booking.id}
               </span>
               <BookingStatusBadge
-                status={booking.status}
+                status={displayStatus}
                 className="hidden py-0.5 sm:inline-block"
               />
             </div>
@@ -254,14 +286,12 @@ export default function BookingCard({
           </span>
         </div>
         <div className="flex gap-2">
-          {booking.status === 'PENDING' && (
-            <Button variant="cyan" size="action" asChild>
-              <Link to={`/tours/${booking.tourId}/booking`}>
-                {t('dashboard.payNow', 'Thanh toán')}
-              </Link>
+          {displayStatus === 'CONFIRM_REQUIRED' && (
+            <Button variant="secondary" size="action" disabled>
+              {t('dashboard.status.CONFIRM_REQUIRED', 'Xác nhận')}
             </Button>
           )}
-          {booking.status === 'UPCOMING' && (
+          {displayStatus === 'UPCOMING' && (
             <Button
               variant="outline"
               size="action"
@@ -271,7 +301,7 @@ export default function BookingCard({
               {t('dashboard.cancelBooking')}
             </Button>
           )}
-          {booking.status === 'COMPLETED' && (
+          {displayStatus === 'COMPLETED' && (
             <Button
               variant="outline"
               size="action"
@@ -294,19 +324,17 @@ export default function BookingCard({
       </div>
 
       <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30 gap-2">
-        {booking.status === 'PENDING' && (
+        {displayStatus === 'CONFIRM_REQUIRED' && (
           <Button
-            variant="cyan"
+            variant="secondary"
             size="action"
             className="w-full rounded-xl"
-            asChild
+            disabled
           >
-            <Link to={`/tours/${booking.tourId}/booking`}>
-              {t('dashboard.payNow', 'Thanh toán')}
-            </Link>
+            {t('dashboard.status.CONFIRM_REQUIRED', 'Xác nhận')}
           </Button>
         )}
-        {booking.status === 'UPCOMING' && (
+        {displayStatus === 'UPCOMING' && (
           <Button
             variant="outline"
             size="action"
@@ -316,21 +344,19 @@ export default function BookingCard({
             {t('dashboard.cancelBooking')}
           </Button>
         )}
-        {booking.status === 'COMPLETED' && (
+        {displayStatus === 'COMPLETED' && (
           <Button variant="cyan" size="action" className="w-full rounded-xl">
             {t('dashboard.writeReview')}
           </Button>
         )}
-        {(booking.status === 'CANCELLED' || !booking.status) && (
+        {(displayStatus === 'CANCELLED' || !booking.status) && (
           <Button
             variant="outline"
             size="action"
             className="w-full rounded-xl text-foreground border-foreground/30 hover:bg-foreground/5 bg-ddms-bg-card"
-            asChild
+            onClick={() => navigate(`/tours/${booking.tourId}`)}
           >
-            <Link to={`/tours/${booking.tourId}`}>
-              {t('dashboard.viewDetails')}
-            </Link>
+            {t('dashboard.viewDetails')}
           </Button>
         )}
         <Button

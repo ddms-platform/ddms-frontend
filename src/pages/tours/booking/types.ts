@@ -33,6 +33,9 @@ export interface RoomOption {
   reviewCount: number;
   totalRooms: number;
   availableRooms: number;
+  bookedRooms?: number;
+  selectedUnitIndex?: number;
+  selectedUnitLabel?: string;
   images: string[];
   description: string;
   amenities: { icon: React.ElementType; label: string }[];

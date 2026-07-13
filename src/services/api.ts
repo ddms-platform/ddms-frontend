@@ -4,7 +4,6 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL
     ? `${import.meta.env.VITE_API_URL}/api`
     : 'https://localhost:7161/api',
-  headers: { 'Content-Type': 'application/json' },
 });
 
 // Tự động gắn Bearer token từ localStorage

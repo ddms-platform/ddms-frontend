@@ -10,12 +10,12 @@ interface ComplexTourFieldsProps {
 }
 
 const ComplexTourFields = ({ service, handlers }: ComplexTourFieldsProps) => (
-  <div className="space-y-8 border-t border-border pt-6 mt-6">
+  <div className="space-y-9 border-t border-border pt-7 mt-7">
     <div>
-      <h3 className="text-lg font-semibold text-ddms-secondary flex items-center gap-2 mb-4">
+      <h3 className="text-xl font-semibold text-ddms-secondary flex items-center gap-2.5 mb-5">
         <MapIcon className="w-5 h-5" /> Lộ trình Tour Dài Ngày
       </h3>
-      <div className="space-y-4">
+      <div className="space-y-5">
         {service.routes.map((route, idx) => (
           <RouteRow
             key={idx}
@@ -34,7 +34,7 @@ const ComplexTourFields = ({ service, handlers }: ComplexTourFieldsProps) => (
           type="button"
           variant="outline"
           onClick={() => handlers.addArrayItem(service.id, 'routes')}
-          className="w-full border-dashed border-border bg-transparent text-ddms-secondary hover:bg-foreground/5"
+          className="w-full border-dashed border-border bg-transparent text-ddms-secondary hover:bg-foreground/5 py-6 text-sm"
         >
           <Plus className="w-4 h-4 mr-2" /> Thêm Chặng Mới
         </Button>
@@ -42,10 +42,10 @@ const ComplexTourFields = ({ service, handlers }: ComplexTourFieldsProps) => (
     </div>
 
     <div>
-      <h3 className="text-lg font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-2 mb-4">
+      <h3 className="text-xl font-semibold text-purple-600 dark:text-purple-400 flex items-center gap-2.5 mb-5">
         <Bed className="w-5 h-5" /> Danh sách Phòng Nghỉ (Cabins)
       </h3>
-      <div className="space-y-4">
+      <div className="space-y-5">
         {service.rooms.map((room, idx) => (
           <RoomRow
             key={idx}
@@ -62,7 +62,7 @@ const ComplexTourFields = ({ service, handlers }: ComplexTourFieldsProps) => (
           type="button"
           variant="outline"
           onClick={() => handlers.addArrayItem(service.id, 'rooms')}
-          className="w-full border-dashed border-border bg-transparent text-purple-600 dark:text-purple-400 hover:bg-foreground/5"
+          className="w-full border-dashed border-border bg-transparent text-purple-600 dark:text-purple-400 hover:bg-foreground/5 py-6 text-sm"
         >
           <Plus className="w-4 h-4 mr-2" /> Thêm Hạng Phòng Mới
         </Button>

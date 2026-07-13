@@ -1,7 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RoomOption } from '../types';
-import type { TourItemResponse } from '@/services/tourService';
+import type {
+  TourItemResponse,
+  TourServiceResponse,
+} from '@/services/tourService';
 import { bookingService } from '@/services/bookingService';
 import SummaryPanel from './step-confirm/SummaryPanel';
 import PaymentPanel from './step-confirm/PaymentPanel';
@@ -14,7 +17,9 @@ interface StepConfirmProps {
   guests: number;
   tourPrice: number;
   roomPrice: number;
+  servicePrice: number;
   totalPrice: number;
+  selectedServices: TourServiceResponse[];
   selectedSchedule: any;
   onConfirm: () => void;
 }
@@ -27,7 +32,9 @@ export default function StepConfirm({
   guests,
   tourPrice,
   roomPrice,
+  servicePrice,
   totalPrice,
+  selectedServices,
   selectedSchedule,
   onConfirm,
 }: StepConfirmProps) {
@@ -44,8 +51,13 @@ export default function StepConfirm({
   const [isCreatingBooking, setIsCreatingBooking] = useState(true);
 
   const bookingCode = useMemo(() => {
-    return 'DDMS' + Math.floor(100000 + Math.random() * 900000);
-  }, []);
+    const source = `${tour.id}-${selectedSchedule?.id}-${selectedDate}-${selectedTime}-${guests}`;
+    let hash = 0;
+    for (let index = 0; index < source.length; index += 1) {
+      hash = (hash * 31 + source.charCodeAt(index)) % 900000;
+    }
+    return `DDMS${String(100000 + hash).padStart(6, '0')}`;
+  }, [guests, selectedDate, selectedSchedule?.id, selectedTime, tour.id]);
 
   const displayCode = dbBookingId
     ? dbBookingId.slice(0, 8).toUpperCase()
@@ -61,7 +73,7 @@ export default function StepConfirm({
           numPeople: guests,
           basePrice: tour.price,
           cabinPrice: roomPrice,
-          servicePrice: 0,
+          servicePrice,
           discountAmount: 0,
           totalPrice: totalPrice,
           notes: '',
@@ -74,6 +86,11 @@ export default function StepConfirm({
                 },
               ]
             : [],
+          services: selectedServices.map((service) => ({
+            serviceId: service.id,
+            quantity: 1,
+            unitPrice: service.price,
+          })),
         };
         const response = await bookingService.createBooking(payload);
         if (active) {
@@ -102,8 +119,10 @@ export default function StepConfirm({
     guests,
     tour.price,
     roomPrice,
+    servicePrice,
     totalPrice,
     selectedRoom,
+    selectedServices,
   ]);
 
   const handlePaymentSubmit = () => {
@@ -162,7 +181,9 @@ export default function StepConfirm({
           guests={guests}
           tourPrice={tourPrice}
           roomPrice={roomPrice}
+          servicePrice={servicePrice}
           totalPrice={totalPrice}
+          selectedServices={selectedServices}
         />
 
         <PaymentPanel

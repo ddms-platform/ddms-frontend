@@ -89,6 +89,19 @@ export interface TourItemResponse {
   updatedAt: string;
 }
 
+export interface TourScheduleResponse {
+  id: string;
+  tour_id: string;
+  boat_id?: string | null;
+  boatName?: string | null;
+  boatImageUrls: string[];
+  dock_id?: string | null;
+  start_time: string;
+  end_time: string;
+  status: string;
+  maxCapacity?: number | null;
+}
+
 export interface TourImageItemResponse {
   id: string;
   tourId: string;
@@ -126,16 +139,18 @@ export interface TourSearchQuery {
 export const tourService = {
   searchTours: (query?: TourSearchQuery) =>
     api
-      .get<
-        ApiResponse<PagedResponse<TourSearchItemResponse>>
-      >('/tours/search', { params: query })
+      .get<ApiResponse<PagedResponse<TourSearchItemResponse>>>(
+        '/tours/search',
+        { params: query },
+      )
       .then((r) => r.data.result),
 
   getPopularDestinations: (limit: number = 3) =>
     api
-      .get<
-        ApiResponse<PopularDestinationResponse[]>
-      >('/public/tours/destinations/popular', { params: { limit } })
+      .get<ApiResponse<PopularDestinationResponse[]>>(
+        '/public/tours/destinations/popular',
+        { params: { limit } },
+      )
       .then((r) => r.data.result),
 
   getPublicTourById: (tourId: string) =>
@@ -145,9 +160,9 @@ export const tourService = {
 
   getTourImages: (tourId: string) =>
     api
-      .get<
-        ApiResponse<TourImageItemResponse[]>
-      >(`/public/tours/${tourId}/images`)
+      .get<ApiResponse<TourImageItemResponse[]>>(
+        `/public/tours/${tourId}/images`,
+      )
       .then((r) => r.data.result),
 
   getTourFaqs: (tourId: string) =>
@@ -157,7 +172,9 @@ export const tourService = {
 
   getTourSchedules: (tourId: string) =>
     api
-      .get<ApiResponse<any[]>>(`/tour-schedules/tour/${tourId}`)
+      .get<ApiResponse<TourScheduleResponse[]>>(
+        `/tour-schedules/tour/${tourId}`,
+      )
       .then((r) => r.data.result),
 
   getToursDashboardStats: () =>
@@ -197,8 +214,9 @@ export const tourService = {
     payload: { status: string; cancelReason?: string },
   ) =>
     api
-      .post<
-        ApiResponse<any>
-      >(`/owner/tours-dashboard/bookings/${bookingId}/status`, payload)
+      .post<ApiResponse<any>>(
+        `/owner/tours-dashboard/bookings/${bookingId}/status`,
+        payload,
+      )
       .then((r) => r.data),
 };

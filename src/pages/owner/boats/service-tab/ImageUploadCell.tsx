@@ -14,22 +14,25 @@ const ImageUploadCell = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       onUpload(e.target.files[0]);
+      e.target.value = '';
     }
   };
 
   return (
     <div>
-      <label className="text-xs text-muted-foreground">{label}</label>
-      <div className="relative mt-1">
+      <label className="text-sm font-medium text-muted-foreground">
+        {label}
+      </label>
+      <div className="relative mt-1.5">
         {imageUrl ? (
-          <div className="relative h-10 rounded-md overflow-hidden border border-border group">
+          <div className="relative h-20 overflow-hidden rounded-lg border border-border group">
             <img
               src={imageUrl}
               alt={altLabel}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <label className="text-[10px] text-foreground cursor-pointer bg-ddms-bg-main px-2 py-1 rounded border border-border">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+              <label className="cursor-pointer rounded-md border border-border bg-ddms-bg-main px-3 py-2 text-sm font-semibold text-foreground">
                 Đổi ảnh
                 <input
                   type="file"
@@ -41,8 +44,8 @@ const ImageUploadCell = ({
             </div>
           </div>
         ) : (
-          <label className="flex items-center justify-center h-10 border border-dashed border-border rounded-md bg-ddms-bg-main cursor-pointer hover:bg-foreground/5 transition-colors">
-            <span className="text-xs text-muted-foreground text-center px-2">
+          <label className="flex h-20 cursor-pointer items-center justify-center rounded-lg border border-dashed border-border bg-ddms-bg-main transition-colors hover:bg-foreground/5">
+            <span className="px-3 text-center text-sm font-semibold text-muted-foreground">
               Tải ảnh lên
             </span>
             <input

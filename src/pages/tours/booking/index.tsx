@@ -1,11 +1,19 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Breadcrumb from '@/components/shared/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import type { RoomOption } from './types';
-import { tourService, type TourItemResponse } from '@/services/tourService';
+import {
+  tourService,
+  type TourItemResponse,
+  type TourServiceResponse,
+} from '@/services/tourService';
+import {
+  bookingService,
+  type CabinAvailabilityResponse,
+} from '@/services/bookingService';
 
 // Step components
 import StepIndicator from './components/step-indicator';
@@ -18,6 +26,35 @@ import BookingSuccess from './components/booking-success';
 export default function BookingPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const prefillRoomKeyRef = useRef<string | null>(null);
+
+  const bookingPrefill = useMemo(() => {
+    const statePrefill = (
+      location.state as {
+        bookingPrefill?: {
+          classId?: string;
+          serviceIds?: string[];
+        };
+      } | null
+    )?.bookingPrefill;
+    const params = new URLSearchParams(location.search);
+    const classId = params.get('classId') || statePrefill?.classId || '';
+    const serviceIdsFromQuery =
+      params
+        .get('services')
+        ?.split(',')
+        .map((item) => item.trim())
+        .filter(Boolean) || [];
+
+    return {
+      classId,
+      serviceIds:
+        serviceIdsFromQuery.length > 0
+          ? serviceIdsFromQuery
+          : statePrefill?.serviceIds || [],
+    };
+  }, [location.search, location.state]);
 
   // ── State ──
   const [step, setStep] = useState(1);
@@ -25,6 +62,13 @@ export default function BookingPage() {
   const [schedules, setSchedules] = useState<any[]>([]);
   const [selectedSchedule, setSelectedSchedule] = useState<any | null>(null);
   const [selectedRoom, setSelectedRoom] = useState<RoomOption | null>(null);
+  const [cabinAvailability, setCabinAvailability] = useState<
+    CabinAvailabilityResponse[]
+  >([]);
+  const [availabilityScheduleId, setAvailabilityScheduleId] = useState<
+    string | null
+  >(null);
+  const [isAvailabilityLoading, setIsAvailabilityLoading] = useState(false);
   const [guests, setGuests] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -71,9 +115,79 @@ export default function BookingPage() {
     return !!tour && tour.classes && tour.classes.length > 0;
   }, [tour]);
 
+  useEffect(() => {
+    if (!selectedSchedule?.id || !hasRooms) {
+      const timer = window.setTimeout(() => {
+        setCabinAvailability([]);
+        setAvailabilityScheduleId(null);
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+
+    let active = true;
+    const fetchCabinAvailability = async () => {
+      setIsAvailabilityLoading(true);
+      setAvailabilityScheduleId(null);
+      try {
+        const data = await bookingService.getCabinAvailability(
+          selectedSchedule.id,
+        );
+        if (active) {
+          setCabinAvailability(data || []);
+        }
+      } catch (error) {
+        console.error('Failed to fetch cabin availability:', error);
+        if (active) {
+          setCabinAvailability([]);
+        }
+      } finally {
+        if (active) {
+          setAvailabilityScheduleId(selectedSchedule.id);
+          setIsAvailabilityLoading(false);
+        }
+      }
+    };
+
+    fetchCabinAvailability();
+
+    return () => {
+      active = false;
+    };
+  }, [selectedSchedule?.id, hasRooms]);
+
   const rooms: RoomOption[] = useMemo(() => {
     if (!tour || !tour.classes) return [];
-    return tour.classes.map((c) => ({
+
+    const classById = new Map(tour.classes.map((c) => [c.id, c]));
+    const classByName = new Map(
+      tour.classes.map((c) => [c.name.toLowerCase(), c]),
+    );
+    const source =
+      cabinAvailability.length > 0
+        ? cabinAvailability.map((c) => {
+            const cabinClass =
+              classById.get(c.cabinId) ||
+              classByName.get(c.cabinName.toLowerCase());
+            return {
+              id: c.cabinId,
+              name: c.cabinName,
+              capacity: c.capacity,
+              price: c.price,
+              totalRooms: c.totalRooms,
+              availableRooms: c.availableRooms,
+              bookedRooms: c.bookedRooms,
+              description: cabinClass?.description,
+              imageUrl: cabinClass?.imageUrl,
+            };
+          })
+        : tour.classes.map((c) => ({
+            ...c,
+            totalRooms: 1,
+            availableRooms: 1,
+            bookedRooms: 0,
+          }));
+
+    return source.map((c) => ({
       id: c.id,
       name: c.name,
       type: c.name.toLowerCase().includes('vip')
@@ -88,8 +202,9 @@ export default function BookingPage() {
       bed: '1 giường đôi hoặc 2 giường đơn',
       rating: 5,
       reviewCount: 0,
-      totalRooms: 10,
-      availableRooms: 10,
+      totalRooms: c.totalRooms,
+      availableRooms: c.availableRooms,
+      bookedRooms: c.bookedRooms,
       images: [
         c.imageUrl ||
           'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=600&fit=crop',
@@ -100,12 +215,94 @@ export default function BookingPage() {
       reviews: [],
       ratingBreakdown: [],
     }));
-  }, [tour]);
+  }, [cabinAvailability, tour]);
+
+  useEffect(() => {
+    if (!selectedRoom) return;
+
+    const latestRoom = rooms.find((room) => room.id === selectedRoom.id);
+    const bookedRooms = latestRoom?.bookedRooms ?? 0;
+    if (
+      !latestRoom ||
+      latestRoom.availableRooms <= 0 ||
+      (selectedRoom.selectedUnitIndex != null &&
+        selectedRoom.selectedUnitIndex <= bookedRooms)
+    ) {
+      const timer = window.setTimeout(() => {
+        setSelectedRoom(null);
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+  }, [rooms, selectedRoom]);
+
+  useEffect(() => {
+    if (
+      !bookingPrefill.classId ||
+      !selectedSchedule?.id ||
+      availabilityScheduleId !== selectedSchedule.id ||
+      rooms.length === 0
+    ) {
+      return;
+    }
+
+    const key = `${selectedSchedule.id}:${bookingPrefill.classId}`;
+    if (prefillRoomKeyRef.current === key) return;
+
+    const selectedClass = tour?.classes?.find(
+      (item) => item.id === bookingPrefill.classId,
+    );
+    const room = rooms.find(
+      (item) =>
+        item.id === bookingPrefill.classId ||
+        (selectedClass &&
+          item.name.toLowerCase() === selectedClass.name.toLowerCase()),
+    );
+
+    prefillRoomKeyRef.current = key;
+
+    if (!room || room.availableRooms <= 0) {
+      const timer = window.setTimeout(() => {
+        setSelectedRoom(null);
+      }, 0);
+      return () => window.clearTimeout(timer);
+    }
+
+    const unitIndex = (room.bookedRooms ?? 0) + 1;
+    const nextRoom = {
+      ...room,
+      selectedUnitIndex: unitIndex,
+      selectedUnitLabel: `${room.name} ${unitIndex}`,
+    };
+    const timer = window.setTimeout(() => {
+      setSelectedRoom(nextRoom);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [
+    availabilityScheduleId,
+    bookingPrefill.classId,
+    rooms,
+    selectedSchedule?.id,
+    tour?.classes,
+  ]);
+
+  const tourServices = tour?.services;
+  const prefillServiceIds = bookingPrefill.serviceIds;
+
+  const selectedServices: TourServiceResponse[] = useMemo(() => {
+    if (!tourServices || prefillServiceIds.length === 0) return [];
+
+    const serviceIds = new Set(prefillServiceIds);
+    return tourServices.filter((service) => serviceIds.has(service.id));
+  }, [prefillServiceIds, tourServices]);
 
   const basePrice = tour ? tour.price : 0;
   const tourPrice = basePrice * guests;
   const roomPrice = selectedRoom ? selectedRoom.price : 0;
-  const totalPrice = tourPrice + roomPrice;
+  const servicePrice = selectedServices.reduce(
+    (sum, service) => sum + service.price,
+    0,
+  );
+  const totalPrice = tourPrice + roomPrice + servicePrice;
   const maxGuests =
     selectedSchedule?.maxCapacity || tour?.classes?.[0]?.capacity || 50;
 
@@ -113,7 +310,7 @@ export default function BookingPage() {
   const canProceed = () => {
     if (step === 1) return selectedSchedule !== null;
     if (hasRooms) {
-      if (step === 2) return true; // Room selection is optional
+      if (step === 2) return !isAvailabilityLoading && selectedRoom !== null;
       if (step === 3) return guests >= 1 && guests <= maxGuests;
     } else {
       if (step === 2) return guests >= 1 && guests <= maxGuests;
@@ -248,6 +445,8 @@ export default function BookingPage() {
                 rooms={rooms}
                 selectedRoom={selectedRoom}
                 selectedBoatName={selectedSchedule?.boatName || 'Du thuyền'}
+                boatImageUrls={selectedSchedule?.boatImageUrls || []}
+                isAvailabilityLoading={isAvailabilityLoading}
                 onSelectRoom={setSelectedRoom}
               />
             )}
@@ -259,7 +458,9 @@ export default function BookingPage() {
                 selectedRoom={selectedRoom}
                 tourPrice={tourPrice}
                 roomPrice={roomPrice}
+                servicePrice={servicePrice}
                 totalPrice={totalPrice}
+                selectedServices={selectedServices}
                 onSetGuests={setGuests}
                 basePrice={basePrice}
               />
@@ -274,7 +475,9 @@ export default function BookingPage() {
                 guests={guests}
                 tourPrice={tourPrice}
                 roomPrice={roomPrice}
+                servicePrice={servicePrice}
                 totalPrice={totalPrice}
+                selectedServices={selectedServices}
                 selectedSchedule={selectedSchedule}
                 onConfirm={handleConfirm}
               />
@@ -289,7 +492,9 @@ export default function BookingPage() {
                 selectedRoom={selectedRoom}
                 tourPrice={tourPrice}
                 roomPrice={roomPrice}
+                servicePrice={servicePrice}
                 totalPrice={totalPrice}
+                selectedServices={selectedServices}
                 onSetGuests={setGuests}
                 basePrice={basePrice}
               />
@@ -304,7 +509,9 @@ export default function BookingPage() {
                 guests={guests}
                 tourPrice={tourPrice}
                 roomPrice={roomPrice}
+                servicePrice={servicePrice}
                 totalPrice={totalPrice}
+                selectedServices={selectedServices}
                 selectedSchedule={selectedSchedule}
                 onConfirm={handleConfirm}
               />

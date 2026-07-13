@@ -353,36 +353,38 @@ export default function OwnerRevenueDashboard() {
         formatVND={formatVND}
       />
 
-      {/* Local Webhook simulation helper card */}
-      <div className="mt-8 p-6 rounded-2xl bg-muted/50 border border-border shadow-inner">
-        <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-ddms-secondary" /> Hướng dẫn Test
-          Webhook trong môi trường Local
-        </h4>
-        <p className="text-xs text-muted-foreground leading-relaxed mb-4">
-          Vì PayOS chạy môi trường cloud không thể gọi trực tiếp webhook về
-          localhost, bạn có thể mô phỏng một thanh toán PayOS thành công bằng
-          cách chạy lệnh CURL sau để gửi trực tiếp thông tin thanh toán đã được
-          xác nhận về API backend. SignalR sẽ ngay lập tức nhận diện và cập nhật
-          giao diện thời gian thực.
-        </p>
-
-        {summary &&
-        summary.paymentHistory.some((p) => p.status === 'pending') ? (
-          <div>
-            <p className="text-xs font-bold text-ddms-secondary mb-2">
-              Lệnh CURL test cho giao dịch đang chờ của bạn:
+      {import.meta.env.VITE_SHOW_LOCAL_WEBHOOK_HELPER === 'true' && summary && (
+        <>
+          {/* Local Webhook simulation helper card */}
+          <div className="mt-8 p-6 rounded-2xl bg-muted/50 border border-border shadow-inner">
+            <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-ddms-secondary" /> Hướng dẫn
+              Test Webhook trong môi trường Local
+            </h4>
+            <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+              Vì PayOS chạy môi trường cloud không thể gọi trực tiếp webhook về
+              localhost, bạn có thể mô phỏng một thanh toán PayOS thành công
+              bằng cách chạy lệnh CURL sau để gửi trực tiếp thông tin thanh toán
+              đã được xác nhận về API backend. SignalR sẽ ngay lập tức nhận diện
+              và cập nhật giao diện thời gian thực.
             </p>
-            <div className="p-3 bg-muted/80 rounded-xl font-mono text-[10px] text-emerald-600 dark:text-emerald-400 border border-border overflow-x-auto whitespace-pre">
-              {`curl -X POST "https://localhost:7161/api/owner/billing/webhook" \\
+
+            {summary &&
+            summary!.paymentHistory.some((p) => p.status === 'pending') ? (
+              <div>
+                <p className="text-xs font-bold text-ddms-secondary mb-2">
+                  Lệnh CURL test cho giao dịch đang chờ của bạn:
+                </p>
+                <div className="p-3 bg-muted/80 rounded-xl font-mono text-[10px] text-emerald-600 dark:text-emerald-400 border border-border overflow-x-auto whitespace-pre">
+                  {`curl -X POST "https://localhost:7161/api/owner/billing/webhook" \\
   -H "Content-Type: application/json" \\
   -d '{
     "code": "00",
     "desc": "success",
     "success": true,
     "data": {
-      "orderCode": ${summary.paymentHistory.find((p) => p.status === 'pending')?.payosOrderCode},
-      "amount": ${Math.round(summary.paymentHistory.find((p) => p.status === 'pending')?.amount || 0)},
+      "orderCode": ${summary!.paymentHistory.find((p) => p.status === 'pending')?.payosOrderCode},
+      "amount": ${Math.round(summary!.paymentHistory.find((p) => p.status === 'pending')?.amount || 0)},
       "description": "Thanh toan test",
       "reference": "TEST_REF_12345",
       "transactionDateTime": "${new Date().toISOString()}",
@@ -391,20 +393,23 @@ export default function OwnerRevenueDashboard() {
     },
     "signature": "test_dummy_signature_will_bypass_on_dev"
   }'`}
-            </div>
-            <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-2">
-              Lưu ý: Đối với việc test cục bộ không có chữ ký thật từ PayOS, bạn
-              cần tắt xác thực hoặc mô phỏng tại webhook controller hoặc đảm bảo
-              rằng webhook payload chạy đúng với orderCode trùng khớp.
-            </p>
+                </div>
+                <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-2">
+                  Lưu ý: Đối với việc test cục bộ không có chữ ký thật từ PayOS,
+                  bạn cần tắt xác thực hoặc mô phỏng tại webhook controller hoặc
+                  đảm bảo rằng webhook payload chạy đúng với orderCode trùng
+                  khớp.
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-muted-foreground italic">
+                (Bấm vào nút "Thanh toán ngay" để tạo một giao dịch chờ thanh
+                toán, lệnh CURL kiểm thử sẽ xuất hiện ở đây để hỗ trợ bạn test).
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="text-xs text-muted-foreground italic">
-            (Bấm vào nút "Thanh toán ngay" để tạo một giao dịch chờ thanh toán,
-            lệnh CURL kiểm thử sẽ xuất hiện ở đây để hỗ trợ bạn test).
-          </p>
-        )}
-      </div>
+        </>
+      )}
 
       {summary && (
         <PaymentModal
