@@ -2,7 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { Ship } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import type { RoomOption } from '../../types';
-import type { TourItemResponse } from '@/services/tourService';
+import type {
+  TourItemResponse,
+  TourServiceResponse,
+} from '@/services/tourService';
 
 interface SummaryPanelProps {
   tour: TourItemResponse;
@@ -13,7 +16,9 @@ interface SummaryPanelProps {
   guests: number;
   tourPrice: number;
   roomPrice: number;
+  servicePrice: number;
   totalPrice: number;
+  selectedServices: TourServiceResponse[];
 }
 
 const formatDateString = (dateStr: string) => {
@@ -36,7 +41,9 @@ const SummaryPanel = ({
   guests,
   tourPrice,
   roomPrice,
+  servicePrice,
   totalPrice,
+  selectedServices,
 }: SummaryPanelProps) => {
   const { t } = useTranslation();
 
@@ -101,7 +108,7 @@ const SummaryPanel = ({
           <div className="flex justify-between text-xs sm:text-sm">
             <span className="text-muted-foreground">Phòng nghỉ / Hạng ghế</span>
             <span className="font-semibold text-ddms-secondary">
-              {selectedRoom.name}
+              {selectedRoom.selectedUnitLabel || selectedRoom.name}
             </span>
           </div>
         )}
@@ -122,6 +129,27 @@ const SummaryPanel = ({
             <span className="font-semibold text-foreground">
               {formatPrice(roomPrice)}
             </span>
+          </div>
+        )}
+        {selectedServices.length > 0 && (
+          <div className="space-y-1">
+            {selectedServices.map((service) => (
+              <div
+                key={service.id}
+                className="flex justify-between gap-4 text-xs sm:text-sm"
+              >
+                <span className="text-muted-foreground">{service.name}</span>
+                <span className="shrink-0 font-semibold text-foreground">
+                  {formatPrice(service.price)}
+                </span>
+              </div>
+            ))}
+            <div className="flex justify-between text-xs sm:text-sm">
+              <span className="text-muted-foreground">Tổng dịch vụ</span>
+              <span className="font-semibold text-foreground">
+                {formatPrice(servicePrice)}
+              </span>
+            </div>
           </div>
         )}
 

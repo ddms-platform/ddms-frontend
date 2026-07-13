@@ -8,47 +8,50 @@ interface RoomRowProps {
   onUploadImage: (file: File) => void;
 }
 
+const fieldLabelClass = 'text-sm font-medium text-muted-foreground';
+const inputClass =
+  'h-11 bg-ddms-bg-main border-border mt-1.5 text-sm text-foreground';
+
 const RoomRow = ({ room, onChange, onUploadImage }: RoomRowProps) => (
-  <div className="flex flex-col gap-3 bg-muted/30 p-4 rounded-lg border border-border">
-    <div className="flex gap-4 items-end">
+  <div className="flex flex-col gap-5 rounded-xl border border-border bg-muted/30 p-5">
+    <div className="flex gap-5 items-end">
       <div className="flex-1">
-        <label className="text-xs text-muted-foreground">Tên hạng phòng</label>
+        <label className={fieldLabelClass}>Tên hạng phòng</label>
         <Input
           placeholder="VD: Ocean View Suite"
-          className="bg-ddms-bg-main border-border mt-1 text-foreground"
+          className={inputClass}
           value={room.name}
           onChange={(e) => onChange('name', e.target.value)}
         />
       </div>
-      <div className="w-24">
-        <label className="text-xs text-muted-foreground">Số khách</label>
+      <div className="w-28">
+        <label className={fieldLabelClass}>Số khách</label>
         <Input
           type="number"
           placeholder="2"
-          className="bg-ddms-bg-main border-border mt-1 text-foreground"
+          className={inputClass}
           value={room.capacity}
           onChange={(e) => onChange('capacity', e.target.value)}
         />
       </div>
-      <div className="w-32">
-        <label className="text-xs text-muted-foreground">
-          Giá phụ thu (VNĐ)
-        </label>
+      <div className="w-40">
+        <label className={fieldLabelClass}>Giá phụ thu (VNĐ)</label>
         <Input
           type="number"
           placeholder="0"
-          className="bg-ddms-bg-main border-border mt-1 text-foreground"
+          className={inputClass}
           value={room.price}
           onChange={(e) => onChange('price', e.target.value)}
         />
       </div>
     </div>
-    <div className="grid grid-cols-[1fr_200px] gap-4">
+
+    <div className="grid grid-cols-[1fr_240px] gap-5">
       <div>
-        <label className="text-xs text-muted-foreground">Mô tả Phòng</label>
+        <label className={fieldLabelClass}>Mô tả phòng</label>
         <Input
           placeholder="VD: Phòng riêng tư lãng mạn dành cho 2 người, trang trí hoa hồng..."
-          className="bg-ddms-bg-main border-border mt-1 text-foreground"
+          className={inputClass}
           value={room.description}
           onChange={(e) => onChange('description', e.target.value)}
         />
@@ -56,7 +59,7 @@ const RoomRow = ({ room, onChange, onUploadImage }: RoomRowProps) => (
       <ImageUploadCell
         imageUrl={room.imageUrl}
         altLabel="Room"
-        label="Ảnh Phòng (1 tấm)"
+        label="Ảnh phòng (1 tấm)"
         onUpload={onUploadImage}
       />
     </div>

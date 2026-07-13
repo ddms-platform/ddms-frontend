@@ -12,6 +12,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042', '#8884d8'];
 
+const isSuccessResponse = (res: any) =>
+  res?.code === 0 || res?.isSuccess === true;
+
 const OwnerToursPage = () => {
   const { t } = useTranslation();
   const [stats, setStats] = useState<any[]>([]);
@@ -53,10 +56,10 @@ const OwnerToursPage = () => {
         cancelReason: reason,
       });
 
-      if (res.code === 0) {
+      if (isSuccessResponse(res)) {
         // Refresh dashboard data
         const refreshData = await tourService.getToursDashboardRecentBookings();
-        if (refreshData.code === 0) {
+        if (isSuccessResponse(refreshData)) {
           setRecentBookings(refreshData.result);
         }
 
@@ -203,21 +206,23 @@ const OwnerToursPage = () => {
         endTime: endDateTime,
       });
 
-      if (res.code === 0) {
+      if (isSuccessResponse(res)) {
         setShowCreateModal(false);
         setScheduleDate('');
         setScheduleTime('');
         setScheduleEndDate('');
         setScheduleEndTime('');
         setSelectedTourId('');
-        toast.success(t('ownerTours.createModal.createSuccess'));
+        toast.success(
+          t('ownerTours.createModal.createSuccess', 'Lịch trình đã được tạo!'),
+        );
 
         // re-fetch schedules
         const schedulesRes = await tourService.getToursDashboardSchedules(
           currentMonth,
           currentYear,
         );
-        if (schedulesRes?.code === 0) setSchedules(schedulesRes.result);
+        if (isSuccessResponse(schedulesRes)) setSchedules(schedulesRes.result);
       } else {
         toast.error(res.message || t('ownerTours.createModal.createError'));
       }

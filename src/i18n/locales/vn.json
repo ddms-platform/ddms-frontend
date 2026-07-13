@@ -113,6 +113,7 @@
     },
     "status": {
       "PENDING": "Chờ thanh toán",
+      "CONFIRM_REQUIRED": "Xác nhận",
       "UPCOMING": "Sắp khởi hành",
       "COMPLETED": "Hoàn tất",
       "CANCELLED": "Đã huỷ"

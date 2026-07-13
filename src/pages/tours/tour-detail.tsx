@@ -49,13 +49,6 @@ export default function TourDetailPage() {
   const [selectedClassId, setSelectedClassId] = useState<string>('');
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
 
-  // Automatically select the first class if available
-  useEffect(() => {
-    if (tour?.classes && tour.classes.length > 0 && !selectedClassId) {
-      setSelectedClassId(tour.classes[0].id);
-    }
-  }, [tour, selectedClassId]);
-
   const finalPrice = useMemo(() => {
     if (!tour) return 0;
     let base = tour.price; // Standard price
@@ -98,6 +91,9 @@ export default function TourDetailPage() {
         );
 
         setTour(tourData);
+        setSelectedClassId(
+          (current) => current || tourData.classes?.[0]?.id || '',
+        );
         setImages(imagesData);
         setHasFutureSchedules(futureSchedules.length > 0);
       } catch (error) {
@@ -217,6 +213,23 @@ export default function TourDetailPage() {
   };
 
   const zoomScale = Math.min(1.15, 1 + scrollY * 0.0003);
+  const bookingParams = new URLSearchParams();
+  if (selectedClassId) bookingParams.set('classId', selectedClassId);
+  if (selectedServiceIds.length > 0) {
+    bookingParams.set('services', selectedServiceIds.join(','));
+  }
+  const bookingQuery = bookingParams.toString();
+  const bookingPath = `/tours/${tour.id}/booking${bookingQuery ? `?${bookingQuery}` : ''}`;
+  const bookingState = {
+    bookingPrefill: {
+      classId: selectedClassId,
+      serviceIds: selectedServiceIds,
+    },
+  };
+  const normalizeId = (value?: string | null) => value?.trim().toLowerCase();
+  const isOwnTour =
+    !!normalizeId((user as any)?.id) &&
+    normalizeId((user as any)?.id) === normalizeId(tour.createdBy);
 
   return (
     <div className="w-full bg-ddms-bg-main">
@@ -484,6 +497,8 @@ export default function TourDetailPage() {
               price={finalPrice}
               isClosed={!hasFutureSchedules}
               createdBy={tour.createdBy}
+              selectedClassId={selectedClassId}
+              selectedServiceIds={selectedServiceIds}
             />
             {tour.location && <WeatherWidget location={tour.location} />}
           </div>
@@ -511,18 +526,9 @@ export default function TourDetailPage() {
             <Button variant="secondary" size="action" disabled>
               Tạm đóng
             </Button>
-          ) : (user as any)?.id === tour.createdBy ? (
-            <Button
-              variant="secondary"
-              size="action"
-              className="bg-gray-500 text-white cursor-not-allowed hover:bg-gray-500"
-              disabled
-            >
-              Tour của bạn
-            </Button>
-          ) : (
+          ) : isOwnTour ? null : (
             <Button variant="cyan" size="action" asChild>
-              <Link to={`/tours/${tour.id}/booking`}>
+              <Link to={bookingPath} state={bookingState}>
                 {t('tour.booking.bookNow')}
               </Link>
             </Button>

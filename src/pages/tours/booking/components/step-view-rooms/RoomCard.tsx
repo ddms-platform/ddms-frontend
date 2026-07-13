@@ -6,6 +6,7 @@ import type { RoomOption } from '../../types';
 interface RoomCardProps {
   room: RoomOption;
   isSelected: boolean;
+  disabled?: boolean;
   onToggle: () => void;
   onViewDetail: () => void;
 }
@@ -13,6 +14,7 @@ interface RoomCardProps {
 const RoomCard = ({
   room,
   isSelected,
+  disabled,
   onToggle,
   onViewDetail,
 }: RoomCardProps) => {
@@ -21,7 +23,8 @@ const RoomCard = ({
   return (
     <button
       onClick={onToggle}
-      className="group relative w-full overflow-hidden rounded-xl border text-left transition-all hover:shadow-lg active:scale-[0.99]"
+      disabled={disabled}
+      className="group relative w-full overflow-hidden rounded-xl border text-left transition-all hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
       style={{
         borderColor: isSelected ? 'var(--ddms-secondary)' : 'var(--border)',
         backgroundColor: isSelected

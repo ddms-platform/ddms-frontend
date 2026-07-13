@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { notificationService } from '@/services/notificationService';
 import type { NotificationResponse } from '@/interfaces/notification';
 import { chatSignalRService } from '@/services/chatSignalRService';
+import { localStorageKey } from '@/constants/local-storage';
 
 export default function NotificationDropdown() {
   const { t } = useTranslation();
@@ -17,16 +18,24 @@ export default function NotificationDropdown() {
   );
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    const hasAccessToken = Boolean(
+      localStorage.getItem(localStorageKey.ACCESS_TOKEN),
+    );
+
+    if (!isAuthenticated || !hasAccessToken) {
       const timer = setTimeout(() => {
         setNotifications([]);
       }, 0);
       return () => clearTimeout(timer);
     }
 
+    let cancelled = false;
+
     notificationService
       .getNotifications(20)
-      .then((data) => setNotifications(data))
+      .then((data) => {
+        if (!cancelled) setNotifications(data);
+      })
       .catch((err) => console.error('Failed to load notifications:', err));
 
     chatSignalRService
@@ -42,6 +51,10 @@ export default function NotificationDropdown() {
       .catch((err) =>
         console.error('Failed to connect to SignalR notifications:', err),
       );
+
+    return () => {
+      cancelled = true;
+    };
   }, [isAuthenticated]);
 
   const markAllAsRead = async () => {
