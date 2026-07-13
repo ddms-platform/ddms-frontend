@@ -114,8 +114,19 @@
     "status": {
       "PENDING": "Pending",
       "UPCOMING": "Upcoming",
+      "CHECKED_IN": "Checked in",
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled"
+    },
+    "checkInQr": {
+      "title": "Check-in QR code",
+      "description": "Show this QR code at the dock for staff to scan and confirm boarding.",
+      "codeLabel": "Ticket code",
+      "show": "Show check-in QR",
+      "hide": "Hide check-in QR",
+      "download": "Download",
+      "downloadSuccess": "QR code downloaded",
+      "downloadError": "Could not download QR code"
     },
     "bookingRef": "Booking ID",
     "guests": "guest(s)",

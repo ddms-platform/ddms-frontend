@@ -7,8 +7,14 @@ import { Button } from '@/components/ui/button';
 import { bookingService } from '@/services/bookingService';
 import { chatService } from '@/services/chatService';
 import { toast } from 'sonner';
+import CheckInQr from './check-in-qr';
 
-export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type BookingStatus =
+  | 'PENDING'
+  | 'UPCOMING'
+  | 'CHECKED_IN'
+  | 'COMPLETED'
+  | 'CANCELLED';
 
 export interface Booking {
   id: string;
@@ -23,6 +29,8 @@ export interface Booking {
   guests: number;
   totalPrice: number;
   status: BookingStatus;
+  bookingCode: string;
+  canShowCheckInQr: boolean;
   createdAt: string;
 }
 
@@ -50,6 +58,12 @@ function BookingStatusBadge({
           bg: '#e8f5e9',
           text: '#2e7d32',
           label: t('dashboard.status.UPCOMING', 'Sắp khởi hành'),
+        };
+      case 'CHECKED_IN':
+        return {
+          bg: 'rgba(59, 130, 246, 0.15)',
+          text: '#2563eb',
+          label: t('dashboard.status.CHECKED_IN', 'Đã check-in'),
         };
       case 'COMPLETED':
         return {
@@ -244,6 +258,10 @@ export default function BookingCard({
             {booking.guests}
           </div>
         </div>
+
+        {booking.canShowCheckInQr && (
+          <CheckInQr bookingId={booking.id} bookingCode={booking.bookingCode} />
+        )}
       </div>
 
       {/* Actions & Mobile Price */}
@@ -278,6 +296,18 @@ export default function BookingCard({
               className="text-foreground border-foreground/30 hover:bg-foreground/5"
             >
               {t('dashboard.writeReview')}
+            </Button>
+          )}
+          {booking.status === 'CHECKED_IN' && (
+            <Button
+              variant="outline"
+              size="action"
+              className="text-foreground border-foreground/30 hover:bg-foreground/5"
+              asChild
+            >
+              <Link to={`/tours/${booking.tourId}`}>
+                {t('dashboard.viewDetails')}
+              </Link>
             </Button>
           )}
           <Button
@@ -319,6 +349,18 @@ export default function BookingCard({
         {booking.status === 'COMPLETED' && (
           <Button variant="cyan" size="action" className="w-full rounded-xl">
             {t('dashboard.writeReview')}
+          </Button>
+        )}
+        {booking.status === 'CHECKED_IN' && (
+          <Button
+            variant="outline"
+            size="action"
+            className="w-full rounded-xl text-foreground border-foreground/30 hover:bg-foreground/5 bg-ddms-bg-card"
+            asChild
+          >
+            <Link to={`/tours/${booking.tourId}`}>
+              {t('dashboard.viewDetails')}
+            </Link>
           </Button>
         )}
         {(booking.status === 'CANCELLED' || !booking.status) && (

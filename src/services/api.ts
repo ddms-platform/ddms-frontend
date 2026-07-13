@@ -1,6 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 import { localStorageKey } from '@/constants/local-storage';
-import { ApiErrorCode } from '@/constants/apiError';
+import { refreshAccessTokenShared } from './auth-token-refresh';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL
@@ -10,34 +10,6 @@ const api = axios.create({
 });
 
 type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
-
-let refreshPromise: Promise<string | null> | null = null;
-
-async function refreshAccessToken(): Promise<string | null> {
-  const refreshToken = localStorage.getItem(localStorageKey.REFRESH_TOKEN);
-  if (!refreshToken) return null;
-
-  try {
-    const base = import.meta.env.VITE_API_URL || 'https://localhost:7161';
-    const res = await axios.post(`${base}/api/auth/refresh-token`, {
-      refreshToken,
-    });
-    const data = res.data;
-    if (data?.code === ApiErrorCode.SUCCESS && data.result?.token) {
-      localStorage.setItem(localStorageKey.ACCESS_TOKEN, data.result.token);
-      if (data.result.refreshToken) {
-        localStorage.setItem(
-          localStorageKey.REFRESH_TOKEN,
-          data.result.refreshToken,
-        );
-      }
-      return data.result.token as string;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem(localStorageKey.ACCESS_TOKEN);
@@ -67,12 +39,7 @@ api.interceptors.response.use(
       !original.url?.includes('/auth/refresh-token')
     ) {
       original._retry = true;
-      if (!refreshPromise) {
-        refreshPromise = refreshAccessToken().finally(() => {
-          refreshPromise = null;
-        });
-      }
-      const newToken = await refreshPromise;
+      const newToken = await refreshAccessTokenShared();
       if (newToken) {
         original.headers = original.headers ?? {};
         original.headers.Authorization = `Bearer ${newToken}`;

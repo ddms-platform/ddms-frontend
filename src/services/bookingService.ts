@@ -36,7 +36,12 @@ export interface BookingResponse {
   createdAt: string;
 }
 
-export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type BookingStatus =
+  | 'PENDING'
+  | 'UPCOMING'
+  | 'CHECKED_IN'
+  | 'COMPLETED'
+  | 'CANCELLED';
 
 export interface UserBookingListItemResponse {
   id: string;
@@ -51,6 +56,8 @@ export interface UserBookingListItemResponse {
   guests: number;
   totalPrice: number;
   status: BookingStatus;
+  bookingCode: string;
+  canShowCheckInQr: boolean;
   createdAt: string;
 }
 

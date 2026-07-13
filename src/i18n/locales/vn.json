@@ -114,8 +114,19 @@
     "status": {
       "PENDING": "Chờ thanh toán",
       "UPCOMING": "Sắp khởi hành",
+      "CHECKED_IN": "Đã check-in",
       "COMPLETED": "Hoàn tất",
       "CANCELLED": "Đã huỷ"
+    },
+    "checkInQr": {
+      "title": "Mã QR check-in",
+      "description": "Xuất trình mã QR này tại cảng để nhân viên quét và ghi nhận lên tàu.",
+      "codeLabel": "Mã vé",
+      "show": "Hiện mã QR check-in",
+      "hide": "Ẩn mã QR check-in",
+      "download": "Tải xuống",
+      "downloadSuccess": "Đã tải mã QR",
+      "downloadError": "Không thể tải mã QR"
     },
     "bookingRef": "Mã đặt chỗ",
     "guests": "khách",
