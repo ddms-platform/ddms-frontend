@@ -24,6 +24,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
 import { performLogout } from '@/lib/auth-session';
 import { wishlistService } from '@/services/wishlistService';
+import { localStorageKey } from '@/constants/local-storage';
 
 interface NavLink {
   label: string;
@@ -88,7 +89,11 @@ export default function GlobalHeader({
   };
 
   const fetchWishlistCount = useCallback(() => {
-    if (user) {
+    const hasAccessToken = Boolean(
+      localStorage.getItem(localStorageKey.ACCESS_TOKEN),
+    );
+
+    if (user && isAuthenticated && hasAccessToken) {
       wishlistService
         .getWishlistedTourIds()
         .then((ids) => setWishlistCount(ids.length))
@@ -96,7 +101,7 @@ export default function GlobalHeader({
     } else {
       Promise.resolve().then(() => setWishlistCount(0));
     }
-  }, [user]);
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     fetchWishlistCount();

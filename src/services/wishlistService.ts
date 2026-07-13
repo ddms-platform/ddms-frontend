@@ -10,33 +10,31 @@ export interface ToggleWishlistResponse {
   isAdded: boolean;
 }
 
+const unwrapData = <T>(data: any, fallback: T): T => {
+  if (data?.result !== undefined) return data.result as T;
+  return (data ?? fallback) as T;
+};
+
+const normalizeTourIds = (data: any): string[] => {
+  const raw = unwrapData<any>(data, []);
+  if (Array.isArray(raw)) return raw.map(String);
+  if (Array.isArray(raw?.items)) return raw.items.map(String);
+  return [];
+};
+
 export const wishlistService = {
   getWishlists: async (): Promise<WishlistResponse> => {
-    const response = await Api.get<WishlistResponse>('/wishlists');
-    if (response.status !== 200 || !response.data?.items) {
-      return { items: [], totalCount: 0 };
-    }
+    const response = await Api.get('/wishlists');
     return response.data;
   },
 
   getWishlistedTourIds: async (): Promise<string[]> => {
-    const response = await Api.get<string[]>('/wishlists/ids');
-    if (response.status !== 200 || !Array.isArray(response.data)) {
-      return [];
-    }
-    return response.data;
+    const response = await Api.get('/wishlists/ids');
+    return response.data || [];
   },
 
   toggleWishlist: async (tourId: string): Promise<ToggleWishlistResponse> => {
-    const response = await Api.post<ToggleWishlistResponse>(
-      '/wishlists/toggle',
-      {
-        tourId,
-      },
-    );
-    if (response.status !== 200 || !response.data) {
-      throw new Error('Failed to toggle wishlist');
-    }
+    const response = await Api.post('/wishlists/toggle', { tourId });
     return response.data;
   },
 };

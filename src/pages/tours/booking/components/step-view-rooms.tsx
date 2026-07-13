@@ -4,12 +4,15 @@ import { Check } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import type { RoomOption } from '../types';
 import RoomDetailModal from './step-view-rooms/RoomDetailModal';
+import InteractiveCabinMap from './step-view-rooms/InteractiveCabinMap';
 import RoomCard from './step-view-rooms/RoomCard';
 
 interface StepViewRoomsProps {
   rooms: RoomOption[];
   selectedRoom: RoomOption | null;
   selectedBoatName: string;
+  boatImageUrls?: string[];
+  isAvailabilityLoading?: boolean;
   onSelectRoom: (room: RoomOption | null) => void;
 }
 
@@ -17,6 +20,8 @@ export default function StepViewRooms({
   rooms,
   selectedRoom,
   selectedBoatName,
+  boatImageUrls,
+  isAvailabilityLoading,
   onSelectRoom,
 }: StepViewRoomsProps) {
   const { t } = useTranslation();
@@ -31,14 +36,33 @@ export default function StepViewRooms({
         {t('booking.rooms.subtitle', { boat: selectedBoatName })}
       </p>
 
+      <InteractiveCabinMap
+        rooms={rooms}
+        selectedRoom={selectedRoom}
+        boatImageUrls={boatImageUrls}
+        isLoading={isAvailabilityLoading}
+        onSelectRoom={onSelectRoom}
+      />
+
       <div className="mt-5 space-y-4">
         {rooms.map((room) => (
           <RoomCard
             key={room.id}
             room={room}
             isSelected={selectedRoom?.id === room.id}
+            disabled={room.availableRooms <= 0}
             onToggle={() =>
-              onSelectRoom(selectedRoom?.id === room.id ? null : room)
+              onSelectRoom(
+                selectedRoom?.id === room.id
+                  ? null
+                  : {
+                      ...room,
+                      selectedUnitIndex: (room.bookedRooms ?? 0) + 1,
+                      selectedUnitLabel: `${room.name} ${
+                        (room.bookedRooms ?? 0) + 1
+                      }`,
+                    },
+              )
             }
             onViewDetail={() => setDetailRoom(room)}
           />
@@ -56,6 +80,9 @@ export default function StepViewRooms({
           <Check size={16} className="text-ddms-secondary" />
           <span className="text-sm text-foreground">
             {t('booking.rooms.selected')}: <strong>{selectedRoom.name}</strong>{' '}
+            {selectedRoom.selectedUnitLabel
+              ? `(${selectedRoom.selectedUnitLabel})`
+              : ''}{' '}
             — {formatPrice(selectedRoom.price)}
           </span>
         </div>
@@ -66,7 +93,17 @@ export default function StepViewRooms({
           room={detailRoom}
           onClose={() => setDetailRoom(null)}
           onSelect={(room) =>
-            onSelectRoom(selectedRoom?.id === room.id ? null : room)
+            onSelectRoom(
+              selectedRoom?.id === room.id
+                ? null
+                : {
+                    ...room,
+                    selectedUnitIndex: (room.bookedRooms ?? 0) + 1,
+                    selectedUnitLabel: `${room.name} ${
+                      (room.bookedRooms ?? 0) + 1
+                    }`,
+                  },
+            )
           }
           isSelected={selectedRoom?.id === detailRoom.id}
         />

@@ -13,6 +13,10 @@ interface RouteRowProps {
   onChange: (field: keyof RouteForm, value: string) => void;
 }
 
+const fieldLabelClass = 'text-sm font-medium text-muted-foreground';
+const inputClass =
+  'h-11 bg-ddms-bg-main border-border text-sm text-foreground mt-1.5';
+
 const RouteRow = ({
   route,
   index,
@@ -23,56 +27,50 @@ const RouteRow = ({
   descriptionPlaceholder = 'VD: Đón khách tại bến, bắt đầu hành trình ngắm cảnh sông Hàn về đêm...',
   onChange,
 }: RouteRowProps) => (
-  <div className="flex flex-col gap-4 bg-muted/30 p-4 rounded-lg border border-border">
-    <div className="flex items-center gap-2 mb-1">
-      <span className="bg-ddms-secondary/20 text-ddms-secondary text-xs px-2 py-0.5 rounded-full font-bold">
+  <div className="flex flex-col gap-5 rounded-xl border border-border bg-muted/30 p-5">
+    <div className="flex items-center gap-2">
+      <span className="rounded-full bg-ddms-secondary/20 px-3 py-1 text-sm font-bold text-ddms-secondary">
         {badgeLabel} {index + 1}
       </span>
     </div>
-    <div className="grid md:grid-cols-2 gap-4">
+
+    <div className="grid gap-5 md:grid-cols-2">
       <div>
-        <label className="text-xs text-muted-foreground">
-          Tên chặng / Hoạt động
-        </label>
+        <label className={fieldLabelClass}>Tên chặng / Hoạt động</label>
         <Input
           placeholder={namePlaceholder}
-          className="bg-ddms-bg-main border-border text-foreground mt-1"
+          className={inputClass}
           value={route.name}
           onChange={(e) => onChange('name', e.target.value)}
         />
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         <div className="flex-1">
-          <label className="text-xs text-muted-foreground">
-            Từ (Điểm bắt đầu)
-          </label>
+          <label className={fieldLabelClass}>Từ (Điểm bắt đầu)</label>
           <Input
             placeholder={startPlaceholder}
-            className="bg-ddms-bg-main border-border text-foreground mt-1"
+            className={inputClass}
             value={route.startPoint}
             onChange={(e) => onChange('startPoint', e.target.value)}
           />
         </div>
         <div className="flex-1">
-          <label className="text-xs text-muted-foreground">
-            Đến (Điểm kết thúc)
-          </label>
+          <label className={fieldLabelClass}>Đến (Điểm kết thúc)</label>
           <Input
             placeholder={endPlaceholder}
-            className="bg-ddms-bg-main border-border text-foreground mt-1"
+            className={inputClass}
             value={route.endPoint}
             onChange={(e) => onChange('endPoint', e.target.value)}
           />
         </div>
       </div>
     </div>
+
     <div>
-      <label className="text-xs text-muted-foreground">
-        Mô tả chi tiết chặng này
-      </label>
+      <label className={fieldLabelClass}>Mô tả chi tiết chặng này</label>
       <Textarea
         placeholder={descriptionPlaceholder}
-        className="bg-ddms-bg-main border-border text-foreground mt-1 h-15"
+        className="bg-ddms-bg-main border-border text-sm text-foreground mt-1.5 h-24 resize-none"
         value={route.description}
         onChange={(e) => onChange('description', e.target.value)}
       />

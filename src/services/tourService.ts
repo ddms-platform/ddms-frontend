@@ -89,6 +89,19 @@ export interface TourItemResponse {
   updatedAt: string;
 }
 
+export interface TourScheduleResponse {
+  id: string;
+  tour_id: string;
+  boat_id?: string | null;
+  boatName?: string | null;
+  boatImageUrls: string[];
+  dock_id?: string | null;
+  start_time: string;
+  end_time: string;
+  status: string;
+  maxCapacity?: number | null;
+}
+
 export interface TourImageItemResponse {
   id: string;
   tourId: string;
@@ -157,7 +170,9 @@ export const tourService = {
 
   getTourSchedules: (tourId: string) =>
     api
-      .get<ApiResponse<any[]>>(`/tour-schedules/tour/${tourId}`)
+      .get<
+        ApiResponse<TourScheduleResponse[]>
+      >(`/tour-schedules/tour/${tourId}`)
       .then((r) => r.data.result),
 
   getToursDashboardStats: () =>

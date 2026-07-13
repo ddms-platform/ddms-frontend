@@ -7,22 +7,26 @@ interface FaqRowProps {
   onChange: (field: keyof FaqForm, value: string) => void;
 }
 
+const fieldLabelClass = 'text-sm font-medium text-muted-foreground';
+const inputClass =
+  'h-11 bg-ddms-bg-main border-border text-sm text-foreground mt-1.5';
+
 const FaqRow = ({ faq, onChange }: FaqRowProps) => (
-  <div className="flex flex-col gap-2 bg-muted/30 p-3 rounded-lg border border-border">
+  <div className="flex flex-col gap-4 rounded-xl border border-border bg-muted/30 p-5">
     <div>
-      <label className="text-xs text-muted-foreground">Câu hỏi (Q)</label>
+      <label className={fieldLabelClass}>Câu hỏi (Q)</label>
       <Input
         placeholder="VD: Tour có đón trả khách tại khách sạn không?"
-        className="bg-ddms-bg-main border-border text-foreground mt-1"
+        className={inputClass}
         value={faq.question}
         onChange={(e) => onChange('question', e.target.value)}
       />
     </div>
     <div>
-      <label className="text-xs text-muted-foreground">Trả lời (A)</label>
+      <label className={fieldLabelClass}>Trả lời (A)</label>
       <Textarea
         placeholder="VD: Có, chúng tôi đón khách tại các khách sạn trung tâm..."
-        className="bg-ddms-bg-main border-border text-foreground mt-1 h-15"
+        className="bg-ddms-bg-main border-border text-sm text-foreground mt-1.5 h-24 resize-none"
         value={faq.answer}
         onChange={(e) => onChange('answer', e.target.value)}
       />

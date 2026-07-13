@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { formatPrice } from '@/lib/utils';
 import type { RoomOption } from '../types';
+import type { TourServiceResponse } from '@/services/tourService';
 
 interface StepGuestsProps {
   guests: number;
@@ -8,7 +9,9 @@ interface StepGuestsProps {
   selectedRoom: RoomOption | null;
   tourPrice: number;
   roomPrice: number;
+  servicePrice: number;
   totalPrice: number;
+  selectedServices: TourServiceResponse[];
   onSetGuests: (guests: number) => void;
   basePrice: number;
 }
@@ -19,7 +22,9 @@ export default function StepGuests({
   selectedRoom,
   tourPrice,
   roomPrice,
+  servicePrice,
   totalPrice,
+  selectedServices,
   onSetGuests,
   basePrice,
 }: StepGuestsProps) {
@@ -104,6 +109,17 @@ export default function StepGuests({
             </span>
             <span className="font-semibold text-foreground">
               {formatPrice(roomPrice)}
+            </span>
+          </div>
+        )}
+        {selectedServices.length > 0 && (
+          <div className="flex justify-between gap-4 text-sm">
+            <span className="text-muted-foreground">
+              Dịch vụ:{' '}
+              {selectedServices.map((service) => service.name).join(', ')}
+            </span>
+            <span className="shrink-0 font-semibold text-foreground">
+              {formatPrice(servicePrice)}
             </span>
           </div>
         )}

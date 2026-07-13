@@ -13,6 +13,8 @@ interface BookingSidebarProps {
   currency?: string;
   isClosed?: boolean;
   createdBy?: string;
+  selectedClassId?: string;
+  selectedServiceIds?: string[];
 }
 
 export default function BookingSidebar({
@@ -20,14 +22,32 @@ export default function BookingSidebar({
   price,
   isClosed,
   createdBy,
+  selectedClassId,
+  selectedServiceIds = [],
 }: BookingSidebarProps) {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
+  const normalizeId = (value?: string | null) => value?.trim().toLowerCase();
   const isOwner =
-    (user as any)?.id && createdBy && (user as any).id === createdBy;
+    !!normalizeId((user as any)?.id) &&
+    normalizeId((user as any)?.id) === normalizeId(createdBy);
+
+  const bookingParams = new URLSearchParams();
+  if (selectedClassId) bookingParams.set('classId', selectedClassId);
+  if (selectedServiceIds.length > 0) {
+    bookingParams.set('services', selectedServiceIds.join(','));
+  }
+  const bookingQuery = bookingParams.toString();
+  const bookingPath = `/tours/${tourId}/booking${bookingQuery ? `?${bookingQuery}` : ''}`;
+  const bookingState = {
+    bookingPrefill: {
+      classId: selectedClassId || '',
+      serviceIds: selectedServiceIds,
+    },
+  };
 
   useEffect(() => {
     if (user) {
@@ -38,7 +58,10 @@ export default function BookingSidebar({
         })
         .catch(console.error);
     } else {
-      setIsWishlisted(false);
+      const timer = window.setTimeout(() => {
+        setIsWishlisted(false);
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
   }, [tourId, user]);
 
@@ -115,18 +138,9 @@ export default function BookingSidebar({
         >
           Tạm đóng
         </Button>
-      ) : isOwner ? (
-        <Button
-          variant="secondary"
-          size="action-lg"
-          className="w-full bg-gray-500 text-white cursor-not-allowed hover:bg-gray-500"
-          disabled
-        >
-          Tour của bạn
-        </Button>
-      ) : (
+      ) : isOwner ? null : (
         <Button variant="cyan" size="action-lg" className="w-full" asChild>
-          <Link to={`/tours/${tourId}/booking`}>
+          <Link to={bookingPath} state={bookingState}>
             {t('tour.booking.bookNow')}
           </Link>
         </Button>
@@ -149,9 +163,11 @@ export default function BookingSidebar({
           : t('tour.booking.addWishlist')}
       </Button>
 
-      <p className="mt-4 text-center text-xs text-foreground/70">
-        {t('tour.booking.noChargeYet')}
-      </p>
+      {!isOwner && (
+        <p className="mt-4 text-center text-xs text-foreground/70">
+          {t('tour.booking.noChargeYet')}
+        </p>
+      )}
     </div>
   );
 }

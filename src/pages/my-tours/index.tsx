@@ -5,6 +5,7 @@ import { Briefcase, RefreshCw } from 'lucide-react';
 import { routeName } from '@/constants/route-name';
 import { bookingService } from '@/services/bookingService';
 import BookingCard, {
+  getBookingFilterStatus,
   type Booking,
   type BookingStatus,
 } from './components/booking-card';
@@ -34,12 +35,15 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    fetchBookings();
+    const timer = window.setTimeout(() => {
+      void fetchBookings();
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const filteredBookings = bookings.filter((booking) => {
     if (activeTab === 'ALL') return true;
-    return booking.status === activeTab;
+    return getBookingFilterStatus(booking) === activeTab;
   });
 
   const tabs: { id: TabType; label: string }[] = [

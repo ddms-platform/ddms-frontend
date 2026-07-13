@@ -36,6 +36,16 @@ export interface BookingResponse {
   createdAt: string;
 }
 
+export interface CabinAvailabilityResponse {
+  cabinId: string;
+  cabinName: string;
+  capacity: number;
+  price: number;
+  totalRooms: number;
+  bookedRooms: number;
+  availableRooms: number;
+}
+
 export type BookingStatus =
   | 'PENDING'
   | 'UPCOMING'
@@ -70,6 +80,13 @@ export const bookingService = {
   getUserBookings: () =>
     api
       .get<ApiResponse<UserBookingListItemResponse[]>>('/bookings')
+      .then((r) => r.data.result),
+
+  getCabinAvailability: (scheduleId: string) =>
+    api
+      .get<
+        ApiResponse<CabinAvailabilityResponse[]>
+      >(`/bookings/schedules/${scheduleId}/cabins`)
       .then((r) => r.data.result),
 
   confirmPayment: (bookingId: string) =>
