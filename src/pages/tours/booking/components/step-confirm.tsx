@@ -5,6 +5,7 @@ import type { TourItemResponse } from '@/services/tourService';
 import { bookingService } from '@/services/bookingService';
 import SummaryPanel from './step-confirm/SummaryPanel';
 import PaymentPanel from './step-confirm/PaymentPanel';
+import HoldCountdown from './step-confirm/HoldCountdown';
 
 interface StepConfirmProps {
   tour: TourItemResponse;
@@ -42,6 +43,9 @@ export default function StepConfirm({
 
   const [dbBookingId, setDbBookingId] = useState<string | null>(null);
   const [isCreatingBooking, setIsCreatingBooking] = useState(true);
+  // Thời điểm hết hạn giữ chỗ (null nếu tour quá sát giờ, phải thanh toán ngay).
+  const [holdExpiredAt, setHoldExpiredAt] = useState<string | null>(null);
+  const [holdExpired, setHoldExpired] = useState(false);
 
   const bookingCode = useMemo(() => {
     return 'DDMS' + Math.floor(100000 + Math.random() * 900000);
@@ -75,9 +79,21 @@ export default function StepConfirm({
               ]
             : [],
         };
-        const response = await bookingService.createBooking(payload);
-        if (active) {
-          setDbBookingId(response.id);
+        // Ưu tiên GIỮ CHỖ (giữ ghế trong lúc khách nhập thẻ) — có đồng hồ đếm ngược.
+        // Nếu tour khởi hành quá sát giờ, backend cấm giữ -> fallback tạo booking
+        // thường để khách thanh toán ngay.
+        try {
+          const held = await bookingService.holdBooking(payload);
+          if (active) {
+            setDbBookingId(held.id);
+            setHoldExpiredAt(held.holdExpiredAt ?? null);
+          }
+        } catch {
+          const response = await bookingService.createBooking(payload);
+          if (active) {
+            setDbBookingId(response.id);
+            setHoldExpiredAt(null);
+          }
         }
       } catch (err: any) {
         console.error('Failed to create booking in DB:', err);
@@ -107,6 +123,13 @@ export default function StepConfirm({
   ]);
 
   const handlePaymentSubmit = () => {
+    // Đã hết hạn giữ chỗ -> không cho thanh toán, yêu cầu đặt lại.
+    if (holdExpired) {
+      setErrorMessage(
+        'Chỗ giữ đã hết hạn. Vui lòng quay lại và đặt tour lại từ đầu.',
+      );
+      return;
+    }
     setIsVerifying(true);
     setErrorMessage(null);
 
@@ -151,6 +174,13 @@ export default function StepConfirm({
           )}
         </p>
       </div>
+
+      {holdExpiredAt && !isPaid && (
+        <HoldCountdown
+          expiresAt={holdExpiredAt}
+          onExpire={() => setHoldExpired(true)}
+        />
+      )}
 
       <div className="grid gap-6 md:grid-cols-2">
         <SummaryPanel
