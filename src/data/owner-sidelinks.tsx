@@ -8,6 +8,8 @@ import {
   Anchor,
   CreditCard,
   MessageSquare,
+  FileText,
+  IdCard,
 } from 'lucide-react';
 import type { JSX } from 'react';
 import { routeName } from '@/constants/route-name';
@@ -39,6 +41,16 @@ export const ownerSidelinks: SideLink[] = [
     title: 'ownerLayout.nav.boats',
     href: routeName.ownerBoats,
     icon: <Ship size={20} />,
+  },
+  {
+    title: 'ownerLayout.nav.certificates',
+    href: routeName.ownerCertificates,
+    icon: <FileText size={20} />,
+  },
+  {
+    title: 'ownerLayout.nav.ownerDocuments',
+    href: routeName.ownerDocuments,
+    icon: <IdCard size={20} />,
   },
   {
     title: 'ownerLayout.nav.dockMap',

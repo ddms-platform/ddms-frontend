@@ -25,27 +25,16 @@ const normalizeTourIds = (data: any): string[] => {
 export const wishlistService = {
   getWishlists: async (): Promise<WishlistResponse> => {
     const response = await Api.get('/wishlists');
-    const data = unwrapData<any>(response.data, {});
-    return {
-      items: Array.isArray(data?.items) ? data.items : [],
-      totalCount:
-        typeof data?.totalCount === 'number'
-          ? data.totalCount
-          : Array.isArray(data?.items)
-            ? data.items.length
-            : 0,
-    };
+    return response.data;
   },
 
   getWishlistedTourIds: async (): Promise<string[]> => {
     const response = await Api.get('/wishlists/ids');
-    return normalizeTourIds(response.data);
+    return response.data || [];
   },
 
   toggleWishlist: async (tourId: string): Promise<ToggleWishlistResponse> => {
     const response = await Api.post('/wishlists/toggle', { tourId });
-    return unwrapData<ToggleWishlistResponse>(response.data, {
-      isAdded: false,
-    });
+    return response.data;
   },
 };

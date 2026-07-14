@@ -1,41 +1,121 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Ship, Map, TrendingUp, Layers, X } from 'lucide-react';
+import {
+  Ship,
+  Map,
+  TrendingUp,
+  Layers,
+  X,
+  FileWarning,
+  FileText,
+  ExternalLink,
+  ShieldCheck,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { StatusBadge } from '@/components/badges';
 import {
   boatService,
   type BoatListItem,
   type BoatStatsResponse,
 } from '@/services/boatService';
+import {
+  certificateService,
+  type CertificateTypeItem,
+  type OwnerCertificateListItem,
+} from '@/services/certificateService';
 import { useAuth } from '@/hooks/use-auth';
 import ProfitChart from '@/components/owner/ProfitChart';
 import BoatForm from '@/pages/owner/boats/boat-form';
 import { Skeleton } from '@/components/ui/skeleton';
+import { formatDisplayDate } from '@/lib/date-format';
+
+const CERT_STATUS_VARIANT: Record<
+  string,
+  'ownerPending' | 'ownerIdle' | 'error' | 'warning'
+> = {
+  pending: 'ownerPending',
+  approved: 'ownerIdle',
+  rejected: 'error',
+  expired: 'warning',
+};
+
+const EXPIRY_WARNING_DAYS = 7;
 
 export default function OwnerDashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language?.startsWith('en');
   const { user } = useAuth();
   const [boats, setBoats] = useState<BoatListItem[]>([]);
   const [stats, setStats] = useState<BoatStatsResponse | null>(null);
+  const [certificates, setCertificates] = useState<OwnerCertificateListItem[]>(
+    [],
+  );
+  const [certTypes, setCertTypes] = useState<CertificateTypeItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedBoatIdForModal, setSelectedBoatIdForModal] = useState<
     string | null
   >(null);
+  const [modalInitialTab, setModalInitialTab] = useState<
+    'basic' | 'certificates'
+  >('basic');
+
+  const certTypeLabel = (code: string) => {
+    const found = certTypes.find((item) => item.code === code);
+    if (found) return isEn ? found.nameEn : found.nameVi;
+    return code;
+  };
 
   const refreshDashboardData = async () => {
     try {
-      const [statsRes, boatsRes] = await Promise.all([
+      const [statsRes, boatsRes, certsRes, typesRes] = await Promise.all([
         boatService.getOwnerStats(),
         boatService.getOwnerBoats({ pageSize: 8 }),
+        certificateService.getAllForOwner().catch(() => []),
+        certificateService
+          .getTypes('boat')
+          .catch(() => [] as CertificateTypeItem[]),
       ]);
       setStats(statsRes);
       setBoats(boatsRes.items || []);
+      setCertificates(certsRes || []);
+      setCertTypes(typesRes || []);
     } catch (error) {
       console.error('Failed to fetch dashboard data', error);
     }
   };
+
+  const openBoatCertificates = (boatId: string) => {
+    setModalInitialTab('certificates');
+    setSelectedBoatIdForModal(boatId);
+  };
+
+  const attentionCertificates = useMemo(() => {
+    const today = new Date();
+    return certificates
+      .filter((c) => {
+        if (
+          c.status === 'pending' ||
+          c.status === 'rejected' ||
+          c.status === 'expired'
+        ) {
+          return true;
+        }
+        if (c.status === 'approved') {
+          const expiry = new Date(c.expiryDate);
+          const diffDays = Math.ceil(
+            (expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+          );
+          return diffDays <= EXPIRY_WARNING_DAYS;
+        }
+        return false;
+      })
+      .sort(
+        (a, b) =>
+          new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime(),
+      );
+  }, [certificates]);
 
   useEffect(() => {
     const initData = async () => {
@@ -254,6 +334,107 @@ export default function OwnerDashboard() {
               </div>
             )}
 
+            {/* Legal Document Management Section */}
+            <div className="mt-8">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold border-l-4 border-cyan-500 pl-3 flex items-center gap-2">
+                  Quản lý giấy tờ pháp lý
+                  {attentionCertificates.length > 0 && (
+                    <Badge className="bg-amber-500/90 hover:bg-amber-500 text-white border-none">
+                      {attentionCertificates.length}
+                    </Badge>
+                  )}
+                </h3>
+                <Link
+                  to="/owner/certificates"
+                  className="text-sm text-cyan-500 hover:underline"
+                >
+                  Xem tất cả giấy tờ
+                </Link>
+              </div>
+
+              <div className="bg-ddms-bg-card rounded-2xl border border-border shadow-lg overflow-hidden">
+                {attentionCertificates.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <ShieldCheck className="w-10 h-10 text-emerald-500 mx-auto mb-3" />
+                    <h4 className="text-base font-medium text-foreground">
+                      Mọi giấy tờ đều hợp lệ
+                    </h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Không có giấy tờ nào cần xử lý hoặc sắp hết hạn.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-border">
+                    {attentionCertificates.map((cert) => (
+                      <div
+                        key={cert.id}
+                        className="flex flex-col sm:flex-row sm:items-center gap-3 p-4"
+                      >
+                        <div className="flex items-start gap-3 flex-1 min-w-0">
+                          <FileWarning
+                            size={20}
+                            className="text-amber-500 shrink-0 mt-0.5"
+                          />
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-foreground">
+                              {certTypeLabel(cert.certificateType)}
+                              <span className="text-muted-foreground font-normal">
+                                {' '}
+                                · {cert.boatName}
+                              </span>
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              {t('ownerBoats.certificates.expiresOn', {
+                                date: formatDisplayDate(cert.expiryDate),
+                              })}
+                            </p>
+                            {cert.rejectionReason && (
+                              <p className="text-xs text-red-400 mt-1">
+                                {t('ownerBoats.certificates.rejectionReason', {
+                                  reason: cert.rejectionReason,
+                                })}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <StatusBadge
+                            label={t(
+                              `ownerBoats.certificates.status.${cert.status}`,
+                              cert.status,
+                            )}
+                            variant={
+                              CERT_STATUS_VARIANT[cert.status] ?? 'ownerPending'
+                            }
+                          />
+                          <a
+                            href={cert.documentUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                            title={t('ownerBoats.certificates.viewDocument')}
+                          >
+                            <ExternalLink size={16} />
+                          </a>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1.5 text-foreground border-foreground/30 hover:bg-foreground/5"
+                            onClick={() => openBoatCertificates(cert.boatId)}
+                          >
+                            <FileText size={13} />
+                            Quản lý
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Profit Chart Section */}
             <div className="mt-8">
               <ProfitChart data={stats?.monthlyProfits || []} />
@@ -271,7 +452,10 @@ export default function OwnerDashboard() {
           <div className="relative z-10 w-full max-w-5xl bg-ddms-bg-owner border border-border rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]">
             <div className="absolute top-6 right-6 z-20">
               <button
-                onClick={() => setSelectedBoatIdForModal(null)}
+                onClick={() => {
+                  setSelectedBoatIdForModal(null);
+                  setModalInitialTab('basic');
+                }}
                 className="p-1.5 bg-muted hover:bg-foreground/10 text-muted-foreground hover:text-foreground rounded-full border border-border transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -280,9 +464,14 @@ export default function OwnerDashboard() {
             <div>
               <BoatForm
                 boatIdProp={selectedBoatIdForModal}
-                onClose={() => setSelectedBoatIdForModal(null)}
+                initialTab={modalInitialTab}
+                onClose={() => {
+                  setSelectedBoatIdForModal(null);
+                  setModalInitialTab('basic');
+                }}
                 onSaved={async () => {
                   setSelectedBoatIdForModal(null);
+                  setModalInitialTab('basic');
                   await refreshDashboardData();
                 }}
               />

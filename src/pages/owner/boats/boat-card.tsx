@@ -6,6 +6,7 @@ import {
   Pencil,
   Eye,
   Trash2,
+  ShieldAlert,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +24,17 @@ interface BoatCardProps {
 export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
   const { t, i18n } = useTranslation();
   const hasActiveMaintenance = boat.status === 'maintenance';
+  const complianceStatus =
+    boat.complianceStatus ??
+    (boat as { compliance_status?: string }).compliance_status;
+  const showComplianceBadge = complianceStatus && complianceStatus !== 'valid';
+
+  const complianceVariant =
+    complianceStatus === 'locked'
+      ? 'error'
+      : complianceStatus === 'hidden'
+        ? 'ownerPending'
+        : 'ownerAttention';
 
   return (
     <div
@@ -59,6 +71,18 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
             <StatusBadge
               label={t('ownerBoats.card.maintenance')}
               variant="ownerMaintenance"
+            />
+          </div>
+        )}
+
+        {showComplianceBadge && (
+          <div
+            className={`absolute ${hasActiveMaintenance ? 'top-12' : 'top-3'} right-3`}
+          >
+            <StatusBadge
+              label={t(`ownerBoats.compliance.${complianceStatus}`)}
+              variant={complianceVariant}
+              icon={ShieldAlert}
             />
           </div>
         )}

@@ -46,7 +46,12 @@ export interface CabinAvailabilityResponse {
   availableRooms: number;
 }
 
-export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type BookingStatus =
+  | 'PENDING'
+  | 'UPCOMING'
+  | 'CHECKED_IN'
+  | 'COMPLETED'
+  | 'CANCELLED';
 
 export interface UserBookingListItemResponse {
   id: string;
@@ -61,6 +66,8 @@ export interface UserBookingListItemResponse {
   guests: number;
   totalPrice: number;
   status: BookingStatus;
+  bookingCode: string;
+  canShowCheckInQr: boolean;
   createdAt: string;
 }
 
@@ -77,9 +84,9 @@ export const bookingService = {
 
   getCabinAvailability: (scheduleId: string) =>
     api
-      .get<ApiResponse<CabinAvailabilityResponse[]>>(
-        `/bookings/schedules/${scheduleId}/cabins`,
-      )
+      .get<
+        ApiResponse<CabinAvailabilityResponse[]>
+      >(`/bookings/schedules/${scheduleId}/cabins`)
       .then((r) => r.data.result),
 
   confirmPayment: (bookingId: string) =>
