@@ -34,6 +34,8 @@ export interface BookingResponse {
   totalPrice: number;
   status: string;
   createdAt: string;
+  /** Thời điểm hết hạn giữ chỗ (chỉ có khi status = holding) — dùng để đếm ngược. */
+  holdExpiredAt?: string | null;
 }
 
 export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
@@ -58,6 +60,12 @@ export const bookingService = {
   createBooking: (data: CreateBookingRequest) =>
     api
       .post<ApiResponse<BookingResponse>>('/bookings', data)
+      .then((r) => r.data.result),
+
+  /** Giữ chỗ tạm thời (chưa thanh toán). Trả về holdExpiredAt để đếm ngược. */
+  holdBooking: (data: CreateBookingRequest) =>
+    api
+      .post<ApiResponse<BookingResponse>>('/bookings/hold', data)
       .then((r) => r.data.result),
 
   getUserBookings: () =>
