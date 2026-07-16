@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AuthServices } from '@/services/auth-service';
 import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
@@ -12,8 +13,25 @@ import OwnerInfoSection from './components/OwnerInfoSection';
 import VesselSection, {
   type VesselFormState,
 } from './components/VesselSection';
+import type {
+  CertificateFormItem,
+  CertificateTypeItem,
+  OwnerEntityType,
+} from '@/services/certificateService';
+import { certificateService } from '@/services/certificateService';
 
-const buildEmptyVessel = (defaultType: string): VesselFormState => ({
+const buildEmptyCertificate = (
+  defaultType = 'registration',
+): CertificateFormItem => ({
+  certificateType: defaultType,
+  file: null,
+  expiryDate: '',
+});
+
+const buildEmptyVessel = (
+  defaultType: string,
+  defaultCertType = 'registration',
+): VesselFormState => ({
   Name: '',
   Type: defaultType,
   Length: '',
@@ -22,21 +40,39 @@ const buildEmptyVessel = (defaultType: string): VesselFormState => ({
   MooringType: 'Floating',
   ExpectedDockingDate: '',
   ImageFiles: [],
-  DocumentFiles: [],
+  Certificates: [buildEmptyCertificate(defaultCertType)],
 });
 
 export default function OwnerRegistrationPage() {
   const navigate = useNavigate();
   const { user, reloadUser } = useAuth();
+  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
   const [boatTypes, setBoatTypes] = useState<IBoatType[]>([]);
+  const [certificateTypes, setCertificateTypes] = useState<
+    CertificateTypeItem[]
+  >([]);
+  const defaultCertType = certificateTypes[0]?.code || 'registration';
+
+  const [ownerInfo, setOwnerInfo] = useState({
+    FullName: user?.name || '',
+    Email: user?.email || '',
+    Phone: user?.phone || '',
+    LicenseNumber: '',
+    Address: user?.address || '',
+    EntityType: 'individual' as OwnerEntityType,
+  });
+
+  const [vessels, setVessels] = useState<VesselFormState[]>([
+    buildEmptyVessel('yacht'),
+  ]);
 
   React.useEffect(() => {
     getBoatTypes()
       .then((res) => {
         let typesData = res.data as any;
-        if (typesData && typesData.data) typesData = typesData.data; // Unwrap if nested
+        if (typesData && typesData.data) typesData = typesData.data;
 
         if (Array.isArray(typesData)) {
           setBoatTypes(typesData);
@@ -44,7 +80,9 @@ export default function OwnerRegistrationPage() {
             const firstTypeCode = typesData[0].code;
             setVessels((prev) =>
               prev.map((v) => {
-                const typeExists = typesData.some((t) => t.code === v.Type);
+                const typeExists = typesData.some(
+                  (t: IBoatType) => t.code === v.Type,
+                );
                 if (!typeExists) {
                   return { ...v, Type: firstTypeCode };
                 }
@@ -55,22 +93,34 @@ export default function OwnerRegistrationPage() {
         }
       })
       .catch((err) => console.log(err));
+
+    certificateService
+      .getTypes('boat')
+      .then((types) => {
+        if (Array.isArray(types) && types.length > 0) {
+          const boatTypesOnly = types.filter((t) => t.isActive !== false);
+          const active = boatTypesOnly.length > 0 ? boatTypesOnly : types;
+          setCertificateTypes(active);
+          const firstCode = active[0].code;
+          setVessels((prev) =>
+            prev.map((v) => ({
+              ...v,
+              Certificates: v.Certificates.map((c) => {
+                const exists = active.some((t) => t.code === c.certificateType);
+                return exists ? c : { ...c, certificateType: firstCode };
+              }),
+            })),
+          );
+        }
+      })
+      .catch((err) => console.log(err));
   }, []);
 
-  const [ownerInfo, setOwnerInfo] = useState({
-    FullName: user?.name || '',
-    Email: user?.email || '',
-    Phone: user?.phone || '',
-    LicenseNumber: '',
-    Address: user?.address || '',
-  });
-
-  const [vessels, setVessels] = useState<VesselFormState[]>([
-    buildEmptyVessel('yacht'),
-  ]);
-
-  const handleOwnerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOwnerInfo({ ...ownerInfo, [e.target.name]: e.target.value });
+  const handleOwnerChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+    setOwnerInfo({ ...ownerInfo, [name]: value });
   };
 
   const handleVesselChange = (index: number, field: string, value: any) => {
@@ -81,7 +131,7 @@ export default function OwnerRegistrationPage() {
 
   const handleFileChange = (
     index: number,
-    field: 'ImageFiles' | 'DocumentFiles',
+    field: 'ImageFiles',
     files: FileList | null,
   ) => {
     if (!files) return;
@@ -99,7 +149,7 @@ export default function OwnerRegistrationPage() {
 
   const handleRemoveFile = (
     vesselIndex: number,
-    field: 'ImageFiles' | 'DocumentFiles',
+    field: 'ImageFiles',
     fileIndex: number,
   ) => {
     const updated = [...vessels];
@@ -109,9 +159,43 @@ export default function OwnerRegistrationPage() {
     setVessels(updated);
   };
 
+  const handleCertificateChange = (
+    vesselIndex: number,
+    certIndex: number,
+    field: keyof CertificateFormItem,
+    value: string | File | null,
+  ) => {
+    const updated = [...vessels];
+    const certs = [...updated[vesselIndex].Certificates];
+    certs[certIndex] = { ...certs[certIndex], [field]: value };
+    updated[vesselIndex] = { ...updated[vesselIndex], Certificates: certs };
+    setVessels(updated);
+  };
+
+  const handleAddCertificate = (vesselIndex: number) => {
+    const updated = [...vessels];
+    updated[vesselIndex] = {
+      ...updated[vesselIndex],
+      Certificates: [
+        ...updated[vesselIndex].Certificates,
+        buildEmptyCertificate(defaultCertType),
+      ],
+    };
+    setVessels(updated);
+  };
+
+  const handleRemoveCertificate = (vesselIndex: number, certIndex: number) => {
+    const updated = [...vessels];
+    const certs = updated[vesselIndex].Certificates.filter(
+      (_, i) => i !== certIndex,
+    );
+    updated[vesselIndex] = { ...updated[vesselIndex], Certificates: certs };
+    setVessels(updated);
+  };
+
   const handleAddVessel = () => {
     const defaultType = boatTypes.length > 0 ? boatTypes[0].code : 'yacht';
-    setVessels([...vessels, buildEmptyVessel(defaultType)]);
+    setVessels([...vessels, buildEmptyVessel(defaultType, defaultCertType)]);
   };
 
   const handleRemoveVessel = (index: number) => {
@@ -120,6 +204,7 @@ export default function OwnerRegistrationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setLoading(true);
     try {
       const formData = new FormData();
@@ -128,6 +213,7 @@ export default function OwnerRegistrationPage() {
       formData.append('Phone', ownerInfo.Phone);
       formData.append('LicenseNumber', ownerInfo.LicenseNumber);
       formData.append('Address', ownerInfo.Address);
+      formData.append('EntityType', ownerInfo.EntityType);
 
       vessels.forEach((vessel, index) => {
         formData.append(`Vessels[${index}].Name`, vessel.Name);
@@ -147,19 +233,34 @@ export default function OwnerRegistrationPage() {
         vessel.ImageFiles.forEach((file) =>
           formData.append(`Vessels[${index}].ImageFiles`, file),
         );
-        vessel.DocumentFiles.forEach((file) =>
-          formData.append(`Vessels[${index}].DocumentFiles`, file),
-        );
+
+        vessel.Certificates.forEach((cert, certIndex) => {
+          if (!cert.file) return;
+          formData.append(
+            `Vessels[${index}].Certificates[${certIndex}].CertificateType`,
+            cert.certificateType,
+          );
+          formData.append(
+            `Vessels[${index}].Certificates[${certIndex}].File`,
+            cert.file,
+          );
+          formData.append(
+            `Vessels[${index}].Certificates[${certIndex}].ExpiryDate`,
+            cert.expiryDate,
+          );
+        });
       });
 
       const res = await AuthServices.registerOwner(formData);
       if (res.status === 200) {
-        toast.success(res.data.message || 'Đăng ký thành công!');
+        toast.success(res.data.message || t('ownerRegistration.submitSuccess'));
         await reloadUser();
         navigate(routeName.home);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Đã có lỗi xảy ra.');
+      toast.error(
+        error.response?.data?.message || t('ownerRegistration.submitError'),
+      );
     } finally {
       setLoading(false);
     }
@@ -170,12 +271,10 @@ export default function OwnerRegistrationPage() {
       <div className="w-full max-w-212.5">
         <div className="mb-8">
           <h1 className="text-[28px] font-bold text-white mb-2 tracking-tight">
-            Đăng ký Chủ thuyền Mới
+            {t('ownerRegistration.title')}
           </h1>
           <p className="text-[15px] text-gray-300">
-            Hoàn tất biểu mẫu dưới đây để gia nhập hệ sinh thái quản lý cảng
-            biển cao cấp Marina Command. Thông tin của bạn sẽ được bảo mật và xử
-            lý bởi bộ phận vận hành cảng.
+            {t('ownerRegistration.subtitle')}
           </p>
         </div>
 
@@ -192,6 +291,7 @@ export default function OwnerRegistrationPage() {
               index={index}
               totalCount={vessels.length}
               boatTypes={boatTypes}
+              certificateTypes={certificateTypes}
               onChange={(field, value) =>
                 handleVesselChange(index, field, value)
               }
@@ -200,6 +300,13 @@ export default function OwnerRegistrationPage() {
               }
               onRemoveFile={(field, fileIndex) =>
                 handleRemoveFile(index, field, fileIndex)
+              }
+              onCertificateChange={(certIndex, field, value) =>
+                handleCertificateChange(index, certIndex, field, value)
+              }
+              onAddCertificate={() => handleAddCertificate(index)}
+              onRemoveCertificate={(certIndex) =>
+                handleRemoveCertificate(index, certIndex)
               }
               onAddVessel={handleAddVessel}
               onRemoveVessel={() => handleRemoveVessel(index)}
@@ -212,7 +319,7 @@ export default function OwnerRegistrationPage() {
               onClick={() => navigate(-1)}
               className="px-8 py-3 rounded border border-gray-600 text-[14px] font-bold text-gray-300 hover:bg-gray-800 transition-colors"
             >
-              HỦY BỎ
+              {t('ownerRegistration.cancel')}
             </button>
             <button
               type="submit"
@@ -223,7 +330,7 @@ export default function OwnerRegistrationPage() {
                 <LoadingSpinner />
               ) : (
                 <>
-                  GỬI ĐĂNG KÝ <ArrowRight size={16} />
+                  {t('ownerRegistration.submit')} <ArrowRight size={16} />
                 </>
               )}
             </button>

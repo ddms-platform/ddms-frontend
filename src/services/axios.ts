@@ -8,9 +8,12 @@ import { toast } from 'sonner';
 import i18n from '@/i18n';
 import { env } from '@/config/env';
 import { localStorageService } from './local-storage-service';
-import { localStorageKey } from '@/constants/local-storage';
 import { ApiErrorCode } from '@/constants/apiError';
 import { routeName } from '@/constants/route-name';
+import {
+  clearAuthSession,
+  refreshAccessTokenShared,
+} from './auth-token-refresh';
 
 // Global state for user disabled dialog
 let showUserDisabledDialog: (() => void) | null = null;
@@ -36,9 +39,7 @@ export interface DataResponseErrorBase {
 type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 
 function clearSession() {
-  localStorage.removeItem(localStorageKey.ACCESS_TOKEN);
-  localStorage.removeItem(localStorageKey.REFRESH_TOKEN);
-  localStorage.removeItem(localStorageKey.USER);
+  clearAuthSession();
 }
 
 function redirectToSignIn() {
@@ -47,36 +48,7 @@ function redirectToSignIn() {
   }
 }
 
-// Silent refresh: shared promise prevents a stampede of concurrent refreshes.
-let refreshPromise: Promise<string | null> | null = null;
-
-async function refreshAccessToken(): Promise<string | null> {
-  const refreshToken = localStorage.getItem(localStorageKey.REFRESH_TOKEN);
-  if (!refreshToken) {
-    return null;
-  }
-
-  try {
-    const res = await axios.post(
-      `${baseUrlApi}/auth/refresh-token`,
-      { refreshToken },
-      { headers: { 'Content-Type': 'application/json' } },
-    );
-
-    const data = res.data;
-    if (data?.code === ApiErrorCode.SUCCESS && data.result?.token) {
-      localStorage.setItem(localStorageKey.ACCESS_TOKEN, data.result.token);
-      localStorage.setItem(
-        localStorageKey.REFRESH_TOKEN,
-        data.result.refreshToken,
-      );
-      return data.result.token as string;
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
+// Silent refresh uses shared module (see auth-token-refresh.ts).
 
 const api = axios.create({
   baseURL: baseUrlApi,
@@ -145,13 +117,7 @@ api.interceptors.response.use(
     ) {
       originalConfig._retry = true;
 
-      if (!refreshPromise) {
-        refreshPromise = refreshAccessToken().finally(() => {
-          refreshPromise = null;
-        });
-      }
-
-      const newToken = await refreshPromise;
+      const newToken = await refreshAccessTokenShared();
       if (newToken) {
         originalConfig.headers = originalConfig.headers ?? {};
         originalConfig.headers.Authorization = `Bearer ${newToken}`;

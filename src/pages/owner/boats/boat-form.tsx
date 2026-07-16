@@ -1,7 +1,15 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Save, Ship, Layers, Wrench, Loader2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  Save,
+  Ship,
+  Layers,
+  Wrench,
+  Loader2,
+  FileText,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,22 +26,29 @@ import ServiceTab, {
 import MaintenanceTab from './maintenance-tab';
 import BoatBasicInfoSection from './boat-form/BoatBasicInfoSection';
 import BoatImagesSection from './boat-form/BoatImagesSection';
+import CertificateTab from './boat-form/CertificateTab';
 import { Api } from '@/services/axios';
 
-type Tab = 'basic' | 'services' | 'maintenance';
+type Tab = 'basic' | 'services' | 'maintenance' | 'certificates';
 
 export default function BoatForm({
   boatIdProp,
+  initialTab,
   onClose,
   onSaved,
-}: { boatIdProp?: string; onClose?: () => void; onSaved?: () => void } = {}) {
+}: {
+  boatIdProp?: string;
+  initialTab?: Tab;
+  onClose?: () => void;
+  onSaved?: () => void;
+} = {}) {
   const { t } = useTranslation();
   const { boatId: routeBoatId } = useParams();
   const boatId = boatIdProp || routeBoatId;
   const navigate = useNavigate();
   const isEdit = !!boatId;
 
-  const [activeTab, setActiveTab] = useState<Tab>('basic');
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab ?? 'basic');
   const [boat, setBoat] = useState<Boat | null>(null);
   const [loadingBoat, setLoadingBoat] = useState(isEdit);
   const [saving, setSaving] = useState(false);
@@ -82,7 +97,7 @@ export default function BoatForm({
       try {
         await boatService.deleteBoatImage(boatId, target.id);
         toast.success('Xóa ảnh thành công');
-      } catch (err) {
+      } catch {
         toast.error('Không thể xóa ảnh trên máy chủ');
         return;
       }
@@ -126,7 +141,10 @@ export default function BoatForm({
   }, [boatId]);
 
   useEffect(() => {
-    loadBoat();
+    const timer = window.setTimeout(() => {
+      void loadBoat();
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [loadBoat]);
 
   useEffect(() => {
@@ -296,6 +314,11 @@ export default function BoatForm({
       icon: Wrench,
       count: maintenances.length,
     },
+    {
+      id: 'certificates',
+      label: t('ownerBoats.form.tabs.certificates'),
+      icon: FileText,
+    },
   ];
 
   if (loadingBoat) {
@@ -415,6 +438,10 @@ export default function BoatForm({
             selectedServices={selectedMaintenanceServices}
             onSelectedServicesChange={setSelectedMaintenanceServices}
           />
+        )}
+
+        {activeTab === 'certificates' && (
+          <CertificateTab boatId={boatId || createdBoatId || undefined} />
         )}
       </div>
     </div>
