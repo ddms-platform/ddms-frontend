@@ -62,11 +62,10 @@ export default function OwnerDocumentsPage() {
       }
     } catch (err: unknown) {
       const axiosMsg =
-        err &&
-        typeof err === 'object' &&
-        'response' in err &&
-        (err as { response?: { data?: { message?: string } } }).response?.data
-          ?.message;
+        err && typeof err === 'object' && 'response' in err
+          ? (err as { response?: { data?: { message?: string } } }).response
+              ?.data?.message
+          : undefined;
       toast.error(
         axiosMsg ||
           (err instanceof Error ? err.message : t('ownerDocuments.loadError')),
@@ -77,7 +76,10 @@ export default function OwnerDocumentsPage() {
   }, [t]);
 
   useEffect(() => {
-    fetchData();
+    const timer = window.setTimeout(() => {
+      void fetchData();
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [fetchData]);
 
   const existingTypes = useMemo(
@@ -104,11 +106,10 @@ export default function OwnerDocumentsPage() {
       await fetchData();
     } catch (err: unknown) {
       const axiosMsg =
-        err &&
-        typeof err === 'object' &&
-        'response' in err &&
-        (err as { response?: { data?: { message?: string } } }).response?.data
-          ?.message;
+        err && typeof err === 'object' && 'response' in err
+          ? (err as { response?: { data?: { message?: string } } }).response
+              ?.data?.message
+          : undefined;
       toast.error(
         axiosMsg ||
           (err instanceof Error

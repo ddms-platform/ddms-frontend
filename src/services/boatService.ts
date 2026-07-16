@@ -166,9 +166,10 @@ export const boatService = {
 
   uploadBoatImage: (boatId: string, base64: string, caption?: string) =>
     api
-      .post<
-        ApiResponse<any>
-      >(`/owner/boats/${boatId}/images`, { fileBase64: base64, caption })
+      .post<ApiResponse<any>>(`/owner/boats/${boatId}/images`, {
+        fileBase64: base64,
+        caption,
+      })
       .then((r) => r.data.result),
 
   deleteBoatImage: (boatId: string, imageId: string) =>
@@ -193,16 +194,17 @@ export const boatService = {
   // Currently backend maps these as /api/admin/boats/... but we will use them here.
   addMaintenance: (boatId: string, dto: CreateMaintenanceDto) =>
     api
-      .post<
-        ApiResponse<BoatMaintenance>
-      >(`/admin/boats/${boatId}/maintenances`, dto)
+      .post<ApiResponse<BoatMaintenance>>(
+        `/admin/boats/${boatId}/maintenances`,
+        dto,
+      )
       .then((r) => r.data.result),
 
   deleteMaintenance: (boatId: string, maintenanceId: string) =>
     api
-      .delete<
-        ApiResponse<any>
-      >(`/admin/boats/${boatId}/maintenances/${maintenanceId}`)
+      .delete<ApiResponse<any>>(
+        `/admin/boats/${boatId}/maintenances/${maintenanceId}`,
+      )
       .then((r) => r.data.result),
 
   registerPortMaintenances: (
@@ -210,16 +212,17 @@ export const boatService = {
     registrations: { serviceId: string; scheduledDate: string }[],
   ) =>
     api
-      .post<
-        ApiResponse<any>
-      >(`/owner/boats/${boatId}/maintenances/register`, registrations)
+      .post<ApiResponse<any>>(
+        `/owner/boats/${boatId}/maintenances/register`,
+        registrations,
+      )
       .then((r) => r.data.result),
 
   deleteOwnerMaintenance: (boatId: string, maintenanceId: string) =>
     api
-      .delete<
-        ApiResponse<any>
-      >(`/owner/boats/${boatId}/maintenances/${maintenanceId}`)
+      .delete<ApiResponse<any>>(
+        `/owner/boats/${boatId}/maintenances/${maintenanceId}`,
+      )
       .then((r) => r.data.result),
 
   getPendingMaintenancesAdmin: () =>

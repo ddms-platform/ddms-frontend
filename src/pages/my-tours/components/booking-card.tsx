@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Calendar, Users, MapPin, MessageCircle } from 'lucide-react';
 import { formatPrice, getLocalizedField } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { bookingService } from '@/services/bookingService';
 import { chatService } from '@/services/chatService';
 import { toast } from 'sonner';
 import CheckInQr from './check-in-qr';
 
-export type BookingStatus = 'PENDING' | 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type BookingStatus =
+  'PENDING' | 'UPCOMING' | 'CHECKED_IN' | 'COMPLETED' | 'CANCELLED';
+export type BookingDisplayStatus = BookingStatus | 'CONFIRM_REQUIRED';
 
 export interface Booking {
   id: string;
@@ -373,7 +375,7 @@ export default function BookingCard({
             {t('dashboard.writeReview')}
           </Button>
         )}
-        {(booking.status === 'CANCELLED' || !booking.status) && (
+        {(displayStatus === 'CANCELLED' || !booking.status) && (
           <Button
             variant="outline"
             size="action"

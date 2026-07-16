@@ -121,9 +121,11 @@ export const certificateService = {
     formData.append('file', file);
     formData.append('expiryDate', expiryDate);
     return api
-      .post<
-        ApiResponse<Certificate>
-      >(`/owner/boats/${boatId}/certificates`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+      .post<ApiResponse<Certificate>>(
+        `/owner/boats/${boatId}/certificates`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } },
+      )
       .then((r) => r.data.result);
   },
 
@@ -132,9 +134,11 @@ export const certificateService = {
     formData.append('file', file);
     formData.append('expiryDate', expiryDate);
     return api
-      .post<
-        ApiResponse<Certificate>
-      >(`/owner/boats/${boatId}/certificates/${certId}/renew`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+      .post<ApiResponse<Certificate>>(
+        `/owner/boats/${boatId}/certificates/${certId}/renew`,
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } },
+      )
       .then((r) => r.data.result);
   },
 };

@@ -104,7 +104,10 @@ export default function CertificateTab({
   }, [boatId, t]);
 
   useEffect(() => {
-    loadCertificates();
+    const timer = window.setTimeout(() => {
+      void loadCertificates();
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [loadCertificates]);
 
   const availableTypes = useMemo(() => {
@@ -131,7 +134,10 @@ export default function CertificateTab({
       availableTypes.length > 0 &&
       !availableTypes.some((t) => t.code === newType)
     ) {
-      setNewType(availableTypes[0].code);
+      const timer = window.setTimeout(() => {
+        setNewType(availableTypes[0].code);
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
   }, [availableTypes, newType]);
 

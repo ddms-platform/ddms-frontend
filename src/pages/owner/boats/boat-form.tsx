@@ -97,7 +97,7 @@ export default function BoatForm({
       try {
         await boatService.deleteBoatImage(boatId, target.id);
         toast.success('Xóa ảnh thành công');
-      } catch (err) {
+      } catch {
         toast.error('Không thể xóa ảnh trên máy chủ');
         return;
       }
@@ -141,7 +141,10 @@ export default function BoatForm({
   }, [boatId]);
 
   useEffect(() => {
-    loadBoat();
+    const timer = window.setTimeout(() => {
+      void loadBoat();
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [loadBoat]);
 
   useEffect(() => {
