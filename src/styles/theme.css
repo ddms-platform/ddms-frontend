@@ -3,55 +3,91 @@
 /* ===== Light Mode ===== */
 :root {
   --font-size: 16px;
-  --background: #003a70;
-  --foreground: #ffffff;
-  --primary: #ffffff;
-  --primary-foreground: #003a70;
-  --secondary: #002e5b;
-  --secondary-foreground: #ffffff;
-  --muted: #002244;
-  --muted-foreground: #a0b8d0;
-  --accent: #002e5b;
-  --accent-foreground: #ffffff;
-  --destructive: #d4183d;
+  --font-sans:
+    'Be Vietnam Pro', 'Figtree Variable', -apple-system, BlinkMacSystemFont,
+    sans-serif;
+
+  /* Modern Ocean-Fresh Light Mode Palette (Vibrant Cyan Ocean Glow) */
+  --background: #ffffff;
+  --foreground: #222222;
+  --card: #ffffff;
+  --card-foreground: #222222;
+  --popover: #ffffff;
+  --popover-foreground: #222222;
+  --primary: #ff385c;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f7f7;
+  --secondary-foreground: #222222;
+  --muted: #f7f7f7;
+  --muted-foreground: #6a6a6a;
+  --accent: #e0f3fa;
+  --accent-foreground: #1f93b8;
+  --destructive: #ff385c;
   --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #00f0ff;
+  --border: #ebebeb;
+  --input: #ebebeb;
+  --ring: #ff385c;
   --radius: 0.625rem;
 
-  /* === DDMS Design System Colors === */
-  --ddms-primary: #003a70;
-  --ddms-secondary: #00f0ff;
-  --ddms-tertiary: #ffffff;
-  --ddms-neutral: #002e5b;
-  --ddms-label: #f1f5f9;
-  --ddms-bg-main: #003a70;
-  --ddms-bg-card: #002547;
-  --ddms-bg-owner: #002547;
-  --ddms-accent: #004d94;
-  --ddms-bg-header: #003a70;
-  --ddms-bg-header-glass: rgba(0, 58, 112, 0.6);
-  --ddms-text-header: #ffffff;
+  /* Sea & Brand Tokens (richer cyan blue ocean palette) */
+  --rausch: #ff385c;
+  --rausch-dark: #e00b41;
+  --sea-1: #bfeaf5;
+  --sea-2: #7fd4e8;
+  --sea-3: #3eb3d4;
+  --sea-4: #1f93b8;
+
+  /* === DDMS Design System Colors (Light) === */
+  --ddms-primary: #ff385c;
+  --ddms-secondary: #1f93b8;
+  --ddms-tertiary: #3eb3d4;
+  --ddms-neutral: #f7f7f7;
+  --ddms-label: #222222;
+  --ddms-bg-main: transparent;
+  --ddms-bg-card: rgba(255, 255, 255, 0.92);
+  --ddms-bg-owner: transparent;
+  --ddms-accent: #e0f3fa;
+  --ddms-bg-header: rgba(255, 255, 255, 0.8);
+  --ddms-bg-header-glass: rgba(255, 255, 255, 0.72);
+  --ddms-text-header: #222222;
+
+  --shadow-card:
+    rgba(0, 0, 0, 0.02) 0px 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 2px 6px,
+    rgba(0, 0, 0, 0.1) 0px 4px 8px;
+  --shadow-hover: rgba(0, 0, 0, 0.12) 0px 8px 24px;
 }
 
 /* ===== Dark Mode ===== */
 .dark {
+  /* Rich Deep Navy Ocean Palette */
   --background: #030d1b;
-  --foreground: #f1f5f9;
+  --foreground: #f3f5f6;
+  --card: #08172d;
+  --card-foreground: #f3f5f6;
+  --popover: #08172d;
+  --popover-foreground: #f3f5f6;
   --primary: #ffffff;
   --primary-foreground: #030d1b;
   --secondary: #0c2340;
-  --secondary-foreground: #f1f5f9;
+  --secondary-foreground: #f3f5f6;
   --muted: #0d2443;
-  --muted-foreground: #94a3b8;
+  --muted-foreground: #a9b2b8;
   --accent: #0c2340;
-  --accent-foreground: #f1f5f9;
+  --accent-foreground: #f3f5f6;
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.08);
   --input: rgba(255, 255, 255, 0.08);
   --ring: #00f0ff;
 
-  /* === DDMS Design System Colors === */
+  --rausch: #ff385c;
+  --rausch-dark: #e00b41;
+  --sea-1: #1c4a61;
+  --sea-2: #175a74;
+  --sea-3: #104259;
+  --sea-4: #092535;
+
+  /* === DDMS Design System Colors (Dark) === */
   --ddms-primary: #030d1b;
   --ddms-secondary: #00f0ff;
   --ddms-tertiary: #ffffff;
@@ -61,15 +97,23 @@
   --ddms-bg-card: #08172d;
   --ddms-bg-owner: #020914;
   --ddms-accent: #0a2e5c;
-  --ddms-bg-header: #030d1b;
-  --ddms-bg-header-glass: rgba(3, 13, 27, 0.6);
-  --ddms-text-header: #f1f5f9;
+  --ddms-bg-header: rgba(14, 20, 24, 0.8);
+  --ddms-bg-header-glass: rgba(14, 20, 24, 0.72);
+  --ddms-text-header: #f3f5f6;
+
+  --shadow-card:
+    rgba(0, 0, 0, 0.4) 0px 0px 0px 1px, rgba(0, 0, 0, 0.5) 0px 4px 12px;
+  --shadow-hover: rgba(0, 0, 0, 0.65) 0px 10px 28px;
 }
 
 /* ===== Map CSS vars → Tailwind tokens ===== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -88,6 +132,13 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  --color-rausch: var(--rausch);
+  --color-rausch-dark: var(--rausch-dark);
+  --color-sea-1: var(--sea-1);
+  --color-sea-2: var(--sea-2);
+  --color-sea-3: var(--sea-3);
+  --color-sea-4: var(--sea-4);
+
   --color-ddms-primary: var(--ddms-primary);
   --color-ddms-secondary: var(--ddms-secondary);
   --color-ddms-neutral: var(--ddms-neutral);
@@ -97,63 +148,75 @@
   --color-ddms-accent: var(--ddms-accent);
 }
 
-/* ===== Base typography ===== */
+/* ===== Base typography & Vibrant Ambient Ocean Background ===== */
 @layer base {
   * {
     @apply border-border outline-ring/50 transition-colors duration-300;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    font-family: var(--font-sans);
+    background-color: #bfeaf5;
+    /* Rich vibrant cyan ocean radial gradients matching preview */
+    background-image:
+      radial-gradient(
+        1300px 850px at 85% 10%,
+        rgba(63, 179, 212, 0.75),
+        transparent 70%
+      ),
+      radial-gradient(
+        1200px 800px at 5% 75%,
+        rgba(94, 197, 224, 0.7),
+        transparent 70%
+      ),
+      radial-gradient(
+        900px 550px at 50% 45%,
+        rgba(191, 234, 245, 0.6),
+        transparent 75%
+      ),
+      linear-gradient(180deg, #ddf4fc 0%, #ffffff 40%, #e0f3fa 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
+
+  .dark body {
+    background-color: #030d1b;
+    background-image:
+      radial-gradient(
+        1300px 850px at 85% 10%,
+        rgba(52, 150, 205, 0.88),
+        transparent 70%
+      ),
+      radial-gradient(
+        1200px 800px at 5% 75%,
+        rgba(35, 115, 168, 0.78),
+        transparent 70%
+      ),
+      linear-gradient(180deg, #0d2231 0%, #0b1218 45%, #0a1e2c 100%);
+    background-attachment: fixed;
+  }
+
   html {
     font-size: var(--font-size);
-  }
-  h1 {
-    font-size: var(--text-2xl);
-    font-weight: 500;
-  }
-  h2 {
-    font-size: var(--text-xl);
-    font-weight: 500;
-  }
-  h3 {
-    font-size: var(--text-lg);
-    font-weight: 500;
+    font-family: var(--font-sans);
   }
 }
 
-/* ===== Premium Block Separation & Soft Depth ===== */
+/* ===== Card & Depth System ===== */
 .bg-ddms-bg-card {
-  box-shadow:
-    0 10px 30px -10px rgba(10, 37, 64, 0.05),
-    0 1px 3px -1px rgba(10, 37, 64, 0.02) !important;
-  border-color: rgba(10, 37, 64, 0.04) !important;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.dark .bg-ddms-bg-card {
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.45) !important;
-  border-color: rgba(255, 255, 255, 0.04) !important;
+.bg-ddms-bg-card:hover {
+  box-shadow: var(--shadow-hover);
 }
 
-/* Sidebar and Header layout refinements */
 aside.border-r {
-  border-color: rgba(10, 37, 64, 0.04) !important;
-  box-shadow:
-    6px 0 25px -5px rgba(10, 37, 64, 0.07),
-    2px 0 8px -4px rgba(10, 37, 64, 0.04) !important;
+  box-shadow: 4px 0 20px -5px rgba(0, 0, 0, 0.04) !important;
 }
 
 .dark aside.border-r {
-  border-color: rgba(255, 255, 255, 0.04) !important;
   box-shadow: 4px 0 24px -4px rgba(0, 0, 0, 0.4) !important;
-}
-
-header {
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
-.dark header {
-  border-bottom: none !important;
-  box-shadow: none !important;
 }

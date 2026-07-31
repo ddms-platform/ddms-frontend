@@ -8,6 +8,7 @@ import {
   RefreshCw,
   Loader2,
   Upload,
+  FolderOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -48,32 +49,27 @@ export default function OwnerDocumentsPage() {
     setLoading(true);
     try {
       const [docs, typeList] = await Promise.all([
-        ownerDocumentService.list(),
+        ownerDocumentService.list().catch(() => [] as OwnerDocumentListItem[]),
         certificateService
           .getTypes('owner')
           .catch(() => [] as CertificateTypeItem[]),
       ]);
       setDocuments(docs || []);
-      setTypes(typeList);
-      if (typeList.length > 0) {
+      const fetchedTypes = typeList || [];
+      setTypes(fetchedTypes);
+      if (fetchedTypes.length > 0) {
         setNewType((prev) =>
-          typeList.some((item) => item.code === prev) ? prev : typeList[0].code,
+          fetchedTypes.some((item) => item.code === prev)
+            ? prev
+            : fetchedTypes[0].code,
         );
       }
-    } catch (err: unknown) {
-      const axiosMsg =
-        err && typeof err === 'object' && 'response' in err
-          ? (err as { response?: { data?: { message?: string } } }).response
-              ?.data?.message
-          : undefined;
-      toast.error(
-        axiosMsg ||
-          (err instanceof Error ? err.message : t('ownerDocuments.loadError')),
-      );
+    } catch {
+      // Ignore top-level rejection
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -123,6 +119,7 @@ export default function OwnerDocumentsPage() {
 
   return (
     <div className="space-y-6">
+      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-foreground">
@@ -135,7 +132,7 @@ export default function OwnerDocumentsPage() {
         <Button
           type="button"
           variant="outline"
-          className="gap-2"
+          className="gap-2 border-border text-foreground hover:bg-muted"
           onClick={fetchData}
           disabled={loading}
         >
@@ -144,34 +141,41 @@ export default function OwnerDocumentsPage() {
         </Button>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-5">
-        <h2 className="text-sm font-semibold text-foreground mb-4">
-          {t('ownerDocuments.listTitle')}
+      {/* Uploaded Documents List Card */}
+      <div className="bg-ddms-bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
+        <h2 className="text-base font-semibold text-foreground flex items-center gap-2.5">
+          <FileText size={18} className="text-ddms-secondary shrink-0" />
+          <span>{t('ownerDocuments.listTitle')}</span>
         </h2>
 
         {loading ? (
-          <div className="space-y-3">
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-16 w-full" />
+          <div className="space-y-3 pt-2">
+            <Skeleton className="h-16 w-full rounded-xl bg-muted/40" />
+            <Skeleton className="h-16 w-full rounded-xl bg-muted/40" />
           </div>
         ) : documents.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-6 text-center">
-            {t('ownerDocuments.empty')}
-          </p>
+          <div className="py-10 text-center flex flex-col items-center justify-center">
+            <FolderOpen className="h-12 w-12 text-muted-foreground/30 mb-3" />
+            <p className="text-sm text-muted-foreground font-medium">
+              {t('ownerDocuments.empty')}
+            </p>
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 pt-1">
             {documents.map((doc) => (
               <div
                 key={doc.id}
-                className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-lg border border-border/60 bg-background p-4"
+                className="flex flex-col sm:flex-row sm:items-center gap-4 rounded-xl border border-border/70 bg-ddms-bg-main/60 p-4 transition-colors hover:border-ddms-secondary/40"
               >
                 <div className="flex items-start gap-3 flex-1 min-w-0">
-                  <FileText
-                    size={20}
-                    className="text-ddms-secondary shrink-0 mt-0.5"
-                  />
+                  <div className="p-2.5 rounded-lg bg-ddms-secondary/10 shrink-0 mt-0.5">
+                    <FileText
+                      size={20}
+                      className="text-ddms-secondary shrink-0"
+                    />
+                  </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-sm font-semibold text-foreground">
                       {typeLabel(doc.documentType)}
                     </p>
                     {doc.expiryDate && (
@@ -182,7 +186,7 @@ export default function OwnerDocumentsPage() {
                       </p>
                     )}
                     {doc.adminNote && (
-                      <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+                      <p className="text-xs text-amber-500 mt-1 font-medium">
                         {t('ownerDocuments.adminNote', {
                           note: doc.adminNote,
                         })}
@@ -194,10 +198,10 @@ export default function OwnerDocumentsPage() {
                   href={doc.documentUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors self-start sm:self-center"
+                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors self-start sm:self-center"
                   title={t('ownerDocuments.viewDocument')}
                 >
-                  <ExternalLink size={16} />
+                  <ExternalLink size={18} />
                 </a>
               </div>
             ))}
@@ -205,81 +209,94 @@ export default function OwnerDocumentsPage() {
         )}
       </div>
 
-      {types.length > 0 && (
-        <div className="rounded-xl border border-border bg-card p-5">
-          <h2 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Plus size={16} />
-            {t('ownerDocuments.uploadTitle')}
-          </h2>
-          <p className="text-xs text-muted-foreground mb-4">
-            {t('ownerDocuments.uploadHint')}
-          </p>
+      {/* Upload Form Card */}
+      <div className="bg-ddms-bg-card rounded-2xl border border-border p-6 shadow-sm space-y-4">
+        <h2 className="text-base font-semibold text-foreground flex items-center gap-2.5">
+          <Plus size={18} className="text-ddms-secondary shrink-0" />
+          <span>{t('ownerDocuments.uploadTitle')}</span>
+        </h2>
+        <p className="text-xs text-muted-foreground">
+          {t('ownerDocuments.uploadHint')}
+        </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">
-                {t('ownerDocuments.type')}
-              </label>
-              <select
-                value={newType}
-                onChange={(e) => setNewType(e.target.value)}
-                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <Skeleton className="h-10 w-full rounded-lg bg-muted/40" />
+            <Skeleton className="h-10 w-full rounded-lg bg-muted/40" />
+            <Skeleton className="h-10 w-full rounded-lg bg-muted/40" />
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">
+                  {t('ownerDocuments.type')}
+                </label>
+                <select
+                  value={newType}
+                  onChange={(e) => setNewType(e.target.value)}
+                  className="w-full rounded-lg border border-border bg-ddms-bg-main px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ddms-secondary/40"
+                >
+                  {types.map((type) => (
+                    <option
+                      key={type.code}
+                      value={type.code}
+                      className="bg-ddms-bg-card text-foreground"
+                    >
+                      {isEn ? type.nameEn : type.nameVi}
+                      {existingTypes.has(type.code)
+                        ? ` (${t('ownerDocuments.replaceLabel')})`
+                        : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">
+                  {t('ownerDocuments.expiryDate')}
+                </label>
+                <DateInput
+                  min={todayIso()}
+                  value={newExpiry}
+                  onChange={setNewExpiry}
+                  className="w-full rounded-lg border border-border bg-ddms-bg-main px-3.5 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ddms-secondary/40"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground">
+                  {t('ownerDocuments.file')}
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  onChange={(e) => setNewFile(e.target.files?.[0] ?? null)}
+                  className="w-full text-sm text-muted-foreground rounded-lg border border-border bg-ddms-bg-main px-3 py-1.5 file:mr-3 file:rounded-md file:border-0 file:bg-ddms-secondary/20 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-ddms-secondary focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="mt-5 flex justify-end">
+              <Button
+                type="button"
+                disabled={uploading || !newFile || !newType}
+                onClick={handleUpload}
+                className="gap-2 bg-ddms-secondary text-ddms-primary-dark hover:bg-ddms-secondary/90 font-semibold px-5"
               >
-                {types.map((type) => (
-                  <option key={type.code} value={type.code}>
-                    {isEn ? type.nameEn : type.nameVi}
-                    {existingTypes.has(type.code)
-                      ? ` (${t('ownerDocuments.replaceLabel')})`
-                      : ''}
-                  </option>
-                ))}
-              </select>
+                {uploading ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Upload size={16} />
+                )}
+                {existingTypes.has(newType)
+                  ? t('ownerDocuments.replace')
+                  : t('ownerDocuments.upload')}
+              </Button>
             </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">
-                {t('ownerDocuments.expiryDate')}
-              </label>
-              <DateInput
-                min={todayIso()}
-                value={newExpiry}
-                onChange={setNewExpiry}
-                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">
-                {t('ownerDocuments.file')}
-              </label>
-              <input
-                type="file"
-                accept=".pdf,image/*"
-                onChange={(e) => setNewFile(e.target.files?.[0] ?? null)}
-                className="w-full text-sm text-muted-foreground file:mr-3 file:rounded-md file:border-0 file:bg-ddms-secondary/20 file:px-3 file:py-1.5 file:text-sm file:text-ddms-secondary"
-              />
-            </div>
-          </div>
-
-          <div className="mt-4 flex justify-end">
-            <Button
-              type="button"
-              disabled={uploading || !newFile || !newType}
-              onClick={handleUpload}
-              className="gap-2"
-            >
-              {uploading ? (
-                <Loader2 size={14} className="animate-spin" />
-              ) : (
-                <Upload size={14} />
-              )}
-              {existingTypes.has(newType)
-                ? t('ownerDocuments.replace')
-                : t('ownerDocuments.upload')}
-            </Button>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

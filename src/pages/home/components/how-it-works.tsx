@@ -19,12 +19,12 @@ export default function HowItWorks() {
           {/* Title & Description Block */}
           <div className="flex flex-col justify-between p-2">
             <div>
-              <h2 className="text-[36px] md:text-[44px] font-bold leading-[1.1] text-white tracking-tight whitespace-pre-line">
+              <h2 className="text-[36px] md:text-[44px] font-bold leading-[1.1] text-foreground tracking-tight whitespace-pre-line">
                 {language === 'EN'
                   ? 'Recommendation\nsummer activity'
                   : 'Gợi ý hoạt động\nmùa hè'}
               </h2>
-              <p className="mt-4 text-sm text-white/70 leading-relaxed max-w-xs font-light">
+              <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-xs font-light">
                 {language === 'EN'
                   ? 'Explore the best aquatic sports, private cruises, and marine adventures Da Nang has to offer this summer season.'
                   : 'Trải nghiệm những hoạt động thể thao nước, du thuyền riêng tư và hành trình khám phá biển đảo Đà Nẵng tuyệt vời nhất mùa hè này.'}

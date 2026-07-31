@@ -306,7 +306,7 @@ export default function FeaturedTours() {
   };
 
   return (
-    <div className="relative w-full overflow-hidden bg-background py-20">
+    <div className="relative w-full overflow-hidden bg-transparent py-20">
       {/* Decorative background glow blobs */}
       <div className="absolute -left-48 top-1/4 h-96 w-96 rounded-full bg-linear-to-tr from-cyan-400/15 to-blue-500/5 blur-3xl opacity-60 dark:opacity-20 pointer-events-none z-0" />
       <div className="absolute -right-48 bottom-1/4 h-96 w-96 rounded-full bg-linear-to-br from-amber-400/10 to-rose-400/5 blur-3xl opacity-50 dark:opacity-10 pointer-events-none z-0" />
@@ -315,7 +315,7 @@ export default function FeaturedTours() {
         {/* Section Header with Carousel Navigation */}
         <div className="mb-10 flex items-center justify-between">
           <div>
-            <h2 className="text-[32px] font-bold leading-tight text-white tracking-tight">
+            <h2 className="text-[32px] font-bold leading-tight text-foreground tracking-tight">
               {t('home.tours.topDestinations')}
             </h2>
             <Link
@@ -344,14 +344,14 @@ export default function FeaturedTours() {
             <div className="flex gap-3">
               <button
                 onClick={() => scroll('left')}
-                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10 hover:border-white transition-all active:scale-95"
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border text-foreground hover:bg-ddms-bg-card hover:border-foreground transition-all active:scale-95 bg-ddms-bg-card/70 backdrop-blur-xs"
                 aria-label="Scroll left"
               >
                 <ChevronLeft size={20} />
               </button>
               <button
                 onClick={() => scroll('right')}
-                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/20 text-white hover:bg-white/10 hover:border-white transition-all active:scale-95"
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-border text-foreground hover:bg-ddms-bg-card hover:border-foreground transition-all active:scale-95 bg-ddms-bg-card/70 backdrop-blur-xs"
                 aria-label="Scroll right"
               >
                 <ChevronRight size={20} />

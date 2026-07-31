@@ -59,15 +59,15 @@ const CreateScheduleModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-[#0f172a] w-full max-w-md rounded-xl border border-slate-700 shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-800/50">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-cyan-400" />
+      <div className="bg-ddms-bg-card text-foreground w-full max-w-md rounded-xl border border-border shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b border-border bg-ddms-bg-main/50">
+          <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-ddms-secondary" />
             {t('ownerTours.createModal.title')}
           </h3>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X size={20} />
           </button>
@@ -75,11 +75,11 @@ const CreateScheduleModal = ({
 
         <div className="p-5 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-muted-foreground mb-1">
               {t('ownerTours.createModal.selectBoat')}
             </label>
             <select
-              className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full bg-ddms-bg-main border border-border rounded-md py-2 px-3 text-foreground focus:outline-none focus:border-ddms-secondary transition-colors"
               value={selectedBoatId}
               onChange={(e) => onBoatChange(e.target.value)}
             >
@@ -87,7 +87,11 @@ const CreateScheduleModal = ({
                 {t('ownerTours.createModal.selectBoatPlaceholder')}
               </option>
               {boats.map((b) => (
-                <option key={b.id} value={b.id}>
+                <option
+                  key={b.id}
+                  value={b.id}
+                  className="bg-ddms-bg-card text-foreground"
+                >
                   {b.name}
                 </option>
               ))}
@@ -95,11 +99,11 @@ const CreateScheduleModal = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-muted-foreground mb-1">
               {t('ownerTours.createModal.selectTour')}
             </label>
             <select
-              className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+              className="w-full bg-ddms-bg-main border border-border rounded-md py-2 px-3 text-foreground focus:outline-none focus:border-ddms-secondary transition-colors disabled:opacity-50"
               value={selectedTourId}
               onChange={(e) => onTourChange(e.target.value)}
               disabled={!selectedBoatId}
@@ -108,7 +112,11 @@ const CreateScheduleModal = ({
                 {t('ownerTours.createModal.selectTourPlaceholder')}
               </option>
               {availableTours.map((tour: any) => (
-                <option key={tour.id} value={tour.id}>
+                <option
+                  key={tour.id}
+                  value={tour.id}
+                  className="bg-ddms-bg-card text-foreground"
+                >
                   {tour.name}
                 </option>
               ))}
@@ -122,11 +130,11 @@ const CreateScheduleModal = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
                 {t('ownerTours.createModal.startDate')}
               </label>
               <DateInput
-                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                className="w-full bg-ddms-bg-main border border-border rounded-md py-2 px-3 text-foreground focus:outline-none focus:border-ddms-secondary transition-colors"
                 value={scheduleDate}
                 onChange={(iso) => {
                   onScheduleDateChange(iso);
@@ -137,12 +145,12 @@ const CreateScheduleModal = ({
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
                 {t('ownerTours.createModal.startTime')}
               </label>
               <input
                 type="time"
-                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors scheme-dark"
+                className="w-full bg-ddms-bg-main border border-border rounded-md py-2 px-3 text-foreground focus:outline-none focus:border-ddms-secondary transition-colors"
                 value={scheduleTime}
                 onChange={(e) => onScheduleTimeChange(e.target.value)}
               />
@@ -151,22 +159,22 @@ const CreateScheduleModal = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
                 {t('ownerTours.createModal.endDate')}
               </label>
               <DateInput
-                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"
+                className="w-full bg-ddms-bg-main border border-border rounded-md py-2 px-3 text-foreground focus:outline-none focus:border-ddms-secondary transition-colors"
                 value={scheduleEndDate}
                 onChange={onScheduleEndDateChange}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-muted-foreground mb-1">
                 {t('ownerTours.createModal.endTime')}
               </label>
               <input
                 type="time"
-                className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors scheme-dark"
+                className="w-full bg-ddms-bg-main border border-border rounded-md py-2 px-3 text-foreground focus:outline-none focus:border-ddms-secondary transition-colors"
                 value={scheduleEndTime}
                 onChange={(e) => onScheduleEndTimeChange(e.target.value)}
               />
@@ -174,17 +182,17 @@ const CreateScheduleModal = ({
           </div>
         </div>
 
-        <div className="p-4 border-t border-slate-700 bg-slate-800/30 flex justify-end gap-3">
+        <div className="p-4 border-t border-border bg-ddms-bg-main/30 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             {t('ownerTours.createModal.cancelBtn')}
           </button>
           <button
             onClick={onConfirm}
             disabled={isSaveDisabled}
-            className="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-600 disabled:text-slate-400 text-white text-sm font-bold rounded-md transition-colors"
+            className="px-4 py-2 bg-ddms-primary hover:bg-ddms-primary/90 disabled:opacity-50 text-primary-foreground text-sm font-bold rounded-md transition-colors"
           >
             {isCreating
               ? t('ownerTours.createModal.savingBtn')

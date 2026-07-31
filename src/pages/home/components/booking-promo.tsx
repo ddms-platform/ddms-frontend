@@ -13,48 +13,33 @@ export default function BookingPromo() {
   };
 
   return (
-    <section className="bg-background text-white py-16 px-6 select-none border-none">
+    <section className="bg-transparent text-foreground py-16 px-6 select-none border-none">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* ── Left Column: Search Form Card ── */}
-          <div
-            className="border rounded-2xl p-6 flex flex-col justify-between relative min-h-120 bg-[#002547]/45 backdrop-blur-md shadow-[0_0_30px_rgba(0,240,255,0.15)] hover:shadow-[0_0_45px_rgba(0,240,255,0.3)] transition-all duration-300"
-            style={{ borderColor: 'var(--border)' }}
-          >
+          <div className="border border-border rounded-2xl p-6 flex flex-col justify-between relative min-h-120 bg-ddms-bg-card backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300">
             <div>
               {/* Departure Port */}
-              <div
-                className="flex flex-col gap-1 border rounded-xl px-4 py-2.5 mb-4 bg-transparent"
-                style={{ borderColor: 'var(--border)' }}
-              >
-                <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
+              <div className="flex flex-col gap-1 border border-border rounded-xl px-4 py-2.5 mb-4 bg-ddms-bg-main/40">
+                <label className="text-[9px] uppercase tracking-wider text-muted-foreground font-bold">
                   {t('home.promo.departurePort')}
                 </label>
-                <select className="bg-transparent text-white text-sm outline-none border-none cursor-pointer w-full font-medium scheme-dark">
+                <select className="bg-transparent text-foreground text-sm outline-none border-none cursor-pointer w-full font-medium">
                   <option
                     value="han_river"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.portHanRiver')}
                   </option>
                   <option
                     value="bach_dang"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.portBachDang')}
                   </option>
                   <option
                     value="tien_sa"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.portTienSa')}
                   </option>
@@ -62,47 +47,32 @@ export default function BookingPromo() {
               </div>
 
               {/* Route */}
-              <div
-                className="flex flex-col gap-1 border rounded-xl px-4 py-2.5 mb-4 bg-transparent"
-                style={{ borderColor: 'var(--border)' }}
-              >
-                <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
+              <div className="flex flex-col gap-1 border border-border rounded-xl px-4 py-2.5 mb-4 bg-ddms-bg-main/40">
+                <label className="text-[9px] uppercase tracking-wider text-muted-foreground font-bold">
                   {t('home.promo.route')}
                 </label>
-                <select className="bg-transparent text-white text-sm outline-none border-none cursor-pointer w-full font-medium scheme-dark">
+                <select className="bg-transparent text-foreground text-sm outline-none border-none cursor-pointer w-full font-medium">
                   <option
                     value="han_river_sightseeing"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.routeHanRiver')}
                   </option>
                   <option
                     value="danang_bay"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.routeDanangBay')}
                   </option>
                   <option
                     value="hon_chao"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.routeHonChao')}
                   </option>
                   <option
                     value="sunset_cruise"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.routeSunset')}
                   </option>
@@ -110,62 +80,35 @@ export default function BookingPromo() {
               </div>
 
               {/* Date */}
-              <div
-                className="flex flex-col gap-1 border rounded-xl px-4 py-2.5 mb-4 bg-transparent"
-                style={{ borderColor: 'var(--border)' }}
-              >
-                <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
+              <div className="flex flex-col gap-1 border border-border rounded-xl px-4 py-2.5 mb-4 bg-ddms-bg-main/40">
+                <label className="text-[9px] uppercase tracking-wider text-muted-foreground font-bold">
                   {t('home.promo.departureDate')}
                 </label>
                 <DateInput
                   value={departureDate}
                   onChange={setDepartureDate}
-                  className="bg-transparent text-white text-sm outline-none border-none w-full font-medium placeholder:text-slate-500"
+                  className="bg-transparent text-foreground text-sm outline-none border-none w-full font-medium placeholder:text-muted-foreground"
                 />
               </div>
 
               {/* Guests */}
-              <div
-                className="flex flex-col gap-1 border rounded-xl px-4 py-2.5 mb-6 bg-transparent"
-                style={{ borderColor: 'var(--border)' }}
-              >
-                <label className="text-[9px] uppercase tracking-wider text-slate-300 font-bold">
+              <div className="flex flex-col gap-1 border border-border rounded-xl px-4 py-2.5 mb-6 bg-ddms-bg-main/40">
+                <label className="text-[9px] uppercase tracking-wider text-muted-foreground font-bold">
                   {t('home.promo.guests')}
                 </label>
-                <select className="bg-transparent text-white text-sm outline-none border-none cursor-pointer w-full font-medium scheme-dark">
-                  <option
-                    value="1"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
-                  >
+                <select className="bg-transparent text-foreground text-sm outline-none border-none cursor-pointer w-full font-medium">
+                  <option value="1" className="bg-ddms-bg-card text-foreground">
                     {t('home.promo.guest')}
                   </option>
-                  <option
-                    value="2"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
-                  >
+                  <option value="2" className="bg-ddms-bg-card text-foreground">
                     {t('home.promo.guests2')}
                   </option>
-                  <option
-                    value="3"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
-                  >
+                  <option value="3" className="bg-ddms-bg-card text-foreground">
                     {t('home.promo.guests3')}
                   </option>
                   <option
                     value="family"
-                    style={{
-                      backgroundColor: 'var(--ddms-bg-card)',
-                      color: 'var(--foreground)',
-                    }}
+                    className="bg-ddms-bg-card text-foreground"
                   >
                     {t('home.promo.family')}
                   </option>
@@ -185,8 +128,7 @@ export default function BookingPromo() {
           {/* Card 1: DIFF Fireworks */}
           <a
             href="/tours"
-            className="flex flex-col rounded-2xl overflow-hidden border bg-[#002547]/45 backdrop-blur-md shadow-[0_0_25px_rgba(0,240,255,0.12)] hover:shadow-[0_0_35px_rgba(0,240,255,0.28)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
-            style={{ borderColor: 'var(--border)' }}
+            className="flex flex-col rounded-2xl overflow-hidden border border-border bg-ddms-bg-card shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
           >
             <div className="h-52 overflow-hidden relative">
               <img
@@ -197,13 +139,13 @@ export default function BookingPromo() {
               <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-60" />
             </div>
             <div className="p-6 flex-1 flex flex-col gap-2">
-              <span className="text-[10px] uppercase tracking-wider text-rose-400 font-bold block mb-1">
+              <span className="text-[10px] uppercase tracking-wider text-rose-500 font-bold block mb-1">
                 {t('home.promo.fireworksCategory')}
               </span>
-              <h3 className="text-lg font-bold text-slate-100 mb-2 leading-snug">
+              <h3 className="text-lg font-bold text-foreground mb-2 leading-snug">
                 {t('home.promo.fireworksTitle')}
               </h3>
-              <p className="text-sm text-slate-300 leading-relaxed font-light">
+              <p className="text-sm text-muted-foreground leading-relaxed font-normal">
                 {t('home.promo.fireworksDesc')}
               </p>
             </div>
@@ -212,8 +154,7 @@ export default function BookingPromo() {
           {/* Card 2: Catamaran Sunset */}
           <a
             href="/tours"
-            className="flex flex-col rounded-2xl overflow-hidden border bg-[#002547]/45 backdrop-blur-md shadow-[0_0_25px_rgba(0,240,255,0.12)] hover:shadow-[0_0_35px_rgba(0,240,255,0.28)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
-            style={{ borderColor: 'var(--border)' }}
+            className="flex flex-col rounded-2xl overflow-hidden border border-border bg-ddms-bg-card shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
           >
             <div className="h-52 overflow-hidden relative">
               <img
@@ -224,13 +165,13 @@ export default function BookingPromo() {
               <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-60" />
             </div>
             <div className="p-6 flex-1 flex flex-col gap-2">
-              <span className="text-[10px] uppercase tracking-wider text-cyan-400 font-bold block mb-1">
+              <span className="text-[10px] uppercase tracking-wider text-cyan-600 dark:text-cyan-400 font-bold block mb-1">
                 {t('home.promo.sunsetCategory')}
               </span>
-              <h3 className="text-lg font-bold text-slate-100 mb-2 leading-snug">
+              <h3 className="text-lg font-bold text-foreground mb-2 leading-snug">
                 {t('home.promo.sunsetTitle')}
               </h3>
-              <p className="text-sm text-slate-300 leading-relaxed font-light">
+              <p className="text-sm text-muted-foreground leading-relaxed font-normal">
                 {t('home.promo.sunsetDesc')}
               </p>
             </div>

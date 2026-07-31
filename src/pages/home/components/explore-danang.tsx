@@ -84,7 +84,7 @@ export default function ExploreDaNang() {
   return (
     <section
       id="explore-danang"
-      className="w-full py-12 bg-background relative z-10"
+      className="w-full py-12 bg-transparent relative z-10"
     >
       <div className="w-full px-4 md:px-10">
         {/* Main Slider Container (Full Width stretching, taller height) */}

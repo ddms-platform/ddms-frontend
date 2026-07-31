@@ -149,7 +149,7 @@ export default function CertificateStatusChart({
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: number, name: string) => [value, name]}
+                formatter={(value: any) => [value ?? 0, '']}
                 contentStyle={{
                   background: 'hsl(var(--card))',
                   border: '1px solid hsl(var(--border))',
