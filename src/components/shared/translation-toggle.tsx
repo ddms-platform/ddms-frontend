@@ -77,11 +77,13 @@ export default function TranslationToggle() {
 
       <style>{`
         .header-link {
-          color: var(--ddms-text-header);
-          transition: color 0.2s ease;
+          color: inherit;
+          opacity: 0.95;
+          transition: all 0.2s ease;
         }
         .header-link:hover {
           color: var(--ddms-secondary) !important;
+          opacity: 1;
         }
       `}</style>
     </div>

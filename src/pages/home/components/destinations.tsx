@@ -95,14 +95,14 @@ export default function Destinations() {
   return (
     <section
       id="destinations"
-      className="mx-auto max-w-7xl px-6 py-20 bg-background"
+      className="mx-auto max-w-7xl px-6 py-20 bg-transparent"
     >
       <div className="mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h2 className="text-[32px] font-bold leading-tight text-white tracking-tight">
+          <h2 className="text-[32px] font-bold leading-tight text-foreground tracking-tight">
             {language === 'EN' ? 'Top Destinations' : 'Điểm đến nổi bật'}
           </h2>
-          <p className="mt-2 text-sm text-white/70">
+          <p className="mt-2 text-sm text-muted-foreground">
             {language === 'EN'
               ? 'Explore beautiful waterways and marine habitats across Da Nang'
               : 'Khám phá các tuyến điểm đường thủy và hệ sinh thái biển tuyệt đẹp tại Đà Nẵng'}

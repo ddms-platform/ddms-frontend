@@ -122,10 +122,10 @@ export default function FeaturedProviders() {
                   <span className="text-[11px] uppercase tracking-wider text-ddms-secondary font-bold">
                     {p.category}
                   </span>
-                  <h3 className="text-3xl font-bold text-white tracking-tight mt-1 mb-4 leading-tight">
+                  <h3 className="text-3xl font-bold text-foreground tracking-tight mt-1 mb-4 leading-tight">
                     {p.name}
                   </h3>
-                  <p className="text-sm text-white/70 leading-relaxed font-light">
+                  <p className="text-sm text-muted-foreground leading-relaxed font-light">
                     {p.description}
                   </p>
                 </div>
@@ -244,24 +244,24 @@ export default function FeaturedProviders() {
               </div>
 
               {/* CTA Card */}
-              <div className="md:col-span-3 rounded-[24px] p-6 flex flex-col justify-between bg-ddms-bg-card/40 backdrop-blur-md relative overflow-hidden group">
+              <div className="md:col-span-3 rounded-[24px] p-6 flex flex-col justify-between bg-ddms-bg-card border border-border/80 shadow-md relative overflow-hidden group">
                 <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-blue-500/5 opacity-50 z-0 pointer-events-none" />
                 <div className="z-10 space-y-2">
                   <span className="text-[10px] uppercase tracking-wider text-ddms-secondary font-bold block">
                     {t('home.providers.specialDeal')}
                   </span>
-                  <h4 className="text-xl font-bold text-white leading-tight">
+                  <h4 className="text-xl font-bold text-foreground leading-tight">
                     {t('home.providers.yachtTitle')}
                   </h4>
-                  <p className="text-xs text-white/60 leading-relaxed font-light">
+                  <p className="text-xs text-muted-foreground leading-relaxed font-normal">
                     {t('home.providers.yachtDesc')}
                   </p>
                 </div>
 
                 <div className="z-10 mt-6 space-y-2">
-                  <div className="text-sm font-semibold text-white/90">
+                  <div className="text-sm font-semibold text-foreground">
                     ★ {p.rating.toFixed(1)}{' '}
-                    <span className="text-xs text-white/50">
+                    <span className="text-xs text-muted-foreground">
                       ({p.totalReviews} {t('home.providers.reviews')})
                     </span>
                   </div>

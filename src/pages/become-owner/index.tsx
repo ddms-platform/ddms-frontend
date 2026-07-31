@@ -39,7 +39,7 @@ export default function BecomeOwnerPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
+    <div className="bg-transparent text-foreground min-h-screen">
       <section
         className="relative min-h-140 overflow-hidden"
         style={{
@@ -138,7 +138,7 @@ export default function BecomeOwnerPage() {
         </div>
       </section>
 
-      <section className="px-6 py-16 bg-muted/30 border-y border-border/40">
+      <section className="px-6 py-16 bg-transparent border-y border-border/40">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 max-w-2xl">
             <h2
