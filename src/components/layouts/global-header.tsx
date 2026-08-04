@@ -157,6 +157,8 @@ export default function GlobalHeader({
               ? 'var(--ddms-bg-header)'
               : 'transparent'
             : 'var(--ddms-bg-header)',
+          color:
+            transparent && !isHovered ? '#ffffff' : 'var(--ddms-text-header)',
           backdropFilter: 'none',
           boxShadow: 'none',
         }}
@@ -260,7 +262,7 @@ export default function GlobalHeader({
                 <button
                   id="user-menu-button"
                   onClick={() => setDropdownOpen((prev) => !prev)}
-                  className="flex items-center gap-3 rounded-full py-2 pl-2 pr-4 transition-all hover:bg-white/5 active:scale-[0.97]"
+                  className="flex items-center gap-3 rounded-full py-2 pl-2 pr-4 transition-all hover:bg-white/5 active:scale-[0.97] header-link cursor-pointer bg-transparent border-none outline-none"
                   aria-expanded={dropdownOpen}
                   aria-haspopup="true"
                 >
@@ -273,11 +275,10 @@ export default function GlobalHeader({
                     />
                   ) : (
                     <div
-                      className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
+                      className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white shadow-sm"
                       style={{
                         background:
                           'linear-gradient(135deg, var(--ddms-secondary), #00d4e0)',
-                        color: 'var(--ddms-primary)',
                       }}
                     >
                       {initials}
@@ -287,7 +288,7 @@ export default function GlobalHeader({
                   {/* Name + chevron (hidden on mobile) */}
                   <span
                     className="hidden text-base font-semibold sm:inline"
-                    style={{ color: 'var(--ddms-text-header)' }}
+                    style={{ color: 'inherit' }}
                   >
                     {user?.name || 'User'}
                   </span>
@@ -295,7 +296,7 @@ export default function GlobalHeader({
                     size={16}
                     className="transition-transform duration-200"
                     style={{
-                      color: 'var(--ddms-text-header)',
+                      color: 'inherit',
                       transform: dropdownOpen
                         ? 'rotate(180deg)'
                         : 'rotate(0deg)',
@@ -443,11 +444,13 @@ export default function GlobalHeader({
           to   { opacity: 1; transform: translateY(0); }
         }
         .header-link {
-          color: var(--ddms-text-header);
-          transition: color 0.2s ease;
+          color: inherit;
+          opacity: 0.95;
+          transition: all 0.2s ease;
         }
         .header-link:hover {
           color: var(--ddms-secondary) !important;
+          opacity: 1;
         }
         .close-btn-rotate {
           transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;

@@ -26,14 +26,14 @@ const CancelBookingModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-[#0f172a] w-full max-w-md rounded-xl border border-slate-700 shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-slate-700 bg-slate-800/50">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+      <div className="bg-ddms-bg-card text-foreground w-full max-w-md rounded-xl border border-border shadow-2xl overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b border-border bg-ddms-bg-main/50">
+          <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
             {t('ownerTours.cancelModal.title')}
           </h3>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X size={20} />
           </button>
@@ -41,17 +41,17 @@ const CancelBookingModal = ({
 
         <div className="p-5 space-y-4">
           <div>
-            <p className="text-sm text-slate-300 mb-3">
+            <p className="text-sm text-muted-foreground mb-3">
               {t('ownerTours.cancelModal.warningMessage', {
                 bookingId: booking.bookingId,
                 customerName: booking.customerName,
               })}
             </p>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            <label className="block text-sm font-medium text-muted-foreground mb-1.5">
               {t('ownerTours.cancelModal.reasonLabel')}
             </label>
             <textarea
-              className="w-full bg-slate-800 border border-slate-600 rounded-md py-2 px-3 text-white focus:outline-none focus:border-cyan-500 transition-colors h-24 resize-none"
+              className="w-full bg-ddms-bg-main border border-border rounded-md py-2 px-3 text-foreground focus:outline-none focus:border-ddms-secondary transition-colors h-24 resize-none"
               placeholder={t('ownerTours.cancelModal.reasonPlaceholder')}
               value={reason}
               onChange={(e) => onReasonChange(e.target.value)}

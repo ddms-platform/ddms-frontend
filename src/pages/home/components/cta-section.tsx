@@ -54,7 +54,7 @@ export default function CtaSection() {
 
   if (isAuthenticated) {
     return (
-      <section className="py-20 bg-background relative overflow-hidden">
+      <section className="py-20 bg-transparent relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute -left-48 bottom-0 h-96 w-96 rounded-full bg-linear-to-tr from-cyan-400/10 to-blue-500/5 blur-3xl opacity-40 pointer-events-none z-0" />
 

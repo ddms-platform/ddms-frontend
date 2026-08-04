@@ -21,7 +21,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
     const savedTheme = localStorage.getItem('theme') as Theme | null;
-    return savedTheme || 'dark'; // Default to dark mode
+    return savedTheme || 'light'; // Default to light mode
   });
 
   const setTheme = useCallback((newTheme: Theme) => {
@@ -56,7 +56,7 @@ export default function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     return {
-      theme: 'dark' as Theme,
+      theme: 'light' as Theme,
       toggleTheme: () => {},
       setTheme: () => {},
     };
