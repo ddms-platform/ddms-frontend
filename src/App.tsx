@@ -1,4 +1,5 @@
 import { Toaster } from '@/components/ui/sonner';
+import { AiChatWidget } from '@/components/ai/AiChatWidget';
 import {
   BrowserRouter,
   Routes,
@@ -102,6 +103,7 @@ export default function App() {
               <LanguageProvider>
                 <WelcomeSplash />
                 <Toaster position="top-right" richColors closeButton />
+                <AiChatWidget />
                 <Routes>
                   {/* Auth Routes - own layout, no header/footer */}
                   <Route element={<AuthLayout />}>
