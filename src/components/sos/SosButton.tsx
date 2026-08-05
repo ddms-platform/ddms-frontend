@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
   Radio,
@@ -13,6 +14,7 @@ export const SosButton: React.FC<SosButtonProps> = ({
   boatId,
   className = '',
 }) => {
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeAlert, setActiveAlert] = useState<SosAlert | null>(null);
@@ -90,7 +92,7 @@ export const SosButton: React.FC<SosButtonProps> = ({
           className="relative flex items-center gap-2.5 bg-linear-to-r from-red-600 via-rose-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-6 py-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-red-400/40 cursor-pointer text-sm tracking-wide uppercase"
         >
           <Radio className="w-5 h-5 animate-pulse text-yellow-300" />
-          <span>PHÁT TÍN HIỆU SOS</span>
+          <span>{t('sos.button.triggerSos')}</span>
         </button>
       </div>
 
@@ -100,19 +102,18 @@ export const SosButton: React.FC<SosButtonProps> = ({
           <ShieldAlert className="w-8 h-8 text-yellow-400 shrink-0 animate-spin" />
           <div className="flex-1">
             <h4 className="font-bold text-red-200 text-sm">
-              TÍN HIỆU CỨU HỘ ĐANG PHÁT
+              {t('sos.button.activeTitle')}
             </h4>
             <p className="text-xs text-red-300 mt-0.5">
-              Đã gửi tọa độ ({activeAlert.latitude.toFixed(4)},{' '}
-              {activeAlert.longitude.toFixed(4)}) về Cảng Vụ. Tàu cứu hộ đang
-              tới!
+              {t('sos.button.activeDesc')} ({activeAlert.latitude.toFixed(4)},{' '}
+              {activeAlert.longitude.toFixed(4)})
             </p>
           </div>
           <button
             onClick={() => setActiveAlert(null)}
             className="text-xs bg-red-800 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg border border-red-500/50"
           >
-            Đóng
+            {t('sos.cancel')}
           </button>
         </div>
       )}
@@ -129,18 +130,16 @@ export const SosButton: React.FC<SosButtonProps> = ({
               </div>
               <div>
                 <h3 className="text-xl font-extrabold text-white">
-                  CẢNH BÁO SOS KHẨN CẤP
+                  {t('sos.button.modalTitle')}
                 </h3>
                 <p className="text-xs text-red-300">
-                  Tàu gặp sự cố nguy hiểm cần hỗ trợ cứu hộ
+                  {t('sos.button.modalSubtitle')}
                 </p>
               </div>
             </div>
 
             <p className="text-sm text-slate-300 mb-6 leading-relaxed bg-red-950/40 border border-red-500/20 p-4 rounded-xl">
-              Khi bấm xác nhận, tọa độ GPS thực tế của tàu sẽ được truyền phát
-              tức thì tới Cảng vụ Đà Nẵng. Màn hình Cảng vụ sẽ hú còi báo động
-              để xuất phát tàu cứu nạn.
+              {t('sos.button.activeDesc')}
             </p>
 
             {errorMsg && (
@@ -153,16 +152,16 @@ export const SosButton: React.FC<SosButtonProps> = ({
               <div className="p-4 bg-emerald-950/60 border border-emerald-500/60 rounded-2xl text-center space-y-2">
                 <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto animate-pulse" />
                 <h4 className="font-bold text-emerald-300">
-                  ĐÃ GỬI TÍN HIỆU SOS THÀNH CÔNG!
+                  {t('sos.button.activeTitle')}
                 </h4>
                 <p className="text-xs text-emerald-200">
-                  Cảng vụ đã nhận định vị và đang điều động lực lượng ứng cứu.
+                  {t('sos.button.standby')}
                 </p>
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="mt-3 w-full bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl font-bold text-xs"
                 >
-                  Đóng Hộp Thoại
+                  {t('sos.cancel')}
                 </button>
               </div>
             ) : (
@@ -172,7 +171,7 @@ export const SosButton: React.FC<SosButtonProps> = ({
                   disabled={loading}
                   className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-medium transition cursor-pointer text-sm"
                 >
-                  Hủy Bỏ
+                  {t('sos.cancel')}
                 </button>
 
                 <button
@@ -183,10 +182,10 @@ export const SosButton: React.FC<SosButtonProps> = ({
                   {loading ? (
                     <>
                       <Navigation className="w-4 h-4 animate-spin" />
-                      <span>Đang định vị...</span>
+                      <span>{t('sos.button.gettingLocation')}</span>
                     </>
                   ) : (
-                    <span>XÁC NHẬN GỬI SOS</span>
+                    <span>{t('sos.button.confirmTrigger')}</span>
                   )}
                 </button>
               </div>
