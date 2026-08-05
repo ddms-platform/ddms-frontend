@@ -28,6 +28,7 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 import ProfitChart from '@/components/owner/ProfitChart';
 import BoatForm from '@/pages/owner/boats/boat-form';
+import { SosButton } from '@/components/sos/SosButton';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDisplayDate } from '@/lib/date-format';
 
@@ -156,7 +157,7 @@ export default function OwnerDashboard() {
   return (
     <div className="min-h-screen bg-ddms-bg-owner p-6 lg:p-8 font-sans text-foreground">
       {/* Header section */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">
             Xin chào, {user?.name || 'Admiral'}
@@ -166,6 +167,9 @@ export default function OwnerDashboard() {
             <span>Bến tàu quốc tế Marina Bay</span>
           </div>
         </div>
+
+        {/* Real-time Emergency SOS Button */}
+        <SosButton boatId={boats.length > 0 ? boats[0].id : undefined} />
       </div>
 
       {loading ? (
