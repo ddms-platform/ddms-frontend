@@ -51,8 +51,14 @@ export interface ServiceFormState {
   pricePerDay: string;
 }
 
+const NEW_SERVICE_ID_PREFIX = 'new_';
+
+/** Distinguishes drafts that only exist in the form from services already persisted server-side. */
+export const isNewService = (id: string) =>
+  id.startsWith(NEW_SERVICE_ID_PREFIX);
+
 export const getEmptyService = (): ServiceFormState => ({
-  id: Math.random().toString(36).substring(7),
+  id: `${NEW_SERVICE_ID_PREFIX}${Math.random().toString(36).substring(7)}`,
   serviceType: 'cruise',
   name: '',
   basePrice: '',

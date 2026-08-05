@@ -190,21 +190,25 @@ export const boatService = {
       .delete<ApiResponse<any>>(`/owner/boats/${id}`)
       .then((r) => r.data.result),
 
+  deleteServiceByOwner: (boatId: string, serviceId: string) =>
+    api
+      .delete<ApiResponse<any>>(`/owner/boats/${boatId}/services/${serviceId}`)
+      .then((r) => r.data.result),
+
   // --- Admin/Owner Management Endpoints (Cabins, Services, Images, Maintenance) ---
   // Currently backend maps these as /api/admin/boats/... but we will use them here.
   addMaintenance: (boatId: string, dto: CreateMaintenanceDto) =>
     api
-      .post<ApiResponse<BoatMaintenance>>(
-        `/admin/boats/${boatId}/maintenances`,
-        dto,
-      )
+      .post<
+        ApiResponse<BoatMaintenance>
+      >(`/admin/boats/${boatId}/maintenances`, dto)
       .then((r) => r.data.result),
 
   deleteMaintenance: (boatId: string, maintenanceId: string) =>
     api
-      .delete<ApiResponse<any>>(
-        `/admin/boats/${boatId}/maintenances/${maintenanceId}`,
-      )
+      .delete<
+        ApiResponse<any>
+      >(`/admin/boats/${boatId}/maintenances/${maintenanceId}`)
       .then((r) => r.data.result),
 
   registerPortMaintenances: (
@@ -212,17 +216,16 @@ export const boatService = {
     registrations: { serviceId: string; scheduledDate: string }[],
   ) =>
     api
-      .post<ApiResponse<any>>(
-        `/owner/boats/${boatId}/maintenances/register`,
-        registrations,
-      )
+      .post<
+        ApiResponse<any>
+      >(`/owner/boats/${boatId}/maintenances/register`, registrations)
       .then((r) => r.data.result),
 
   deleteOwnerMaintenance: (boatId: string, maintenanceId: string) =>
     api
-      .delete<ApiResponse<any>>(
-        `/owner/boats/${boatId}/maintenances/${maintenanceId}`,
-      )
+      .delete<
+        ApiResponse<any>
+      >(`/owner/boats/${boatId}/maintenances/${maintenanceId}`)
       .then((r) => r.data.result),
 
   getPendingMaintenancesAdmin: () =>
