@@ -22,6 +22,7 @@ import { getBoatTypes, type IBoatType } from '@/services/system-service';
 import ServiceTab, {
   type ServiceFormState,
   getEmptyService,
+  isNewService,
 } from './service-tab';
 import MaintenanceTab from './maintenance-tab';
 import BoatBasicInfoSection from './boat-form/BoatBasicInfoSection';
@@ -65,6 +66,7 @@ export default function BoatForm({
   const [services, setServices] = useState<ServiceFormState[]>([
     getEmptyService(),
   ]);
+  const [removedServiceIds, setRemovedServiceIds] = useState<string[]>([]);
   const [maintenances, setMaintenances] = useState<BoatMaintenance[]>([]);
   const [selectedMaintenanceServices, setSelectedMaintenanceServices] =
     useState<{ serviceId: string; scheduledDate: string }[]>([]);
@@ -105,6 +107,17 @@ export default function BoatForm({
     setBoatImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleServicesChange = (next: ServiceFormState[]) => {
+    const nextIds = new Set(next.map((s) => s.id));
+    const removed = services
+      .map((s) => s.id)
+      .filter((id) => !nextIds.has(id) && !isNewService(id));
+    if (removed.length > 0) {
+      setRemovedServiceIds((prev) => [...new Set([...prev, ...removed])]);
+    }
+    setServices(next);
+  };
+
   const loadBoat = useCallback(async () => {
     if (!boatId) return;
     setLoadingBoat(true);
@@ -116,6 +129,7 @@ export default function BoatForm({
       setMaxPassengers(String(b.maxPassengers));
       setStatus(b.status);
       setMaintenances(b.maintenances);
+      setRemovedServiceIds([]);
       if (b.images) {
         setBoatImages(b.images);
       }
@@ -206,7 +220,16 @@ export default function BoatForm({
       if (!savedBoatId) throw new Error('Không lấy được ID tàu');
 
       // Sync complex services
-      const newServices = services.filter((s) => !s.id.includes('-') && s.name); // only save newly created ones that have a name
+      if (removedServiceIds.length > 0) {
+        await Promise.all(
+          removedServiceIds.map((serviceId) =>
+            boatService.deleteServiceByOwner(savedBoatId, serviceId),
+          ),
+        );
+        setRemovedServiceIds([]);
+      }
+
+      const newServices = services.filter((s) => isNewService(s.id) && s.name);
       if (newServices.length > 0) {
         const payloads = newServices.map((srv) => ({
           boatId: savedBoatId,
@@ -426,7 +449,7 @@ export default function BoatForm({
           <ServiceTab
             boatType={type}
             services={services}
-            onChange={setServices}
+            onChange={handleServicesChange}
           />
         )}
 
