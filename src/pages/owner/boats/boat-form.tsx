@@ -133,18 +133,58 @@ export default function BoatForm({
       if (b.images) {
         setBoatImages(b.images);
       }
-      // For now, if editing, we might not map existing complex services perfectly if the backend doesn't return combos/rooms here.
-      // But we will at least try to populate basic info or keep the empty service
       if (b.services && b.services.length > 0) {
         setServices(
-          b.services.map((s) => ({
-            ...getEmptyService(),
-            id: s.id,
-            name: s.name,
-            basePrice: String(s.price || 0),
-            description: s.description || '',
-            serviceType: 'cruise', // Fallback
-          })),
+          b.services.map((s) => {
+            const empty = getEmptyService();
+            const routes =
+              s.routes && s.routes.length > 0
+                ? s.routes.map((r) => ({
+                    name: r.name ?? '',
+                    startPoint: r.startPoint ?? '',
+                    endPoint: r.endPoint ?? '',
+                    description: r.description ?? '',
+                  }))
+                : empty.routes;
+            const faqs =
+              s.faqs && s.faqs.length > 0
+                ? s.faqs.map((f) => ({
+                    question: f.question ?? '',
+                    answer: f.answer ?? '',
+                  }))
+                : empty.faqs;
+            const rooms =
+              s.rooms && s.rooms.length > 0
+                ? s.rooms.map((r) => ({
+                    name: r.name ?? '',
+                    capacity: String(r.capacity ?? ''),
+                    price: String(r.price ?? ''),
+                    description: r.description ?? '',
+                    imageUrl: r.imageUrl ?? '',
+                  }))
+                : empty.rooms;
+            const combos =
+              s.combos && s.combos.length > 0
+                ? s.combos.map((c) => ({
+                    name: c.name ?? '',
+                    price: String(c.price ?? ''),
+                    description: c.description ?? '',
+                    imageUrl: c.imageUrl ?? '',
+                  }))
+                : empty.combos;
+            return {
+              ...empty,
+              id: s.id,
+              name: s.name,
+              basePrice: String(s.price || 0),
+              description: s.description || '',
+              serviceType: s.serviceType || 'cruise',
+              routes,
+              faqs,
+              rooms,
+              combos,
+            };
+          }),
         );
       }
     } catch {

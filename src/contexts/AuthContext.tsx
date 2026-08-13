@@ -27,6 +27,12 @@ function isUserRole(role: unknown): role is UserRole {
   return typeof role === 'string' && USER_ROLES.includes(role as UserRole);
 }
 
+function normalizeRole(role: unknown): UserRole | null {
+  if (typeof role !== 'string') return null;
+  const lower = role.toLowerCase();
+  return isUserRole(lower) ? (lower as UserRole) : null;
+}
+
 function normalizeUser(rawUser: unknown): User | null {
   if (!rawUser || typeof rawUser !== 'object') return null;
 
@@ -41,7 +47,13 @@ function normalizeUser(rawUser: unknown): User | null {
 
   if (!name || !email) return null;
 
-  const roles = Array.isArray(user.roles) ? user.roles.filter(isUserRole) : [];
+  const roles = Array.isArray(user.roles)
+    ? (user.roles
+        .map(normalizeRole)
+        .filter(
+          (r: UserRole | null): r is UserRole => r !== null,
+        ) as UserRole[])
+    : [];
 
   return {
     id: typeof user.id === 'string' ? user.id : undefined,

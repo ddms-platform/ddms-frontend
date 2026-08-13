@@ -21,6 +21,9 @@ export interface MessageResponse {
   senderName: string;
   senderAvatar?: string;
   body: string;
+  attachmentUrl?: string;
+  attachmentType?: 'image' | 'video' | string;
+  attachmentName?: string;
   createdAt: string;
 }
 
@@ -29,5 +32,14 @@ export interface StartConversationRequest {
 }
 
 export interface SendMessageRequest {
-  body: string;
+  body?: string;
+  attachmentUrl?: string;
+  attachmentType?: string;
+  attachmentName?: string;
+}
+
+export interface ChatAttachmentResponse {
+  url: string;
+  type: 'image' | 'video' | string;
+  name: string;
 }

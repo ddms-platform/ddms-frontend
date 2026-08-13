@@ -30,3 +30,311 @@ html {
     transform: translateY(0);
   }
 }
+
+/* ============================================================
+   Hero scene — cảnh biển hoàng hôn ở landing page.
+   Các animation này nhiều chặng hoặc lặp vô hạn nên không diễn đạt
+   được bằng utility class của Tailwind; khai báo một lần ở đây.
+   ============================================================ */
+
+/* Mây trôi ngang màn hình rồi lặp lại từ mép trái */
+@keyframes ddms-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(100vw + 300px));
+  }
+}
+
+/* Hải âu bay ngang + vỗ cánh */
+@keyframes ddms-fly {
+  from {
+    left: -60px;
+  }
+  to {
+    left: 105vw;
+  }
+}
+@keyframes ddms-flap {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.55);
+  }
+}
+
+/* Mặt trời hắt sáng nhè nhẹ */
+@keyframes ddms-sun-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 50px 24px rgba(255, 190, 110, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 70px 34px rgba(255, 190, 110, 0.6);
+  }
+}
+
+/* Sóng: trượt ngang liền mạch (tile rộng đúng 1200px) */
+@keyframes ddms-wave-move {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 1200px;
+  }
+}
+@keyframes ddms-wave-move-rev {
+  from {
+    background-position-x: 1200px;
+  }
+  to {
+    background-position-x: 0;
+  }
+}
+
+/* Biên độ sóng phồng lên xẹp xuống — mỗi lớp một chu kỳ khác nhau
+   nên có lúc biển động, có lúc lặng, thay vì lặp đều đặn máy móc */
+@keyframes ddms-swell {
+  0%,
+  100% {
+    transform: scaleY(var(--swell-min, 0.6));
+  }
+  50% {
+    transform: scaleY(var(--swell-max, 1.3));
+  }
+}
+
+/* Thuyền: chạy sang phải → lật đầu → chạy về trái → lật lại */
+@keyframes ddms-sail {
+  0% {
+    transform: translateX(-18vw) scaleX(1);
+  }
+  44% {
+    transform: translateX(92vw) scaleX(1);
+  }
+  50% {
+    transform: translateX(92vw) scaleX(-1);
+  }
+  94% {
+    transform: translateX(-18vw) scaleX(-1);
+  }
+  100% {
+    transform: translateX(-18vw) scaleX(1);
+  }
+}
+
+/* Thuyền nhấp nhô theo sóng */
+@keyframes ddms-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.4deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(1.4deg);
+  }
+}
+
+/* Vệt nước sau đuôi thuyền */
+@keyframes ddms-wake {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scaleX(1.18);
+  }
+}
+
+/* Sao nhấp nháy (chỉ hiện ở chế độ tối) */
+@keyframes ddms-twinkle {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Gợi ý cuộn xuống */
+@keyframes ddms-hint-bounce {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 8px);
+  }
+}
+
+/* Chấm đỏ "đang hoạt động" trên khung video */
+@keyframes ddms-live-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 56, 92, 0.5);
+  }
+  60% {
+    box-shadow: 0 0 0 8px rgba(255, 56, 92, 0);
+  }
+}
+
+/* --- Lớp tiện ích gắn animation ---
+   Tiền tố ddms-anim- cũng là móc để quy tắc prefers-reduced-motion ở cuối file
+   tắt toàn bộ chuyển động chỉ bằng một selector. */
+.ddms-anim-sun {
+  animation: ddms-sun-glow 6s ease-in-out infinite;
+}
+.dark .ddms-anim-sun {
+  animation: none;
+}
+.ddms-anim-cloud-1 {
+  animation: ddms-drift 55s linear infinite;
+}
+.ddms-anim-cloud-2 {
+  animation: ddms-drift 78s linear 8s infinite;
+}
+.ddms-anim-cloud-3 {
+  animation: ddms-drift 42s linear 20s infinite;
+}
+.ddms-anim-gull-1 {
+  animation: ddms-fly 26s linear infinite;
+}
+.ddms-anim-gull-2 {
+  animation: ddms-fly 26s linear 9s infinite;
+}
+.ddms-anim-flap {
+  animation: ddms-flap 0.7s ease-in-out infinite alternate;
+}
+.ddms-anim-sail {
+  animation: ddms-sail 38s ease-in-out infinite;
+  will-change: transform;
+}
+.ddms-anim-bob {
+  animation: ddms-bob 4.2s ease-in-out infinite;
+  transform-origin: 50% 85%;
+}
+.ddms-anim-wake {
+  animation: ddms-wake 1.8s ease-in-out infinite;
+}
+.ddms-anim-hint {
+  animation: ddms-hint-bounce 2s ease-in-out infinite;
+}
+.ddms-anim-live {
+  animation: ddms-live-pulse 1.6s ease-in-out infinite;
+}
+
+/* --- Lớp sóng ---
+   Ảnh nền là SVG data-URI nên màu phải nhúng cứng, không dùng được biến CSS.
+   Vì vậy mỗi lớp có một bản cho chế độ sáng và một bản cho chế độ tối.
+   Điểm đầu và điểm cuối của path đều ở y=60 để tile lặp không thấy mối nối. */
+.ddms-wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background-repeat: repeat-x;
+  background-size: 1200px 100%;
+  transform-origin: 50% 100%;
+}
+.ddms-wave--back {
+  --swell-min: 0.6;
+  --swell-max: 1.15;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C200,78 400,42 600,60 C800,78 1000,42 1200,60 L1200,120 L0,120 Z' fill='%23bfeaf5'/%3E%3C/svg%3E");
+  animation:
+    ddms-wave-move 13s linear infinite,
+    ddms-swell 14s ease-in-out -3s infinite;
+}
+.ddms-wave--mid {
+  --swell-min: 0.5;
+  --swell-max: 1.3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C200,40 400,80 600,60 C800,40 1000,80 1200,60 L1200,120 L0,120 Z' fill='%237fd4e8'/%3E%3C/svg%3E");
+  animation:
+    ddms-wave-move-rev 9s linear infinite,
+    ddms-swell 10s ease-in-out -6s infinite;
+}
+.ddms-wave--front {
+  --swell-min: 0.65;
+  --swell-max: 1.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C180,76 420,44 600,60 C780,76 1020,44 1200,60 L1200,120 L0,120 Z' fill='%233eb3d4'/%3E%3C/svg%3E");
+  animation:
+    ddms-wave-move 7s linear infinite,
+    ddms-swell 12s ease-in-out -1.5s infinite;
+}
+.dark .ddms-wave--back {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C200,78 400,42 600,60 C800,78 1000,42 1200,60 L1200,120 L0,120 Z' fill='%231c4a61'/%3E%3C/svg%3E");
+}
+.dark .ddms-wave--mid {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C200,40 400,80 600,60 C800,40 1000,80 1200,60 L1200,120 L0,120 Z' fill='%23175a74'/%3E%3C/svg%3E");
+}
+.dark .ddms-wave--front {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C180,76 420,44 600,60 C780,76 1020,44 1200,60 L1200,120 L0,120 Z' fill='%23104259'/%3E%3C/svg%3E");
+}
+
+/* Dải sóng trang trí dưới đáy thẻ CTA */
+.ddms-wave-deco {
+  background-repeat: repeat-x;
+  background-size: 1200px 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C150,110 350,10 600,60 C850,110 1050,10 1200,60 L1200,120 L0,120 Z' fill='%23ffffff'/%3E%3C/svg%3E");
+  animation: ddms-wave-move 10s linear infinite;
+}
+
+/* --- Trời sao, chỉ hiện ở chế độ tối --- */
+.ddms-stars::before,
+.ddms-stars::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+}
+.ddms-stars::before {
+  box-shadow:
+    90px 90px #fff,
+    240px 50px rgba(255, 255, 255, 0.8),
+    420px 130px #fff,
+    610px 70px rgba(255, 255, 255, 0.7),
+    800px 110px #fff,
+    990px 60px rgba(255, 255, 255, 0.8),
+    1180px 100px #fff,
+    1330px 150px rgba(255, 255, 255, 0.7),
+    1500px 80px #fff,
+    1680px 130px rgba(255, 255, 255, 0.7);
+  animation: ddms-twinkle 2.6s ease-in-out infinite alternate;
+}
+.ddms-stars::after {
+  box-shadow:
+    160px 180px rgba(255, 255, 255, 0.6),
+    350px 210px rgba(255, 255, 255, 0.75),
+    540px 40px rgba(255, 255, 255, 0.65),
+    730px 190px rgba(255, 255, 255, 0.6),
+    920px 160px rgba(255, 255, 255, 0.7),
+    1120px 200px rgba(255, 255, 255, 0.55),
+    1280px 40px rgba(255, 255, 255, 0.7),
+    1460px 190px rgba(255, 255, 255, 0.6),
+    1650px 60px rgba(255, 255, 255, 0.65);
+  animation: ddms-twinkle 3.4s ease-in-out -1.2s infinite alternate;
+}
+
+/* Người bật "giảm chuyển động" trong hệ điều hành thì cảnh biển gần như đứng yên:
+   vẫn thấy đủ bố cục, không có gì chớp/nhún/lặp nhanh gây khó chịu. */
+@media (prefers-reduced-motion: reduce) {
+  .ddms-wave,
+  .ddms-wave-deco,
+  .ddms-stars::before,
+  .ddms-stars::after,
+  [class*='ddms-anim-'] {
+    animation: none !important;
+  }
+
+  /* Ngoại lệ duy nhất: con thuyền. Nếu tắt hẳn thì nó đứng chết ở mép trái,
+     hero trông như ảnh tĩnh bị lỗi. Cho chạy tiếp nhưng rất chậm và tuyến tính
+     — dịch chuyển đều, không nhún, không đổi tốc — nên không gây chóng mặt.
+     Đặt sau khối trên để override !important cùng độ đặc hiệu. */
+  .ddms-anim-sail {
+    animation: ddms-sail 150s linear infinite !important;
+  }
+}

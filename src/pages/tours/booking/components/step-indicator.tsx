@@ -1,47 +1,63 @@
 import { useTranslation } from 'react-i18next';
-import { Calendar, DoorOpen, Users, CreditCard, Check } from 'lucide-react';
+import {
+  Calendar,
+  DoorOpen,
+  Package,
+  Users,
+  CreditCard,
+  Check,
+} from 'lucide-react';
 
 interface StepIndicatorProps {
   currentStep: number;
   hasRooms: boolean;
+  hasServices: boolean;
 }
 
 export default function StepIndicator({
   currentStep,
   hasRooms,
+  hasServices,
 }: StepIndicatorProps) {
   const { t } = useTranslation();
 
-  const steps = [
+  const dynamicSteps: {
+    icon: typeof Calendar;
+    labelKey: string;
+    labelFallback: string;
+  }[] = [
     {
-      num: 1,
       icon: Calendar,
       labelKey: 'booking.steps.date',
       labelFallback: 'Giờ di chuyển',
     },
-    ...(hasRooms
-      ? [
-          {
-            num: 2,
-            icon: DoorOpen,
-            labelKey: 'booking.steps.rooms',
-            labelFallback: 'Chọn phòng',
-          },
-        ]
-      : []),
-    {
-      num: hasRooms ? 3 : 2,
-      icon: Users,
-      labelKey: 'booking.steps.guests',
-      labelFallback: 'Số khách',
-    },
-    {
-      num: hasRooms ? 4 : 3,
-      icon: CreditCard,
-      labelKey: 'booking.steps.confirm',
-      labelFallback: 'Xác nhận',
-    },
   ];
+  if (hasRooms) {
+    dynamicSteps.push({
+      icon: DoorOpen,
+      labelKey: 'booking.steps.rooms',
+      labelFallback: 'Chọn phòng',
+    });
+  }
+  if (hasServices) {
+    dynamicSteps.push({
+      icon: Package,
+      labelKey: 'booking.steps.services',
+      labelFallback: 'Dịch vụ',
+    });
+  }
+  dynamicSteps.push({
+    icon: Users,
+    labelKey: 'booking.steps.guests',
+    labelFallback: 'Số khách',
+  });
+  dynamicSteps.push({
+    icon: CreditCard,
+    labelKey: 'booking.steps.confirm',
+    labelFallback: 'Xác nhận',
+  });
+
+  const steps = dynamicSteps.map((s, idx) => ({ ...s, num: idx + 1 }));
 
   return (
     <div className="mt-8 flex items-center justify-between gap-2 max-w-2xl mx-auto">

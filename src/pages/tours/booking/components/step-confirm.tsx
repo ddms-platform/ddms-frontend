@@ -5,7 +5,7 @@ import type {
   TourItemResponse,
   TourServiceResponse,
 } from '@/services/tourService';
-import { bookingService } from '@/services/bookingService';
+import { bookingService, type BookingQuote } from '@/services/bookingService';
 import SummaryPanel from './step-confirm/SummaryPanel';
 import PaymentPanel from './step-confirm/PaymentPanel';
 import HoldCountdown from './step-confirm/HoldCountdown';
@@ -53,6 +53,11 @@ export default function StepConfirm({
   // Thời điểm hết hạn giữ chỗ (null nếu tour quá sát giờ, phải thanh toán ngay).
   const [holdExpiredAt, setHoldExpiredAt] = useState<string | null>(null);
   const [holdExpired, setHoldExpired] = useState(false);
+  // Bảng giá server trả về sau khi áp mã giảm giá; null khi chưa áp mã nào.
+  const [quote, setQuote] = useState<BookingQuote | null>(null);
+
+  // Số tiền thật sự phải trả: ưu tiên con số server tính.
+  const payableTotal = quote ? quote.totalPrice : totalPrice;
 
   const bookingCode = useMemo(() => {
     const source = `${tour.id}-${selectedSchedule?.id}-${selectedDate}-${selectedTime}-${guests}`;
@@ -72,28 +77,18 @@ export default function StepConfirm({
     const createDbBooking = async () => {
       try {
         setIsCreatingBooking(true);
+        // Không gửi giá lên nữa — server tự tính toàn bộ từ dữ liệu trong DB.
         const payload = {
           scheduleId: selectedSchedule.id,
           numPeople: guests,
-          basePrice: tour.price,
-          cabinPrice: roomPrice,
-          servicePrice,
-          discountAmount: 0,
-          totalPrice: totalPrice,
           notes: '',
           cabins: selectedRoom
-            ? [
-                {
-                  cabinId: selectedRoom.id,
-                  quantity: 1,
-                  unitPrice: selectedRoom.price,
-                },
-              ]
+            ? [{ cabinId: selectedRoom.id, quantity: 1, unitPrice: 0 }]
             : [],
           services: selectedServices.map((service) => ({
             serviceId: service.id,
             quantity: 1,
-            unitPrice: service.price,
+            unitPrice: 0,
           })),
         };
         // Ưu tiên GIỮ CHỖ (giữ ghế trong lúc khách nhập thẻ) — có đồng hồ đếm ngược.
@@ -130,16 +125,9 @@ export default function StepConfirm({
     return () => {
       active = false;
     };
-  }, [
-    selectedSchedule.id,
-    guests,
-    tour.price,
-    roomPrice,
-    servicePrice,
-    totalPrice,
-    selectedRoom,
-    selectedServices,
-  ]);
+    // Payload chỉ còn phụ thuộc lịch trình, số khách và các mục đã chọn —
+    // giá không nằm trong đây nữa nên effect không chạy lại khi giá đổi.
+  }, [selectedSchedule.id, guests, selectedRoom, selectedServices]);
 
   const handlePaymentSubmit = () => {
     // Đã hết hạn giữ chỗ -> không cho thanh toán, yêu cầu đặt lại.
@@ -214,6 +202,9 @@ export default function StepConfirm({
           servicePrice={servicePrice}
           totalPrice={totalPrice}
           selectedServices={selectedServices}
+          bookingId={dbBookingId}
+          quote={quote}
+          onQuoteChange={setQuote}
         />
 
         <PaymentPanel
@@ -224,7 +215,7 @@ export default function StepConfirm({
           webhookReceived={webhookReceived}
           errorMessage={errorMessage}
           displayCode={displayCode}
-          totalPrice={totalPrice}
+          totalPrice={payableTotal}
           onSelectMethod={setPaymentMethod}
           onClearError={() => setErrorMessage(null)}
           onMarkWebhookReceived={() => {

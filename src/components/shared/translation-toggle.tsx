@@ -2,6 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import useLanguage from '@/contexts/LanguageContext';
 
+const LANGUAGES = [
+  { code: 'VN' as const, label: 'Tiếng Việt' },
+  { code: 'EN' as const, label: 'English' },
+];
+
 export default function TranslationToggle() {
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -43,35 +48,23 @@ export default function TranslationToggle() {
         />
       </button>
 
-      {/* Dropdown List */}
+      {/* Dropdown List — dùng token popover (đục hẳn ở cả hai chế độ) thay vì
+          màu cứng cho nền tối, nếu không ở chế độ sáng chữ sẽ chìm vào hero. */}
       {isOpen && (
-        <div
-          className="absolute right-0 mt-2 w-32 overflow-hidden rounded-xl py-1 shadow-xl border animate-in fade-in slide-in-from-top-2 duration-150 z-50"
-          style={{
-            backgroundColor: 'var(--ddms-bg-header)',
-            borderColor: 'rgba(255, 255, 255, 0.1)',
-          }}
-        >
-          <button
-            onClick={() => selectLanguage('VN')}
-            className={`flex w-full items-center justify-between px-4 py-2.5 text-xs md:text-sm font-semibold transition-colors hover:bg-white/10 text-left cursor-pointer border-none bg-transparent ${
-              language === 'VN'
-                ? 'text-ddms-secondary font-bold'
-                : 'text-slate-200'
-            }`}
-          >
-            Tiếng Việt
-          </button>
-          <button
-            onClick={() => selectLanguage('EN')}
-            className={`flex w-full items-center justify-between px-4 py-2.5 text-xs md:text-sm font-semibold transition-colors hover:bg-white/10 text-left cursor-pointer border-none bg-transparent ${
-              language === 'EN'
-                ? 'text-ddms-secondary font-bold'
-                : 'text-slate-200'
-            }`}
-          >
-            English
-          </button>
+        <div className="animate-in fade-in slide-in-from-top-2 absolute right-0 z-50 mt-2 w-32 overflow-hidden rounded-xl border border-border bg-popover py-1 shadow-xl duration-150">
+          {LANGUAGES.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => selectLanguage(lang.code)}
+              className={`flex w-full cursor-pointer items-center justify-between border-none bg-transparent px-4 py-2.5 text-left text-xs font-semibold transition-colors hover:bg-accent md:text-sm ${
+                language === lang.code
+                  ? 'font-bold text-ddms-secondary'
+                  : 'text-popover-foreground'
+              }`}
+            >
+              {lang.label}
+            </button>
+          ))}
         </div>
       )}
 

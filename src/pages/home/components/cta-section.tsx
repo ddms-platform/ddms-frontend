@@ -128,41 +128,37 @@ export default function CtaSection() {
     );
   }
 
+  // Thẻ gradient xanh biển với dải sóng chạy ở đáy — điểm nhấn cuối trang.
   return (
-    <section
-      className="py-20"
-      style={{
-        background:
-          'linear-gradient(135deg, var(--ddms-bg-card) 0%, var(--ddms-bg-main) 50%, var(--ddms-accent) 100%)',
-      }}
-    >
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <h2
-          className="text-3xl font-bold leading-tight md:text-4xl text-foreground"
-          style={{ letterSpacing: '-0.44px' }}
-        >
-          {t('home.cta.title')}
-        </h2>
-        <p className="mt-4 text-lg text-foreground/80">
-          {t('home.cta.description')}
-        </p>
-        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button
-            variant="cyan"
-            size="action-lg"
-            className="px-8 text-base"
-            asChild
-          >
-            <Link to={routeName.signUp}>{t('home.cta.signUp')}</Link>
-          </Button>
-          <Button
-            variant="outline"
-            size="action-lg"
-            className="rounded-lg border-2 px-8 text-base border-foreground/30 text-foreground hover:bg-foreground/5"
-            asChild
-          >
-            <Link to={routeName.tours}>{t('home.cta.explore')}</Link>
-          </Button>
+    <section id="cta" className="mx-auto max-w-7xl px-6 py-16 md:py-22">
+      <div className="relative overflow-hidden rounded-[32px] bg-linear-120 from-[#0e2a38] via-[#14547a] to-[#1f93b8] px-6 py-16 text-center text-white md:px-12 md:py-17">
+        <div className="ddms-wave-deco pointer-events-none absolute inset-x-0 -bottom-1.5 h-17.5 opacity-25" />
+
+        <div className="relative">
+          <h2 className="mb-3.5 text-[clamp(26px,3vw,36px)] font-extrabold tracking-[-0.6px]">
+            {t('home.cta.title')}
+          </h2>
+          <p className="mx-auto mb-7.5 max-w-135 text-base opacity-85">
+            {t('home.cta.description')}
+          </p>
+
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button
+              size="action-lg"
+              className="rounded-3xl bg-ddms-primary px-8 text-base text-white shadow-[rgba(255,56,92,0.3)_0_4px_14px] hover:bg-[#e00b41]"
+              asChild
+            >
+              <Link to={routeName.signUp}>{t('home.cta.signUp')}</Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="action-lg"
+              className="rounded-3xl border-2 border-white/40 bg-transparent px-8 text-base text-white hover:bg-white/10 hover:text-white"
+              asChild
+            >
+              <Link to={routeName.tours}>{t('home.cta.explore')}</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>
