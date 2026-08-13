@@ -40,7 +40,12 @@ export function mapProfileToUser(profile: IProfileRes): User {
     id: profile.id,
     name: profile.fullName,
     email: profile.email,
-    roles: (profile.roles?.length ? profile.roles : ['user']) as User['roles'],
+    roles: (() => {
+      const normalized = (profile.roles ?? [])
+        .map((r) => r?.toLowerCase())
+        .filter((r): r is string => ['user', 'owner', 'admin'].includes(r));
+      return (normalized.length ? normalized : ['user']) as User['roles'];
+    })(),
     avatar_url: profile.avatarUrl,
     phone: profile.phone,
     address: profile.address,

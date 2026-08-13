@@ -15,16 +15,26 @@ export interface CreateBookingServiceRequest {
 
 export interface CreateBookingRequest {
   scheduleId: string;
-  promotionId?: string | null;
   numPeople: number;
-  basePrice: number;
-  cabinPrice: number;
-  servicePrice: number;
-  discountAmount: number;
-  totalPrice: number;
+  /** Mã giảm giá. Server tự tra và tự tính mức giảm. */
+  promotionCode?: string | null;
   notes?: string | null;
   cabins?: CreateBookingCabinRequest[];
   services?: CreateBookingServiceRequest[];
+}
+
+/** Bảng giá do server tính. Là nguồn sự thật duy nhất về số tiền phải trả. */
+export interface BookingQuote {
+  basePrice: number;
+  cabinPrice: number;
+  servicePrice: number;
+  subtotal: number;
+  promotionId?: string | null;
+  promotionCode?: string | null;
+  /** Mô tả mức giảm để hiển thị, ví dụ "Giảm 10%". */
+  promotionDescription?: string | null;
+  discountAmount: number;
+  totalPrice: number;
 }
 
 export interface BookingResponse {
@@ -49,7 +59,11 @@ export interface CabinAvailabilityResponse {
 }
 
 export type BookingStatus =
-  'PENDING' | 'UPCOMING' | 'CHECKED_IN' | 'COMPLETED' | 'CANCELLED';
+  | 'PENDING'
+  | 'UPCOMING'
+  | 'CHECKED_IN'
+  | 'COMPLETED'
+  | 'CANCELLED';
 
 export interface UserBookingListItemResponse {
   id: string;
@@ -88,9 +102,23 @@ export const bookingService = {
 
   getCabinAvailability: (scheduleId: string) =>
     api
-      .get<ApiResponse<CabinAvailabilityResponse[]>>(
-        `/bookings/schedules/${scheduleId}/cabins`,
-      )
+      .get<
+        ApiResponse<CabinAvailabilityResponse[]>
+      >(`/bookings/schedules/${scheduleId}/cabins`)
+      .then((r) => r.data.result),
+
+  /** Áp mã giảm giá lên đơn đang chờ thanh toán. Trả về bảng giá đã tính lại. */
+  applyPromotion: (bookingId: string, code: string) =>
+    api
+      .put<ApiResponse<BookingQuote>>(`/bookings/${bookingId}/promotion`, {
+        code,
+      })
+      .then((r) => r.data.result),
+
+  /** Gỡ mã giảm giá khỏi đơn, giá trở lại như cũ. */
+  removePromotion: (bookingId: string) =>
+    api
+      .delete<ApiResponse<BookingQuote>>(`/bookings/${bookingId}/promotion`)
       .then((r) => r.data.result),
 
   confirmPayment: (bookingId: string) =>

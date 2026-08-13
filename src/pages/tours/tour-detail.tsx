@@ -300,11 +300,9 @@ export default function TourDetailPage() {
             />
 
             {/* Weather Widget for Mobile only */}
-            {tour.location && (
-              <div className="mt-8 block lg:hidden">
-                <WeatherWidget location={tour.location} />
-              </div>
-            )}
+            <div className="mt-8 block lg:hidden">
+              <WeatherWidget location={tour.location || 'Đà Nẵng'} />
+            </div>
 
             {/* Lộ trình (Itinerary) */}
             {tour.routes && tour.routes.length > 0 && (
@@ -491,16 +489,18 @@ export default function TourDetailPage() {
           </div>
 
           {/* Right: Booking Sidebar */}
-          <div className="hidden lg:block space-y-6">
-            <BookingSidebar
-              tourId={tour.id}
-              price={finalPrice}
-              isClosed={!hasFutureSchedules}
-              createdBy={tour.createdBy}
-              selectedClassId={selectedClassId}
-              selectedServiceIds={selectedServiceIds}
-            />
-            {tour.location && <WeatherWidget location={tour.location} />}
+          <div className="hidden lg:block">
+            <div className="sticky top-24 space-y-6">
+              <BookingSidebar
+                tourId={tour.id}
+                price={finalPrice}
+                isClosed={!hasFutureSchedules}
+                createdBy={tour.createdBy}
+                selectedClassId={selectedClassId}
+                selectedServiceIds={selectedServiceIds}
+              />
+              <WeatherWidget location={tour.location || 'Đà Nẵng'} />
+            </div>
           </div>
         </div>
 

@@ -317,9 +317,34 @@
       "tours": "Tours",
       "howItWorks": "How It Works",
       "destinations": "Destinations",
+      "experience": "Experience",
+      "forOwners": "For Owners",
       "signIn": "Sign In"
     },
+    "heroSearch": {
+      "placeLabel": "Where",
+      "placeValue": "Han River · Da Nang Bay",
+      "dateLabel": "Date",
+      "dateValue": "Pick a date",
+      "guestsLabel": "Guests",
+      "guestsValue": "Add guests",
+      "submit": "Search"
+    },
+    "experience": {
+      "kicker": "See it for real",
+      "title": "The Han River at night, seen from the deck",
+      "desc": "The video plays as you scroll — every tour on DDMS carries real footage uploaded by the boat owner, so guests know what they are booking.",
+      "liveChip": "Yachts sailing now · Da Nang Bay",
+      "statBoats": "Yachts",
+      "statBookings": "Bookings",
+      "statRating": "Rating"
+    },
     "hero": {
+      "badge": "Da Nang's digital marina",
+      "titleLine1": "Book a Han River cruise",
+      "titleLine2": "as easily as a hotel room",
+      "subtitle": "Nearly 100 yachts, speedboats and dining vessels — listed prices, real-time availability, secure payment.",
+      "scrollHint": "Scroll down to explore",
       "welcome": "Welcome to Da Nang",
       "explore": "Explore now",
       "title": "Discover Da Nang's Waterway Beauty",
@@ -400,6 +425,8 @@
       "sunsetCategory": "Private Sunset Charter"
     },
     "providers": {
+      "sectionEyebrow": "Featured operators",
+      "sectionTitle": "Trusted partners on the Han River",
       "verified": "Verified Partner",
       "viewFleets": "View active fleets",
       "specialDeal": "Special Deal",

@@ -19,6 +19,7 @@ import {
 import StepIndicator from './components/step-indicator';
 import StepDateTime from './components/step-date-time';
 import StepViewRooms from './components/step-view-rooms';
+import StepServices from './components/step-services';
 import StepGuests from './components/step-guests';
 import StepConfirm from './components/step-confirm';
 import BookingSuccess from './components/booking-success';
@@ -86,18 +87,10 @@ export default function BookingPage() {
         const now = new Date();
         now.setHours(0, 0, 0, 0); // Ignore time, only compare date
 
-        console.log('DEBUG: schedulesData from API:', schedulesData);
-
         const futureSchedules = (schedulesData || []).filter((s: any) => {
           const startTime = new Date(s.start_time);
-          console.log(
-            `DEBUG: checking schedule ${s.start_time}, is it > now?`,
-            startTime > now,
-          );
           return startTime >= now;
         });
-
-        console.log('DEBUG: futureSchedules:', futureSchedules);
 
         setTour(tourData);
         setSchedules(futureSchedules);
@@ -111,12 +104,8 @@ export default function BookingPage() {
   }, [id]);
 
   // ── Derived State ──
-  const hasRooms = useMemo(() => {
-    return !!tour && tour.classes && tour.classes.length > 0;
-  }, [tour]);
-
   useEffect(() => {
-    if (!selectedSchedule?.id || !hasRooms) {
+    if (!selectedSchedule?.id) {
       const timer = window.setTimeout(() => {
         setCabinAvailability([]);
         setAvailabilityScheduleId(null);
@@ -153,14 +142,15 @@ export default function BookingPage() {
     return () => {
       active = false;
     };
-  }, [selectedSchedule?.id, hasRooms]);
+  }, [selectedSchedule?.id]);
 
   const rooms: RoomOption[] = useMemo(() => {
-    if (!tour || !tour.classes) return [];
+    if (!tour) return [];
 
-    const classById = new Map(tour.classes.map((c) => [c.id, c]));
+    const tourClasses = tour.classes || [];
+    const classById = new Map(tourClasses.map((c) => [c.id, c]));
     const classByName = new Map(
-      tour.classes.map((c) => [c.name.toLowerCase(), c]),
+      tourClasses.map((c) => [c.name.toLowerCase(), c]),
     );
     const source =
       cabinAvailability.length > 0
@@ -180,7 +170,7 @@ export default function BookingPage() {
               imageUrl: cabinClass?.imageUrl,
             };
           })
-        : tour.classes.map((c) => ({
+        : tourClasses.map((c) => ({
             ...c,
             totalRooms: 1,
             availableRooms: 1,
@@ -285,15 +275,35 @@ export default function BookingPage() {
     tour?.classes,
   ]);
 
-  const tourServices = tour?.services;
+  const tourServices = useMemo(() => tour?.services ?? [], [tour?.services]);
   const prefillServiceIds = bookingPrefill.serviceIds;
 
-  const selectedServices: TourServiceResponse[] = useMemo(() => {
-    if (!tourServices || prefillServiceIds.length === 0) return [];
+  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+  const prefillServiceKeyRef = useRef<string | null>(null);
 
-    const serviceIds = new Set(prefillServiceIds);
+  useEffect(() => {
+    if (!tour) return;
+    const key = `${tour.id}:${prefillServiceIds.join(',')}`;
+    if (prefillServiceKeyRef.current === key) return;
+    prefillServiceKeyRef.current = key;
+    const validIds = new Set(tourServices.map((s) => s.id));
+    setSelectedServiceIds(prefillServiceIds.filter((id) => validIds.has(id)));
+  }, [prefillServiceIds, tour, tourServices]);
+
+  const toggleService = (id: string) => {
+    setSelectedServiceIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  };
+
+  const selectedServices: TourServiceResponse[] = useMemo(() => {
+    if (tourServices.length === 0 || selectedServiceIds.length === 0) return [];
+    const serviceIds = new Set(selectedServiceIds);
     return tourServices.filter((service) => serviceIds.has(service.id));
-  }, [prefillServiceIds, tourServices]);
+  }, [selectedServiceIds, tourServices]);
+
+  const hasRooms = rooms.length > 0;
+  const hasServices = tourServices.length > 0;
 
   const basePrice = tour ? tour.price : 0;
   const tourPrice = basePrice * guests;
@@ -306,20 +316,42 @@ export default function BookingPage() {
   const maxGuests =
     selectedSchedule?.maxCapacity || tour?.classes?.[0]?.capacity || 50;
 
+  // ── Step layout (dynamic) ──
+  const stepKeys = useMemo(() => {
+    const keys: Array<'date' | 'rooms' | 'services' | 'guests' | 'confirm'> = [
+      'date',
+    ];
+    if (hasRooms) keys.push('rooms');
+    if (hasServices) keys.push('services');
+    keys.push('guests');
+    keys.push('confirm');
+    return keys;
+  }, [hasRooms, hasServices]);
+
+  const totalSteps = stepKeys.length;
+  const currentStepKey = stepKeys[step - 1];
+
+  useEffect(() => {
+    if (step > totalSteps) setStep(totalSteps);
+  }, [step, totalSteps]);
+
   // ── Handlers ──
   const canProceed = () => {
-    if (step === 1) return selectedSchedule !== null;
-    if (hasRooms) {
-      if (step === 2) return !isAvailabilityLoading && selectedRoom !== null;
-      if (step === 3) return guests >= 1 && guests <= maxGuests;
-    } else {
-      if (step === 2) return guests >= 1 && guests <= maxGuests;
+    switch (currentStepKey) {
+      case 'date':
+        return selectedSchedule !== null && !isAvailabilityLoading;
+      case 'rooms':
+        return !isAvailabilityLoading && selectedRoom !== null;
+      case 'services':
+        return true; // optional
+      case 'guests':
+        return guests >= 1 && guests <= maxGuests;
+      default:
+        return true;
     }
-    return true;
   };
 
   const handleNext = () => {
-    const totalSteps = hasRooms ? 4 : 3;
     if (step < totalSteps) setStep(step + 1);
   };
 
@@ -391,8 +423,6 @@ export default function BookingPage() {
     );
   }
 
-  const totalSteps = hasRooms ? 4 : 3;
-
   return (
     <div className="mx-auto max-w-3xl px-6 py-8">
       {/* Breadcrumb */}
@@ -415,7 +445,11 @@ export default function BookingPage() {
       <p className="mt-1 text-sm text-ddms-secondary">{tour.name}</p>
 
       {/* Step Indicator */}
-      <StepIndicator currentStep={step} hasRooms={hasRooms} />
+      <StepIndicator
+        currentStep={step}
+        hasRooms={hasRooms}
+        hasServices={hasServices}
+      />
 
       {/* Step Content */}
       <div
@@ -427,7 +461,7 @@ export default function BookingPage() {
             'rgba(0,0,0,0.02) 0px 0px 0px 1px, rgba(0,0,0,0.04) 0px 2px 6px, rgba(0,0,0,0.05) 0px 4px 8px',
         }}
       >
-        {step === 1 && (
+        {currentStepKey === 'date' && (
           <StepDateTime
             schedules={schedules}
             selectedSchedule={selectedSchedule}
@@ -438,85 +472,55 @@ export default function BookingPage() {
           />
         )}
 
-        {hasRooms ? (
-          <>
-            {step === 2 && (
-              <StepViewRooms
-                rooms={rooms}
-                selectedRoom={selectedRoom}
-                selectedBoatName={selectedSchedule?.boatName || 'Du thuyền'}
-                boatImageUrls={selectedSchedule?.boatImageUrls || []}
-                isAvailabilityLoading={isAvailabilityLoading}
-                onSelectRoom={setSelectedRoom}
-              />
-            )}
+        {currentStepKey === 'rooms' && (
+          <StepViewRooms
+            rooms={rooms}
+            selectedRoom={selectedRoom}
+            selectedBoatName={selectedSchedule?.boatName || 'Du thuyền'}
+            boatImageUrls={selectedSchedule?.boatImageUrls || []}
+            isAvailabilityLoading={isAvailabilityLoading}
+            onSelectRoom={setSelectedRoom}
+          />
+        )}
 
-            {step === 3 && (
-              <StepGuests
-                guests={guests}
-                maxGuests={maxGuests}
-                selectedRoom={selectedRoom}
-                tourPrice={tourPrice}
-                roomPrice={roomPrice}
-                servicePrice={servicePrice}
-                totalPrice={totalPrice}
-                selectedServices={selectedServices}
-                onSetGuests={setGuests}
-                basePrice={basePrice}
-              />
-            )}
+        {currentStepKey === 'services' && (
+          <StepServices
+            services={tourServices}
+            selectedServiceIds={selectedServiceIds}
+            onToggleService={toggleService}
+          />
+        )}
 
-            {step === 4 && (
-              <StepConfirm
-                tour={tour}
-                selectedDate={selectedDate}
-                selectedTime={selectedTime}
-                selectedRoom={selectedRoom}
-                guests={guests}
-                tourPrice={tourPrice}
-                roomPrice={roomPrice}
-                servicePrice={servicePrice}
-                totalPrice={totalPrice}
-                selectedServices={selectedServices}
-                selectedSchedule={selectedSchedule}
-                onConfirm={handleConfirm}
-              />
-            )}
-          </>
-        ) : (
-          <>
-            {step === 2 && (
-              <StepGuests
-                guests={guests}
-                maxGuests={maxGuests}
-                selectedRoom={selectedRoom}
-                tourPrice={tourPrice}
-                roomPrice={roomPrice}
-                servicePrice={servicePrice}
-                totalPrice={totalPrice}
-                selectedServices={selectedServices}
-                onSetGuests={setGuests}
-                basePrice={basePrice}
-              />
-            )}
+        {currentStepKey === 'guests' && (
+          <StepGuests
+            guests={guests}
+            maxGuests={maxGuests}
+            selectedRoom={selectedRoom}
+            tourPrice={tourPrice}
+            roomPrice={roomPrice}
+            servicePrice={servicePrice}
+            totalPrice={totalPrice}
+            selectedServices={selectedServices}
+            onSetGuests={setGuests}
+            basePrice={basePrice}
+          />
+        )}
 
-            {step === 3 && (
-              <StepConfirm
-                tour={tour}
-                selectedDate={selectedDate}
-                selectedTime={selectedTime}
-                selectedRoom={selectedRoom}
-                guests={guests}
-                tourPrice={tourPrice}
-                roomPrice={roomPrice}
-                servicePrice={servicePrice}
-                totalPrice={totalPrice}
-                selectedServices={selectedServices}
-                selectedSchedule={selectedSchedule}
-                onConfirm={handleConfirm}
-              />
-            )}
-          </>
+        {currentStepKey === 'confirm' && (
+          <StepConfirm
+            tour={tour}
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            selectedRoom={selectedRoom}
+            guests={guests}
+            tourPrice={tourPrice}
+            roomPrice={roomPrice}
+            servicePrice={servicePrice}
+            totalPrice={totalPrice}
+            selectedServices={selectedServices}
+            selectedSchedule={selectedSchedule}
+            onConfirm={handleConfirm}
+          />
         )}
       </div>
 

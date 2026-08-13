@@ -40,10 +40,10 @@ export default function CategoryPills() {
               <button
                 key={svc.key}
                 onClick={() => setActiveTab(svc.key)}
-                className={`flex shrink-0 items-center gap-2.5 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300 cursor-pointer ${
+                className={`flex shrink-0 cursor-pointer items-center gap-2 rounded-3xl border px-5 py-2.75 text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'border-2 border-primary bg-primary text-primary-foreground shadow-md scale-[1.03]'
-                    : 'border border-border bg-ddms-bg-card text-foreground hover:border-foreground/40 shadow-xs'
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-border bg-ddms-bg-card text-foreground hover:border-foreground'
                 }`}
               >
                 <span className="text-lg md:text-xl">{svc.icon}</span>

@@ -1,4 +1,11 @@
-import { Plus, Trash2, MessageCircleQuestion } from 'lucide-react';
+import { useRef } from 'react';
+import {
+  Plus,
+  Trash2,
+  MessageCircleQuestion,
+  Upload,
+  FileDown,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,6 +18,13 @@ import ComplexTourFields from './service-tab/ComplexTourFields';
 import FishingFields from './service-tab/FishingFields';
 import SpeedboatFields from './service-tab/SpeedboatFields';
 import type { ServiceHandlers } from './service-tab/types';
+import {
+  downloadTemplate,
+  parseServicesExcel,
+  parseServicesZip,
+} from './service-tab/excel-import';
+import AiContentStudio from './service-tab/AiContentStudio';
+import type { FaqItem } from '@/services/aiService';
 
 export interface ComboForm {
   name: string;
@@ -83,8 +97,79 @@ export default function ServiceTab({
   services,
   onChange,
 }: ServiceTabProps) {
+  const importInputRef = useRef<HTMLInputElement>(null);
+  const zipInputRef = useRef<HTMLInputElement>(null);
+
   const handleAddService = () => {
     onChange([...services, getEmptyService()]);
+  };
+
+  const applyImported = (imported: ServiceFormState[]) => {
+    const isDefaultBlank =
+      services.length === 1 &&
+      !services[0].name.trim() &&
+      !services[0].basePrice.trim();
+    onChange(isDefaultBlank ? imported : [...services, ...imported]);
+  };
+
+  const handleImportExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const { services: imported, errors } = await parseServicesExcel(file);
+      if (errors.length > 0) {
+        toast.error(errors.slice(0, 3).join('\n'), { duration: 6000 });
+      }
+      if (imported.length === 0) {
+        if (errors.length === 0)
+          toast.error('File không có dịch vụ nào hợp lệ.');
+        return;
+      }
+      applyImported(imported);
+      toast.success(`Đã import ${imported.length} dịch vụ từ file Excel.`);
+    } catch (err) {
+      console.error('Failed to parse Excel:', err);
+      toast.error('Không đọc được file. Hãy dùng đúng template.');
+    }
+  };
+
+  const handleImportZip = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    const loadingToast = toast.loading('Đang mở ZIP và upload ảnh...');
+    try {
+      const { services: imported, errors } = await parseServicesZip(
+        file,
+        (uploaded, total) => {
+          if (total > 0) {
+            toast.loading(`Đang upload ảnh ${uploaded}/${total}...`, {
+              id: loadingToast,
+            });
+          }
+        },
+      );
+      toast.dismiss(loadingToast);
+      if (errors.length > 0) {
+        toast.error(errors.slice(0, 3).join('\n'), { duration: 6000 });
+      }
+      if (imported.length === 0) {
+        if (errors.length === 0)
+          toast.error('ZIP không có dịch vụ nào hợp lệ.');
+        return;
+      }
+      applyImported(imported);
+      toast.success(
+        `Đã import ${imported.length} dịch vụ${
+          errors.length ? ' (có cảnh báo)' : ''
+        }.`,
+      );
+    } catch (err) {
+      console.error('Failed to parse ZIP:', err);
+      toast.dismiss(loadingToast);
+      toast.error('Không đọc được ZIP. Kiểm tra lại file hoặc cấu trúc.');
+    }
   };
 
   const handleRemoveService = (id: string) => {
@@ -219,6 +304,63 @@ export default function ServiceTab({
 
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-ddms-bg-card border border-border rounded-xl p-4">
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold text-foreground">
+            Nhập nhanh dịch vụ từ Excel hoặc ZIP
+          </p>
+          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+            <b>Excel</b> (5 sheet: Services / Rooms / Combos / Faqs / Routes) —
+            link nested item bằng cột <code>service_name</code>. Ảnh: paste URL
+            vào cột <code>imageUrl</code>.
+            <br />
+            <b>ZIP</b> (khuyến nghị) — chứa file Excel + folder ảnh. Trong Excel
+            chỉ cần điền cột <code>imageFile</code> = tên file (vd:{' '}
+            <code>vip.jpg</code>). Hệ thống tự upload ảnh và gắn URL.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => downloadTemplate()}
+            className="text-sm"
+          >
+            <FileDown className="w-4 h-4 mr-2" /> Tải Template
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => importInputRef.current?.click()}
+            className="text-sm"
+          >
+            <Upload className="w-4 h-4 mr-2" /> Import Excel
+          </Button>
+          <Button
+            type="button"
+            variant="cyan"
+            onClick={() => zipInputRef.current?.click()}
+            className="text-sm"
+          >
+            <Upload className="w-4 h-4 mr-2" /> Import ZIP (kèm ảnh)
+          </Button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept=".xlsx,.xls,.csv"
+            onChange={handleImportExcel}
+            className="hidden"
+          />
+          <input
+            ref={zipInputRef}
+            type="file"
+            accept=".zip,application/zip"
+            onChange={handleImportZip}
+            className="hidden"
+          />
+        </div>
+      </div>
+
       {services.map((srv, index) => (
         <div
           key={srv.id}
@@ -295,6 +437,32 @@ export default function ServiceTab({
                 </button>
               )}
             </div>
+          </div>
+
+          <div className="mb-6">
+            <AiContentStudio
+              service={srv}
+              onApplyName={(name) => updateService(srv.id, 'name', name)}
+              onApplyDescription={(desc) =>
+                updateService(srv.id, 'description', desc)
+              }
+              onApplyPrice={(price) =>
+                updateService(srv.id, 'basePrice', price)
+              }
+              onApplyFaqs={(items: FaqItem[]) => {
+                const currentFaqs = srv.faqs.filter(
+                  (f) => f.question.trim() || f.answer.trim(),
+                );
+                const merged = [
+                  ...currentFaqs,
+                  ...items.map((i) => ({
+                    question: i.question,
+                    answer: i.answer,
+                  })),
+                ];
+                updateService(srv.id, 'faqs', merged);
+              }}
+            />
           </div>
 
           <div className="grid md:grid-cols-2 gap-7">

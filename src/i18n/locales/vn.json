@@ -317,9 +317,34 @@
       "tours": "Tour",
       "howItWorks": "Cách hoạt động",
       "destinations": "Điểm đến",
+      "experience": "Trải nghiệm",
+      "forOwners": "Chủ tàu",
       "signIn": "Đăng nhập"
     },
+    "heroSearch": {
+      "placeLabel": "Địa điểm",
+      "placeValue": "Sông Hàn · Vịnh Đà Nẵng",
+      "dateLabel": "Ngày đi",
+      "dateValue": "Chọn ngày",
+      "guestsLabel": "Số khách",
+      "guestsValue": "Thêm khách",
+      "submit": "Tìm kiếm"
+    },
+    "experience": {
+      "kicker": "Trải nghiệm thực tế",
+      "title": "Sông Hàn về đêm, nhìn từ boong tàu",
+      "desc": "Video tự phát khi bạn cuộn tới — mỗi tour trên DDMS đều có video thực tế do chủ tàu tải lên, khách xem trước khi đặt.",
+      "liveChip": "Du thuyền đang hoạt động · Vịnh Đà Nẵng",
+      "statBoats": "Du thuyền",
+      "statBookings": "Lượt đặt",
+      "statRating": "Đánh giá"
+    },
     "hero": {
+      "badge": "Bến du thuyền số của thành phố Đà Nẵng",
+      "titleLine1": "Đặt du thuyền sông Hàn",
+      "titleLine2": "dễ như đặt phòng",
+      "subtitle": "Gần 100 du thuyền, cano và tàu nhà hàng — giá niêm yết, lịch trống thời gian thực, thanh toán an toàn.",
+      "scrollHint": "Cuộn xuống để khám phá",
       "welcome": "Chào mừng tới Đà Nẵng",
       "explore": "Trải nghiệm nào",
       "title": "Khám phá vẻ đẹp đường thủy Đà Nẵng",
@@ -400,6 +425,8 @@
       "sunsetCategory": "Du thuyền hoàng hôn"
     },
     "providers": {
+      "sectionEyebrow": "Nhà cung cấp nổi bật",
+      "sectionTitle": "Đối tác uy tín trên sông Hàn",
       "verified": "Đối tác tin cậy",
       "viewFleets": "Xem các tàu hoạt động",
       "specialDeal": "Ưu đãi đặt sớm",

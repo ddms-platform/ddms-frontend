@@ -85,7 +85,7 @@ export default function BookingSidebar({
 
   return (
     <div
-      className="sticky top-24 rounded-2xl p-6 border"
+      className="rounded-2xl p-6 border"
       style={{
         backgroundColor: 'var(--ddms-bg-card)',
         borderColor: 'var(--border)',

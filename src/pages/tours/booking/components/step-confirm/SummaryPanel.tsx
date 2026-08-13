@@ -6,6 +6,8 @@ import type {
   TourItemResponse,
   TourServiceResponse,
 } from '@/services/tourService';
+import type { BookingQuote } from '@/services/bookingService';
+import PromoCodeInput from './PromoCodeInput';
 
 interface SummaryPanelProps {
   tour: TourItemResponse;
@@ -19,6 +21,10 @@ interface SummaryPanelProps {
   servicePrice: number;
   totalPrice: number;
   selectedServices: TourServiceResponse[];
+  bookingId: string | null;
+  /** Bảng giá server trả về sau khi áp mã; null nghĩa là chưa áp mã nào. */
+  quote: BookingQuote | null;
+  onQuoteChange: (quote: BookingQuote | null) => void;
 }
 
 const formatDateString = (dateStr: string) => {
@@ -44,8 +50,14 @@ const SummaryPanel = ({
   servicePrice,
   totalPrice,
   selectedServices,
+  bookingId,
+  quote,
+  onQuoteChange,
 }: SummaryPanelProps) => {
   const { t } = useTranslation();
+
+  // Khi đã áp mã thì tổng tiền lấy từ server, không dùng số FE tự cộng nữa.
+  const payable = quote ? quote.totalPrice : totalPrice;
 
   return (
     <div className="space-y-4">
@@ -155,12 +167,32 @@ const SummaryPanel = ({
 
         <div className="h-px bg-border my-2" />
 
+        <PromoCodeInput
+          bookingId={bookingId}
+          applied={quote}
+          onApplied={onQuoteChange}
+          onRemoved={() => onQuoteChange(null)}
+        />
+
+        {quote && quote.discountAmount > 0 && (
+          <div className="flex justify-between text-xs sm:text-sm">
+            <span className="text-emerald-600 dark:text-emerald-400">
+              Giảm giá
+            </span>
+            <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+              −{formatPrice(quote.discountAmount)}
+            </span>
+          </div>
+        )}
+
+        <div className="h-px bg-border my-2" />
+
         <div className="flex justify-between items-baseline pt-1">
           <span className="font-bold text-foreground">
             Tổng tiền thanh toán
           </span>
           <span className="text-xl font-black text-ddms-secondary">
-            {formatPrice(totalPrice)}
+            {formatPrice(payable)}
           </span>
         </div>
       </div>

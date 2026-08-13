@@ -9,11 +9,12 @@ export default function MainLayout() {
 
   const isHome = location.pathname === '/';
 
+  // Mỗi href phải khớp id của một section có thật trên trang chủ.
   const navLinks = isHome
     ? [
+        { label: t('home.nav.experience'), href: '#experience' },
         { label: t('home.nav.tours'), href: '#tours' },
-        { label: t('home.nav.howItWorks'), href: '#how-it-works' },
-        { label: t('home.nav.destinations'), href: '#destinations' },
+        { label: t('home.nav.forOwners'), href: '#cta' },
       ]
     : [];
 

@@ -20,8 +20,6 @@ const getProviders = (language: string) => [
       'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=1000&q=80',
       'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1621275471769-e6aa344546d5?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80',
     ],
     imageTitles: [
@@ -32,12 +30,6 @@ const getProviders = (language: string) => [
         ? 'Premium interior lounge & custom routes'
         : 'Không gian nội thất sang trọng & lịch trình riêng',
       language === 'EN' ? 'Relaxing sun decks' : 'Khoang phơi nắng thư giãn',
-      language === 'EN'
-        ? 'Pristine snorkeling bays'
-        : 'Khám phá các vịnh biển nguyên sơ',
-      language === 'EN'
-        ? 'Ocean breeze & sunset views'
-        : 'Ngắm hoàng hôn lãng mạn trên biển',
       language === 'EN'
         ? 'Five-star dining setup on board'
         : 'Trải nghiệm ẩm thực 5 sao giữa khơi xa',
@@ -58,8 +50,6 @@ const getProviders = (language: string) => [
       'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1000&q=80',
       'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80',
-      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80',
     ],
     imageTitles: [
@@ -73,17 +63,60 @@ const getProviders = (language: string) => [
         ? 'Live cultural music shows'
         : 'Biểu diễn nghệ thuật truyền thống',
       language === 'EN'
-        ? 'Delectable local seafood cuisine'
-        : 'Thưởng thức ẩm thực sông nước đặc sắc',
-      language === 'EN'
-        ? 'Da Nang bridges light show up close'
-        : 'Chiêm ngưỡng những cây cầu ánh sáng cự ly gần',
-      language === 'EN'
         ? 'Front-row seats to Dragon Bridge fire show'
         : 'Vị trí tuyệt vời ngắm Cầu Rồng phun lửa',
     ],
   },
 ];
+
+/**
+ * Một ô ảnh trong lưới gallery.
+ *
+ * `emphasis` phân biệt ảnh chủ đạo với ảnh phụ: ảnh chủ đạo phủ gradient đậm
+ * và chữ to hơn để mắt có điểm dừng đầu tiên, thay vì 4 ảnh đều nhau như cũ.
+ */
+function GalleryTile({
+  src,
+  alt,
+  title,
+  className = '',
+  emphasis = false,
+}: {
+  src: string;
+  alt: string;
+  title: string;
+  className?: string;
+  emphasis?: boolean;
+}) {
+  return (
+    <div
+      className={`group bg-ddms-bg-card relative overflow-hidden rounded-[24px]
+                  transition-all duration-300 hover:scale-[0.99] ${className}`}
+    >
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover transition-transform
+                   duration-700 ease-out group-hover:scale-105"
+      />
+      <div
+        className={`absolute inset-0 z-0 bg-linear-to-t to-transparent ${
+          emphasis ? 'from-black/85 via-black/20' : 'from-black/70 via-black/10'
+        }`}
+      />
+      <div className="absolute bottom-0 left-0 z-10 p-6">
+        <h4
+          className={`max-w-md leading-tight font-bold tracking-tight text-white ${
+            emphasis ? 'text-lg md:text-xl' : 'text-base md:text-lg'
+          }`}
+        >
+          {title}
+        </h4>
+      </div>
+    </div>
+  );
+}
 
 export default function FeaturedProviders() {
   const { t, i18n } = useTranslation();
@@ -95,48 +128,66 @@ export default function FeaturedProviders() {
         backgroundColor: 'var(--ddms-bg-main)',
       }}
     >
-      {providers.map((p) => (
-        <section key={p.id} className="py-16 bg-transparent">
-          <div className="mx-auto max-w-7xl md:max-w-[80%] px-6">
-            {/* Row 1: Text info & Image 1 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 items-stretch">
-              <div className="flex flex-col justify-between p-2">
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider bg-sky-500/20 text-sky-400 border border-sky-500/35 px-2.5 py-1 rounded-full font-bold">
-                      <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
-                        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                      </svg>
-                      {t('home.providers.verified')}
-                    </span>
-                    <span className="flex items-center gap-1 text-xs font-bold text-white/90">
-                      <Star
-                        size={12}
-                        fill="#ffc107"
-                        style={{ color: '#ffc107' }}
-                      />
-                      {p.rating.toFixed(1)}
-                    </span>
-                  </div>
+      <div className="mx-auto max-w-7xl px-6 pt-16 pb-2 md:max-w-[80%]">
+        <span className="text-ddms-secondary text-[11px] font-bold tracking-wider uppercase">
+          {t('home.providers.sectionEyebrow')}
+        </span>
+        <h2 className="text-foreground mt-1 text-3xl font-bold tracking-tight md:text-4xl">
+          {t('home.providers.sectionTitle')}
+        </h2>
+      </div>
 
-                  <span className="text-[11px] uppercase tracking-wider text-ddms-secondary font-bold">
-                    {p.category}
+      {providers.map((p) => (
+        <section key={p.id} className="bg-transparent py-12">
+          <div className="mx-auto max-w-7xl px-6 md:max-w-[80%]">
+            {/* Hàng 1: thẻ giới thiệu + ảnh chủ đạo */}
+            <div className="mb-6 grid grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+              {/* Chữ đặt trên thẻ nền sáng mờ, không nằm trần trên gradient
+                  cyan của body — nền đó làm chữ nhỏ rất khó đọc ở light mode. */}
+              {/* justify-center: ở md+ thẻ bị kéo cao bằng ảnh hero, canh giữa
+                  để chữ không dồn lên đỉnh và bỏ trống nửa dưới. */}
+              <div className="bg-ddms-bg-card border-border/80 flex flex-col justify-center rounded-[24px] border p-7">
+                <div className="mb-3 flex items-center gap-2">
+                  <span
+                    className="bg-ddms-accent text-foreground border-ddms-secondary/25 flex items-center
+                               gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold
+                               tracking-wider uppercase"
+                  >
+                    <svg
+                      className="text-ddms-secondary h-3 w-3 fill-current"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    {t('home.providers.verified')}
                   </span>
-                  <h3 className="text-3xl font-bold text-foreground tracking-tight mt-1 mb-4 leading-tight">
-                    {p.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed font-light">
-                    {p.description}
-                  </p>
+                  <span className="text-foreground flex items-center gap-1 text-xs font-bold">
+                    <Star
+                      size={12}
+                      fill="#ffc107"
+                      style={{ color: '#ffc107' }}
+                    />
+                    {p.rating.toFixed(1)}
+                  </span>
                 </div>
+
+                <span className="text-ddms-secondary text-[11px] font-bold tracking-wider uppercase">
+                  {p.category}
+                </span>
+                <h3 className="text-foreground mt-1 mb-4 text-3xl leading-tight font-bold tracking-tight">
+                  {p.name}
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {p.description}
+                </p>
 
                 <Link
                   to={routeName.tours}
-                  className="group inline-flex items-center gap-2 text-sm font-semibold text-ddms-secondary mt-8 transition-all"
+                  className="group text-ddms-secondary mt-6 inline-flex items-center gap-2 text-sm font-semibold transition-all"
                 >
                   <span>{t('home.providers.viewFleets')}</span>
                   <svg
-                    className="w-6.5 h-4 transition-transform duration-300 group-hover:translate-x-2 shrink-0"
+                    className="h-4 w-6.5 shrink-0 transition-transform duration-300 group-hover:translate-x-2"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -151,123 +202,64 @@ export default function FeaturedProviders() {
                 </Link>
               </div>
 
-              {/* Hero Image 1 */}
-              <div className="md:col-span-2 group relative rounded-[24px] overflow-hidden h-96 md:h-125 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
-                <img
-                  src={p.images[0]}
-                  alt={`${p.name} Hero`}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent z-0" />
-                <div className="absolute bottom-0 left-0 p-6 z-10">
-                  <h4 className="text-lg md:text-xl font-bold text-white tracking-tight leading-tight max-w-lg">
-                    {p.imageTitles[0]}
-                  </h4>
-                </div>
-              </div>
+              <GalleryTile
+                src={p.images[0]}
+                alt={`${p.name} Hero`}
+                title={p.imageTitles[0]}
+                emphasis
+                className="h-80 md:col-span-2 md:h-110"
+              />
             </div>
 
-            {/* Row 2: Image 2 (7) & Image 3 (3) */}
-            <div className="grid grid-cols-1 md:grid-cols-10 gap-6 mb-6">
-              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
-                <img
-                  src={p.images[1]}
-                  alt={`${p.name} Gallery 2`}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent z-0" />
-                <div className="absolute bottom-0 left-0 p-6 z-10">
-                  <h4 className="text-lg md:text-xl font-bold text-white tracking-tight leading-tight max-w-md">
-                    {p.imageTitles[1]}
-                  </h4>
-                </div>
-              </div>
-              <div className="md:col-span-3 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
-                <img
-                  src={p.images[2]}
-                  alt={`${p.name} Gallery 3`}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent z-0" />
-                <div className="absolute bottom-0 left-0 p-6 z-10">
-                  <h4 className="text-base md:text-lg font-bold text-white tracking-tight leading-tight">
-                    {p.imageTitles[2]}
-                  </h4>
-                </div>
-              </div>
+            {/* Hàng 2: ảnh rộng + ảnh hẹp */}
+            <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-10">
+              <GalleryTile
+                src={p.images[1]}
+                alt={`${p.name} Gallery 2`}
+                title={p.imageTitles[1]}
+                className="h-72 md:col-span-7 md:h-80"
+              />
+              <GalleryTile
+                src={p.images[2]}
+                alt={`${p.name} Gallery 3`}
+                title={p.imageTitles[2]}
+                className="h-72 md:col-span-3 md:h-80"
+              />
             </div>
 
-            {/* Row 3: Image 4 (3) & Image 5 (7) */}
-            <div className="grid grid-cols-1 md:grid-cols-10 gap-6 mb-6">
-              <div className="md:col-span-3 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
-                <img
-                  src={p.images[3]}
-                  alt={`${p.name} Gallery 4`}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent z-0" />
-                <div className="absolute bottom-0 left-0 p-6 z-10">
-                  <h4 className="text-base md:text-lg font-bold text-white tracking-tight leading-tight">
-                    {p.imageTitles[3]}
-                  </h4>
-                </div>
-              </div>
-              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
-                <img
-                  src={p.images[4]}
-                  alt={`${p.name} Gallery 5`}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent z-0" />
-                <div className="absolute bottom-0 left-0 p-6 z-10">
-                  <h4 className="text-lg md:text-xl font-bold text-white tracking-tight leading-tight max-w-md">
-                    {p.imageTitles[4]}
-                  </h4>
-                </div>
-              </div>
-            </div>
+            {/* Hàng 3: ảnh rộng + thẻ đặt chỗ */}
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-10">
+              <GalleryTile
+                src={p.images[3]}
+                alt={`${p.name} Gallery 4`}
+                title={p.imageTitles[3]}
+                className="h-72 md:col-span-7 md:h-80"
+              />
 
-            {/* Row 4: Image 6 (7) & CTA Booking Card (3) */}
-            <div className="grid grid-cols-1 md:grid-cols-10 gap-6">
-              <div className="md:col-span-7 group relative rounded-[24px] overflow-hidden h-80 md:h-96 transition-all duration-300 hover:scale-[0.99] bg-ddms-bg-card">
-                <img
-                  src={p.images[5]}
-                  alt={`${p.name} Gallery 6`}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-transparent z-0" />
-                <div className="absolute bottom-0 left-0 p-6 z-10">
-                  <h4 className="text-lg md:text-xl font-bold text-white tracking-tight leading-tight max-w-md">
-                    {p.imageTitles[5]}
-                  </h4>
-                </div>
-              </div>
-
-              {/* CTA Card */}
-              <div className="md:col-span-3 rounded-[24px] p-6 flex flex-col justify-between bg-ddms-bg-card border border-border/80 shadow-md relative overflow-hidden group">
-                <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-blue-500/5 opacity-50 z-0 pointer-events-none" />
+              <div className="bg-ddms-bg-card border-border/80 group relative flex flex-col justify-between overflow-hidden rounded-[24px] border p-6 shadow-md md:col-span-3">
+                <div className="pointer-events-none absolute inset-0 z-0 bg-linear-to-br from-cyan-500/5 to-blue-500/5 opacity-50" />
                 <div className="z-10 space-y-2">
-                  <span className="text-[10px] uppercase tracking-wider text-ddms-secondary font-bold block">
+                  <span className="text-ddms-secondary block text-[10px] font-bold tracking-wider uppercase">
                     {t('home.providers.specialDeal')}
                   </span>
-                  <h4 className="text-xl font-bold text-foreground leading-tight">
+                  <h4 className="text-foreground text-xl leading-tight font-bold">
                     {t('home.providers.yachtTitle')}
                   </h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed font-normal">
+                  <p className="text-muted-foreground text-xs leading-relaxed font-normal">
                     {t('home.providers.yachtDesc')}
                   </p>
                 </div>
 
                 <div className="z-10 mt-6 space-y-2">
-                  <div className="text-sm font-semibold text-foreground">
+                  <div className="text-foreground text-sm font-semibold">
                     ★ {p.rating.toFixed(1)}{' '}
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-muted-foreground text-xs">
                       ({p.totalReviews} {t('home.providers.reviews')})
                     </span>
                   </div>
                   <CyanAnimatedButton
                     to={routeName.tours}
-                    className="py-2.5 rounded-xl text-xs"
+                    className="rounded-xl py-2.5 text-xs"
                   >
                     {t('home.providers.bookNow')}
                   </CyanAnimatedButton>

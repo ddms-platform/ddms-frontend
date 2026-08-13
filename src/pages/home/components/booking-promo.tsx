@@ -13,7 +13,10 @@ export default function BookingPromo() {
   };
 
   return (
-    <section className="bg-transparent text-foreground py-16 px-6 select-none border-none">
+    <section
+      id="booking-search"
+      className="bg-transparent text-foreground py-16 px-6 select-none border-none"
+    >
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* ── Left Column: Search Form Card ── */}

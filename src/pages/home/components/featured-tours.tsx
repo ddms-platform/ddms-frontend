@@ -394,81 +394,79 @@ export default function FeaturedTours() {
                 <Link
                   key={tour.id}
                   to={`/tours/${tour.id}`}
-                  className={`group relative flex-none w-75 h-75 sm:w-92.5 sm:h-92.5 rounded-[24px] overflow-hidden transition-all duration-500 hover:scale-[0.98] snap-start ${
-                    isVisible ? 'opacity-100' : 'opacity-40 hover:opacity-75'
-                  }`}
+                  className={`group flex-none w-75 snap-start overflow-hidden rounded-[20px] bg-ddms-bg-card
+                    shadow-[rgba(0,0,0,0.02)_0_0_0_1px,rgba(0,0,0,0.04)_0_2px_6px,rgba(0,0,0,0.1)_0_4px_8px]
+                    transition-all duration-250 hover:-translate-y-1.25 hover:shadow-[rgba(0,0,0,0.12)_0_8px_24px]
+                    dark:shadow-[rgba(0,0,0,.4)_0_0_0_1px,rgba(0,0,0,.5)_0_4px_12px] ${
+                      isVisible ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+                    }`}
                 >
-                  {/* Full Card background image */}
-                  <img
-                    src={
-                      tour.imageUrl ||
-                      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop'
-                    }
-                    alt={tour.name}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 z-0"
-                  />
-
-                  {/* Dark gradient overlay for typography readability */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent z-0" />
-
-                  {/* Top Right Heart Wishlist Button */}
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toggleWishlist(tour.id);
-                    }}
-                    className="absolute right-4 top-4 rounded-full p-2.5 transition-all hover:scale-110 z-10"
-                    style={{
-                      backgroundColor: 'rgba(0,0,0,0.3)',
-                      backdropFilter: 'blur(8px)',
-                    }}
-                  >
-                    <Heart
-                      size={18}
-                      fill={wishlist.includes(tour.id) ? '#ff385c' : 'none'}
-                      style={{
-                        color: wishlist.includes(tour.id)
-                          ? '#ff385c'
-                          : '#ffffff',
-                      }}
+                  {/* Ảnh bìa */}
+                  <div className="relative h-52.5 overflow-hidden">
+                    <img
+                      src={
+                        tour.imageUrl ||
+                        'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop'
+                      }
+                      alt={tour.name}
+                      className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     />
-                  </button>
 
-                  {/* Bottom details overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 z-10 flex flex-col gap-1.5">
-                    {/* Location label */}
-                    <span className="text-[11px] uppercase tracking-wider text-ddms-secondary font-bold flex items-center gap-1">
-                      <MapPin size={12} className="shrink-0" />
+                    <span className="absolute top-3.5 left-3.5 flex items-center gap-1 rounded-[14px] bg-white/92 px-3 py-1.5 text-xs font-bold text-[#222]">
+                      <MapPin size={11} className="shrink-0" />
                       {tour.location || 'Đà Nẵng'}
                     </span>
 
-                    {/* Destination/Tour name title */}
-                    <h3
-                      className="text-xl sm:text-2xl font-bold text-white leading-tight line-clamp-2"
-                      title={tour.name}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toggleWishlist(tour.id);
+                      }}
+                      aria-label="Yêu thích"
+                      className="absolute top-3.5 right-3.5 grid size-8.5 place-items-center rounded-full bg-white/90 transition-transform group-hover:scale-110"
                     >
-                      {tour.name}
-                    </h3>
+                      <Heart
+                        size={16}
+                        fill={wishlist.includes(tour.id) ? '#ff385c' : 'none'}
+                        className={
+                          wishlist.includes(tour.id)
+                            ? 'text-ddms-primary'
+                            : 'text-[#222]'
+                        }
+                      />
+                    </button>
+                  </div>
 
-                    {/* Price and Rating row */}
-                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10 text-white/90 text-sm">
-                      <div className="flex items-center gap-1 font-semibold text-ddms-secondary">
-                        <span>{formatPrice(tour.price)}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-white/80">
+                  {/* Nội dung */}
+                  <div className="px-5 pt-4.5 pb-5">
+                    <div className="flex items-baseline justify-between gap-2.5">
+                      <h3
+                        className="line-clamp-2 text-base font-semibold tracking-[-0.18px] text-foreground"
+                        title={tour.name}
+                      >
+                        {tour.name}
+                      </h3>
+                      <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-foreground">
                         <Star
                           size={13}
                           fill="#ffc107"
-                          style={{ color: '#ffc107' }}
+                          className="text-[#ffc107]"
                         />
-                        <span className="font-semibold text-white">
-                          {tour.avgRating.toFixed(1)}
-                        </span>
-                        <span className="text-white/60">
-                          ({tour.totalReviews})
-                        </span>
-                      </div>
+                        {tour.avgRating.toFixed(1)}
+                      </span>
                     </div>
+
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {tour.totalReviews} {t('home.tours.reviews')}
+                    </p>
+
+                    <p className="mt-2.5 text-[15px] text-foreground">
+                      <b className="font-bold">{formatPrice(tour.price)}</b>
+                      <span className="text-muted-foreground">
+                        {' '}
+                        / {t('home.tours.perPerson')}
+                      </span>
+                    </p>
                   </div>
                 </Link>
               );

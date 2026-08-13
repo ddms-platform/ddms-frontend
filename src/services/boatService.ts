@@ -35,15 +35,52 @@ export interface BoatCabin {
   updatedAt: string;
 }
 
+export interface ServiceRouteItem {
+  id: string;
+  name: string;
+  startPoint?: string;
+  endPoint?: string;
+  description?: string;
+}
+
+export interface ServiceFaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface ServiceRoomItem {
+  id: string;
+  name: string;
+  capacity: number;
+  price: number;
+  description?: string;
+  imageUrl?: string;
+}
+
+export interface ServiceComboItem {
+  id: string;
+  name: string;
+  price: number;
+  description?: string;
+  imageUrl?: string;
+}
+
 export interface BoatServiceItem {
   id: string;
   boatId: string;
   name: string;
   price: number;
   description?: string;
+  imageUrl?: string;
+  serviceType?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  routes?: ServiceRouteItem[];
+  faqs?: ServiceFaqItem[];
+  rooms?: ServiceRoomItem[];
+  combos?: ServiceComboItem[];
 }
 
 export interface Boat {
