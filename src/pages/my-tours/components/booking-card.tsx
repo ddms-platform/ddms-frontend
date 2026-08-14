@@ -10,7 +10,11 @@ import { toast } from 'sonner';
 import CheckInQr from './check-in-qr';
 
 export type BookingStatus =
-  'PENDING' | 'UPCOMING' | 'CHECKED_IN' | 'COMPLETED' | 'CANCELLED';
+  | 'PENDING'
+  | 'UPCOMING'
+  | 'CHECKED_IN'
+  | 'COMPLETED'
+  | 'CANCELLED';
 export type BookingDisplayStatus = BookingStatus | 'CONFIRM_REQUIRED';
 
 export interface Booking {
