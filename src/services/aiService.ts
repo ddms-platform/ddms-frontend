@@ -33,7 +33,12 @@ export interface AiConversation {
   messageCount: number;
 }
 
-export type OwnerContentType = 'name' | 'description' | 'faqs' | 'price';
+export type OwnerContentType =
+  | 'name'
+  | 'vessel_name'
+  | 'description'
+  | 'faqs'
+  | 'price';
 
 export interface OwnerContentRequest {
   type: OwnerContentType;
