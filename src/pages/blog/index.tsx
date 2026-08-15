@@ -6,6 +6,7 @@ import {
   BLOG_CATEGORIES,
   type BlogPostListItem,
 } from '@/services/blogService';
+import { blogSignalRService } from '@/services/blogSignalRService';
 
 const FALLBACK_COVER =
   'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=800&auto=format&fit=crop&q=80';
@@ -23,6 +24,18 @@ export default function BlogListPage() {
   const [posts, setPosts] = useState<BlogPostListItem[]>([]);
   const [category, setCategory] = useState<string | undefined>();
   const [loading, setLoading] = useState(true);
+  const [freshCount, setFreshCount] = useState(0);
+
+  // Bài mới do worker cào tin đưa lên: chèn thẳng lên đầu, không phải tải lại trang.
+  useEffect(() => {
+    return blogSignalRService.subscribe((post) => {
+      setPosts((prev) => {
+        if (prev.some((p) => p.id === post.id)) return prev;
+        return [post, ...prev];
+      });
+      setFreshCount((n) => n + 1);
+    });
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -61,6 +74,16 @@ export default function BlogListPage() {
           đều dẫn về nguồn gốc để bạn đọc bản đầy đủ.
         </p>
       </header>
+
+      {freshCount > 0 && (
+        <div className="mb-6 flex items-center gap-2 rounded-xl border border-ddms-secondary/30 bg-ddms-secondary/5 px-4 py-3 text-sm text-foreground">
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-ddms-secondary opacity-70" />
+            <span className="relative inline-flex size-2 rounded-full bg-ddms-secondary" />
+          </span>
+          Vừa có {freshCount} bài mới
+        </div>
+      )}
 
       <div className="mb-8 flex flex-wrap gap-2">
         <CategoryChip
