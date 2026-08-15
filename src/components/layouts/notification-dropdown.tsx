@@ -38,22 +38,21 @@ export default function NotificationDropdown() {
       })
       .catch((err) => console.error('Failed to load notifications:', err));
 
-    chatSignalRService
-      .startConnection(
-        () => {},
-        (newNotif: NotificationResponse) => {
-          setNotifications((prev) => {
-            if (prev.some((n) => n.id === newNotif.id)) return prev;
-            return [newNotif, ...prev];
-          });
-        },
-      )
-      .catch((err) =>
-        console.error('Failed to connect to SignalR notifications:', err),
-      );
+    // Chi dang ky thong bao. Truoc day cho nay truyen `() => {}` vao vi tri
+    // handler tin nhan, va service cu lai cho handler sau ghi de handler truoc,
+    // nen moi lan effect nay chay lai la trang inbox mat kha nang nhan tin.
+    const unsubscribe = chatSignalRService.subscribe({
+      onNotification: (newNotif: NotificationResponse) => {
+        setNotifications((prev) => {
+          if (prev.some((n) => n.id === newNotif.id)) return prev;
+          return [newNotif, ...prev];
+        });
+      },
+    });
 
     return () => {
       cancelled = true;
+      unsubscribe();
     };
   }, [isAuthenticated]);
 

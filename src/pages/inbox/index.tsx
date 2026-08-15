@@ -129,14 +129,24 @@ export default function InboxPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryConversationId]);
 
+  // Giu ban moi nhat cho handler SignalR doc, de handler khong phai dang ky lai
+  const activeConversationRef = useRef(activeConversation);
+  const fetchConversationsRef = useRef(fetchConversations);
   useEffect(() => {
-    chatSignalRService
-      .startConnection((newMessage) => {
+    activeConversationRef.current = activeConversation;
+    fetchConversationsRef.current = fetchConversations;
+  });
+
+  // Dang ky dung mot lan khi vao trang. Truoc day effect nay phu thuoc
+  // [activeConversation?.id] va cleanup goi stopConnection(): ngay sau khi
+  // danh sach tai xong va tu dong chon hoi thoai dau tien, connection bi dong
+  // trong luc start() van con dang chay, nen tu do khong nhan them tin nao.
+  useEffect(() => {
+    return chatSignalRService.subscribe({
+      onMessage: (newMessage) => {
+        const active = activeConversationRef.current;
         // Append message if it's in the current active conversation
-        if (
-          activeConversation &&
-          newMessage.conversationId === activeConversation.id
-        ) {
+        if (active && newMessage.conversationId === active.id) {
           setMessages((prev) => {
             if (prev.some((m) => m.id === newMessage.id)) return prev;
             return [...prev, newMessage];
@@ -146,17 +156,10 @@ export default function InboxPage() {
         }
 
         // Refresh conversations list to update previews
-        fetchConversations(activeConversation?.id);
-      })
-      .catch((err) => {
-        console.error('Error starting SignalR chat:', err);
-      });
-
-    return () => {
-      chatSignalRService.stopConnection();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeConversation?.id]);
+        fetchConversationsRef.current(activeConversationRef.current?.id);
+      },
+    });
+  }, []);
 
   // Load messages when active conversation changes
   useEffect(() => {
