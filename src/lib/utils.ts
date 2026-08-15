@@ -25,3 +25,20 @@ export function getLocalizedField<T extends Record<string, unknown>>(
   const fallback = `${field}_vn` as keyof T;
   return (obj[key] as string) || (obj[fallback] as string) || '';
 }
+
+/**
+ * Safely parse an ISO-8601 date string from the backend.
+ * If the string lacks timezone indicators (neither 'Z' nor '+/-HH:mm'),
+ * it treats the string as UTC to prevent incorrect local timezone shifting.
+ */
+export function parseIsoDate(dateStr?: string | null): Date {
+  if (!dateStr) return new Date();
+  const trimmed = dateStr.trim();
+  if (!trimmed) return new Date();
+
+  if (trimmed.endsWith('Z') || /[+-]\d{2}(:\d{2})?$/.test(trimmed)) {
+    return new Date(trimmed);
+  }
+
+  return new Date(`${trimmed}Z`);
+}

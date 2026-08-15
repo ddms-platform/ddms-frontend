@@ -7,9 +7,11 @@ import { notificationService } from '@/services/notificationService';
 import type { NotificationResponse } from '@/interfaces/notification';
 import { chatSignalRService } from '@/services/chatSignalRService';
 import { localStorageKey } from '@/constants/local-storage';
+import { parseIsoDate } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function NotificationDropdown() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isAuthenticated } = useAuth();
   const [notificationOpen, setNotificationOpen] = useState(false);
   const notificationRef = useRef<HTMLDivElement>(null);
@@ -47,6 +49,16 @@ export default function NotificationDropdown() {
           if (prev.some((n) => n.id === newNotif.id)) return prev;
           return [newNotif, ...prev];
         });
+
+        // Trigger real-time In-App toast pop-up
+        try {
+          toast.info(newNotif.title || 'Thông báo mới', {
+            description: newNotif.content,
+            duration: 6000,
+          });
+        } catch {
+          /* best-effort */
+        }
       },
     });
 
@@ -80,19 +92,21 @@ export default function NotificationDropdown() {
 
   const formatTimeAgo = (dateStr: string) => {
     const now = new Date();
-    const date = new Date(dateStr);
-    const diffMs = now.getTime() - date.getTime();
+    const date = parseIsoDate(dateStr);
+    const diffMs = Math.max(0, now.getTime() - date.getTime());
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffMins < 1) return t('notification.justNow', 'Vừa xong');
+    if (diffMins === 1) return `1 ${t('notification.minuteAgo', 'phút trước')}`;
     if (diffMins < 60)
       return `${diffMins} ${t('notification.minutesAgo', 'phút trước')}`;
+    if (diffHours === 1) return `1 ${t('notification.hourAgo', 'giờ trước')}`;
     if (diffHours < 24)
       return `${diffHours} ${t('notification.hoursAgo', 'giờ trước')}`;
     if (diffDays === 1) return t('notification.yesterday', 'Hôm qua');
-    return date.toLocaleDateString();
+    return date.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'vi-VN');
   };
 
   // Close notification dropdown on outside click

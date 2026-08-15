@@ -529,7 +529,12 @@
         "mismatch": "Mật khẩu xác nhận không khớp"
       }
     },
-    "updateSuccess": "Cập nhật thông tin hồ sơ thành công!"
+    "updateSuccess": "Cập nhật thông tin hồ sơ thành công!",
+    "tabs": {
+      "info": "Thông tin cá nhân",
+      "password": "Đổi mật khẩu",
+      "notifications": "Thông báo"
+    }
   },
   "tour": {
     "backToHome": "Quay lại trang chủ",
@@ -1395,9 +1400,21 @@
     "empty": "Chưa có thông báo nào",
     "viewAll": "Xem tất cả thông báo",
     "justNow": "Vừa xong",
+    "minuteAgo": "phút trước",
     "minutesAgo": "phút trước",
+    "hourAgo": "giờ trước",
     "hoursAgo": "giờ trước",
-    "yesterday": "Hôm qua"
+    "yesterday": "Hôm qua",
+    "unreadCount": "thông báo chưa đọc",
+    "allRead": "Tất cả thông báo đã được đọc",
+    "filterAll": "Tất cả",
+    "filterUnread": "Chưa đọc",
+    "filterRead": "Đã đọc",
+    "searchPlaceholder": "Tìm kiếm thông báo...",
+    "allMarkedRead": "Đã đánh dấu tất cả là đã đọc",
+    "loading": "Đang tải thông báo...",
+    "noSearchResults": "Không tìm thấy thông báo phù hợp với từ khóa.",
+    "noNotificationsDesc": "Khi có cập nhật mới về tour hoặc đơn đặt chỗ, thông báo sẽ hiển thị tại đây."
   },
   "sos": {
     "centerTitle": "Trung Tâm Quản Lý Ứng Cứu SOS",
