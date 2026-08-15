@@ -438,7 +438,10 @@
       "yachtTitle": "Private Yacht Charter",
       "yachtDesc": "Book custom itinerary cruises with verified captains.",
       "bookNow": "Book Now",
-      "reviews": "reviews"
+      "reviews": "reviews",
+      "boats": "boats",
+      "tours": "tours",
+      "noRating": "No reviews yet"
     },
     "explore": {
       "topAttractions": "Top attractions"

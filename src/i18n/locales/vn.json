@@ -438,7 +438,10 @@
       "yachtTitle": "Đặt chỗ trực tiếp",
       "yachtDesc": "Liên hệ đặt hải trình riêng tư thiết kế theo sở thích.",
       "bookNow": "Liên hệ ngay",
-      "reviews": "đánh giá"
+      "reviews": "đánh giá",
+      "boats": "tàu",
+      "tours": "tour",
+      "noRating": "Chưa có đánh giá"
     },
     "explore": {
       "topAttractions": "Địa điểm nổi bật"
