@@ -402,7 +402,8 @@
       "hanRiver": "Han River",
       "marbleMountains": "Marble Mountains",
       "bachDang": "Bach Dang Wharf",
-      "toursAvailable": "tours available"
+      "toursAvailable": "tours available",
+      "empty": "No destinations yet. Create your first tour."
     },
     "promo": {
       "departurePort": "DEPARTURE PORT",
@@ -437,7 +438,10 @@
       "yachtTitle": "Private Yacht Charter",
       "yachtDesc": "Book custom itinerary cruises with verified captains.",
       "bookNow": "Book Now",
-      "reviews": "reviews"
+      "reviews": "reviews",
+      "boats": "boats",
+      "tours": "tours",
+      "noRating": "No reviews yet"
     },
     "explore": {
       "topAttractions": "Top attractions"
