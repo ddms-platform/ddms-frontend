@@ -6,7 +6,7 @@ import {
   BLOG_CATEGORIES,
   type BlogPostDetail,
 } from '@/services/blogService';
-import ArticleVideoPlayer from './components/ArticleVideoPlayer';
+import NewsBroadcastPlayer from './components/NewsBroadcastPlayer';
 
 const FALLBACK_COVER =
   'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1200&auto=format&fit=crop&q=80';
@@ -114,10 +114,11 @@ export default function BlogDetailPage() {
 
       {post.videoScenes.length > 0 && (
         <div className="mt-8">
-          <ArticleVideoPlayer
+          <NewsBroadcastPlayer
             scenes={post.videoScenes}
             fallbackImage={post.coverImageUrl || FALLBACK_COVER}
             title={post.title}
+            sourceName={post.sourceName}
           />
         </div>
       )}
