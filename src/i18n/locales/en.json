@@ -529,7 +529,12 @@
         "mismatch": "Passwords do not match"
       }
     },
-    "updateSuccess": "Profile updated successfully!"
+    "updateSuccess": "Profile updated successfully!",
+    "tabs": {
+      "info": "Personal Info",
+      "password": "Change Password",
+      "notifications": "Notifications"
+    }
   },
   "tour": {
     "backToHome": "Back to home",
@@ -1395,9 +1400,21 @@
     "empty": "No notifications yet",
     "viewAll": "View all notifications",
     "justNow": "Just now",
+    "minuteAgo": "minute ago",
     "minutesAgo": "minutes ago",
+    "hourAgo": "hour ago",
     "hoursAgo": "hours ago",
-    "yesterday": "Yesterday"
+    "yesterday": "Yesterday",
+    "unreadCount": "unread notifications",
+    "allRead": "All notifications are read",
+    "filterAll": "All",
+    "filterUnread": "Unread",
+    "filterRead": "Read",
+    "searchPlaceholder": "Search notifications...",
+    "allMarkedRead": "All notifications marked as read",
+    "loading": "Loading notifications...",
+    "noSearchResults": "No notifications match your search.",
+    "noNotificationsDesc": "When there are updates regarding your tours or bookings, they will appear here."
   },
   "sos": {
     "centerTitle": "Emergency SOS Response Center",
