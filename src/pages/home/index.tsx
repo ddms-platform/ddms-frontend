@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import HeroSection from './components/hero';
 import ExperienceVideo from './components/experience-video';
-import CategoryPills from './components/category-pills';
 import BookingPromo from './components/booking-promo';
 import FeaturedTours from './components/featured-tours';
 import FeaturedProviders from './components/featured-providers';
@@ -25,7 +24,6 @@ export default function HomePage() {
     <>
       <HeroSection />
       <ExperienceVideo />
-      <CategoryPills />
       <BookingPromo />
       <FeaturedTours />
       <FeaturedProviders />

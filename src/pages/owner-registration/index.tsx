@@ -212,6 +212,13 @@ export default function OwnerRegistrationPage() {
     e.preventDefault();
 
     setLoading(true);
+    const toastId = toast.loading(
+      t(
+        'ownerRegistration.submitting',
+        'Đang gửi hồ sơ và tải lên tài liệu...',
+      ),
+    );
+
     try {
       const formData = new FormData();
       formData.append('FullName', ownerInfo.FullName);
@@ -258,15 +265,33 @@ export default function OwnerRegistrationPage() {
       });
 
       const res = await AuthServices.registerOwner(formData);
-      if (res.status === 200) {
-        toast.success(res.data.message || t('ownerRegistration.submitSuccess'));
-        await reloadUser();
-        navigate(routeName.home);
-      }
+      const successMsg =
+        res.data?.message ||
+        t(
+          'ownerRegistration.submitSuccess',
+          'Gửi hồ sơ đăng ký chủ thuyền thành công! Vui lòng chờ Ban Quản Trị xét duyệt.',
+        );
+
+      toast.success(successMsg, {
+        id: toastId,
+        duration: 6000,
+      });
+
+      await reloadUser();
+      navigate(routeName.home);
     } catch (error: any) {
-      toast.error(
-        error.response?.data?.message || t('ownerRegistration.submitError'),
-      );
+      const errorMsg =
+        error.response?.data?.message ||
+        error.message ||
+        t(
+          'ownerRegistration.submitError',
+          'Đã có lỗi xảy ra khi gửi hồ sơ đăng ký.',
+        );
+
+      toast.error(errorMsg, {
+        id: toastId,
+        duration: 6000,
+      });
     } finally {
       setLoading(false);
     }
