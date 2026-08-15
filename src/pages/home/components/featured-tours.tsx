@@ -13,185 +13,6 @@ import { wishlistService } from '@/services/wishlistService';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTranslation } from 'react-i18next';
 
-const getMockTours = (language: string): TourSearchItemResponse[] => [
-  {
-    id: 'mock-1',
-    name:
-      language === 'EN'
-        ? 'Sparkling Han River Night Cruise'
-        : 'Tour du thuyền Sông Hàn đêm lung linh',
-    price: 150000,
-    description:
-      language === 'EN'
-        ? "Admire Da Nang's legendary bridges from the Han River."
-        : 'Ngắm nhìn các cây cầu huyền thoại của Đà Nẵng từ sông Hàn.',
-    durationMinutes: 90,
-    location: language === 'EN' ? 'Han River, Da Nang' : 'Sông Hàn, Đà Nẵng',
-    status: 'Active',
-    avgRating: 4.8,
-    totalReviews: 142,
-    cancelPolicy: 'Free Cancellation',
-    cancelHours: 24,
-    imageUrl:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-  {
-    id: 'mock-2',
-    name:
-      language === 'EN'
-        ? 'Luxury Catamaran Sunset Cruise'
-        : 'Du thuyền hạng sang ngắm hoàng hôn Vịnh Đà Nẵng',
-    price: 950000,
-    description:
-      language === 'EN'
-        ? 'Romantic sunset experience on the bay with light wine.'
-        : 'Trải nghiệm ngắm hoàng hôn lãng mạn trên biển cùng tiệc rượu nhẹ.',
-    durationMinutes: 180,
-    location: language === 'EN' ? 'Da Nang Bay' : 'Vịnh Đà Nẵng',
-    status: 'Active',
-    avgRating: 4.9,
-    totalReviews: 86,
-    cancelPolicy: 'Non-refundable',
-    cancelHours: null,
-    imageUrl:
-      'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-  {
-    id: 'mock-3',
-    name:
-      language === 'EN'
-        ? 'Sơn Trà Coral Diving & Fishing Tour'
-        : 'Lặn ngắm san hô & Câu cá Bán đảo Sơn Trà',
-    price: 650000,
-    description:
-      language === 'EN'
-        ? 'Explore the rich marine world at Sơn Trà coral reefs.'
-        : 'Khám phá thế giới đại dương phong phú tại các rạn san hô Sơn Trà.',
-    durationMinutes: 240,
-    location: language === 'EN' ? 'Sơn Trà Peninsula' : 'Bán đảo Sơn Trà',
-    status: 'Active',
-    avgRating: 4.7,
-    totalReviews: 98,
-    cancelPolicy: 'Free Cancellation',
-    cancelHours: 48,
-    imageUrl:
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-  {
-    id: 'mock-4',
-    name:
-      language === 'EN'
-        ? 'Cham Island Discovery by Speedboat'
-        : 'Hành trình đảo Cù Lao Chàm bằng Cano cao tốc',
-    price: 850000,
-    description:
-      language === 'EN'
-        ? 'All-inclusive trip to explore the UNESCO Biosphere Reserve.'
-        : 'Hành trình trọn gói khám phá Khu dự trữ sinh quyển thế giới.',
-    durationMinutes: 480,
-    location: language === 'EN' ? 'Cham Island' : 'Cù Lao Chàm',
-    status: 'Active',
-    avgRating: 4.6,
-    totalReviews: 215,
-    cancelPolicy: 'Free Cancellation',
-    cancelHours: 24,
-    imageUrl:
-      'https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-  {
-    id: 'mock-5',
-    name:
-      language === 'EN'
-        ? 'Mỹ Khê Beach Sunrise SUP Paddling'
-        : 'Chèo SUP ngắm bình minh trên biển Mỹ Khê',
-    price: 250000,
-    description:
-      language === 'EN'
-        ? 'Catch the first rays of the day on a paddleboard.'
-        : 'Đón những tia nắng đầu ngày cực chill trên ván chèo đứng.',
-    durationMinutes: 120,
-    location: language === 'EN' ? 'Mỹ Khê Beach' : 'Biển Mỹ Khê',
-    status: 'Active',
-    avgRating: 4.8,
-    totalReviews: 64,
-    cancelPolicy: 'Free Cancellation',
-    cancelHours: 12,
-    imageUrl:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-  {
-    id: 'mock-6',
-    name:
-      language === 'EN'
-        ? 'Squid Fishing with Local Fishermen'
-        : 'Tour câu mực đêm cùng Ngư dân địa phương',
-    price: 500000,
-    description:
-      language === 'EN'
-        ? 'Experience authentic fishing and enjoy fresh seafood on board.'
-        : 'Trải nghiệm làm ngư dân thực thụ và chế biến hải sản tươi sống.',
-    durationMinutes: 300,
-    location: language === 'EN' ? 'Da Nang Sea' : 'Biển Đà Nẵng',
-    status: 'Active',
-    avgRating: 4.5,
-    totalReviews: 32,
-    cancelPolicy: 'Non-refundable',
-    cancelHours: null,
-    imageUrl:
-      'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-  {
-    id: 'mock-7',
-    name:
-      language === 'EN'
-        ? 'Private Speedboat Rental to Son Tra Caves'
-        : 'Thuê Cano riêng khám phá hang động nước Sơn Trà',
-    price: 1800000,
-    description:
-      language === 'EN'
-        ? 'Customizable itinerary to explore Son Tra caves.'
-        : 'Tự do thiết kế lịch trình khám phá Sơn Trà cùng gia đình.',
-    durationMinutes: 240,
-    location: language === 'EN' ? 'Sơn Trà Peninsula' : 'Bán đảo Sơn Trà',
-    status: 'Active',
-    avgRating: 4.9,
-    totalReviews: 45,
-    cancelPolicy: 'Free Cancellation',
-    cancelHours: 24,
-    imageUrl:
-      'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-  {
-    id: 'mock-8',
-    name:
-      language === 'EN'
-        ? 'Bay Mau Coconut Forest Basket Boat Tour'
-        : 'Khám phá rừng dừa Bảy Mẫu bằng Thuyền thúng',
-    price: 300000,
-    description:
-      language === 'EN'
-        ? 'Spin in a basket boat and navigate the nipa palms.'
-        : 'Trải nghiệm múa thúng chai và luồn lách qua các rặng dừa nước.',
-    durationMinutes: 120,
-    location: language === 'EN' ? 'Hoi An - Da Nang' : 'Hội An - Đà Nẵng',
-    status: 'Active',
-    avgRating: 4.7,
-    totalReviews: 188,
-    cancelPolicy: 'Free Cancellation',
-    cancelHours: 24,
-    imageUrl:
-      'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80',
-    availableSlots: [],
-  },
-];
-
 export default function FeaturedTours() {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
@@ -204,36 +25,17 @@ export default function FeaturedTours() {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        let apiTours: TourSearchItemResponse[] = [];
-        try {
-          const res = await tourService.searchTours({
-            pageSize: 8,
-            sortBy: 'rating',
-            sortOrder: 'desc',
-          });
-          apiTours = res.items || [];
-        } catch (apiError) {
-          console.warn('API call failed, falling back to mock data:', apiError);
-        }
-
-        // Combine API results with mock tours, ensuring no duplicate IDs
-        const mockList = getMockTours(i18n.language.toUpperCase());
-        const combined = [...apiTours];
-        mockList.forEach((mock) => {
-          if (
-            !combined.some(
-              (t) =>
-                t.id === mock.id ||
-                t.name.toLowerCase() === mock.name.toLowerCase(),
-            )
-          ) {
-            combined.push(mock);
-          }
+        const res = await tourService.searchTours({
+          pageSize: 8,
+          sortBy: 'rating',
+          sortOrder: 'desc',
         });
-
-        setTours(combined);
+        setTours(res.items || []);
       } catch (error) {
+        // Không có tour thì để trống. Trước đây chỗ này trộn 8 tour giả vào,
+        // nên trang chủ luôn hiện tour không có thật kể cả khi API chạy tốt.
         console.error('Failed to fetch featured tours:', error);
+        setTours([]);
       } finally {
         setLoading(false);
       }
@@ -378,8 +180,11 @@ export default function FeaturedTours() {
             ))}
           </div>
         ) : tours.length === 0 ? (
-          <div className="flex h-40 items-center justify-center text-[#ecf0ff]/60">
-            {t('home.tours.noTours')}
+          <div className="flex h-40 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border text-center">
+            <MapPin size={24} className="text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">
+              {t('home.tours.noTours')}
+            </p>
           </div>
         ) : (
           /* Horizontal Carousel Container */

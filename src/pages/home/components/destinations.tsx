@@ -1,42 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Loader2 } from 'lucide-react';
+import { Loader2, MapPin } from 'lucide-react';
 import { routeName } from '@/constants/route-name';
 import {
   tourService,
   type PopularDestinationResponse,
 } from '@/services/tourService';
 import useLanguage from '@/contexts/LanguageContext';
-
-const getMockDestinations = (
-  language: string,
-): PopularDestinationResponse[] => [
-  {
-    name: language === 'EN' ? 'Han River' : 'Sông Hàn',
-    tours: 5,
-    imageUrl:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    name: language === 'EN' ? 'Son Tra Peninsula' : 'Bán đảo Sơn Trà',
-    tours: 4,
-    imageUrl:
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    name: language === 'EN' ? 'Cham Island' : 'Đảo Cù Lao Chàm',
-    tours: 3,
-    imageUrl:
-      'https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    name: language === 'EN' ? 'Da Nang Bay' : 'Vịnh Đà Nẵng',
-    tours: 6,
-    imageUrl:
-      'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=600&q=80',
-  },
-];
 
 export default function Destinations() {
   const { t } = useTranslation();
@@ -50,33 +21,13 @@ export default function Destinations() {
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
-        let apiDest: PopularDestinationResponse[] = [];
-        try {
-          const data = await tourService.getPopularDestinations(4);
-          apiDest = data || [];
-        } catch (apiError) {
-          console.warn(
-            'API getPopularDestinations failed, falling back to mock destinations:',
-            apiError,
-          );
-        }
-
-        // Combine API and mock destinations to always have 4 items for the staggered grid
-        const mocks = getMockDestinations(language);
-        const combined = [...apiDest];
-        mocks.forEach((mock) => {
-          if (
-            !combined.some(
-              (d) => d.name.toLowerCase() === mock.name.toLowerCase(),
-            )
-          ) {
-            combined.push(mock);
-          }
-        });
-
-        setDestinations(combined.slice(0, 4));
+        const data = await tourService.getPopularDestinations(4);
+        setDestinations((data || []).slice(0, 4));
       } catch (error) {
+        // Chưa có điểm đến nào thì để trống. Trước đây chỗ này luôn chèn thêm
+        // điểm đến giả cho đủ 4 ô, kèm số tour bịa.
         console.error('Failed to fetch destinations:', error);
+        setDestinations([]);
       } finally {
         setLoading(false);
       }
@@ -134,7 +85,14 @@ export default function Destinations() {
 
       {loading ? (
         <div className="flex h-40 items-center justify-center">
-          <Loader2 size={32} className="animate-spin text-[#00F0FF]" />
+          <Loader2 size={32} className="animate-spin text-ddms-secondary" />
+        </div>
+      ) : destinations.length === 0 ? (
+        <div className="flex h-40 flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border text-center">
+          <MapPin size={24} className="text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">
+            {t('home.destinations.empty')}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">

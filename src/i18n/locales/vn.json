@@ -402,7 +402,8 @@
       "hanRiver": "Sông Hàn",
       "marbleMountains": "Ngũ Hành Sơn",
       "bachDang": "Bến Bạch Đằng",
-      "toursAvailable": "tour có sẵn"
+      "toursAvailable": "tour có sẵn",
+      "empty": "Chưa có điểm đến nào. Hãy tạo tour đầu tiên."
     },
     "promo": {
       "departurePort": "CẢNG KHỞI HÀNH",

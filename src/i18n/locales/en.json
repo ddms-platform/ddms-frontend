@@ -402,7 +402,8 @@
       "hanRiver": "Han River",
       "marbleMountains": "Marble Mountains",
       "bachDang": "Bach Dang Wharf",
-      "toursAvailable": "tours available"
+      "toursAvailable": "tours available",
+      "empty": "No destinations yet. Create your first tour."
     },
     "promo": {
       "departurePort": "DEPARTURE PORT",
