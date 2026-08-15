@@ -193,6 +193,29 @@ export default function StepConfirm({
     [dbBookingId],
   );
 
+  /**
+   * Chỉ chạy khi dev/demo. Endpoint phía sau không tồn tại trên production —
+   * backend chỉ đăng ký route khi ASPNETCORE_ENVIRONMENT=Development.
+   */
+  const simulatePayment = useCallback(async () => {
+    if (!dbBookingId) return;
+    setIsChecking(true);
+    setErrorMessage(null);
+    try {
+      const status = await bookingService.simulatePayment(dbBookingId);
+      if (status.paid) {
+        setIsPaid(true);
+        setTimeout(() => onConfirmRef.current(), 1500);
+      }
+    } catch (err: any) {
+      setErrorMessage(
+        err.message || 'Giả lập thất bại — backend không chạy ở chế độ dev.',
+      );
+    } finally {
+      setIsChecking(false);
+    }
+  }, [dbBookingId]);
+
   // Webhook PayOS là đường chính, vòng lặp này chỉ để màn hình tự cập nhật.
   useEffect(() => {
     if (!dbBookingId || !payment || isPaid || holdExpired) return;
@@ -252,6 +275,7 @@ export default function StepConfirm({
           totalPrice={payableTotal}
           onRetry={createPaymentLink}
           onCheckNow={() => void checkPaymentStatus(true)}
+          onSimulate={() => void simulatePayment()}
         />
       </div>
     </div>

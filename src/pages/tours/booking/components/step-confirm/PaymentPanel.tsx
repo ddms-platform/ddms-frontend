@@ -24,7 +24,31 @@ interface PaymentPanelProps {
   totalPrice: number;
   onRetry: () => void;
   onCheckNow: () => void;
+  /** Chỉ dùng khi dev/demo — xem DevSimulateButton. */
+  onSimulate: () => void;
 }
+
+/**
+ * Nút giả lập thanh toán cho lúc demo.
+ *
+ * `import.meta.env.DEV` là hằng số lúc build: bản production build thành
+ * `false` và toàn bộ khối này bị loại khỏi bundle. Endpoint phía sau cũng chỉ
+ * được đăng ký khi backend chạy ở môi trường Development, nên kể cả có gọi
+ * được thì server cũng trả 404.
+ */
+const DevSimulateButton = ({ onSimulate }: { onSimulate: () => void }) => {
+  if (!import.meta.env.DEV) return null;
+
+  return (
+    <button
+      type="button"
+      onClick={onSimulate}
+      className="w-full rounded-lg border border-dashed border-amber-500/50 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-600 transition-colors hover:bg-amber-500/20 dark:text-amber-400"
+    >
+      ⚡ DEV · Giả lập đã nhận tiền
+    </button>
+  );
+};
 
 const Centered = ({
   icon,
@@ -67,6 +91,7 @@ const PaymentPanel = ({
   totalPrice,
   onRetry,
   onCheckNow,
+  onSimulate,
 }: PaymentPanelProps) => (
   <div
     className="flex min-h-87.5 flex-col justify-center rounded-xl border p-5 transition-all"
@@ -196,6 +221,8 @@ const PaymentPanel = ({
               </>
             )}
           </Button>
+
+          <DevSimulateButton onSimulate={onSimulate} />
         </div>
       </div>
     )}
