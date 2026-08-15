@@ -21,6 +21,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { wishlistService } from '@/services/wishlistService';
 import { useAuth } from '@/hooks/use-auth';
 
+/** Chi dung khi tour chua co anh nao. Truoc day moi the deu dung cung
+ * tam anh nay du API da tra ve tour_images rieng cua tung tour. */
+const TOURS_PER_PAGE = 20;
+
+const FALLBACK_TOUR_IMAGE =
+  'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop';
+
 const CATEGORIES = [
   { key: 'all', icon: '🌊' },
   { key: 'cruise', icon: '🚢' },
@@ -72,7 +79,7 @@ export default function TourListPage() {
 
         const res = await tourService.searchTours({
           page: currentPage,
-          pageSize: 8,
+          pageSize: TOURS_PER_PAGE,
           sortBy: apiSortBy,
           sortOrder: apiSortOrder,
           location: debouncedSearch || undefined, // use search query as location/name filter
@@ -259,7 +266,7 @@ export default function TourListPage() {
               >
                 <div className="relative aspect-16/11 overflow-hidden bg-muted">
                   <img
-                    src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop"
+                    src={tour.imageUrl || FALLBACK_TOUR_IMAGE}
                     alt={tour.name}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
