@@ -64,6 +64,12 @@ const OwnerCertificatesPage = lazy(
 );
 const OwnerDocumentsPage = lazy(() => import('@/pages/owner/documents/index'));
 const InboxPage = lazy(() => import('@/pages/inbox/index'));
+const TermsOfServicePage = lazy(() => import('@/pages/legal/terms'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/legal/privacy'));
+const CancellationPolicyPage = lazy(() => import('@/pages/legal/cancellation'));
+const HelpCenterPage = lazy(() => import('@/pages/support/help'));
+const ContactPage = lazy(() => import('@/pages/support/contact'));
+const FaqsPage = lazy(() => import('@/pages/support/faqs'));
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -238,6 +244,54 @@ export default function App() {
                         element={
                           <Suspense fallback={<PageLoader />}>
                             <BecomeOwnerPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.terms}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <TermsOfServicePage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.privacy}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <PrivacyPolicyPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.cancellationPolicy}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <CancellationPolicyPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.help}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <HelpCenterPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.contact}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <ContactPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.faqs}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <FaqsPage />
                           </Suspense>
                         }
                       />

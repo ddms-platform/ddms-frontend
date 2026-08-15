@@ -23,7 +23,7 @@ import { useAuth } from '@/hooks/use-auth';
 
 /** Chi dung khi tour chua co anh nao. Truoc day moi the deu dung cung
  * tam anh nay du API da tra ve tour_images rieng cua tung tour. */
-const TOURS_PER_PAGE = 20;
+const TOURS_PER_PAGE = 8;
 
 const FALLBACK_TOUR_IMAGE =
   'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop';
@@ -43,7 +43,7 @@ const SORT_OPTIONS = ['rating', 'priceAsc', 'priceDesc'] as const;
 export default function TourListPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const initialKeyword =
     searchParams.get('keyword') || searchParams.get('location') || '';
@@ -65,24 +65,17 @@ export default function TourListPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  // Sync searchQuery & category with URL params if they change
+  // Sync state with URL params when they change (e.g. from footer link or back/forward nav)
   useEffect(() => {
-    const kw = searchParams.get('keyword') || searchParams.get('location');
-    const cat = searchParams.get('category');
-    const d = searchParams.get('date');
+    const kw =
+      searchParams.get('keyword') || searchParams.get('location') || '';
+    const cat = searchParams.get('category') || 'all';
+    const d = searchParams.get('date') || '';
 
-    if (kw !== null && kw !== searchQuery) {
-      setSearchQuery(kw);
-      setCurrentPage(1);
-    }
-    if (cat !== null && cat !== activeCategory) {
-      setActiveCategory(cat);
-      setCurrentPage(1);
-    }
-    if (d !== null && d !== selectedDate) {
-      setSelectedDate(d);
-      setCurrentPage(1);
-    }
+    setSearchQuery((prev) => (prev !== kw ? kw : prev));
+    setActiveCategory((prev) => (prev !== cat ? cat : prev));
+    setSelectedDate((prev) => (prev !== d ? d : prev));
+    setCurrentPage(1);
   }, [searchParams]);
 
   useEffect(() => {
@@ -150,11 +143,30 @@ export default function TourListPage() {
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat);
     setCurrentPage(1);
+    const params = new URLSearchParams(searchParams);
+    if (cat === 'all') {
+      params.delete('category');
+    } else {
+      params.set('category', cat);
+    }
+    setSearchParams(params, { replace: true });
   };
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
     setCurrentPage(1);
+    const params = new URLSearchParams(searchParams);
+    if (!value) {
+      params.delete('keyword');
+    } else {
+      params.set('keyword', value);
+    }
+    setSearchParams(params, { replace: true });
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const formatDuration = (minutes: number) => {
@@ -355,7 +367,7 @@ export default function TourListPage() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
             />
           </div>
         </>

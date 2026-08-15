@@ -25,6 +25,12 @@ export const routeName = Object.freeze({
   // Legal
   terms: '/terms',
   privacy: '/privacy',
+  cancellationPolicy: '/cancellation-policy',
+
+  // Support
+  help: '/help',
+  contact: '/contact',
+  faqs: '/faqs',
 
   // Owner
   owner: '/owner',

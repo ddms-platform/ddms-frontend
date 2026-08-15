@@ -1,9 +1,44 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Anchor } from 'lucide-react';
 import logo from '@/assets/logo.png';
+import { routeName } from '@/constants/route-name';
 
 export default function GlobalFooter() {
   const { t } = useTranslation();
+
+  const footerSections = [
+    {
+      key: 'explore',
+      title: t('home.footer.explore.title'),
+      links: [
+        { label: t('home.footer.explore.link1'), to: '/tours?category=cruise' },
+        { label: t('home.footer.explore.link2'), to: '/tours?category=sunset' },
+        { label: t('home.footer.explore.link3'), to: '/tours?category=family' },
+      ],
+    },
+    {
+      key: 'support',
+      title: t('home.footer.support.title'),
+      links: [
+        { label: t('home.footer.support.link1'), to: routeName.help },
+        { label: t('home.footer.support.link2'), to: routeName.contact },
+        { label: t('home.footer.support.link3'), to: routeName.faqs },
+      ],
+    },
+    {
+      key: 'legal',
+      title: t('home.footer.legal.title'),
+      links: [
+        { label: t('home.footer.legal.link1'), to: routeName.terms },
+        { label: t('home.footer.legal.link2'), to: routeName.privacy },
+        {
+          label: t('home.footer.legal.link3'),
+          to: routeName.cancellationPolicy,
+        },
+      ],
+    },
+  ];
 
   return (
     <footer
@@ -21,8 +56,8 @@ export default function GlobalFooter() {
             </p>
           </div>
           {/* Links */}
-          {(['explore', 'support', 'legal'] as const).map((section) => (
-            <div key={section}>
+          {footerSections.map((section) => (
+            <div key={section.key}>
               <h4
                 className="mb-4 text-sm font-semibold text-foreground"
                 style={{
@@ -30,17 +65,17 @@ export default function GlobalFooter() {
                   letterSpacing: '0.32px',
                 }}
               >
-                {t(`home.footer.${section}.title`)}
+                {section.title}
               </h4>
               <ul className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <li key={i}>
-                    <a
-                      href="#"
+                {section.links.map((link, idx) => (
+                  <li key={idx}>
+                    <Link
+                      to={link.to}
                       className="text-sm transition-colors hover:text-ddms-secondary text-foreground/85"
                     >
-                      {t(`home.footer.${section}.link${i}`)}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
