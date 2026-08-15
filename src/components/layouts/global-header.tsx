@@ -81,8 +81,9 @@ export default function GlobalHeader({
 
   const handleSearch = () => {
     setIsSearchOpen(false);
-    if (searchQuery.trim()) {
-      navigate(`/tours?location=${encodeURIComponent(searchQuery.trim())}`);
+    const q = searchQuery.trim();
+    if (q) {
+      navigate(`/tours?keyword=${encodeURIComponent(q)}`);
     } else {
       navigate('/tours');
     }

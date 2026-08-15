@@ -1,15 +1,37 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CyanAnimatedButton } from '@/components/common/CyanAnimatedButton';
 import DateInput from '@/components/ui/date-input';
 
 export default function BookingPromo() {
   const { t } = useTranslation();
-  const [departureDate, setDepartureDate] = useState('2026-07-04');
+  const navigate = useNavigate();
+  const [selectedPort, setSelectedPort] = useState('han_river');
+  const [selectedRoute, setSelectedRoute] = useState('han_river_sightseeing');
+  const [departureDate, setDepartureDate] = useState('');
 
   const handleSearchClick = () => {
-    // Simple mock search action
-    window.location.href = '/tours';
+    const portKeywords: Record<string, string> = {
+      han_river: 'Sông Hàn',
+      bach_dang: 'Bạch Đằng',
+      tien_sa: 'Tiên Sa',
+    };
+    const routeKeywords: Record<string, string> = {
+      han_river_sightseeing: 'Sông Hàn',
+      danang_bay: 'Vịnh Đà Nẵng',
+      hon_chao: 'Hòn Chảo',
+      sunset_cruise: 'Hoàng Hôn',
+    };
+
+    const locationKeyword =
+      portKeywords[selectedPort] || routeKeywords[selectedRoute] || 'Sông Hàn';
+    const params = new URLSearchParams();
+    params.set('keyword', locationKeyword);
+    if (departureDate) {
+      params.set('date', departureDate);
+    }
+    navigate(`/tours?${params.toString()}`);
   };
 
   return (
@@ -27,7 +49,11 @@ export default function BookingPromo() {
                 <label className="text-[9px] uppercase tracking-wider text-muted-foreground font-bold">
                   {t('home.promo.departurePort')}
                 </label>
-                <select className="bg-transparent text-foreground text-sm outline-none border-none cursor-pointer w-full font-medium">
+                <select
+                  value={selectedPort}
+                  onChange={(e) => setSelectedPort(e.target.value)}
+                  className="bg-transparent text-foreground text-sm outline-none border-none cursor-pointer w-full font-medium"
+                >
                   <option
                     value="han_river"
                     className="bg-ddms-bg-card text-foreground"
@@ -54,7 +80,11 @@ export default function BookingPromo() {
                 <label className="text-[9px] uppercase tracking-wider text-muted-foreground font-bold">
                   {t('home.promo.route')}
                 </label>
-                <select className="bg-transparent text-foreground text-sm outline-none border-none cursor-pointer w-full font-medium">
+                <select
+                  value={selectedRoute}
+                  onChange={(e) => setSelectedRoute(e.target.value)}
+                  className="bg-transparent text-foreground text-sm outline-none border-none cursor-pointer w-full font-medium"
+                >
                   <option
                     value="han_river_sightseeing"
                     className="bg-ddms-bg-card text-foreground"
