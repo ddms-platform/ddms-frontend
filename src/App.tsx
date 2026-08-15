@@ -37,6 +37,8 @@ const ResetPasswordSuccessPage = lazy(
 const MyToursPage = lazy(() => import('@/pages/my-tours/index'));
 const WalletPage = lazy(() => import('@/pages/wallet/index'));
 const HomePage = lazy(() => import('@/pages/home/index'));
+const BlogListPage = lazy(() => import('@/pages/blog/index'));
+const BlogDetailPage = lazy(() => import('@/pages/blog/detail'));
 const BecomeOwnerPage = lazy(() => import('@/pages/become-owner/index'));
 const OwnerRegistrationPage = lazy(
   () => import('@/pages/owner-registration/index'),
@@ -212,6 +214,22 @@ export default function App() {
                         element={
                           <Suspense fallback={<PageLoader />}>
                             <BoatDetailPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.blogList}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <BlogListPage />
+                          </Suspense>
+                        }
+                      />
+                      <Route
+                        path={routeName.blogDetail}
+                        element={
+                          <Suspense fallback={<PageLoader />}>
+                            <BlogDetailPage />
                           </Suspense>
                         }
                       />
