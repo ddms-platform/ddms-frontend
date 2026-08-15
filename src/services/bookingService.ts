@@ -23,6 +23,28 @@ export interface CreateBookingRequest {
   services?: CreateBookingServiceRequest[];
 }
 
+/** Thông tin cổng PayOS trả về để dựng màn thanh toán. */
+export interface BookingPaymentInit {
+  checkoutUrl: string;
+  orderCode: number;
+  amount: number;
+  /** Chuỗi EMV của mã VietQR — render bằng react-qr-code. */
+  qrCode?: string | null;
+  accountNumber?: string | null;
+  accountName?: string | null;
+  bin?: string | null;
+  expiredAt?: string | null;
+}
+
+/** Trạng thái thanh toán do server đối chiếu với PayOS, không phải do client tự khai. */
+export interface BookingPaymentStatus {
+  bookingStatus: string;
+  paymentStatus: 'none' | 'pending' | 'paid' | 'cancelled' | 'expired';
+  paid: boolean;
+  orderCode?: number | null;
+  amountPaid: number;
+}
+
 /** Bảng giá do server tính. Là nguồn sự thật duy nhất về số tiền phải trả. */
 export interface BookingQuote {
   basePrice: number;
@@ -121,9 +143,23 @@ export const bookingService = {
       .delete<ApiResponse<BookingQuote>>(`/bookings/${bookingId}/promotion`)
       .then((r) => r.data.result),
 
-  confirmPayment: (bookingId: string) =>
+  /**
+   * Tạo link thanh toán PayOS cho đơn. Khách trả tiền trên cổng — không có
+   * đường nào để client tự khai báo là đã trả.
+   */
+  createPaymentLink: (bookingId: string) =>
     api
-      .put<ApiResponse<{ success: boolean }>>(`/bookings/${bookingId}/pay`)
+      .post<
+        ApiResponse<BookingPaymentInit>
+      >(`/bookings/${bookingId}/payment-link`)
+      .then((r) => r.data.result),
+
+  /** Hỏi server đối chiếu với PayOS xem đơn đã được trả tiền chưa. */
+  getPaymentStatus: (bookingId: string) =>
+    api
+      .get<
+        ApiResponse<BookingPaymentStatus>
+      >(`/bookings/${bookingId}/payment-status`)
       .then((r) => r.data.result),
 
   cancelBooking: (bookingId: string) =>

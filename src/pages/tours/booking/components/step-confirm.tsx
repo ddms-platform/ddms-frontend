@@ -1,11 +1,15 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { RoomOption } from '../types';
 import type {
   TourItemResponse,
   TourServiceResponse,
 } from '@/services/tourService';
-import { bookingService, type BookingQuote } from '@/services/bookingService';
+import {
+  bookingService,
+  type BookingPaymentInit,
+  type BookingQuote,
+} from '@/services/bookingService';
 import SummaryPanel from './step-confirm/SummaryPanel';
 import PaymentPanel from './step-confirm/PaymentPanel';
 import HoldCountdown from './step-confirm/HoldCountdown';
@@ -40,13 +44,14 @@ export default function StepConfirm({
   onConfirm,
 }: StepConfirmProps) {
   const { t } = useTranslation();
-  const [paymentMethod, setPaymentMethod] = useState<'vietqr' | 'payos' | null>(
-    null,
-  );
-  const [isVerifying, setIsVerifying] = useState(false);
   const [isPaid, setIsPaid] = useState(false);
-  const [webhookReceived, setWebhookReceived] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Thông tin cổng PayOS trả về. Không có nó thì không thanh toán được —
+  // và không có đường nào khác để đơn chuyển sang đã thanh toán.
+  const [payment, setPayment] = useState<BookingPaymentInit | null>(null);
+  const [isLoadingPayment, setIsLoadingPayment] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
 
   const [dbBookingId, setDbBookingId] = useState<string | null>(null);
   const [isCreatingBooking, setIsCreatingBooking] = useState(true);
@@ -129,44 +134,73 @@ export default function StepConfirm({
     // giá không nằm trong đây nữa nên effect không chạy lại khi giá đổi.
   }, [selectedSchedule.id, guests, selectedRoom, selectedServices]);
 
-  const handlePaymentSubmit = () => {
-    // Đã hết hạn giữ chỗ -> không cho thanh toán, yêu cầu đặt lại.
-    if (holdExpired) {
-      setErrorMessage(
-        'Chỗ giữ đã hết hạn. Vui lòng quay lại và đặt tour lại từ đầu.',
-      );
-      return;
-    }
-    setIsVerifying(true);
-    setErrorMessage(null);
+  const onConfirmRef = useRef(onConfirm);
+  onConfirmRef.current = onConfirm;
 
-    setTimeout(async () => {
-      if (webhookReceived) {
-        try {
-          if (dbBookingId) {
-            await bookingService.confirmPayment(dbBookingId);
-          }
+  const createPaymentLink = useCallback(async () => {
+    if (!dbBookingId) return;
+    setIsLoadingPayment(true);
+    setErrorMessage(null);
+    try {
+      setPayment(await bookingService.createPaymentLink(dbBookingId));
+    } catch (err: any) {
+      setPayment(null);
+      setErrorMessage(
+        err.message ||
+          'Không tạo được mã thanh toán. Vui lòng thử lại sau ít phút.',
+      );
+    } finally {
+      setIsLoadingPayment(false);
+    }
+  }, [dbBookingId]);
+
+  // Giá đổi (áp/gỡ mã giảm giá) thì mã thanh toán cũ không còn đúng số tiền nữa.
+  useEffect(() => {
+    if (!dbBookingId || isPaid) return;
+    createPaymentLink();
+  }, [dbBookingId, payableTotal, isPaid, createPaymentLink]);
+
+  /**
+   * Hỏi server đã nhận tiền chưa. Server tự đối chiếu với PayOS —
+   * phía này không khẳng định gì, chỉ đọc kết quả.
+   */
+  const checkPaymentStatus = useCallback(
+    async (manual = false) => {
+      if (!dbBookingId) return false;
+      if (manual) setIsChecking(true);
+      try {
+        const status = await bookingService.getPaymentStatus(dbBookingId);
+        if (status.paid) {
           setIsPaid(true);
-          setTimeout(() => {
-            onConfirm();
-          }, 1500);
-        } catch (err: any) {
-          setIsVerifying(false);
+          setTimeout(() => onConfirmRef.current(), 1500);
+          return true;
+        }
+        if (manual) {
           setErrorMessage(
-            err.message ||
-              'Không thể cập nhật trạng thái thanh toán. Vui lòng thử lại.',
+            'Chưa nhận được thanh toán. Nếu bạn vừa chuyển khoản, hệ thống thường ghi nhận sau vài giây.',
           );
         }
-      } else {
-        setIsVerifying(false);
-        setErrorMessage(
-          `Không tìm thấy giao dịch chuyển khoản với nội dung '${
-            paymentMethod === 'payos' ? 'PAYOS' : 'DATTOUR'
-          } ${displayCode}'. Hệ thống đang chạy trên môi trường thử nghiệm. Mách nhỏ: Vui lòng click vào nút màu xanh "Giả lập cổng PayOS thanh toán thành công" (hoặc "Giả lập nhận tiền thành công" đối với VietQR) ở bên dưới để bỏ qua bước quét mã QR thực tế và hoàn tất đơn hàng nhanh chóng.`,
-        );
+        return false;
+      } catch {
+        if (manual) {
+          setErrorMessage('Không kiểm tra được trạng thái. Vui lòng thử lại.');
+        }
+        return false;
+      } finally {
+        if (manual) setIsChecking(false);
       }
-    }, 2000);
-  };
+    },
+    [dbBookingId],
+  );
+
+  // Webhook PayOS là đường chính, vòng lặp này chỉ để màn hình tự cập nhật.
+  useEffect(() => {
+    if (!dbBookingId || !payment || isPaid || holdExpired) return;
+    const timer = window.setInterval(() => {
+      void checkPaymentStatus();
+    }, 4000);
+    return () => window.clearInterval(timer);
+  }, [dbBookingId, payment, isPaid, holdExpired, checkPaymentStatus]);
 
   return (
     <div className="space-y-6 font-sans">
@@ -210,19 +244,14 @@ export default function StepConfirm({
         <PaymentPanel
           isCreatingBooking={isCreatingBooking}
           isPaid={isPaid}
-          isVerifying={isVerifying}
-          paymentMethod={paymentMethod}
-          webhookReceived={webhookReceived}
+          isLoadingPayment={isLoadingPayment}
+          payment={payment}
           errorMessage={errorMessage}
+          isChecking={isChecking}
           displayCode={displayCode}
           totalPrice={payableTotal}
-          onSelectMethod={setPaymentMethod}
-          onClearError={() => setErrorMessage(null)}
-          onMarkWebhookReceived={() => {
-            setWebhookReceived(true);
-            setErrorMessage(null);
-          }}
-          onSubmit={handlePaymentSubmit}
+          onRetry={createPaymentLink}
+          onCheckNow={() => void checkPaymentStatus(true)}
         />
       </div>
     </div>
