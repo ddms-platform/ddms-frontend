@@ -969,12 +969,57 @@
     }
   },
   "ownerRegistration": {
-    "title": "Đăng ký Chủ thuyền Mới",
-    "subtitle": "Hoàn tất biểu mẫu dưới đây để gia nhập hệ sinh thái quản lý cảng biển cao cấp Marina Command. Thông tin của bạn sẽ được bảo mật và xử lý bởi bộ phận vận hành cảng.",
-    "cancel": "HỦY BỎ",
-    "submit": "GỬI ĐĂNG KÝ",
+    "title": "Đăng ký chủ thuyền",
+    "subtitle": "Hoàn tất biểu mẫu dưới đây để đăng ký thuyền của bạn lên DDMS. Thông tin sẽ được bảo mật và do bộ phận vận hành cảng xét duyệt.",
+    "badge": "Hồ sơ chủ thuyền",
+    "back": "Quay lại",
+    "cancel": "Hủy bỏ",
+    "submit": "Gửi đăng ký",
+    "addVessel": "Thêm du thuyền khác",
+    "reviewNote": "Hồ sơ sẽ được bộ phận vận hành cảng xét duyệt. Bạn sẽ nhận email thông báo kết quả.",
     "submitSuccess": "Đăng ký thành công!",
     "submitError": "Đã có lỗi xảy ra.",
+    "steps": {
+      "owner": "Bước 1",
+      "vessel": "Bước {{index}} · Du thuyền"
+    },
+    "vessel": {
+      "title": "Thông tin du thuyền",
+      "titleNumbered": "Du thuyền {{index}}",
+      "description": "Khai báo thông số kỹ thuật, nhu cầu neo đậu và giấy tờ pháp lý của thuyền.",
+      "remove": "Xoá du thuyền này",
+      "name": "Tên thuyền",
+      "type": "Loại thuyền",
+      "typeFallback": {
+        "yacht": "Du thuyền cá nhân (Yacht)",
+        "catamaran": "Thuyền hai thân (Catamaran)",
+        "speedboat": "Ca nô tốc độ (Speedboat)"
+      },
+      "length": "Chiều dài (LOA - m)",
+      "beam": "Chiều rộng (Beam - m)",
+      "registrationNumber": "Số đăng ký hàng hải",
+      "mooring": {
+        "title": "Nhu cầu neo đậu",
+        "label": "Loại bến mong muốn",
+        "floating": "Bến nổi",
+        "fixed": "Bến cố định",
+        "learnMore": "Tìm hiểu thêm về các loại bến",
+        "floatingDesc": "Hệ thống phao neo đậu linh hoạt, tự động nâng hạ theo mực nước thủy triều. Giúp việc bước lên/xuống du thuyền luôn dễ dàng, bằng phẳng và an toàn.",
+        "fixedDesc": "Cầu cảng xây kiên cố bằng bê tông. Khoảng cách từ mặt bến xuống thuyền thay đổi theo thủy triều. Thường dành cho siêu du thuyền hoặc tàu neo đậu dài hạn ít di chuyển.",
+        "dockingDate": "Ngày dự kiến cập bến"
+      },
+      "images": {
+        "title": "Hình ảnh du thuyền",
+        "empty": "Tải lên ảnh du thuyền",
+        "hint": "Cho phép chọn nhiều ảnh (PNG, JPG)",
+        "count": "Đã chọn {{count}} hình ảnh",
+        "addMore": "Thêm ảnh"
+      },
+      "documents": {
+        "title": "Giấy tờ pháp lý của thuyền",
+        "add": "Thêm giấy tờ"
+      }
+    },
     "entityTypes": {
       "individual": "Cá nhân",
       "business": "Doanh nghiệp",
@@ -982,6 +1027,7 @@
     },
     "ownerInfo": {
       "title": "Thông tin chủ sở hữu",
+      "description": "Thông tin liên lạc để bộ phận vận hành cảng xác minh hồ sơ của bạn.",
       "fullName": "Họ và Tên",
       "email": "Email liên lạc",
       "phone": "Số điện thoại",

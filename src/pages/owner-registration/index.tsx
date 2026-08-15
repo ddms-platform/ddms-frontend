@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Plus, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { AuthServices } from '@/services/auth-service';
 import { useAuth } from '@/hooks/use-auth';
 import { routeName } from '@/constants/route-name';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { Button } from '@/components/ui/button';
+import { cardStyle } from './components/form-styles';
 import { getBoatTypes } from '@/services/system-service';
 import type { IBoatType } from '@/services/system-service';
 import OwnerInfoSection from './components/OwnerInfoSection';
@@ -121,6 +123,10 @@ export default function OwnerRegistrationPage() {
   ) => {
     const { name, value } = e.target;
     setOwnerInfo({ ...ownerInfo, [name]: value });
+  };
+
+  const handleEntityTypeChange = (value: OwnerEntityType) => {
+    setOwnerInfo((prev) => ({ ...prev, EntityType: value }));
   };
 
   const handleVesselChange = (index: number, field: string, value: any) => {
@@ -267,76 +273,105 @@ export default function OwnerRegistrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050D1A] text-white font-sans flex justify-center py-12 px-4 sm:px-6">
-      <div className="w-full max-w-212.5">
-        <div className="mb-8">
-          <h1 className="text-[28px] font-bold text-white mb-2 tracking-tight">
-            {t('ownerRegistration.title')}
-          </h1>
-          <p className="text-[15px] text-gray-300">
-            {t('ownerRegistration.subtitle')}
-          </p>
-        </div>
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <ArrowLeft size={16} />
+        {t('ownerRegistration.back')}
+      </button>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <OwnerInfoSection
-            ownerInfo={ownerInfo}
-            onChange={handleOwnerChange}
+      <header className="mb-8">
+        <span className="inline-flex items-center gap-2 rounded-full bg-ddms-secondary/12 px-3 py-1 text-xs font-semibold text-ddms-secondary">
+          <ShieldCheck size={14} />
+          {t('ownerRegistration.badge')}
+        </span>
+        <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          {t('ownerRegistration.title')}
+        </h1>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
+          {t('ownerRegistration.subtitle')}
+        </p>
+      </header>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <OwnerInfoSection
+          ownerInfo={ownerInfo}
+          onChange={handleOwnerChange}
+          onEntityTypeChange={handleEntityTypeChange}
+        />
+
+        {vessels.map((vessel, index) => (
+          <VesselSection
+            key={index}
+            vessel={vessel}
+            index={index}
+            totalCount={vessels.length}
+            boatTypes={boatTypes}
+            certificateTypes={certificateTypes}
+            onChange={(field, value) => handleVesselChange(index, field, value)}
+            onAddFiles={(field, files) => handleFileChange(index, field, files)}
+            onRemoveFile={(field, fileIndex) =>
+              handleRemoveFile(index, field, fileIndex)
+            }
+            onCertificateChange={(certIndex, field, value) =>
+              handleCertificateChange(index, certIndex, field, value)
+            }
+            onAddCertificate={() => handleAddCertificate(index)}
+            onRemoveCertificate={(certIndex) =>
+              handleRemoveCertificate(index, certIndex)
+            }
+            onRemoveVessel={() => handleRemoveVessel(index)}
           />
+        ))}
 
-          {vessels.map((vessel, index) => (
-            <VesselSection
-              key={index}
-              vessel={vessel}
-              index={index}
-              totalCount={vessels.length}
-              boatTypes={boatTypes}
-              certificateTypes={certificateTypes}
-              onChange={(field, value) =>
-                handleVesselChange(index, field, value)
-              }
-              onAddFiles={(field, files) =>
-                handleFileChange(index, field, files)
-              }
-              onRemoveFile={(field, fileIndex) =>
-                handleRemoveFile(index, field, fileIndex)
-              }
-              onCertificateChange={(certIndex, field, value) =>
-                handleCertificateChange(index, certIndex, field, value)
-              }
-              onAddCertificate={() => handleAddCertificate(index)}
-              onRemoveCertificate={(certIndex) =>
-                handleRemoveCertificate(index, certIndex)
-              }
-              onAddVessel={handleAddVessel}
-              onRemoveVessel={() => handleRemoveVessel(index)}
-            />
-          ))}
+        <button
+          type="button"
+          onClick={handleAddVessel}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border py-4 text-sm font-semibold text-muted-foreground transition-colors hover:border-ddms-secondary/50 hover:text-ddms-secondary"
+        >
+          <Plus size={16} />
+          {t('ownerRegistration.addVessel')}
+        </button>
 
-          <div className="flex justify-end gap-4 mt-8 pt-4">
-            <button
+        <div
+          className="sticky bottom-4 flex flex-col-reverse gap-3 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between"
+          style={{ ...cardStyle, backdropFilter: 'blur(12px)' }}
+        >
+          <p className="text-xs leading-relaxed text-muted-foreground sm:max-w-sm">
+            {t('ownerRegistration.reviewNote')}
+          </p>
+          <div className="flex gap-3">
+            <Button
               type="button"
+              variant="outline"
+              size="action"
+              className="flex-1 rounded-lg border-foreground/30 text-foreground hover:bg-foreground/5 sm:flex-none"
               onClick={() => navigate(-1)}
-              className="px-8 py-3 rounded border border-gray-600 text-[14px] font-bold text-gray-300 hover:bg-gray-800 transition-colors"
             >
               {t('ownerRegistration.cancel')}
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
+              variant="cyan"
+              size="action"
               disabled={loading}
-              className="px-8 py-3 rounded bg-ddms-secondary text-ddms-primary text-[14px] font-bold uppercase tracking-wide hover:bg-[#00d4e0] transition-colors disabled:opacity-70 flex items-center gap-2"
+              className="flex-1 gap-2 font-semibold sm:flex-none"
             >
               {loading ? (
                 <LoadingSpinner />
               ) : (
                 <>
-                  {t('ownerRegistration.submit')} <ArrowRight size={16} />
+                  {t('ownerRegistration.submit')}
+                  <ArrowRight size={16} />
                 </>
               )}
-            </button>
+            </Button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 }

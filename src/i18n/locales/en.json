@@ -969,12 +969,57 @@
     }
   },
   "ownerRegistration": {
-    "title": "New Boat Owner Registration",
-    "subtitle": "Complete the form below to join the Marina Command port management ecosystem. Your information will be kept confidential and processed by the port operations team.",
-    "cancel": "CANCEL",
-    "submit": "SUBMIT REGISTRATION",
+    "title": "Boat owner registration",
+    "subtitle": "Complete the form below to register your vessel on DDMS. Your information is kept confidential and reviewed by the port operations team.",
+    "badge": "Owner application",
+    "back": "Back",
+    "cancel": "Cancel",
+    "submit": "Submit registration",
+    "addVessel": "Add another vessel",
+    "reviewNote": "Your application will be reviewed by the port operations team. You will be notified of the result by email.",
     "submitSuccess": "Registration submitted successfully!",
     "submitError": "Something went wrong.",
+    "steps": {
+      "owner": "Step 1",
+      "vessel": "Step {{index}} · Vessel"
+    },
+    "vessel": {
+      "title": "Vessel information",
+      "titleNumbered": "Vessel {{index}}",
+      "description": "Provide the technical specs, mooring needs and legal documents for this vessel.",
+      "remove": "Remove this vessel",
+      "name": "Vessel name",
+      "type": "Vessel type",
+      "typeFallback": {
+        "yacht": "Yacht",
+        "catamaran": "Catamaran",
+        "speedboat": "Speedboat"
+      },
+      "length": "Length (LOA - m)",
+      "beam": "Beam (m)",
+      "registrationNumber": "Maritime registration number",
+      "mooring": {
+        "title": "Mooring requirements",
+        "label": "Preferred berth type",
+        "floating": "Floating berth",
+        "fixed": "Fixed berth",
+        "learnMore": "Learn more about berth types",
+        "floatingDesc": "A flexible pontoon system that rises and falls with the tide, so boarding stays level, easy and safe at any water level.",
+        "fixedDesc": "A solid concrete quay. The drop from the quay to the deck changes with the tide. Usually used for superyachts or long-term moorings.",
+        "dockingDate": "Expected docking date"
+      },
+      "images": {
+        "title": "Vessel photos",
+        "empty": "Upload vessel photos",
+        "hint": "You can select multiple images (PNG, JPG)",
+        "count": "{{count}} image(s) selected",
+        "addMore": "Add photos"
+      },
+      "documents": {
+        "title": "Vessel legal documents",
+        "add": "Add document"
+      }
+    },
     "entityTypes": {
       "individual": "Individual",
       "business": "Business",
@@ -982,6 +1027,7 @@
     },
     "ownerInfo": {
       "title": "Owner information",
+      "description": "Contact details the port operations team will use to verify your application.",
       "fullName": "Full name",
       "email": "Contact email",
       "phone": "Phone number",
