@@ -9,4 +9,5 @@ export interface User {
   phone?: string;
   address?: string;
   hasOwnerProfile?: boolean;
+  ownerProfileStatus?: string;
 }

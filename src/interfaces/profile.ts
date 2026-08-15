@@ -8,4 +8,5 @@ export interface IProfileRes {
   address?: string;
   avatarUrl?: string;
   hasOwnerProfile: boolean;
+  ownerProfileStatus?: 'pending' | 'verified' | 'rejected' | string;
 }

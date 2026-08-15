@@ -227,14 +227,16 @@ export default function GlobalHeader({
             </button>
             <TranslationToggle />
 
-            {!isOwner && !user?.hasOwnerProfile && (
-              <Link
-                to={routeName.becomeOwner}
-                className="hidden items-center rounded-full px-4 py-2 text-base font-semibold transition-colors hover:bg-white/5 sm:inline-flex header-link"
-              >
-                {t('becomeOwner.navLink')}
-              </Link>
-            )}
+            {!isOwner &&
+              (!user?.hasOwnerProfile ||
+                user?.ownerProfileStatus === 'rejected') && (
+                <Link
+                  to={routeName.becomeOwner}
+                  className="hidden items-center rounded-full px-4 py-2 text-base font-semibold transition-colors hover:bg-white/5 sm:inline-flex header-link"
+                >
+                  {t('becomeOwner.navLink')}
+                </Link>
+              )}
 
             {isAuthenticated && (
               <Link

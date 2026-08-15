@@ -50,6 +50,7 @@ export function mapProfileToUser(profile: IProfileRes): User {
     phone: profile.phone,
     address: profile.address,
     hasOwnerProfile: profile.hasOwnerProfile,
+    ownerProfileStatus: profile.ownerProfileStatus,
   };
 }
 

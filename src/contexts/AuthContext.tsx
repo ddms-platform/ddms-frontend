@@ -68,6 +68,9 @@ function normalizeUser(rawUser: unknown): User | null {
     ...(typeof user.phone === 'string' ? { phone: user.phone } : {}),
     ...(typeof user.address === 'string' ? { address: user.address } : {}),
     ...(user.hasOwnerProfile === true ? { hasOwnerProfile: true } : {}),
+    ...(typeof user.ownerProfileStatus === 'string'
+      ? { ownerProfileStatus: user.ownerProfileStatus }
+      : {}),
   };
 }
 
