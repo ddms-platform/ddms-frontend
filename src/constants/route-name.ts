@@ -16,6 +16,8 @@ export const routeName = Object.freeze({
   tourBooking: '/tours/:id/booking',
   boatDetail: '/boats/:boatId',
   becomeOwner: '/become-owner',
+  blogList: '/tin-tuc',
+  blogDetail: '/tin-tuc/:slug',
   ownerRegistration: '/owner-registration',
   profile: '/profile',
   myTours: '/my-tours',

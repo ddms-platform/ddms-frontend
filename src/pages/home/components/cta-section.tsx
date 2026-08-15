@@ -1,58 +1,52 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import {
+  blogService,
+  BLOG_CATEGORIES,
+  type BlogPostListItem,
+} from '@/services/blogService';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { routeName } from '@/constants/route-name';
 import { useAuth } from '@/hooks/use-auth';
 
-interface Article {
-  id: number;
-  image: string;
-  category: string;
-  title: string;
-  excerpt: string;
-  date: string;
-}
+const FALLBACK_COVER =
+  'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=600&auto=format&fit=crop&q=80';
+
+const formatDate = (value?: string | null) =>
+  value
+    ? new Intl.DateTimeFormat('vi-VN', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date(value))
+    : '';
 
 export default function CtaSection() {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
+  const [articles, setArticles] = useState<BlogPostListItem[]>([]);
 
-  const mockArticles: Article[] = [
-    {
-      id: 1,
-      image:
-        'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=600&auto=format&fit=crop&q=80',
-      category: 'Cẩm nang du lịch',
-      title: 'Top 5 Du Thuyền Sông Hàn Đáng Trải Nghiệm Nhất 2026',
-      excerpt:
-        'Khám phá danh sách những du thuyền sang trọng bậc nhất sông Hàn với dịch vụ ẩm thực đẳng cấp và lộ trình ngắm toàn cảnh Đà Nẵng về đêm.',
-      date: '28 Tháng 6, 2026',
-    },
-    {
-      id: 2,
-      image:
-        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop&q=80',
-      category: 'Kinh nghiệm',
-      title: 'Ngắm Hoàng Hôn Sông Hàn: Khoảnh Khắc Lãng Mạn Không Thể Bỏ Lỡ',
-      excerpt:
-        'Kinh nghiệm săn góc chụp hình hoàng hôn triệu đô từ tầng thượng du thuyền và thời gian khởi hành lý tưởng nhất cho buổi tối lãng mạn.',
-      date: '15 Tháng 6, 2026',
-    },
-    {
-      id: 3,
-      image:
-        'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=600&auto=format&fit=crop&q=80',
-      category: 'Tin tức mới',
-      title:
-        'Khai Trương Tuyến Du Lịch Đường Thủy Mới Kết Nối Đà Nẵng - Hội An',
-      excerpt:
-        'Thông tin chi tiết về tuyến hành trình đường thủy dọc sông Cổ Cò, hứa hẹn mở ra trải nghiệm du lịch văn hóa độc đáo mới giữa hai thành phố.',
-      date: '10 Tháng 6, 2026',
-    },
-  ];
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let active = true;
+    blogService
+      .getPosts({ page: 1, pageSize: 3 })
+      .then((res) => {
+        if (active) setArticles(res.items ?? []);
+      })
+      .catch((error) => {
+        // Chua co bai nao thi an khoi di, khong dung du lieu mau.
+        console.error('Failed to fetch blog posts:', error);
+        if (active) setArticles([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [isAuthenticated]);
 
-  if (isAuthenticated) {
+  if (isAuthenticated && articles.length > 0) {
     return (
       <section className="py-20 bg-transparent relative overflow-hidden">
         {/* Decorative elements */}
@@ -77,26 +71,27 @@ export default function CtaSection() {
               className="mt-6 md:mt-0 gap-2 border-border text-foreground hover:bg-foreground/5 cursor-pointer font-semibold rounded-xl"
               asChild
             >
-              <Link to={routeName.tours}>
+              <Link to={routeName.blogList}>
                 Xem tất cả tin tức <ArrowRight size={16} />
               </Link>
             </Button>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {mockArticles.map((article) => (
-              <article
+            {articles.map((article) => (
+              <Link
                 key={article.id}
+                to={`/tin-tuc/${article.slug}`}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-ddms-bg-card transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
               >
                 <div className="relative aspect-16/10 overflow-hidden bg-muted">
                   <img
-                    src={article.image}
+                    src={article.coverImageUrl || FALLBACK_COVER}
                     alt={article.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <span className="absolute left-4 top-4 rounded-full bg-ddms-primary/80 backdrop-blur-xs px-3.5 py-1 text-xs font-semibold text-white">
-                    {article.category}
+                    {BLOG_CATEGORIES[article.category] ?? article.category}
                   </span>
                 </div>
 
@@ -106,21 +101,21 @@ export default function CtaSection() {
                       {article.title}
                     </h3>
                     <p className="mt-2.5 line-clamp-3 text-sm text-muted-foreground leading-relaxed">
-                      {article.excerpt}
+                      {article.summary}
                     </p>
                   </div>
 
                   <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1.5 font-medium">
                       <Calendar size={13} className="opacity-80" />
-                      {article.date}
+                      {formatDate(article.publishedAt)}
                     </span>
                     <span className="flex items-center gap-1 font-bold text-ddms-secondary group-hover:underline">
                       Đọc thêm <ArrowRight size={12} />
                     </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
