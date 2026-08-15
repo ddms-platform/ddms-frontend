@@ -6,13 +6,16 @@ import {
 } from '@/services/weatherService';
 
 interface WeatherWidgetProps {
-  location: string;
+  /** Tên điểm đón khách. Không nhận ra thì widget lấy dự báo Đà Nẵng. */
+  location?: string | null;
 }
 
 export default function WeatherWidget({ location }: WeatherWidgetProps) {
   const [forecasts, setForecasts] = useState<WeatherForecast[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const area = weatherService.resolveArea(location);
 
   useEffect(() => {
     let mounted = true;
@@ -30,7 +33,7 @@ export default function WeatherWidget({ location }: WeatherWidgetProps) {
             setError('Không thể lấy thông tin thời tiết');
           }
         }
-      } catch (err) {
+      } catch {
         if (mounted) {
           setError('Đã có lỗi xảy ra');
         }
@@ -41,12 +44,8 @@ export default function WeatherWidget({ location }: WeatherWidgetProps) {
       }
     };
 
-    if (location) {
-      fetchWeather();
-    } else {
-      setLoading(false);
-      setError('Chưa có vị trí');
-    }
+    // Không có location vẫn tra được: mặc định là Đà Nẵng.
+    fetchWeather();
 
     return () => {
       mounted = false;
@@ -67,7 +66,7 @@ export default function WeatherWidget({ location }: WeatherWidgetProps) {
       <div className="flex flex-col items-center justify-center p-6 bg-[#0A192F]/50 border border-white/10 rounded-xl backdrop-blur-sm min-h-37.5">
         <Cloud className="w-8 h-8 text-gray-500 mb-3" />
         <p className="text-sm text-gray-400">
-          Không có dữ liệu thời tiết tại <b>{location}</b>
+          Không lấy được dự báo cho <b>{area.label}</b>. Vui lòng thử lại sau.
         </p>
       </div>
     );
@@ -78,7 +77,7 @@ export default function WeatherWidget({ location }: WeatherWidgetProps) {
       <div className="flex items-center gap-3 mb-5 border-b border-white/10 pb-3">
         <Cloud className="w-6 h-6 text-[#00F0FF]" />
         <h3 className="font-semibold text-lg">
-          Dự báo thời tiết <span className="text-[#00F0FF]">{location}</span>
+          Dự báo thời tiết <span className="text-[#00F0FF]">{area.label}</span>
         </h3>
       </div>
 

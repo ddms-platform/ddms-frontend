@@ -7,61 +7,71 @@ export interface WeatherForecast {
   weatherCode: number;
 }
 
-const extractCity = (loc: string) => {
-  const lower = loc.toLowerCase();
+/**
+ * Toa do co dinh cho tung khu vuc. Truoc day component goi
+ * geocoding-api.open-meteo.com de doi ten dia diem sang toa do, nhung ten
+ * diem don khach trong DB ("Ben Du Thuyen Song Han", "Vinh Da Nang"...)
+ * khong phai ten hanh chinh nen API khong tim ra va widget bao khong co du
+ * lieu. Tra cuu tai cho vua chac chan vua bot mot vong goi mang.
+ */
+const COORDS: Record<string, { lat: number; lon: number; label: string }> = {
+  'da nang': { lat: 16.0544, lon: 108.2022, label: 'Đà Nẵng' },
+  'hoi an': { lat: 15.8801, lon: 108.338, label: 'Hội An' },
+  'ha long': { lat: 20.9101, lon: 107.1839, label: 'Hạ Long' },
+  'nha trang': { lat: 12.2388, lon: 109.1967, label: 'Nha Trang' },
+  'phu quoc': { lat: 10.2899, lon: 103.984, label: 'Phú Quốc' },
+  'hai phong': { lat: 20.8449, lon: 106.6881, label: 'Hải Phòng' },
+  'vung tau': { lat: 10.3459, lon: 107.0843, label: 'Vũng Tàu' },
+  'phan thiet': { lat: 10.9804, lon: 108.2622, label: 'Phan Thiết' },
+};
+
+/** DDMS chi khai thac tuyen Da Nang nen day la mac dinh, khong phai loi. */
+const DEFAULT_AREA = COORDS['da nang'];
+
+/** Bo dau tieng Viet de "Song Han" va "Sông Hàn" doi chieu nhu nhau. */
+const noAccent = (v: string) =>
+  v
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase();
+
+/** Doi ten diem don khach sang khu vuc co du bao. */
+export const resolveArea = (locationName?: string | null) => {
+  if (!locationName) return DEFAULT_AREA;
+  const key = noAccent(locationName);
+
   if (
-    lower.includes('hàn') ||
-    lower.includes('đà nẵng') ||
-    lower.includes('bạch đằng')
+    /(son tra|my khe|bach dang|song han|vinh da nang|ngu hanh son|da nang)/.test(
+      key,
+    )
   )
-    return 'Da Nang';
-  if (lower.includes('hạ long') || lower.includes('tuần châu'))
-    return 'Ha Long';
-  if (lower.includes('phú quốc')) return 'Phu Quoc';
-  if (lower.includes('nha trang')) return 'Nha Trang';
-  if (
-    lower.includes('lan hạ') ||
-    lower.includes('cát bà') ||
-    lower.includes('hải phòng')
-  )
-    return 'Hai Phong';
-  if (lower.includes('cù lao chàm') || lower.includes('hội an'))
-    return 'Hoi An';
-  if (lower.includes('vũng tàu')) return 'Vung Tau';
-  if (lower.includes('mũi né') || lower.includes('phan thiết'))
-    return 'Phan Thiet';
-  return loc; // fallback to original
+    return COORDS['da nang'];
+  if (/(cu lao cham|hoi an)/.test(key)) return COORDS['hoi an'];
+  if (/(ha long|tuan chau)/.test(key)) return COORDS['ha long'];
+  if (/(lan ha|cat ba|hai phong)/.test(key)) return COORDS['hai phong'];
+  if (/nha trang/.test(key)) return COORDS['nha trang'];
+  if (/phu quoc/.test(key)) return COORDS['phu quoc'];
+  if (/vung tau/.test(key)) return COORDS['vung tau'];
+  if (/(mui ne|phan thiet)/.test(key)) return COORDS['phan thiet'];
+
+  // Khong nhan ra thi van tra du bao Da Nang thay vi de trong.
+  return DEFAULT_AREA;
 };
 
 export const weatherService = {
+  resolveArea,
+
   getWeatherForecast: async (
-    locationName: string,
+    locationName?: string | null,
   ): Promise<WeatherForecast[]> => {
     try {
-      if (!locationName) return [];
-
-      let queryName = locationName;
-      let geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(queryName)}&count=1&language=vi&format=json`;
-      let geoRes = await axios.get(geoUrl);
-
-      // Fallback if not found
-      if (!geoRes.data.results || geoRes.data.results.length === 0) {
-        const fallbackCity = extractCity(locationName);
-        if (fallbackCity !== locationName) {
-          queryName = fallbackCity;
-          geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(queryName)}&count=1&language=vi&format=json`;
-          geoRes = await axios.get(geoUrl);
-        }
-      }
-
-      if (!geoRes.data.results || geoRes.data.results.length === 0) {
-        return [];
-      }
-
-      const { latitude, longitude } = geoRes.data.results[0];
-
-      // 2. Lấy dự báo thời tiết 5 ngày
-      const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FHo_Chi_Minh&forecast_days=5`;
+      const { lat, lon } = resolveArea(locationName);
+      const weatherUrl =
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+        `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+        `&timezone=Asia%2FHo_Chi_Minh&forecast_days=5`;
       const weatherRes = await axios.get(weatherUrl);
 
       const daily = weatherRes.data.daily;
