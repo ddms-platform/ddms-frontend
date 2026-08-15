@@ -16,20 +16,20 @@ const getSpots = (language: string) => [
         ? 'A state-of-the-art bridge designed in the shape of a magnificent Ly Dynasty dragon, famous for its breath-taking fire and water breathing show every weekend.'
         : 'Cây cầu độc đáo thiết kế mô phỏng hình dáng con rồng thời Lý mạnh mẽ hướng ra biển Đông, nổi tiếng với màn trình diễn phun lửa và nước ấn tượng dịp cuối tuần.',
     image:
-      'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1732827503735-511f7ccd187e?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'spot-2',
     title:
       language === 'EN'
-        ? "Han River Bridge - Vietnam's First Swing Bridge"
-        : 'Cầu Sông Hàn - Cây cầu quay đầu tiên của Việt Nam',
+        ? "Han River by Night - The City's Glowing Waterway"
+        : 'Sông Hàn về đêm - Dòng sông ánh sáng giữa lòng thành phố',
     description:
       language === 'EN'
-        ? 'A proud landmark built by the local citizens, swinging 90 degrees at midnight to open the shipping lane for vessels to pass through.'
-        : 'Biểu tượng tự hào được xây dựng bởi chính người dân Đà Nẵng, có khả năng quay 90 độ vào giữa đêm để mở đường cho các tàu thuyền lớn qua lại.',
+        ? 'The heart of Da Nang river tourism: illuminated bridges on both banks, a skyline mirrored on the water, and cruises departing every evening.'
+        : 'Trục đường thủy trung tâm của Đà Nẵng với những cây cầu rực sáng hai bên bờ, bóng thành phố in xuống mặt nước và các chuyến du thuyền khởi hành mỗi tối.',
     image:
-      'https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1445272885371-027f17af0130?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'spot-3',
@@ -42,7 +42,7 @@ const getSpots = (language: string) => [
         ? 'A sacred sanctuary home to the tallest Lady Buddha statue in Vietnam (67m), offering peaceful spiritual journeys and vast ocean horizons.'
         : 'Ngôi chùa linh thiêng tựa lưng vào núi Sơn Trà, nơi có tượng Phật Bà Quan Âm cao 67m hướng ra biển cả cầu bình an cho ngư dân và thành phố.',
     image:
-      'https://images.unsplash.com/photo-1621275471769-e6aa344546d5?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1560964645-f9c3a3857831?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'spot-4',
