@@ -1012,6 +1012,12 @@
       "description": "Provide the technical specs, mooring needs and legal documents for this vessel.",
       "remove": "Remove this vessel",
       "name": "Vessel name",
+      "aiSuggestBtn": "AI Suggest Names ✨",
+      "namingConventionBadge": "Naming standard",
+      "namingGuideTitle": "Standard vessel name structure:",
+      "quickSuffixes": "Quick suggestions:",
+      "formatNow": "Format UPPERCASE",
+      "invalidCharsWarning": "Vessel name should only contain letters, numbers, and hyphens (-).",
       "type": "Vessel type",
       "typeFallback": {
         "yacht": "Yacht",
@@ -1514,5 +1520,27 @@
   },
   "error": {
     "USER_DISABLED": "Your account has been disabled or suspended. Please contact the administrator."
+  },
+  "aiVesselModal": {
+    "title": "AI Vessel Name Generator ✨",
+    "subtitle": "Branding excellence & maritime compliance standard",
+    "vesselType": "Vessel type",
+    "defaultType": "Yacht",
+    "keywordsLabel": "Style keywords / ideas (optional):",
+    "keywordsPlaceholder": "E.g. Royal, Poseidon, Ocean Blue, Son Tra...",
+    "generateBtn": "Generate",
+    "popularThemes": "Quick themes:",
+    "suggestionsTitle": "Suggestions by Gemini AI:",
+    "regenerate": "Regenerate",
+    "loadingText": "AI is crafting vessel names adhering to maritime standards...",
+    "loadingSubtext": "Optimizing for vessel category & selected style",
+    "copy": "Copy",
+    "applyBtn": "Select this name",
+    "noOptions": "Enter keywords and click \"Generate\" to get name ideas.",
+    "footerHint": "💡 Vessel names are automatically formatted in UPPERCASE and cleaned of invalid symbols.",
+    "close": "Close",
+    "applied": "Applied vessel name: {{name}}",
+    "errorEmpty": "AI could not generate suitable names. Please try different keywords.",
+    "errorFailed": "Could not connect to AI service. Please try again later."
   }
 }

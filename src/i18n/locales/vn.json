@@ -1012,6 +1012,12 @@
       "description": "Khai báo thông số kỹ thuật, nhu cầu neo đậu và giấy tờ pháp lý của thuyền.",
       "remove": "Xoá du thuyền này",
       "name": "Tên thuyền",
+      "aiSuggestBtn": "AI Gợi ý tên ✨",
+      "namingConventionBadge": "Chuẩn đặt tên",
+      "namingGuideTitle": "Cấu trúc tên tàu chuẩn:",
+      "quickSuffixes": "Gợi ý thêm:",
+      "formatNow": "IN HOA chuẩn",
+      "invalidCharsWarning": "Tên tàu chỉ nên chứa chữ cái, số và dấu gạch ngang (-).",
       "type": "Loại thuyền",
       "typeFallback": {
         "yacht": "Du thuyền cá nhân (Yacht)",
@@ -1514,5 +1520,27 @@
   },
   "error": {
     "USER_DISABLED": "Tài khoản của bạn đã bị vô hiệu hóa hoặc tạm khóa. Vui lòng liên hệ quản trị viên."
+  },
+  "aiVesselModal": {
+    "title": "AI Gợi ý Tên Du Thuyền ✨",
+    "subtitle": "Chuẩn thương hiệu & quy chuẩn đăng kiểm hàng hải",
+    "vesselType": "Loại phương tiện",
+    "defaultType": "Du thuyền",
+    "keywordsLabel": "Ý tưởng / Từ khóa phong cách (tùy chọn):",
+    "keywordsPlaceholder": "VD: Hoàng Gia, Poseidon, Biển Xanh, Sơn Trà...",
+    "generateBtn": "Sáng tạo",
+    "popularThemes": "Chủ đề nhanh:",
+    "suggestionsTitle": "Gợi ý từ Gemini AI:",
+    "regenerate": "Tạo gợi ý khác",
+    "loadingText": "AI đang sáng tạo tên tàu chuẩn quốc tế & đăng kiểm hàng hải...",
+    "loadingSubtext": "Đang tối ưu theo loại phương tiện & phong cách",
+    "copy": "Sao chép",
+    "applyBtn": "Chọn tên này",
+    "noOptions": "Nhập từ khóa và bấm \"Sáng tạo\" để nhận gợi ý tên.",
+    "footerHint": "💡 Tên tàu sẽ tự động chuẩn hóa IN HOA và loại bỏ ký tự lạ.",
+    "close": "Đóng",
+    "applied": "Đã áp dụng tên du thuyền: {{name}}",
+    "errorEmpty": "AI chưa tạo được tên phù hợp. Vui lòng thử từ khoá khác.",
+    "errorFailed": "Không thể kết nối AI. Vui lòng thử lại sau."
   }
 }
