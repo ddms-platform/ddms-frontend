@@ -6,6 +6,14 @@ import type {
 } from '@/services/certificateService';
 import DateInput from '@/components/ui/date-input';
 import { todayIso } from '@/lib/date-format';
+import {
+  dateInputClass,
+  dropzoneClass,
+  fieldStyle,
+  labelClass,
+  optionClass,
+  selectClass,
+} from './form-styles';
 
 interface CertificateUploadRowProps {
   certificate: CertificateFormItem;
@@ -18,10 +26,6 @@ interface CertificateUploadRowProps {
   ) => void;
   onRemove: () => void;
 }
-
-const inputClass =
-  'w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all placeholder:text-gray-500';
-const labelClass = 'text-[13px] font-bold text-gray-300';
 
 export default function CertificateUploadRow({
   certificate,
@@ -38,16 +42,16 @@ export default function CertificateUploadRow({
     isEn ? item.nameEn : item.nameVi;
 
   return (
-    <div className="rounded-lg border border-gray-700/50 bg-[#060D17]/50 p-4 space-y-4">
+    <div className="space-y-4 rounded-xl border border-border bg-foreground/5 p-4">
       <div className="flex items-center justify-between">
-        <span className="text-[13px] font-bold text-[#00F0FF] uppercase tracking-wide">
+        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {t('ownerRegistration.certificates.rowLabel', { index: index + 1 })}
         </span>
         {canRemove && (
           <button
             type="button"
             onClick={onRemove}
-            className="text-gray-500 hover:text-red-500 transition-colors"
+            className="text-muted-foreground transition-colors hover:text-destructive"
             aria-label={t('ownerRegistration.certificates.remove')}
           >
             <Trash2 size={16} />
@@ -55,67 +59,67 @@ export default function CertificateUploadRow({
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
           <label className={labelClass}>
-            {t('ownerRegistration.certificates.type')}
+            {t('ownerRegistration.certificates.type')} *
           </label>
           <select
             required
             value={certificate.certificateType}
             onChange={(e) => onChange('certificateType', e.target.value)}
-            style={{ colorScheme: 'dark' }}
-            className="w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all appearance-none cursor-pointer"
+            className={selectClass}
+            style={fieldStyle}
           >
             {types.map((type) => (
-              <option
-                key={type.code}
-                className="bg-[#060D17] text-white"
-                value={type.code}
-              >
+              <option key={type.code} value={type.code} className={optionClass}>
                 {typeLabel(type)}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="space-y-2">
+        <div>
           <label className={labelClass}>
-            {t('ownerRegistration.certificates.expiryDate')}
+            {t('ownerRegistration.certificates.expiryDate')} *
           </label>
           <DateInput
             required
             min={todayIso()}
             value={certificate.expiryDate}
             onChange={(iso) => onChange('expiryDate', iso)}
-            className={inputClass}
+            className={dateInputClass}
           />
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div>
         <label className={labelClass}>
-          {t('ownerRegistration.certificates.file')}
+          {t('ownerRegistration.certificates.file')} *
         </label>
         {certificate.file ? (
-          <div className="flex items-center gap-2 text-[13px] text-gray-300 bg-[#0A1322] p-3 rounded border border-gray-700/50">
-            <FileText size={16} className="text-[#00F0FF] shrink-0" />
-            <span className="truncate flex-1">{certificate.file.name}</span>
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-ddms-bg-main p-3 text-sm text-foreground">
+            <FileText size={16} className="shrink-0 text-ddms-secondary" />
+            <span className="flex-1 truncate">{certificate.file.name}</span>
             <button
               type="button"
               onClick={() => onChange('file', null)}
-              className="text-gray-500 hover:text-red-500 transition-colors"
+              className="text-muted-foreground transition-colors hover:text-destructive"
+              aria-label={t('ownerRegistration.certificates.remove')}
             >
               <Trash2 size={14} />
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-700/70 hover:border-[#00F0FF]/50 transition-colors cursor-pointer p-6 bg-[#060D17]">
-            <FileText className="w-7 h-7 text-gray-400 mb-2" />
-            <span className="text-[14px] text-white">
+          <label className={`${dropzoneClass} cursor-pointer px-4 py-6`}>
+            <FileText
+              size={26}
+              className="mb-2 text-ddms-secondary/60 transition-transform group-hover:scale-110"
+            />
+            <span className="text-sm text-foreground">
               {t('ownerRegistration.certificates.uploadHint')}
             </span>
-            <span className="text-[12px] text-gray-500 mt-1">
+            <span className="mt-1 text-xs text-muted-foreground">
               PDF, JPG, PNG
             </span>
             <input

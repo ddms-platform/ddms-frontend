@@ -1,7 +1,10 @@
 import { User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Input } from '@/components/ui/input';
 import type { OwnerEntityType } from '@/services/certificateService';
 import { OWNER_ENTITY_TYPES } from '@/services/certificateService';
+import SectionCard from './SectionCard';
+import { fieldStyle, labelClass } from './form-styles';
 
 interface OwnerInfo {
   FullName: string;
@@ -17,117 +20,126 @@ interface OwnerInfoSectionProps {
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
+  onEntityTypeChange: (value: OwnerEntityType) => void;
 }
 
-const inputClass =
-  'w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all placeholder:text-gray-500';
-
-const labelClass = 'text-[13px] font-bold text-gray-300';
-
-const OwnerInfoSection = ({ ownerInfo, onChange }: OwnerInfoSectionProps) => {
+const OwnerInfoSection = ({
+  ownerInfo,
+  onChange,
+  onEntityTypeChange,
+}: OwnerInfoSectionProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-[#0D1C33] rounded-lg p-6 shadow-xl">
-      <h2 className="text-[16px] font-bold text-[#00F0FF] mb-5 flex items-center gap-2 uppercase tracking-wide">
-        <User size={18} /> {t('ownerRegistration.ownerInfo.title')}
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div className="space-y-2">
+    <SectionCard
+      icon={User}
+      step={t('ownerRegistration.steps.owner')}
+      title={t('ownerRegistration.ownerInfo.title')}
+      description={t('ownerRegistration.ownerInfo.description')}
+    >
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
           <label className={labelClass}>
-            {t('ownerRegistration.ownerInfo.fullName')}
+            {t('ownerRegistration.ownerInfo.fullName')} *
           </label>
-          <input
+          <Input
             required
             type="text"
             name="FullName"
             value={ownerInfo.FullName}
             onChange={onChange}
-            className={inputClass}
+            style={fieldStyle}
             placeholder="Nguyễn Văn A"
           />
         </div>
-        <div className="space-y-2">
+
+        <div>
           <label className={labelClass}>
-            {t('ownerRegistration.ownerInfo.email')}
+            {t('ownerRegistration.ownerInfo.email')} *
           </label>
-          <input
+          <Input
             required
             type="email"
             name="Email"
             value={ownerInfo.Email}
             onChange={onChange}
-            className={inputClass}
+            style={fieldStyle}
             placeholder="owner@example.com"
           />
         </div>
-        <div className="space-y-2">
+
+        <div>
           <label className={labelClass}>
-            {t('ownerRegistration.ownerInfo.phone')}
+            {t('ownerRegistration.ownerInfo.phone')} *
           </label>
-          <input
+          <Input
             required
-            type="text"
+            type="tel"
             name="Phone"
             value={ownerInfo.Phone}
             onChange={onChange}
-            className={inputClass}
+            style={fieldStyle}
             placeholder="+84 900 000 000"
           />
         </div>
-        <div className="space-y-2">
+
+        <div>
           <label className={labelClass}>
-            {t('ownerRegistration.ownerInfo.licenseNumber')}
+            {t('ownerRegistration.ownerInfo.licenseNumber')} *
           </label>
-          <input
+          <Input
             required
             type="text"
             name="LicenseNumber"
             value={ownerInfo.LicenseNumber}
             onChange={onChange}
-            className={inputClass}
+            style={fieldStyle}
             placeholder="012345678901"
           />
         </div>
-        <div className="space-y-2">
+
+        <div className="sm:col-span-2">
           <label className={labelClass}>
-            {t('ownerRegistration.ownerInfo.entityType')}
+            {t('ownerRegistration.ownerInfo.entityType')} *
           </label>
-          <select
-            required
-            name="EntityType"
-            value={ownerInfo.EntityType}
-            onChange={onChange}
-            style={{ colorScheme: 'dark' }}
-            className="w-full bg-[#060D17] border-none rounded px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-1 focus:ring-[#00F0FF]/50 transition-all appearance-none cursor-pointer"
-          >
-            {OWNER_ENTITY_TYPES.map((code) => (
-              <option
-                key={code}
-                className="bg-[#060D17] text-white"
-                value={code}
-              >
-                {t(`ownerRegistration.entityTypes.${code}`)}
-              </option>
-            ))}
-          </select>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {OWNER_ENTITY_TYPES.map((code) => {
+              const active = ownerInfo.EntityType === code;
+              return (
+                <button
+                  key={code}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => onEntityTypeChange(code)}
+                  className={`h-11 rounded-lg border px-4 text-sm font-medium transition-colors ${
+                    active
+                      ? 'border-ddms-secondary bg-ddms-secondary/10 text-ddms-secondary'
+                      : 'border-border text-muted-foreground hover:border-ddms-secondary/40 hover:text-foreground'
+                  }`}
+                >
+                  {t(`ownerRegistration.entityTypes.${code}`)}
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="md:col-span-2 space-y-2">
+
+        <div className="sm:col-span-2">
           <label className={labelClass}>
-            {t('ownerRegistration.ownerInfo.address')}
+            {t('ownerRegistration.ownerInfo.address')} *
           </label>
-          <input
+          <Input
             required
             type="text"
             name="Address"
             value={ownerInfo.Address}
             onChange={onChange}
-            className={inputClass}
+            style={fieldStyle}
             placeholder={t('ownerRegistration.ownerInfo.addressPlaceholder')}
           />
         </div>
       </div>
-    </div>
+    </SectionCard>
   );
 };
 
