@@ -38,12 +38,16 @@ export default function TourListPage() {
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
 
-  const [searchQuery, setSearchQuery] = useState(
-    searchParams.get('location') || '',
-  );
+  const initialKeyword =
+    searchParams.get('keyword') || searchParams.get('location') || '';
+  const initialCategory = searchParams.get('category') || 'all';
+  const initialDate = searchParams.get('date') || '';
+
+  const [searchQuery, setSearchQuery] = useState(initialKeyword);
   const debouncedSearch = useDebounce(searchQuery, 500);
 
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [sortBy, setSortBy] = useState<(typeof SORT_OPTIONS)[number]>('rating');
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -54,14 +58,25 @@ export default function TourListPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
 
-  // Sync searchQuery with URL params if it changes
+  // Sync searchQuery & category with URL params if they change
   useEffect(() => {
-    const loc = searchParams.get('location');
-    if (loc !== null && loc !== searchQuery) {
-      setSearchQuery(loc);
+    const kw = searchParams.get('keyword') || searchParams.get('location');
+    const cat = searchParams.get('category');
+    const d = searchParams.get('date');
+
+    if (kw !== null && kw !== searchQuery) {
+      setSearchQuery(kw);
       setCurrentPage(1);
     }
-  }, [searchParams, searchQuery]);
+    if (cat !== null && cat !== activeCategory) {
+      setActiveCategory(cat);
+      setCurrentPage(1);
+    }
+    if (d !== null && d !== selectedDate) {
+      setSelectedDate(d);
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -75,7 +90,9 @@ export default function TourListPage() {
           pageSize: 8,
           sortBy: apiSortBy,
           sortOrder: apiSortOrder,
-          location: debouncedSearch || undefined, // use search query as location/name filter
+          keyword: debouncedSearch || undefined,
+          category: activeCategory !== 'all' ? activeCategory : undefined,
+          date: selectedDate || undefined,
         });
 
         setTours(res.items || []);
@@ -89,7 +106,7 @@ export default function TourListPage() {
     };
 
     fetchTours();
-  }, [currentPage, debouncedSearch, sortBy, activeCategory]);
+  }, [currentPage, debouncedSearch, sortBy, activeCategory, selectedDate]);
 
   useEffect(() => {
     if (user) {
