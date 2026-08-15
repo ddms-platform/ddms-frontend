@@ -156,7 +156,9 @@
     "retry": "Retry",
     "tryAgain": "Try Again",
     "somethingWentWrong": "Something went wrong",
-    "unexpectedError": "An unexpected error occurred"
+    "unexpectedError": "An unexpected error occurred",
+    "prev": "Previous",
+    "next": "Next"
   },
   "validation": {
     "required": "{{field}} is required",
@@ -378,7 +380,9 @@
       "perPerson": "person",
       "topDestinations": "Top Destinations",
       "learnMore": "Learn more",
-      "noTours": "No featured tours available."
+      "noTours": "No featured tours available.",
+      "hours": "hours",
+      "minutes": "mins"
     },
     "howItWorks": {
       "title": "Book in 4 Easy Steps",
@@ -524,7 +528,8 @@
         "minLength": "Password must be at least 6 characters",
         "mismatch": "Passwords do not match"
       }
-    }
+    },
+    "updateSuccess": "Profile updated successfully!"
   },
   "tour": {
     "backToHome": "Back to home",
@@ -551,7 +556,8 @@
       "addWishlist": "Add to wishlist",
       "removeWishlist": "Saved to wishlist",
       "noChargeYet": "You won't be charged yet"
-    }
+    },
+    "reviewsCount": "reviews"
   },
   "booking": {
     "title": "Book Tour",
@@ -622,6 +628,11 @@
       "description": "Thank you for your booking. We'll send a confirmation email to you.",
       "viewBookings": "View my bookings",
       "backHome": "Back to home"
+    },
+    "services": {
+      "title": "Add-on Services",
+      "subtitle": "Choose additional services to upgrade your trip experience (optional).",
+      "empty": "This tour does not have any add-on services yet."
     }
   },
   "tourList": {
@@ -649,7 +660,9 @@
       "title": "No tours found",
       "description": "Try changing your search or filters to find a matching trip.",
       "reset": "Clear filters"
-    }
+    },
+    "hours": "hours",
+    "minutes": "mins"
   },
   "boatDetail": {
     "viewDetails": "View details",
@@ -718,7 +731,8 @@
   "nav": {
     "home": "Home",
     "tours": "Tours",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "wishlist": "Wishlist"
   },
   "header": {
     "search": "Search",
@@ -1203,7 +1217,10 @@
         "confirm": "Confirm",
         "reject": "Reject",
         "complete": "Complete",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "confirmSuccess": "Booking confirmed successfully!",
+        "cancelSuccess": "Booking cancelled.",
+        "completeSuccess": "Trip completed successfully."
       }
     },
     "createModal": {
@@ -1232,7 +1249,8 @@
       "reasonPlaceholder": "Enter detailed reason...",
       "cancelBtn": "Cancel",
       "confirmCancelBtn": "Confirm Cancel"
-    }
+    },
+    "loadingError": "Unable to load tour management data."
   },
   "wallet": {
     "title": "My Wallet",
@@ -1307,8 +1325,18 @@
     "errors": {
       "loadConversations": "Failed to load conversations.",
       "loadMessages": "Failed to load messages.",
-      "sendMessage": "Failed to send message. Please try again."
-    }
+      "sendMessage": "Failed to send message. Please try again.",
+      "invalidFileType": "Only image or video files are supported.",
+      "fileTooLarge": "File size exceeds 50 MB limit.",
+      "micUnavailable": "Microphone is not supported on this browser.",
+      "micDenied": "Microphone access denied. Please check browser permissions."
+    },
+    "emojiPicker": "Choose emoji",
+    "attachFile": "Attach Photo/Video",
+    "recordVoice": "Record Voice Message",
+    "recording": "Recording",
+    "stopRecording": "Stop Recording",
+    "cancel": "Cancel"
   },
   "splash": {
     "tagline": "Discover the beauty of Da Nang on the water",
@@ -1380,6 +1408,44 @@
       "activeTitle": "EMERGENCY SOS SIGNAL BROADCASTED",
       "activeDesc": "Port Authority center has received your distress signal and emergency sirens are sounding at the control center.",
       "standby": "Please stay calm, keep your phone reachable, and remain in a safe location!"
+    },
+    "offline": {
+      "queuedBadge": "Pending sync when online",
+      "queuedTitle": "SOS ALERT SAVED OFFLINE",
+      "queuedDesc": "Your device is currently offline. GPS coordinates have been saved locally and the system will automatically broadcast the alert to Port Authority as soon as connection is restored.",
+      "retryNow": "Retry & Send Now",
+      "retrying": "Reconnecting...",
+      "offlineWarning": "No connection: SOS signal saved locally and will auto-sync when online!",
+      "syncSuccess": "Connection restored! Emergency SOS signal successfully transmitted to Port Authority.",
+      "smsRescue": "Send Emergency SMS with GPS",
+      "callHotline": "Call Port Authority Hotline (111)",
+      "vhfReminder": "VHF Marine Distress Channel: CH 16 (156.8 MHz)"
     }
+  },
+  "wishlist": {
+    "title": "Your Favorite Tours",
+    "subtitle": "Manage your saved boat tours and experiences.",
+    "clearAll": "Clear All",
+    "clearAllConfirm": "Are you sure you want to clear your entire wishlist?",
+    "sortBy": "Sort by",
+    "sort": {
+      "default": "Default",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low",
+      "rating": "Highest Rated"
+    },
+    "empty": {
+      "title": "Your wishlist is empty",
+      "subtitle": "You have not saved any tours to your wishlist yet. Explore tours and save your favorites!",
+      "button": "Explore Now"
+    },
+    "priceFrom": "From",
+    "perPerson": "person",
+    "reviewsCount": "reviews",
+    "remove": "Remove from wishlist",
+    "viewDetail": "Details"
+  },
+  "error": {
+    "USER_DISABLED": "Your account has been disabled or suspended. Please contact the administrator."
   }
 }

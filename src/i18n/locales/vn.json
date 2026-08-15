@@ -156,7 +156,9 @@
     "retry": "Thử lại",
     "tryAgain": "Thử lại",
     "somethingWentWrong": "Đã xảy ra sự cố",
-    "unexpectedError": "Đã xảy ra lỗi không mong muốn"
+    "unexpectedError": "Đã xảy ra lỗi không mong muốn",
+    "prev": "Trước",
+    "next": "Tiếp theo"
   },
   "validation": {
     "required": "{{field}} là bắt buộc",
@@ -378,7 +380,9 @@
       "perPerson": "người",
       "topDestinations": "Điểm đến nổi bật",
       "learnMore": "Xem tất cả",
-      "noTours": "Không có tour nào nổi bật."
+      "noTours": "Không có tour nào nổi bật.",
+      "hours": "giờ",
+      "minutes": "phút"
     },
     "howItWorks": {
       "title": "Đặt tour chỉ 4 bước",
@@ -524,7 +528,8 @@
         "minLength": "Mật khẩu phải có ít nhất 6 ký tự",
         "mismatch": "Mật khẩu xác nhận không khớp"
       }
-    }
+    },
+    "updateSuccess": "Cập nhật thông tin hồ sơ thành công!"
   },
   "tour": {
     "backToHome": "Quay lại trang chủ",
@@ -551,7 +556,8 @@
       "addWishlist": "Thêm vào yêu thích",
       "removeWishlist": "Đã lưu vào yêu thích",
       "noChargeYet": "Bạn chưa bị tính phí"
-    }
+    },
+    "reviewsCount": "đánh giá"
   },
   "booking": {
     "title": "Đặt tour",
@@ -622,6 +628,11 @@
       "description": "Cảm ơn bạn đã đặt tour. Chúng tôi sẽ gửi email xác nhận cho bạn.",
       "viewBookings": "Xem đặt tour của tôi",
       "backHome": "Về trang chủ"
+    },
+    "services": {
+      "title": "Dịch vụ đi kèm",
+      "subtitle": "Chọn thêm các dịch vụ để nâng cấp trải nghiệm chuyến đi (không bắt buộc).",
+      "empty": "Tour này chưa có dịch vụ đi kèm nào."
     }
   },
   "tourList": {
@@ -649,7 +660,9 @@
       "title": "Không tìm thấy tour nào",
       "description": "Thử thay đổi từ khoá hoặc bộ lọc để tìm chuyến phù hợp.",
       "reset": "Xoá bộ lọc"
-    }
+    },
+    "hours": "giờ",
+    "minutes": "phút"
   },
   "boatDetail": {
     "viewDetails": "Xem chi tiết",
@@ -718,7 +731,8 @@
   "nav": {
     "home": "Trang chủ",
     "tours": "Tours",
-    "notifications": "Thông báo"
+    "notifications": "Thông báo",
+    "wishlist": "Yêu thích"
   },
   "header": {
     "search": "Tìm kiếm",
@@ -1203,7 +1217,10 @@
         "confirm": "Xác nhận",
         "reject": "Từ chối",
         "complete": "Hoàn thành",
-        "cancel": "Hủy đơn"
+        "cancel": "Hủy đơn",
+        "confirmSuccess": "Đã xác nhận đơn đặt chỗ thành công!",
+        "cancelSuccess": "Đã hủy đơn đặt chỗ.",
+        "completeSuccess": "Đã hoàn thành chuyến đi."
       }
     },
     "createModal": {
@@ -1232,7 +1249,8 @@
       "reasonPlaceholder": "Nhập lý do chi tiết...",
       "cancelBtn": "Hủy bỏ",
       "confirmCancelBtn": "Xác nhận Hủy"
-    }
+    },
+    "loadingError": "Không thể tải danh sách tour."
   },
   "wallet": {
     "title": "Ví Của Tôi",
@@ -1307,8 +1325,18 @@
     "errors": {
       "loadConversations": "Không thể tải danh sách cuộc hội thoại.",
       "loadMessages": "Không thể tải lịch sử tin nhắn.",
-      "sendMessage": "Không thể gửi tin nhắn. Vui lòng thử lại."
-    }
+      "sendMessage": "Không thể gửi tin nhắn. Vui lòng thử lại.",
+      "invalidFileType": "Chỉ hỗ trợ ảnh hoặc video.",
+      "fileTooLarge": "Tệp vượt quá 50 MB.",
+      "micUnavailable": "Trình duyệt không hỗ trợ ghi âm.",
+      "micDenied": "Không thể truy cập microphone. Kiểm tra quyền trình duyệt."
+    },
+    "emojiPicker": "Chọn biểu tượng cảm xúc",
+    "attachFile": "Gửi ảnh/video",
+    "recordVoice": "Ghi âm giọng nói",
+    "recording": "Đang ghi âm",
+    "stopRecording": "Dừng ghi âm",
+    "cancel": "Hủy"
   },
   "splash": {
     "tagline": "Khám phá vẻ đẹp Đà Nẵng trên mặt nước",
@@ -1380,6 +1408,44 @@
       "activeTitle": "ĐÃ PHÁT TÍN HIỆU SOS KHẨN CẤP",
       "activeDesc": "Hệ thống Cảng vụ đã tiếp nhận tín hiệu và còi báo động khẩn cấp đang réo tại Trung tâm.",
       "standby": "Vui lòng giữ bình tĩnh, giữ liên lạc điện thoại và ở nguyên vị trí an toàn!"
+    },
+    "offline": {
+      "queuedBadge": "Đang chờ sóng để gửi bù",
+      "queuedTitle": "ĐÃ LƯU TÍN HIỆU SOS NGOẠI TUYẾN",
+      "queuedDesc": "Thiết bị hiện đang mất kết nối Internet. Tọa độ GPS đã được lưu an toàn và hệ thống sẽ tự động phát tín hiệu đến Cảng vụ ngay khi có sóng trở lại.",
+      "retryNow": "Thử kết nối & Gửi lại ngay",
+      "retrying": "Đang kết nối lại...",
+      "offlineWarning": "Mất sóng mạng: Tín hiệu SOS đã được lưu vào bộ nhớ đệm tự động gửi bù!",
+      "syncSuccess": "Đã khôi phục mạng! Tín hiệu SOS khẩn cấp đã được gửi thành công đến Cảng vụ.",
+      "smsRescue": "Gửi SMS cứu nạn kèm GPS",
+      "callHotline": "Gọi Hotline Cảng vụ (111)",
+      "vhfReminder": "Kênh cứu nạn bộ đàm VHF: CH 16 (156.8 MHz)"
     }
+  },
+  "wishlist": {
+    "title": "Tour yêu thích của bạn",
+    "subtitle": "Quản lý các tour du lịch mà bạn đã lưu lại.",
+    "clearAll": "Xóa tất cả",
+    "clearAllConfirm": "Bạn có chắc chắn muốn xóa toàn bộ danh sách yêu thích?",
+    "sortBy": "Sắp xếp",
+    "sort": {
+      "default": "Mặc định",
+      "priceAsc": "Giá thấp trước",
+      "priceDesc": "Giá cao trước",
+      "rating": "Đánh giá cao"
+    },
+    "empty": {
+      "title": "Danh sách trống",
+      "subtitle": "Bạn chưa lưu tour nào vào danh sách yêu thích. Hãy quay lại trang chủ và khám phá các tour hấp dẫn nhé!",
+      "button": "Khám phá ngay"
+    },
+    "priceFrom": "Giá từ",
+    "perPerson": "người",
+    "reviewsCount": "đánh giá",
+    "remove": "Xóa khỏi yêu thích",
+    "viewDetail": "Chi tiết"
+  },
+  "error": {
+    "USER_DISABLED": "Tài khoản của bạn đã bị vô hiệu hóa hoặc tạm khóa. Vui lòng liên hệ quản trị viên."
   }
 }

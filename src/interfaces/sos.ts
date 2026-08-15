@@ -25,3 +25,12 @@ export interface SosAlert {
   created_at: string;
   resolved_at?: string;
 }
+
+export interface QueuedSosItem {
+  id: string;
+  payload: TriggerSosPayload;
+  queuedAt: string;
+  attempts: number;
+  status: 'QUEUED' | 'SENDING' | 'FAILED' | 'SENT';
+  lastError?: string;
+}
