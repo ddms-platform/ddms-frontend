@@ -63,14 +63,16 @@ export default function DockMapPage() {
         return start <= now && end >= now;
       });
 
-      activeSchedules.forEach((schedule, idx) => {
-        const slot = ALL_SLOTS[idx % ALL_SLOTS.length];
-        if (slot) {
-          locations[schedule.boatId] = {
-            dockName: dock.name,
-            slotName: slot.id,
-          };
-        }
+      activeSchedules.forEach((schedule) => {
+        // Khoang do cảng vụ gán và lưu trong DB. Trước đây suy ra từ vị trí
+        // trong mảng, nên cùng một con tàu ra khoang khác nhau giữa trang
+        // admin (duyệt mọi tàu) và trang owner (chỉ lọc tàu của mình), và còn
+        // tự đổi mỗi khi có tàu khác vào hoặc rời bến.
+        if (!schedule.berthCode) return;
+        locations[schedule.boatId] = {
+          dockName: dock.name,
+          slotName: schedule.berthCode,
+        };
       });
     });
 
@@ -90,9 +92,10 @@ export default function DockMapPage() {
     });
 
     return activeSchedules
-      .map((schedule, idx) => {
+      .map((schedule) => {
         const boatDetail = boats.find((b) => b.id === schedule.boatId);
-        const slot = ALL_SLOTS[idx % ALL_SLOTS.length];
+        // Chưa được cảng vụ gán khoang thì không vẽ lên sơ đồ, thay vì đoán bừa.
+        const slot = ALL_SLOTS.find((s) => s.id === schedule.berthCode);
         if (!slot) return null;
 
         const isRunning = boatDetail ? boatDetail.status === 'running' : false;
