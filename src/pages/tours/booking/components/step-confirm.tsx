@@ -10,6 +10,7 @@ import {
   type BookingPaymentInit,
   type BookingQuote,
 } from '@/services/bookingService';
+import { useAuth } from '@/hooks/use-auth';
 import SummaryPanel from './step-confirm/SummaryPanel';
 import PaymentPanel from './step-confirm/PaymentPanel';
 import HoldCountdown from './step-confirm/HoldCountdown';
@@ -44,6 +45,13 @@ export default function StepConfirm({
   onConfirm,
 }: StepConfirmProps) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+
+  // Nút giả lập chỉ hiện cho admin (để demo trên web thật) hoặc khi chạy dev.
+  // Đây thuần là chuyện hiển thị — server mới là nơi thật sự chặn.
+  const canSimulate =
+    import.meta.env.DEV || (user?.roles?.includes('admin') ?? false);
+
   const [isPaid, setIsPaid] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -194,8 +202,8 @@ export default function StepConfirm({
   );
 
   /**
-   * Chỉ chạy khi dev/demo. Endpoint phía sau không tồn tại trên production —
-   * backend chỉ đăng ký route khi ASPNETCORE_ENVIRONMENT=Development.
+   * Chỉ dùng khi demo. Server từ chối nếu người gọi không phải admin
+   * (trừ lúc chạy dev), nên không cần tin vào `canSimulate` ở phía này.
    */
   const simulatePayment = useCallback(async () => {
     if (!dbBookingId) return;
@@ -209,7 +217,8 @@ export default function StepConfirm({
       }
     } catch (err: any) {
       setErrorMessage(
-        err.message || 'Giả lập thất bại — backend không chạy ở chế độ dev.',
+        err.message ||
+          'Giả lập thất bại — tài khoản này không có quyền giả lập thanh toán.',
       );
     } finally {
       setIsChecking(false);
@@ -276,6 +285,7 @@ export default function StepConfirm({
           onRetry={createPaymentLink}
           onCheckNow={() => void checkPaymentStatus(true)}
           onSimulate={() => void simulatePayment()}
+          canSimulate={canSimulate}
         />
       </div>
     </div>

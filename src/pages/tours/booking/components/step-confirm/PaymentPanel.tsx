@@ -24,31 +24,28 @@ interface PaymentPanelProps {
   totalPrice: number;
   onRetry: () => void;
   onCheckNow: () => void;
-  /** Chỉ dùng khi dev/demo — xem DevSimulateButton. */
+  /** Chỉ dùng khi demo — xem SimulateButton. */
   onSimulate: () => void;
+  /** Đang chạy dev, hoặc người đăng nhập là admin. */
+  canSimulate: boolean;
 }
 
 /**
  * Nút giả lập thanh toán cho lúc demo.
  *
- * `import.meta.env.DEV` là hằng số lúc build: bản production build thành
- * `false` và toàn bộ khối này bị loại khỏi bundle. Endpoint phía sau cũng chỉ
- * được đăng ký khi backend chạy ở môi trường Development, nên kể cả có gọi
- * được thì server cũng trả 404.
+ * Ẩn nút chỉ là để khách không nhìn thấy — quyền thật nằm ở server: endpoint
+ * phía sau từ chối mọi tài khoản không phải admin khi chạy production. Kể cả
+ * người dùng tự gọi API bằng tay cũng không đánh dấu được đơn là đã trả tiền.
  */
-const DevSimulateButton = ({ onSimulate }: { onSimulate: () => void }) => {
-  if (!import.meta.env.DEV) return null;
-
-  return (
-    <button
-      type="button"
-      onClick={onSimulate}
-      className="w-full rounded-lg border border-dashed border-amber-500/50 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-600 transition-colors hover:bg-amber-500/20 dark:text-amber-400"
-    >
-      ⚡ DEV · Giả lập đã nhận tiền
-    </button>
-  );
-};
+const SimulateButton = ({ onSimulate }: { onSimulate: () => void }) => (
+  <button
+    type="button"
+    onClick={onSimulate}
+    className="w-full rounded-lg border border-dashed border-amber-500/50 bg-amber-500/10 px-3 py-2 text-[11px] font-bold text-amber-600 transition-colors hover:bg-amber-500/20 dark:text-amber-400"
+  >
+    ⚡ {import.meta.env.DEV ? 'DEV' : 'ADMIN'} · Giả lập đã nhận tiền
+  </button>
+);
 
 const Centered = ({
   icon,
@@ -92,6 +89,7 @@ const PaymentPanel = ({
   onRetry,
   onCheckNow,
   onSimulate,
+  canSimulate,
 }: PaymentPanelProps) => (
   <div
     className="flex min-h-87.5 flex-col justify-center rounded-xl border p-5 transition-all"
@@ -222,7 +220,7 @@ const PaymentPanel = ({
             )}
           </Button>
 
-          <DevSimulateButton onSimulate={onSimulate} />
+          {canSimulate && <SimulateButton onSimulate={onSimulate} />}
         </div>
       </div>
     )}
