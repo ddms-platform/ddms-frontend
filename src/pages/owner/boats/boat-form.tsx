@@ -299,9 +299,10 @@ export default function BoatForm({
         setRemovedServiceIds([]);
       }
 
-      const newServices = services.filter((s) => isNewService(s.id) && s.name);
-      if (newServices.length > 0) {
-        const payloads = newServices.map((srv) => ({
+      const activeServices = services.filter((s) => s.name && s.name.trim());
+      if (activeServices.length > 0) {
+        const payloads = activeServices.map((srv) => ({
+          id: isNewService(srv.id) ? undefined : srv.id,
           boatId: savedBoatId,
           serviceType: srv.serviceType,
           name: srv.name,
@@ -344,7 +345,7 @@ export default function BoatForm({
           payloads.map((payload) =>
             Api.post('/owner/services/register', payload).catch((err) => {
               console.error(err);
-              throw new Error('Lỗi khi đăng ký dịch vụ');
+              throw new Error('Lỗi khi đăng ký/cập nhật dịch vụ');
             }),
           ),
         );

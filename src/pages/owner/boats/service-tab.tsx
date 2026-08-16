@@ -109,7 +109,31 @@ export default function ServiceTab({
       services.length === 1 &&
       !services[0].name.trim() &&
       !services[0].basePrice.trim();
-    onChange(isDefaultBlank ? imported : [...services, ...imported]);
+
+    // Map existing IDs by service name to update instead of duplicating
+    const existingByName = new Map<string, string>();
+    services.forEach((s) => {
+      if (s.name?.trim() && !isNewService(s.id)) {
+        existingByName.set(s.name.trim().toLowerCase(), s.id);
+      }
+    });
+
+    const mappedImported = imported.map((imp) => {
+      const matchId = existingByName.get(imp.name.trim().toLowerCase());
+      return matchId ? { ...imp, id: matchId } : imp;
+    });
+
+    if (isDefaultBlank) {
+      onChange(mappedImported);
+    } else {
+      const importedNames = new Set(
+        mappedImported.map((s) => s.name.trim().toLowerCase()),
+      );
+      const remainingOld = services.filter(
+        (s) => !importedNames.has(s.name.trim().toLowerCase()),
+      );
+      onChange([...remainingOld, ...mappedImported]);
+    }
   };
 
   const handleImportExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
