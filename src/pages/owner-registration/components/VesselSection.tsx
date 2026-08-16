@@ -39,6 +39,7 @@ export interface VesselFormState {
   Type: string;
   Length: string;
   Beam: string;
+  MaxPassengers: string;
   RegistrationNumber: string;
   MooringType: string;
   ExpectedDockingDate: string;
@@ -284,6 +285,27 @@ const VesselSection = ({
               </>
             )}
           </select>
+        </div>
+
+        <div>
+          <label className={labelClass}>
+            {t(
+              'ownerRegistration.vessel.maxPassengers',
+              'Sức chứa tối đa (khách)',
+            )}{' '}
+            *
+          </label>
+          <Input
+            required
+            type="number"
+            min={1}
+            max={1000}
+            step="1"
+            value={vessel.MaxPassengers}
+            onChange={(e) => onChange('MaxPassengers', e.target.value)}
+            style={fieldStyle}
+            placeholder="50"
+          />
         </div>
 
         <div>
