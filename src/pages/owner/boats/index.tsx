@@ -24,6 +24,7 @@ import { getBoatTypes, type IBoatType } from '@/services/system-service';
 import BoatCard from './boat-card';
 import BoatTable from './boat-table';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/hooks/use-auth';
 
 type FilterStatus = 'all' | BoatStatus;
 type ViewMode = 'grid' | 'table';
@@ -76,6 +77,13 @@ export default function OwnerBoatList() {
 
   const isLocked = Boolean(docOverview?.isLocked);
 
+  // Vai tro `owner` chi duoc cap khi cang vu duyet ho so, nhung thuyen da duoc
+  // tao ngay tu luc nop. Trong khoang cho duyet phai noi ro dieu do, khong thi
+  // chu thuyen tuong thuyen bi mat va di khai lai mot chiec nua.
+  const { user } = useAuth();
+  const hoSoChoDuyet =
+    user?.hasOwnerProfile === true && user?.ownerProfileStatus === 'pending';
+
   const filteredBoats = useMemo(
     () =>
       boats.filter((b) => {
@@ -110,6 +118,26 @@ export default function OwnerBoatList() {
 
   return (
     <div className="px-4 py-6 lg:px-8 space-y-6">
+      {hoSoChoDuyet && (
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="shrink-0 rounded-xl bg-amber-500/20 p-2.5 text-amber-500">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-foreground">
+                Hồ sơ chủ thuyền đang chờ cảng vụ duyệt
+              </p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Thuyền bạn đã khai lúc đăng ký nằm ngay bên dưới — không cần
+                khai lại. Sau khi hồ sơ được duyệt, bạn mới thêm và sửa được
+                thuyền.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Overdue / Compliance Banner */}
       {isLocked && (
         <div
@@ -178,7 +206,7 @@ export default function OwnerBoatList() {
               className={`text-muted-foreground ${loading ? 'animate-spin' : ''}`}
             />
           </Button>
-          {isLocked ? (
+          {hoSoChoDuyet ? null : isLocked ? (
             <Button
               variant="destructive"
               size="action"
