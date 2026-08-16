@@ -9,12 +9,17 @@ import {
   Layers,
   RefreshCw,
   Filter,
+  Lock,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { type BoatStatus } from '@/data/owner-boats';
 import { boatService, type BoatListItem } from '@/services/boatService';
+import {
+  ownerDocumentService,
+  type OwnerDocumentsOverviewResponse,
+} from '@/services/ownerDocumentService';
 import { getBoatTypes, type IBoatType } from '@/services/system-service';
 import BoatCard from './boat-card';
 import BoatTable from './boat-table';
@@ -31,13 +36,19 @@ export default function OwnerBoatList() {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [boats, setBoats] = useState<BoatListItem[]>([]);
   const [boatTypes, setBoatTypes] = useState<IBoatType[]>([]);
+  const [docOverview, setDocOverview] =
+    useState<OwnerDocumentsOverviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchBoats = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await boatService.getOwnerBoats({ pageSize: 100 });
+      const [res, overview] = await Promise.all([
+        boatService.getOwnerBoats({ pageSize: 100 }),
+        ownerDocumentService.getOverview().catch(() => null),
+      ]);
       setBoats(res.items || []);
+      setDocOverview(overview);
     } catch (err) {
       toast.error(
         err instanceof Error ? err.message : 'Không thể tải danh sách tàu',
@@ -62,6 +73,8 @@ export default function OwnerBoatList() {
         console.error('Failed to load boat types:', err);
       });
   }, []);
+
+  const isLocked = Boolean(docOverview?.isLocked);
 
   const filteredBoats = useMemo(
     () =>
@@ -96,7 +109,50 @@ export default function OwnerBoatList() {
   const isFiltered = search || filterStatus !== 'all' || filterType !== 'all';
 
   return (
-    <div className="px-4 py-6 lg:px-8">
+    <div className="px-4 py-6 lg:px-8 space-y-6">
+      {/* Overdue / Compliance Banner */}
+      {isLocked && (
+        <div
+          className={`rounded-2xl p-5 border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm ${
+            docOverview?.isPendingReview
+              ? 'border-blue-500/30 bg-blue-500/10 text-blue-300'
+              : 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className={`p-2.5 rounded-xl shrink-0 ${
+                docOverview?.isPendingReview
+                  ? 'bg-blue-500/20 text-blue-400'
+                  : 'bg-rose-500/20 text-rose-400'
+              }`}
+            >
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="font-bold text-sm text-foreground">
+                {docOverview?.isPendingReview
+                  ? 'Hồ sơ pháp lý đang chờ Ban quản trị phê duyệt'
+                  : 'Chức năng quản lý và đăng ký tàu mới đang bị tạm khóa'}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {docOverview?.isPendingReview
+                  ? 'Bạn đã nộp đầy đủ giấy tờ. Hệ thống sẽ tự động mở khóa quản lý tàu ngay sau khi được Admin phê duyệt.'
+                  : 'Hồ sơ pháp lý của bạn chưa hoàn tất và đã quá thời hạn nộp. Vui lòng tải lên giấy tờ để gửi Admin xét duyệt và mở khóa.'}
+              </p>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            variant={docOverview?.isPendingReview ? 'default' : 'destructive'}
+            className="cursor-pointer shrink-0 rounded-xl font-bold"
+            asChild
+          >
+            <Link to="/owner/documents">Xem hồ sơ giấy tờ &rarr;</Link>
+          </Button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -122,12 +178,24 @@ export default function OwnerBoatList() {
               className={`text-muted-foreground ${loading ? 'animate-spin' : ''}`}
             />
           </Button>
-          <Button variant="cyan" size="action" className="gap-2" asChild>
-            <Link to="/owner/boats/new">
-              <Plus size={16} />
-              {t('ownerBoats.addBoat')}
-            </Link>
-          </Button>
+          {isLocked ? (
+            <Button
+              variant="destructive"
+              size="action"
+              className="gap-2 opacity-80 cursor-not-allowed"
+              disabled
+            >
+              <Lock size={16} />
+              Tạm khóa thêm tàu
+            </Button>
+          ) : (
+            <Button variant="cyan" size="action" className="gap-2" asChild>
+              <Link to="/owner/boats/new">
+                <Plus size={16} />
+                {t('ownerBoats.addBoat')}
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -334,6 +402,7 @@ export default function OwnerBoatList() {
               key={boat.id}
               boat={boat}
               boatTypes={boatTypes}
+              isLocked={isLocked}
               onDelete={handleDelete}
             />
           ))}
@@ -342,6 +411,7 @@ export default function OwnerBoatList() {
         <BoatTable
           boats={filteredBoats}
           boatTypes={boatTypes}
+          isLocked={isLocked}
           onDelete={handleDelete}
         />
       )}

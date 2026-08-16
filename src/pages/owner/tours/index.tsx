@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Map as MapIcon } from 'lucide-react';
+import { Map as MapIcon, Lock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { tourService } from '@/services/tourService';
+import {
+  ownerDocumentService,
+  type OwnerDocumentsOverviewResponse,
+} from '@/services/ownerDocumentService';
 import { toast } from 'sonner';
 import CancelBookingModal from './components/CancelBookingModal';
 import CreateScheduleModal from './components/CreateScheduleModal';
@@ -20,6 +26,8 @@ const OwnerToursPage = () => {
   const [stats, setStats] = useState<any[]>([]);
   const [schedules, setSchedules] = useState<any[]>([]);
   const [recentBookings, setRecentBookings] = useState<any[]>([]);
+  const [docOverview, setDocOverview] =
+    useState<OwnerDocumentsOverviewResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
 
@@ -127,13 +135,16 @@ const OwnerToursPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, schedulesRes, bookingsRes, resourcesRes] =
+        const [statsRes, schedulesRes, bookingsRes, resourcesRes, overviewRes] =
           await Promise.all([
             tourService.getToursDashboardStats(),
             tourService.getToursDashboardSchedules(currentMonth, currentYear),
             tourService.getToursDashboardRecentBookings(),
             tourService.getToursDashboardResources(),
+            ownerDocumentService.getOverview().catch(() => null),
           ]);
+
+        setDocOverview(overviewRes);
 
         const extractData = (res: any) => {
           if (!res) return null;
@@ -183,7 +194,22 @@ const OwnerToursPage = () => {
     fetchData();
   }, [currentMonth, currentYear, t]);
 
+  const isLocked = Boolean(docOverview?.isLocked);
+
   const handleCreateSchedule = async () => {
+    if (isLocked) {
+      if (docOverview?.isPendingReview) {
+        toast.warning(
+          'Hồ sơ pháp lý của bạn đang chờ Ban quản trị xét duyệt. Chức năng tạo lịch trình tour sẽ mở lại sau khi được Admin phê duyệt.',
+        );
+      } else {
+        toast.error(
+          'Tài khoản của bạn đã quá hạn nộp giấy tờ pháp lý. Chức năng tạo lịch trình tour đang tạm khóa!',
+        );
+      }
+      return;
+    }
+
     if (
       !selectedBoatId ||
       !selectedTourId ||
@@ -293,6 +319,50 @@ const OwnerToursPage = () => {
         </div>
       ) : (
         <>
+          {isLocked && (
+            <div
+              className={`rounded-2xl p-5 border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm ${
+                docOverview?.isPendingReview
+                  ? 'border-blue-500/30 bg-blue-500/10 text-blue-300'
+                  : 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`p-2.5 rounded-xl shrink-0 ${
+                    docOverview?.isPendingReview
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : 'bg-rose-500/20 text-rose-400'
+                  }`}
+                >
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-foreground">
+                    {docOverview?.isPendingReview
+                      ? 'Hồ sơ pháp lý đang chờ Ban quản trị phê duyệt'
+                      : 'Chức năng tạo lịch trình tour đang bị tạm khóa'}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {docOverview?.isPendingReview
+                      ? 'Bạn đã nộp đầy đủ giấy tờ. Hệ thống sẽ tự động mở khóa tạo tour ngay sau khi được Admin phê duyệt.'
+                      : 'Hồ sơ pháp lý của bạn chưa hoàn tất và đã quá thời hạn nộp. Vui lòng tải lên giấy tờ để gửi Admin xét duyệt và mở khóa.'}
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant={
+                  docOverview?.isPendingReview ? 'default' : 'destructive'
+                }
+                className="cursor-pointer shrink-0 rounded-xl font-bold"
+                asChild
+              >
+                <Link to="/owner/documents">Xem hồ sơ giấy tờ &rarr;</Link>
+              </Button>
+            </div>
+          )}
+
           <DashboardCharts stats={stats} />
 
           <ScheduleCalendar
@@ -301,8 +371,17 @@ const OwnerToursPage = () => {
             currentMonth={currentMonth}
             currentYear={currentYear}
             viewMode={viewMode}
+            isLocked={isLocked}
             onViewModeChange={setViewMode}
-            onCreateClick={() => setShowCreateModal(true)}
+            onCreateClick={() => {
+              if (isLocked) {
+                toast.error(
+                  'Tài khoản của bạn đã quá hạn nộp giấy tờ pháp lý. Chức năng tạo lịch trình tour đang tạm khóa!',
+                );
+                return;
+              }
+              setShowCreateModal(true);
+            }}
             onPrev={handlePrevMonth}
             onNext={handleNextMonth}
           />

@@ -10,6 +10,9 @@ import {
   FileText,
   ExternalLink,
   ShieldCheck,
+  AlertTriangle,
+  Lock,
+  Clock,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -25,6 +28,10 @@ import {
   type CertificateTypeItem,
   type OwnerCertificateListItem,
 } from '@/services/certificateService';
+import {
+  ownerDocumentService,
+  type OwnerDocumentsOverviewResponse,
+} from '@/services/ownerDocumentService';
 import { useAuth } from '@/hooks/use-auth';
 import ProfitChart from '@/components/owner/ProfitChart';
 import BoatForm from '@/pages/owner/boats/boat-form';
@@ -54,6 +61,8 @@ export default function OwnerDashboard() {
     [],
   );
   const [certTypes, setCertTypes] = useState<CertificateTypeItem[]>([]);
+  const [docOverview, setDocOverview] =
+    useState<OwnerDocumentsOverviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedBoatIdForModal, setSelectedBoatIdForModal] = useState<
     string | null
@@ -70,18 +79,21 @@ export default function OwnerDashboard() {
 
   const refreshDashboardData = async () => {
     try {
-      const [statsRes, boatsRes, certsRes, typesRes] = await Promise.all([
-        boatService.getOwnerStats(),
-        boatService.getOwnerBoats({ pageSize: 8 }),
-        certificateService.getAllForOwner().catch(() => []),
-        certificateService
-          .getTypes('boat')
-          .catch(() => [] as CertificateTypeItem[]),
-      ]);
+      const [statsRes, boatsRes, certsRes, typesRes, overviewRes] =
+        await Promise.all([
+          boatService.getOwnerStats(),
+          boatService.getOwnerBoats({ pageSize: 8 }),
+          certificateService.getAllForOwner().catch(() => []),
+          certificateService
+            .getTypes('boat')
+            .catch(() => [] as CertificateTypeItem[]),
+          ownerDocumentService.getOverview().catch(() => null),
+        ]);
       setStats(statsRes);
       setBoats(boatsRes.items || []);
       setCertificates(certsRes || []);
       setCertTypes(typesRes || []);
+      setDocOverview(overviewRes);
     } catch (error) {
       console.error('Failed to fetch dashboard data', error);
     }
@@ -218,6 +230,75 @@ export default function OwnerDashboard() {
         </div>
       ) : (
         <>
+          {/* Owner Document Compliance & Deadline Alert Banner */}
+          {!docOverview?.isApproved && docOverview && (
+            <div
+              className={`mb-6 p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm transition-all ${
+                docOverview.isPendingReview
+                  ? 'bg-blue-500/10 border-blue-500/30 text-blue-300'
+                  : docOverview.isRejected || docOverview.isExpired
+                    ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                    : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`p-2.5 rounded-xl shrink-0 ${
+                    docOverview.isPendingReview
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : docOverview.isRejected || docOverview.isExpired
+                        ? 'bg-rose-500/20 text-rose-400'
+                        : 'bg-amber-500/20 text-amber-400'
+                  }`}
+                >
+                  {docOverview.isPendingReview ? (
+                    <Clock className="w-5 h-5" />
+                  ) : docOverview.isRejected ? (
+                    <AlertTriangle className="w-5 h-5" />
+                  ) : docOverview.isExpired ? (
+                    <Lock className="w-5 h-5" />
+                  ) : (
+                    <AlertTriangle className="w-5 h-5" />
+                  )}
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-foreground">
+                    {docOverview.isPendingReview
+                      ? 'Hồ sơ pháp lý đang chờ Ban quản trị DDMS xét duyệt'
+                      : docOverview.isRejected
+                        ? 'Hồ sơ pháp lý bị từ chối — Vui lòng cập nhật lại giấy tờ'
+                        : docOverview.isExpired
+                          ? 'Hồ sơ pháp lý đã quá hạn — Quyền tạo tour, quản lý tàu và rút tiền đang tạm khóa'
+                          : `Hạn chót bổ sung giấy tờ pháp lý: Còn ${docOverview.daysRemaining} ngày ${docOverview.hoursRemaining} giờ`}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {docOverview.isPendingReview
+                      ? 'Bạn đã nộp đầy đủ giấy tờ pháp lý. Các quyền thương mại (tạo tour, quản lý tàu, rút tiền) sẽ được tự động mở lại ngay sau khi Ban quản trị phê duyệt.'
+                      : docOverview.isRejected
+                        ? 'Ban quản trị đã từ chối hồ sơ pháp lý của bạn và yêu cầu cập nhật lại giấy tờ. Vui lòng xem lý do và nộp lại.'
+                        : docOverview.isExpired
+                          ? 'Vui lòng tải lên đầy đủ các giấy tờ còn thiếu để gửi Ban quản trị DDMS thẩm định và mở khóa tài khoản.'
+                          : 'Vui lòng tải lên đầy đủ các giấy tờ bắt buộc còn thiếu để đảm bảo hoạt động kinh doanh liên tục.'}
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant={
+                  docOverview.isPendingReview
+                    ? 'default'
+                    : docOverview.isRejected || docOverview.isExpired
+                      ? 'destructive'
+                      : 'default'
+                }
+                className="cursor-pointer shrink-0 rounded-xl font-bold"
+                asChild
+              >
+                <Link to="/owner/documents">Xem hồ sơ giấy tờ &rarr;</Link>
+              </Button>
+            </div>
+          )}
+
           {/* Stats row */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
             {STATS_CARDS.map((s, idx) => (

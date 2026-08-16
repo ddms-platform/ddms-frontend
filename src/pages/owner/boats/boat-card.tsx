@@ -18,10 +18,16 @@ import type { IBoatType } from '@/services/system-service';
 interface BoatCardProps {
   boat: BoatListItem;
   boatTypes?: IBoatType[];
+  isLocked?: boolean;
   onDelete: (id: string) => void;
 }
 
-export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
+export default function BoatCard({
+  boat,
+  boatTypes,
+  isLocked = false,
+  onDelete,
+}: BoatCardProps) {
   const { t, i18n } = useTranslation();
   const hasActiveMaintenance = boat.status === 'maintenance';
   const complianceStatus =
@@ -151,10 +157,17 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
         </div>
 
         <div className="mt-3 flex gap-2">
-          <Button variant="cyan" size="sm" className="flex-1 gap-1.5" asChild>
+          <Button
+            variant={isLocked ? 'outline' : 'cyan'}
+            size="sm"
+            className={`flex-1 gap-1.5 ${isLocked ? 'border-amber-500/30 text-amber-300 hover:bg-amber-500/10' : ''}`}
+            asChild
+          >
             <Link to={`/owner/boats/${boat.id}/edit`}>
-              <Pencil size={13} />
-              {t('ownerBoats.card.edit')}
+              {isLocked ? <Eye size={13} /> : <Pencil size={13} />}
+              {isLocked
+                ? t('ownerBoats.card.viewDetail', 'Chi tiết (Chỉ xem)')
+                : t('ownerBoats.card.edit', 'Chỉnh sửa')}
             </Link>
           </Button>
           <Button
@@ -167,14 +180,26 @@ export default function BoatCard({ boat, boatTypes, onDelete }: BoatCardProps) {
               <Eye size={13} />
             </Link>
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            className="gap-1.5"
-            onClick={() => onDelete(boat.id)}
-          >
-            <Trash2 size={13} />
-          </Button>
+          {isLocked ? (
+            <Button
+              variant="destructive"
+              size="sm"
+              className="gap-1.5 opacity-40 cursor-not-allowed"
+              disabled
+              title="Tạm khóa xóa tàu (Quá hạn hồ sơ)"
+            >
+              <Trash2 size={13} />
+            </Button>
+          ) : (
+            <Button
+              variant="destructive"
+              size="sm"
+              className="gap-1.5"
+              onClick={() => onDelete(boat.id)}
+            >
+              <Trash2 size={13} />
+            </Button>
+          )}
         </div>
       </div>
     </div>

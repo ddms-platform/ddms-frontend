@@ -1,4 +1,4 @@
-import { Calendar, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Plus, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 type ViewMode = 'month' | 'week' | 'day';
@@ -9,6 +9,7 @@ interface ScheduleCalendarProps {
   currentMonth: number;
   currentYear: number;
   viewMode: ViewMode;
+  isLocked?: boolean;
   onViewModeChange: (mode: ViewMode) => void;
   onCreateClick: () => void;
   onPrev?: () => void;
@@ -21,6 +22,7 @@ const ScheduleCalendar = ({
   currentMonth,
   currentYear,
   viewMode,
+  isLocked = false,
   onViewModeChange,
   onCreateClick,
   onPrev,
@@ -262,10 +264,17 @@ const ScheduleCalendar = ({
           </div>
           <button
             onClick={onCreateClick}
-            className="flex items-center gap-2 bg-ddms-secondary hover:bg-ddms-secondary/90 text-white px-4 py-1.5 rounded-md font-bold transition-colors cursor-pointer shadow-md shadow-ddms-secondary/15"
+            disabled={isLocked}
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-md font-bold transition-all ${
+              isLocked
+                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30 cursor-not-allowed opacity-80'
+                : 'bg-ddms-secondary hover:bg-ddms-secondary/90 text-white cursor-pointer shadow-md shadow-ddms-secondary/15'
+            }`}
           >
-            <Plus size={18} />
-            {t('ownerTours.calendar.createTourBtn')}
+            {isLocked ? <Lock size={16} /> : <Plus size={18} />}
+            {isLocked
+              ? 'Tạm khóa tạo tour'
+              : t('ownerTours.calendar.createTourBtn')}
           </button>
         </div>
       </div>

@@ -11,11 +11,39 @@ export interface OwnerDocumentListItem {
   updatedAt: string;
 }
 
+export interface OwnerDocumentsOverviewResponse {
+  documents: OwnerDocumentListItem[];
+  ownerSince?: string | null;
+  uploadDeadline?: string | null;
+  isExpired: boolean;
+  daysRemaining: number;
+  hoursRemaining: number;
+  isCompleted: boolean;
+  isPendingReview?: boolean;
+  isApproved?: boolean;
+  isRejected?: boolean;
+  isLocked?: boolean;
+  entityType: string;
+  requiredDocumentTypes: string[];
+  missingRequiredTypes: string[];
+}
+
 export const ownerDocumentService = {
+  getOverview: () =>
+    api
+      .get<ApiResponse<OwnerDocumentsOverviewResponse>>('/owner/documents')
+      .then((r) => r.data.result),
+
   list: () =>
     api
-      .get<ApiResponse<OwnerDocumentListItem[]>>('/owner/documents')
-      .then((r) => r.data.result),
+      .get<
+        ApiResponse<OwnerDocumentsOverviewResponse | OwnerDocumentListItem[]>
+      >('/owner/documents')
+      .then((r) => {
+        const res = r.data.result;
+        if (Array.isArray(res)) return res;
+        return res?.documents || [];
+      }),
 
   uploadOrReplace: (documentType: string, file: File, expiryDate?: string) => {
     const formData = new FormData();
