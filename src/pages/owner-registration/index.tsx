@@ -38,6 +38,7 @@ const buildEmptyVessel = (
   Type: defaultType,
   Length: '',
   Beam: '',
+  MaxPassengers: '',
   RegistrationNumber: '',
   MooringType: 'Floating',
   ExpectedDockingDate: '',
@@ -233,6 +234,10 @@ export default function OwnerRegistrationPage() {
         formData.append(`Vessels[${index}].Type`, vessel.Type);
         formData.append(`Vessels[${index}].Length`, vessel.Length);
         formData.append(`Vessels[${index}].Beam`, vessel.Beam);
+        formData.append(
+          `Vessels[${index}].MaxPassengers`,
+          vessel.MaxPassengers,
+        );
         formData.append(
           `Vessels[${index}].RegistrationNumber`,
           vessel.RegistrationNumber,
