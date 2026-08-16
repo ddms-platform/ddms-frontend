@@ -7,8 +7,13 @@ interface OwnerRouteProps {
 }
 
 /**
- * Route guard that checks both authentication and owner role.
- * Redirects to sign-in if not authenticated, or home if not an owner.
+ * Route guard cho khu vực chủ thuyền.
+ *
+ * Vai trò `owner` chỉ được cấp khi cảng vụ duyệt hồ sơ. Nhưng thuyền đã được
+ * tạo ngay từ lúc nộp hồ sơ, nên nếu chỉ xét vai trò thì trong khoảng chờ duyệt
+ * chủ thuyền bị đá về trang chủ và tưởng thuyền đã khai bị mất — rồi đi khai
+ * lại một chiếc nữa. Vì vậy cho vào luôn khi hồ sơ đang chờ duyệt; server chặn
+ * phần ghi (xem OwnerAreaHandler phía backend).
  */
 export default function OwnerRoute({
   redirectPath = routeName.signIn,
@@ -21,7 +26,10 @@ export default function OwnerRoute({
   }
 
   const isOwner = user?.roles.includes('owner') ?? false;
-  if (!isOwner) {
+  const dangChoDuyet =
+    user?.hasOwnerProfile === true && user?.ownerProfileStatus === 'pending';
+
+  if (!isOwner && !dangChoDuyet) {
     return <Navigate to={routeName.home} replace />;
   }
 
