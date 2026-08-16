@@ -179,6 +179,12 @@ export default function BoatForm({
                     imageUrl: c.imageUrl ?? '',
                   }))
                 : empty.combos;
+            const tourImageUrls =
+              s.imageUrls && s.imageUrls.length > 0
+                ? s.imageUrls.filter(Boolean)
+                : s.imageUrl
+                  ? [s.imageUrl]
+                  : [];
             return {
               ...empty,
               id: s.id,
@@ -190,6 +196,7 @@ export default function BoatForm({
               faqs,
               rooms,
               combos,
+              tourImageUrls,
             };
           }),
         );
@@ -339,6 +346,7 @@ export default function BoatForm({
             srv.serviceType === 'speedboat' && srv.pricePerDay
               ? parseFloat(srv.pricePerDay)
               : undefined,
+          imageUrls: (srv.tourImageUrls ?? []).filter(Boolean),
         }));
 
         await Promise.all(

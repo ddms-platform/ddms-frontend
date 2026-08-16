@@ -160,6 +160,7 @@ export async function parseServicesExcel(
       faqs: [],
       equipments: toStr(row.equipments),
       pricePerDay: toStr(row.pricePerDay),
+      tourImageUrls: [],
     };
     services.push(svc);
     byName.set(name.toLowerCase(), svc);

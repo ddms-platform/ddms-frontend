@@ -24,6 +24,7 @@ import {
   parseServicesZip,
 } from './service-tab/excel-import';
 import AiContentStudio from './service-tab/AiContentStudio';
+import TourImagesSection from './service-tab/TourImagesSection';
 import type { FaqItem } from '@/services/aiService';
 
 export interface ComboForm {
@@ -63,6 +64,7 @@ export interface ServiceFormState {
   faqs: FaqForm[];
   equipments: string;
   pricePerDay: string;
+  tourImageUrls: string[];
 }
 
 const NEW_SERVICE_ID_PREFIX = 'new_';
@@ -84,6 +86,7 @@ export const getEmptyService = (): ServiceFormState => ({
   faqs: [{ question: '', answer: '' }],
   equipments: '',
   pricePerDay: '',
+  tourImageUrls: [],
 });
 
 interface ServiceTabProps {
@@ -300,6 +303,45 @@ export default function ServiceTab({
       console.error(err);
       toast.error('Có lỗi xảy ra khi tải ảnh.');
     }
+  };
+
+  const handleUploadTourImage = async (serviceId: string, file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await api.post('/owner/services/upload-image', formData);
+      const imageUrl = res.data?.result || res.data?.imageUrl || res.data?.url;
+      if (!imageUrl) {
+        toast.error('Lỗi khi tải ảnh tour.');
+        return;
+      }
+      onChange(
+        services.map((s) =>
+          s.id === serviceId
+            ? { ...s, tourImageUrls: [...(s.tourImageUrls ?? []), imageUrl] }
+            : s,
+        ),
+      );
+      toast.success('Tải ảnh tour thành công!');
+    } catch (err) {
+      console.error(err);
+      toast.error('Có lỗi xảy ra khi tải ảnh tour.');
+    }
+  };
+
+  const handleRemoveTourImage = (serviceId: string, index: number) => {
+    onChange(
+      services.map((s) =>
+        s.id === serviceId
+          ? {
+              ...s,
+              tourImageUrls: (s.tourImageUrls ?? []).filter(
+                (_, i) => i !== index,
+              ),
+            }
+          : s,
+      ),
+    );
   };
 
   const serviceHandlers: ServiceHandlers = {
@@ -535,6 +577,14 @@ export default function ServiceTab({
                 }
               />
             </div>
+          </div>
+
+          <div className="mb-7">
+            <TourImagesSection
+              imageUrls={srv.tourImageUrls ?? []}
+              onUpload={(file) => handleUploadTourImage(srv.id, file)}
+              onRemove={(index) => handleRemoveTourImage(srv.id, index)}
+            />
           </div>
 
           {renderDynamicFields(srv)}

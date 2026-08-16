@@ -73,6 +73,7 @@ export interface BoatServiceItem {
   price: number;
   description?: string;
   imageUrl?: string;
+  imageUrls?: string[];
   serviceType?: string;
   isActive: boolean;
   createdAt: string;
