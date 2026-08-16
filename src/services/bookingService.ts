@@ -163,21 +163,17 @@ export const bookingService = {
       .then((r) => r.data.result),
 
   /**
-   * CHỈ DÙNG KHI DEV/DEMO. Route này chỉ tồn tại khi backend chạy với
-   * ASPNETCORE_ENVIRONMENT=Development — gọi trên production sẽ nhận 404.
+   * CHỈ DÙNG KHI DEMO: đánh dấu đơn đã trả tiền mà không qua PayOS.
+   *
+   * Không tự chặn ở đây — quyền do server quyết: trên production chỉ tài khoản
+   * admin gọi được, còn lại nhận lỗi. Chặn ở frontend chỉ là giấu nút.
    */
-  simulatePayment: (bookingId: string) => {
-    if (!import.meta.env.DEV) {
-      return Promise.reject(
-        new Error('Giả lập thanh toán chỉ dùng ở môi trường phát triển.'),
-      );
-    }
-    return api
+  simulatePayment: (bookingId: string) =>
+    api
       .post<
         ApiResponse<BookingPaymentStatus>
-      >(`/dev/bookings/${bookingId}/simulate-payment`)
-      .then((r) => r.data.result);
-  },
+      >(`/demo/bookings/${bookingId}/simulate-payment`)
+      .then((r) => r.data.result),
 
   cancelBooking: (bookingId: string) =>
     api
