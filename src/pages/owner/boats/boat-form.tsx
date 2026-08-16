@@ -9,6 +9,7 @@ import {
   Wrench,
   Loader2,
   FileText,
+  Lock,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,10 @@ import {
   type Boat,
   type BoatMaintenance,
 } from '@/services/boatService';
+import {
+  ownerDocumentService,
+  type OwnerDocumentsOverviewResponse,
+} from '@/services/ownerDocumentService';
 import { routeName } from '@/constants/route-name';
 import { getBoatTypes, type IBoatType } from '@/services/system-service';
 import ServiceTab, {
@@ -51,6 +56,8 @@ export default function BoatForm({
 
   const [activeTab, setActiveTab] = useState<Tab>(initialTab ?? 'basic');
   const [boat, setBoat] = useState<Boat | null>(null);
+  const [docOverview, setDocOverview] =
+    useState<OwnerDocumentsOverviewResponse | null>(null);
   const [loadingBoat, setLoadingBoat] = useState(isEdit);
   const [saving, setSaving] = useState(false);
 
@@ -216,6 +223,15 @@ export default function BoatForm({
       });
   }, [isEdit]);
 
+  useEffect(() => {
+    ownerDocumentService
+      .getOverview()
+      .then(setDocOverview)
+      .catch(() => null);
+  }, []);
+
+  const isOverdueAndIncomplete = Boolean(docOverview?.isLocked);
+
   const validate = () => {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = 'Tên tàu không được để trống';
@@ -236,6 +252,20 @@ export default function BoatForm({
 
   const handleSave = async () => {
     if (isSavingRef.current) return;
+    if (isOverdueAndIncomplete) {
+      if (docOverview?.isPendingReview) {
+        toast.warning(
+          'Hồ sơ pháp lý của bạn đang chờ Ban quản trị xét duyệt. Không thể lưu thay đổi lúc này!',
+        );
+      } else {
+        toast.error(
+          isEdit
+            ? 'Tài khoản của bạn đã quá hạn nộp giấy tờ pháp lý. Không thể chỉnh sửa thông tin tàu!'
+            : 'Tài khoản của bạn đã quá hạn nộp giấy tờ pháp lý. Không thể đăng ký thêm tàu mới!',
+        );
+      }
+      return;
+    }
     if (!validate()) {
       setActiveTab('basic');
       return;
@@ -394,6 +424,51 @@ export default function BoatForm({
 
   return (
     <div className="px-4 py-6 lg:px-8 pb-24">
+      {/* Overdue / Compliance Banner */}
+      {isOverdueAndIncomplete && (
+        <div
+          className={`mb-6 rounded-2xl p-5 border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm ${
+            docOverview?.isPendingReview
+              ? 'border-blue-500/30 bg-blue-500/10 text-blue-300'
+              : 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className={`p-2.5 rounded-xl shrink-0 ${
+                docOverview?.isPendingReview
+                  ? 'bg-blue-500/20 text-blue-400'
+                  : 'bg-rose-500/20 text-rose-400'
+              }`}
+            >
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="font-bold text-sm text-foreground">
+                {docOverview?.isPendingReview
+                  ? 'Hồ sơ pháp lý đang chờ Ban quản trị phê duyệt'
+                  : isEdit
+                    ? 'Chức năng chỉnh sửa tàu đang ở chế độ Chỉ đọc (Read-only)'
+                    : 'Chức năng đăng ký tàu mới đang bị tạm khóa'}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {docOverview?.isPendingReview
+                  ? 'Bạn đã nộp đầy đủ giấy tờ. Hệ thống sẽ tự động mở khóa chỉnh sửa tàu ngay sau khi được Admin phê duyệt.'
+                  : 'Hồ sơ pháp lý của bạn chưa hoàn tất và đã quá thời hạn nộp. Vui lòng tải lên giấy tờ để gửi Admin xét duyệt và mở khóa.'}
+              </p>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            variant={docOverview?.isPendingReview ? 'default' : 'destructive'}
+            className="cursor-pointer shrink-0 rounded-xl font-bold"
+            asChild
+          >
+            <Link to="/owner/documents">Xem hồ sơ giấy tờ &rarr;</Link>
+          </Button>
+        </div>
+      )}
+
       {/* Header */}
       <div
         className={`flex items-center justify-between ${onClose ? 'pr-12 sm:pr-16' : ''}`}
@@ -421,21 +496,34 @@ export default function BoatForm({
             </p>
           </div>
         </div>
-        <Button
-          type="button"
-          variant="cyan"
-          size="action"
-          className="gap-2"
-          onClick={handleSave}
-          disabled={saving}
-        >
-          {saving ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <Save size={16} />
-          )}
-          {saving ? 'Đang lưu...' : 'Lưu tất cả'}
-        </Button>
+        {isOverdueAndIncomplete ? (
+          <Button
+            type="button"
+            variant="destructive"
+            size="action"
+            className="gap-2 opacity-80 cursor-not-allowed"
+            disabled
+          >
+            <Lock size={16} />
+            {isEdit ? 'Tạm khóa lưu' : 'Tạm khóa thêm tàu'}
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant="cyan"
+            size="action"
+            className="gap-2"
+            onClick={handleSave}
+            disabled={saving}
+          >
+            {saving ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Save size={16} />
+            )}
+            {saving ? 'Đang lưu...' : 'Lưu tất cả'}
+          </Button>
+        )}
       </div>
 
       {/* Tabs */}

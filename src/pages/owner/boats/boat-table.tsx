@@ -9,12 +9,14 @@ import type { IBoatType } from '@/services/system-service';
 interface BoatTableProps {
   boats: BoatListItem[];
   boatTypes?: IBoatType[];
+  isLocked?: boolean;
   onDelete: (id: string) => void;
 }
 
 export default function BoatTable({
   boats,
   boatTypes,
+  isLocked = false,
   onDelete,
 }: BoatTableProps) {
   const { t, i18n } = useTranslation();
@@ -132,8 +134,14 @@ export default function BoatTable({
               <td className="px-4 py-3">
                 <div className="flex items-center justify-end gap-1">
                   <Button variant="ghost" size="icon-sm" asChild>
-                    <Link to={`/owner/boats/${boat.id}/edit`}>
-                      <Pencil size={14} style={{ color: '#ecf0ff' }} />
+                    <Link
+                      to={`/owner/boats/${boat.id}/edit`}
+                      title={isLocked ? 'Chi tiết (Chỉ xem)' : 'Chỉnh sửa'}
+                    >
+                      <Pencil
+                        size={14}
+                        style={{ color: isLocked ? '#F59E0B' : '#ecf0ff' }}
+                      />
                     </Link>
                   </Button>
                   <Button variant="ghost" size="icon-sm" asChild>
@@ -141,13 +149,25 @@ export default function BoatTable({
                       <Eye size={14} style={{ color: '#ecf0ff' }} />
                     </Link>
                   </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={() => onDelete(boat.id)}
-                  >
-                    <Trash2 size={14} style={{ color: '#EF4444' }} />
-                  </Button>
+                  {isLocked ? (
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      disabled
+                      className="opacity-30 cursor-not-allowed"
+                      title="Tạm khóa xóa tàu (Quá hạn hồ sơ)"
+                    >
+                      <Trash2 size={14} style={{ color: '#EF4444' }} />
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => onDelete(boat.id)}
+                    >
+                      <Trash2 size={14} style={{ color: '#EF4444' }} />
+                    </Button>
+                  )}
                 </div>
               </td>
             </tr>

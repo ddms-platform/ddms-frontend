@@ -6,6 +6,10 @@ import {
   walletService,
   type WalletWithdrawalResponse,
 } from '@/services/walletService';
+import {
+  ownerDocumentService,
+  type OwnerDocumentsOverviewResponse,
+} from '@/services/ownerDocumentService';
 import { toast } from 'sonner';
 import BalanceCard from './components/BalanceCard';
 import WithdrawalForm from './components/WithdrawalForm';
@@ -17,6 +21,8 @@ export default function WalletPage() {
   const [withdrawals, setWithdrawals] = useState<WalletWithdrawalResponse[]>(
     [],
   );
+  const [docOverview, setDocOverview] =
+    useState<OwnerDocumentsOverviewResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -29,12 +35,14 @@ export default function WalletPage() {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const [balanceData, withdrawalsData] = await Promise.all([
+      const [balanceData, withdrawalsData, overviewData] = await Promise.all([
         walletService.getBalance(),
         walletService.getWithdrawals(),
+        ownerDocumentService.getOverview().catch(() => null),
       ]);
       setBalance(balanceData.balance);
       setWithdrawals(withdrawalsData);
+      setDocOverview(overviewData);
     } catch (e: any) {
       console.error('Failed to load wallet data:', e);
       toast.error(t('wallet.form.validation.fetchError'));
@@ -131,6 +139,13 @@ export default function WalletPage() {
             accountName={accountName}
             formError={formError}
             isSubmitting={isSubmitting}
+            isLocked={Boolean(docOverview?.isLocked)}
+            isPendingReview={Boolean(docOverview?.isPendingReview)}
+            lockReason={
+              docOverview?.isPendingReview
+                ? 'Hồ sơ pháp lý của bạn đã nộp đầy đủ và đang chờ Ban quản trị DDMS xét duyệt. Chức năng rút tiền sẽ tự động mở lại ngay sau khi được Admin phê duyệt.'
+                : 'Chức năng rút tiền tạm khóa do hồ sơ pháp lý của bạn chưa hoàn tất và đã quá thời hạn nộp. Vui lòng tải lên đầy đủ giấy tờ để gửi Ban quản trị xét duyệt và mở khóa.'
+            }
             onAmountChange={setAmount}
             onBankNameChange={setBankName}
             onAccountNumberChange={setAccountNumber}

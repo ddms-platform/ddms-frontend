@@ -12,12 +12,13 @@ export type CertificateScope = 'boat' | 'owner';
 export type OwnerEntityType = 'individual' | 'business' | 'cooperative';
 
 export interface CertificateTypeItem {
-  id: number;
+  id?: number;
   code: string;
   nameVi: string;
   nameEn: string;
+  description?: string;
   scope?: CertificateScope | string;
-  sortOrder: number;
+  sortOrder?: number;
   isActive: boolean;
 }
 
@@ -121,11 +122,9 @@ export const certificateService = {
     formData.append('file', file);
     formData.append('expiryDate', expiryDate);
     return api
-      .post<ApiResponse<Certificate>>(
-        `/owner/boats/${boatId}/certificates`,
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } },
-      )
+      .post<
+        ApiResponse<Certificate>
+      >(`/owner/boats/${boatId}/certificates`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((r) => r.data.result);
   },
 
@@ -134,11 +133,9 @@ export const certificateService = {
     formData.append('file', file);
     formData.append('expiryDate', expiryDate);
     return api
-      .post<ApiResponse<Certificate>>(
-        `/owner/boats/${boatId}/certificates/${certId}/renew`,
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } },
-      )
+      .post<
+        ApiResponse<Certificate>
+      >(`/owner/boats/${boatId}/certificates/${certId}/renew`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then((r) => r.data.result);
   },
 };
