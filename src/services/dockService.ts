@@ -8,6 +8,8 @@ export interface DockSchedule {
   boatId: string;
   boatName?: string;
   scheduleId?: string;
+  /** Khoang neo cảng vụ đã gán, ví dụ "A12". Rỗng khi chưa gán. */
+  berthCode?: string | null;
   startTime: string;
   endTime: string;
   createdAt: string;
