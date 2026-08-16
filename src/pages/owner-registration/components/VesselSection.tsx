@@ -7,7 +7,6 @@ import {
   Plus,
   Trash2,
   Info,
-  Sparkles,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import FileUploadBox from './FileUploadBox';
@@ -22,7 +21,6 @@ import {
   getSuggestedVesselSuffixes,
   getVesselNamingExample,
 } from '@/lib/vessel-naming';
-import AiVesselNameModal from '@/components/ai/AiVesselNameModal';
 import type { IBoatType } from '@/services/system-service';
 import type {
   CertificateFormItem,
@@ -118,7 +116,6 @@ const VesselSection = ({
   ];
 
   const [showNamingGuide, setShowNamingGuide] = useState(false);
-  const [showAiModal, setShowAiModal] = useState(false);
   const suggestedSuffixes = getSuggestedVesselSuffixes(vessel.Type);
   const hasInvalidChars = hasInvalidVesselChars(vessel.Name);
 
@@ -166,23 +163,10 @@ const VesselSection = ({
             <label className="text-xs font-medium text-muted-foreground">
               {t('ownerRegistration.vessel.name')} *
             </label>
+            {/* Không gợi ý tên ở đây: tên thuyền đã được đăng ký trên giấy tờ
+                trước khi chủ thuyền vào khai, phải nhập đúng tên đó thì hồ sơ
+                mới khớp với giấy đăng ký. */}
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShowAiModal(true)}
-                className="flex items-center gap-1 rounded-md bg-linear-to-r from-ddms-secondary/20 to-blue-500/20 px-2 py-0.5 text-[11px] font-semibold text-ddms-secondary hover:from-ddms-secondary/30 hover:to-blue-500/30 transition-all cursor-pointer select-none active:scale-95 border border-ddms-secondary/30"
-              >
-                <Sparkles
-                  size={12}
-                  className="animate-pulse text-ddms-secondary"
-                />
-                <span>
-                  {t(
-                    'ownerRegistration.vessel.aiSuggestBtn',
-                    'AI Gợi ý tên ✨',
-                  )}
-                </span>
-              </button>
               <button
                 type="button"
                 onClick={() => setShowNamingGuide(!showNamingGuide)}
@@ -464,15 +448,6 @@ const VesselSection = ({
           ))}
         </div>
       </SubSection>
-
-      <AiVesselNameModal
-        isOpen={showAiModal}
-        onClose={() => setShowAiModal(false)}
-        vesselType={vessel.Type}
-        vesselTypeName={boatTypes.find((bt) => bt.code === vessel.Type)?.nameVi}
-        currentName={vessel.Name}
-        onSelectName={(name) => onChange('Name', name)}
-      />
     </SectionCard>
   );
 };
