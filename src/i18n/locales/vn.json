@@ -149,6 +149,10 @@
       "successRefunded": "Đã hủy đặt tour thành công. Bạn được hoàn lại {{price}} về ví!",
       "successNoRefund": "Đã hủy đặt tour thành công. (Không hoàn tiền do sát ngày khởi hành)",
       "error": "Có lỗi xảy ra khi hủy đặt tour."
+    },
+    "gatewayReturn": {
+      "paid": "Thanh toán thành công! Đơn của bạn đã được xác nhận.",
+      "pending": "Chưa nhận được tiền. Nếu bạn vừa chuyển khoản, vui lòng đợi một lát rồi bấm làm mới."
     }
   },
   "common": {

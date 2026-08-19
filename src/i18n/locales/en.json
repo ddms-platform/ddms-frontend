@@ -149,6 +149,10 @@
       "successRefunded": "Cancelled booking successfully. You received a refund of {{price}} to your wallet!",
       "successNoRefund": "Cancelled booking successfully. (No refund due to close departure date)",
       "error": "An error occurred while cancelling the booking."
+    },
+    "gatewayReturn": {
+      "paid": "Payment received. Your booking is confirmed.",
+      "pending": "Payment not received yet. If you have just paid, wait a moment and hit refresh."
     }
   },
   "common": {
