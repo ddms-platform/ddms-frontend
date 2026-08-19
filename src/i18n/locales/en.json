@@ -141,6 +141,7 @@
     "cancelModal": {
       "title": "Confirm Booking Cancellation",
       "refundEligible": "Are you sure you want to cancel this booking? Your tour will be cancelled and you will receive a 100% refund of {{price}} to your wallet because the cancellation is more than 2 days (48 hours) before departure.",
+      "unpaid": "Are you sure you want to cancel this booking? Nothing has been paid, so no refund is involved. The held seats are released immediately.",
       "noRefund": "Are you sure you want to cancel this booking? Note: You will NOT RECEIVE A REFUND because the cancellation is less than 2 days (48 hours) before departure.",
       "closeBtn": "Close",
       "confirmBtn": "Confirm Cancel",

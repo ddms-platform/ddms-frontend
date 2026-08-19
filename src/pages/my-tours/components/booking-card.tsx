@@ -10,7 +10,11 @@ import { toast } from 'sonner';
 import CheckInQr from './check-in-qr';
 
 export type BookingStatus =
-  'PENDING' | 'UPCOMING' | 'CHECKED_IN' | 'COMPLETED' | 'CANCELLED';
+  | 'PENDING'
+  | 'UPCOMING'
+  | 'CHECKED_IN'
+  | 'COMPLETED'
+  | 'CANCELLED';
 export type BookingDisplayStatus = BookingStatus | 'CONFIRM_REQUIRED';
 
 export interface Booking {
@@ -301,8 +305,13 @@ export default function BookingCard({
         </div>
         <div className="flex gap-2">
           {displayStatus === 'CONFIRM_REQUIRED' && (
-            <Button variant="secondary" size="action" disabled>
-              {t('dashboard.status.CONFIRM_REQUIRED', 'Xác nhận')}
+            <Button
+              variant="outline"
+              size="action"
+              className="text-foreground border-foreground/30 hover:bg-foreground/5"
+              onClick={() => setIsCancelModalOpen(true)}
+            >
+              {t('dashboard.cancelBooking')}
             </Button>
           )}
           {displayStatus === 'UPCOMING' && (
@@ -352,12 +361,12 @@ export default function BookingCard({
       <div className="hidden shrink-0 flex-col justify-end sm:flex sm:min-w-30 gap-2">
         {displayStatus === 'CONFIRM_REQUIRED' && (
           <Button
-            variant="secondary"
+            variant="outline"
             size="action"
-            className="w-full rounded-xl"
-            disabled
+            className="w-full rounded-xl text-foreground border-foreground/30 hover:bg-foreground/5"
+            onClick={() => setIsCancelModalOpen(true)}
           >
-            {t('dashboard.status.CONFIRM_REQUIRED', 'Xác nhận')}
+            {t('dashboard.cancelBooking')}
           </Button>
         )}
         {displayStatus === 'UPCOMING' && (
@@ -413,7 +422,10 @@ export default function BookingCard({
               {t('dashboard.cancelModal.title')}
             </h3>
             <div className="text-sm leading-relaxed mb-6 text-muted-foreground">
-              {eligibleForRefund ? (
+              {/* Đơn chưa thanh toán thì không có gì để hoàn — nói chuyện hoàn tiền chỉ làm khách hoang mang. */}
+              {displayStatus === 'CONFIRM_REQUIRED' ? (
+                <p>{t('dashboard.cancelModal.unpaid')}</p>
+              ) : eligibleForRefund ? (
                 <p>
                   {t('dashboard.cancelModal.refundEligible', {
                     price: formatPrice(booking.totalPrice),

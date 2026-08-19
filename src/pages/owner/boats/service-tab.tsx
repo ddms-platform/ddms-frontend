@@ -56,6 +56,10 @@ export interface ServiceFormState {
   serviceType: string;
   name: string;
   basePrice: string;
+  /** % giá trẻ 5–11 tuổi phải trả. Rỗng = dùng mặc định hệ thống. */
+  childPricePercent: string;
+  /** % giá trẻ dưới 5 tuổi phải trả. */
+  infantPricePercent: string;
   description: string;
   route: string;
   routes: RouteForm[];
@@ -78,6 +82,8 @@ export const getEmptyService = (): ServiceFormState => ({
   serviceType: 'cruise',
   name: '',
   basePrice: '',
+  childPricePercent: '50',
+  infantPricePercent: '0',
   description: '',
   route: '',
   routes: [{ name: '', startPoint: '', endPoint: '', description: '' }],
@@ -559,6 +565,38 @@ export default function ServiceTab({
                   value={srv.basePrice}
                   onChange={(e) =>
                     updateService(srv.id, 'basePrice', e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <label className="text-base font-medium text-muted-foreground">
+                  Trẻ em 5–11 tuổi trả (% giá vé)
+                </label>
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  placeholder="50"
+                  className="h-11 bg-ddms-bg-main border-border mt-1.5 text-sm text-foreground"
+                  value={srv.childPricePercent}
+                  onChange={(e) =>
+                    updateService(srv.id, 'childPricePercent', e.target.value)
+                  }
+                />
+              </div>
+              <div>
+                <label className="text-base font-medium text-muted-foreground">
+                  Em bé dưới 5 tuổi trả (% giá vé)
+                </label>
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  placeholder="0"
+                  className="h-11 bg-ddms-bg-main border-border mt-1.5 text-sm text-foreground"
+                  value={srv.infantPricePercent}
+                  onChange={(e) =>
+                    updateService(srv.id, 'infantPricePercent', e.target.value)
                   }
                 />
               </div>

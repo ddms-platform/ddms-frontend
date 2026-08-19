@@ -71,6 +71,10 @@ export interface TourItemResponse {
   id: string;
   name: string;
   price: number;
+  /** % giá tour trẻ 5–11 tuổi phải trả. Chỉ để hiển thị — giá thật do server chốt. */
+  childPricePercent?: number;
+  /** % giá tour trẻ dưới 5 tuổi phải trả. */
+  infantPricePercent?: number;
   description?: string;
   durationMinutes: number;
   location?: string;

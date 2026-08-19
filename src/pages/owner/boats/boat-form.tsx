@@ -190,6 +190,8 @@ export default function BoatForm({
               id: s.id,
               name: s.name,
               basePrice: String(s.price || 0),
+              childPricePercent: String(s.childPricePercent ?? 50),
+              infantPricePercent: String(s.infantPricePercent ?? 0),
               description: s.description || '',
               serviceType: s.serviceType || 'cruise',
               routes,
@@ -314,6 +316,15 @@ export default function BoatForm({
           serviceType: srv.serviceType,
           name: srv.name,
           basePrice: parseFloat(srv.basePrice || '0'),
+          // Để trống thì gửi undefined để server giữ nguyên giá trị cũ, không ghi đè thành 0.
+          childPricePercent:
+            srv.childPricePercent.trim() === ''
+              ? undefined
+              : parseFloat(srv.childPricePercent),
+          infantPricePercent:
+            srv.infantPricePercent.trim() === ''
+              ? undefined
+              : parseFloat(srv.infantPricePercent),
           description: srv.description,
           route: srv.serviceType === 'cruise' ? srv.route : undefined,
           routes:
