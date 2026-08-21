@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Briefcase, RefreshCw } from 'lucide-react';
 import { routeName } from '@/constants/route-name';
 import { bookingService } from '@/services/bookingService';
@@ -10,6 +10,7 @@ import BookingCard, {
   type BookingStatus,
 } from './components/booking-card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
 
 type TabType = 'ALL' | BookingStatus;
 
@@ -19,6 +20,7 @@ export default function DashboardPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const fetchBookings = async () => {
     setIsLoading(true);
@@ -40,6 +42,41 @@ export default function DashboardPage() {
     }, 0);
     return () => window.clearTimeout(timer);
   }, []);
+
+  // PayOS đá khách về đây kèm ?bookingId=... sau khi trả tiền xong. Webhook có thể
+  // tới chậm hoặc rớt, nên hỏi thẳng server đối chiếu lại thay vì để khách nhìn
+  // đơn vẫn "chờ thanh toán" rồi hoang mang trả lần hai.
+  const bookingIdFromGateway = searchParams.get('bookingId');
+  useEffect(() => {
+    if (!bookingIdFromGateway) return;
+
+    let active = true;
+    const confirmPayment = async () => {
+      try {
+        const status =
+          await bookingService.getPaymentStatus(bookingIdFromGateway);
+        if (!active) return;
+
+        if (status.paid) {
+          toast.success(t('dashboard.gatewayReturn.paid'));
+          await fetchBookings();
+        } else if (status.paymentStatus === 'pending') {
+          toast.info(t('dashboard.gatewayReturn.pending'));
+        }
+      } catch (e) {
+        // Không chặn màn hình: danh sách vẫn tải bình thường, khách bấm làm mới được.
+        console.error('Failed to sync payment status from gateway return:', e);
+      } finally {
+        // Gỡ query khỏi URL để F5 không hỏi lại và không bắn toast lần nữa.
+        if (active) setSearchParams({}, { replace: true });
+      }
+    };
+
+    void confirmPayment();
+    return () => {
+      active = false;
+    };
+  }, [bookingIdFromGateway]);
 
   const filteredBookings = bookings.filter((booking) => {
     if (activeTab === 'ALL') return true;
