@@ -21,6 +21,7 @@ import StepDateTime from './components/step-date-time';
 import StepViewRooms from './components/step-view-rooms';
 import StepServices from './components/step-services';
 import StepGuests from './components/step-guests';
+import type { PartyState } from './components/step-guests';
 import StepConfirm from './components/step-confirm';
 import BookingSuccess from './components/booking-success';
 
@@ -70,7 +71,13 @@ export default function BookingPage() {
     string | null
   >(null);
   const [isAvailabilityLoading, setIsAvailabilityLoading] = useState(false);
-  const [guests, setGuests] = useState(1);
+  const [party, setParty] = useState<PartyState>({
+    adults: 1,
+    children: 0,
+    infants: 0,
+  });
+  // Giữ `guests` là giá trị dẫn xuất để các bước còn lại không phải biết tới hạng vé.
+  const guests = party.adults + party.children + party.infants;
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -306,7 +313,14 @@ export default function BookingPage() {
   const hasServices = tourServices.length > 0;
 
   const basePrice = tour ? tour.price : 0;
-  const tourPrice = basePrice * guests;
+  const childPricePercent = tour?.childPricePercent ?? 50;
+  const infantPricePercent = tour?.infantPricePercent ?? 0;
+  // Làm tròn từng dòng, không làm tròn tổng — giống hệt BookingPricingService,
+  // để số khách nhìn thấy khớp số server chốt.
+  const tourPrice =
+    Math.round(basePrice * party.adults) +
+    Math.round((basePrice * party.children * childPricePercent) / 100) +
+    Math.round((basePrice * party.infants * infantPricePercent) / 100);
   const roomPrice = selectedRoom ? selectedRoom.price : 0;
   const servicePrice = selectedServices.reduce(
     (sum, service) => sum + service.price,
@@ -493,15 +507,18 @@ export default function BookingPage() {
 
         {currentStepKey === 'guests' && (
           <StepGuests
+            party={party}
             guests={guests}
             maxGuests={maxGuests}
+            childPricePercent={childPricePercent}
+            infantPricePercent={infantPricePercent}
             selectedRoom={selectedRoom}
             tourPrice={tourPrice}
             roomPrice={roomPrice}
             servicePrice={servicePrice}
             totalPrice={totalPrice}
             selectedServices={selectedServices}
-            onSetGuests={setGuests}
+            onSetParty={setParty}
             basePrice={basePrice}
           />
         )}
@@ -509,6 +526,7 @@ export default function BookingPage() {
         {currentStepKey === 'confirm' && (
           <StepConfirm
             tour={tour}
+            party={party}
             selectedDate={selectedDate}
             selectedTime={selectedTime}
             selectedRoom={selectedRoom}

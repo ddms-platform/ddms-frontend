@@ -5,6 +5,7 @@ import type {
   TourItemResponse,
   TourServiceResponse,
 } from '@/services/tourService';
+import type { PartyState } from './step-guests';
 import {
   bookingService,
   type BookingPaymentInit,
@@ -16,6 +17,7 @@ import HoldCountdown from './step-confirm/HoldCountdown';
 
 interface StepConfirmProps {
   tour: TourItemResponse;
+  party: PartyState;
   selectedDate: string;
   selectedTime: string;
   selectedRoom: RoomOption | null;
@@ -31,6 +33,7 @@ interface StepConfirmProps {
 
 export default function StepConfirm({
   tour,
+  party,
   selectedDate,
   selectedTime,
   selectedRoom,
@@ -65,13 +68,15 @@ export default function StepConfirm({
   const payableTotal = quote ? quote.totalPrice : totalPrice;
 
   const bookingCode = useMemo(() => {
-    const source = `${tour.id}-${selectedSchedule?.id}-${selectedDate}-${selectedTime}-${guests}`;
+    // Thành phần đoàn vào khóa: đổi 2 người lớn thành 1 lớn + 1 trẻ vẫn là 4 người
+    // nhưng giá khác nhau, nên không được dùng lại đơn cũ.
+    const source = `${tour.id}-${selectedSchedule?.id}-${selectedDate}-${selectedTime}-${party.adults}-${party.children}-${party.infants}`;
     let hash = 0;
     for (let index = 0; index < source.length; index += 1) {
       hash = (hash * 31 + source.charCodeAt(index)) % 900000;
     }
     return `DDMS${String(100000 + hash).padStart(6, '0')}`;
-  }, [guests, selectedDate, selectedSchedule?.id, selectedTime, tour.id]);
+  }, [party, selectedDate, selectedSchedule?.id, selectedTime, tour.id]);
 
   const displayCode = dbBookingId
     ? dbBookingId.slice(0, 8).toUpperCase()
@@ -86,6 +91,9 @@ export default function StepConfirm({
         const payload = {
           scheduleId: selectedSchedule.id,
           numPeople: guests,
+          numAdults: party.adults,
+          numChildren: party.children,
+          numInfants: party.infants,
           notes: '',
           cabins: selectedRoom
             ? [{ cabinId: selectedRoom.id, quantity: 1, unitPrice: 0 }]
@@ -132,7 +140,7 @@ export default function StepConfirm({
     };
     // Payload chỉ còn phụ thuộc lịch trình, số khách và các mục đã chọn —
     // giá không nằm trong đây nữa nên effect không chạy lại khi giá đổi.
-  }, [selectedSchedule.id, guests, selectedRoom, selectedServices]);
+  }, [selectedSchedule.id, guests, party, selectedRoom, selectedServices]);
 
   const onConfirmRef = useRef(onConfirm);
   onConfirmRef.current = onConfirm;

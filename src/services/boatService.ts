@@ -71,6 +71,10 @@ export interface BoatServiceItem {
   boatId: string;
   name: string;
   price: number;
+  /** % giá trẻ 5–11 tuổi phải trả. */
+  childPricePercent?: number;
+  /** % giá trẻ dưới 5 tuổi phải trả. */
+  infantPricePercent?: number;
   description?: string;
   imageUrl?: string;
   imageUrls?: string[];

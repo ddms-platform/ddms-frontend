@@ -15,7 +15,14 @@ export interface CreateBookingServiceRequest {
 
 export interface CreateBookingRequest {
   scheduleId: string;
+  /** Tổng số khách. Server tự cộng lại từ ba hạng dưới, không tin số này. */
   numPeople: number;
+  /** Khách từ 12 tuổi — trả đủ giá tour. */
+  numAdults?: number;
+  /** Khách 5–11 tuổi. */
+  numChildren?: number;
+  /** Khách dưới 5 tuổi. */
+  numInfants?: number;
   /** Mã giảm giá. Server tự tra và tự tính mức giảm. */
   promotionCode?: string | null;
   notes?: string | null;
@@ -46,8 +53,18 @@ export interface BookingPaymentStatus {
 }
 
 /** Bảng giá do server tính. Là nguồn sự thật duy nhất về số tiền phải trả. */
+/** Một hạng vé trên hoá đơn. */
+export interface PartyPricedLine {
+  tier: 'adult' | 'child' | 'infant';
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+}
+
 export interface BookingQuote {
   basePrice: number;
+  /** Tiền tour tách theo hạng vé. Hạng không có khách thì không xuất hiện. */
+  partyLines: PartyPricedLine[];
   cabinPrice: number;
   servicePrice: number;
   subtotal: number;

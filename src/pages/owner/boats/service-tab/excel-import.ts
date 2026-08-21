@@ -152,6 +152,9 @@ export async function parseServicesExcel(
       serviceType: normalizeServiceType(row.serviceType),
       name,
       basePrice,
+      // File Excel chưa có cột hạng vé — dùng mặc định, owner sửa lại trên form nếu cần.
+      childPricePercent: '50',
+      infantPricePercent: '0',
       description: toStr(row.description),
       route: toStr(row.route),
       routes: [],

@@ -141,6 +141,7 @@
     "cancelModal": {
       "title": "Xác Nhận Hủy Đặt Tour",
       "refundEligible": "Bạn có chắc chắn muốn hủy đặt tour này không? Tour của bạn sẽ được hủy và bạn sẽ được hoàn trả 100% số tiền {{price}} về ví vì thời gian hủy cách ngày khởi hành trên 2 ngày (48 tiếng).",
+      "unpaid": "Bạn có chắc chắn muốn hủy đơn này không? Đơn chưa được thanh toán nên không phát sinh hoàn tiền. Chỗ đang giữ sẽ được mở bán lại ngay.",
       "noRefund": "Bạn có chắc chắn muốn hủy đặt tour này không? Lưu ý: Bạn sẽ KHÔNG ĐƯỢC HOÀN TIỀN vì thời gian hủy đến ngày khởi hành đã dưới 2 ngày (48 tiếng) - sát ngày khởi hành.",
       "closeBtn": "Đóng",
       "confirmBtn": "Xác nhận hủy",
