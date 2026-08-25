@@ -212,6 +212,20 @@ export default function OwnerRegistrationPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const invalidCapacity = vessels.some((vessel) => {
+      const n = Number(vessel.MaxPassengers);
+      return !Number.isInteger(n) || n < 1 || n > 1000;
+    });
+    if (invalidCapacity) {
+      toast.error(
+        t(
+          'ownerRegistration.vessel.maxPassengersInvalid',
+          'Sức chứa mỗi thuyền phải từ 1 đến 1000 khách.',
+        ),
+      );
+      return;
+    }
+
     setLoading(true);
     const toastId = toast.loading(
       t(

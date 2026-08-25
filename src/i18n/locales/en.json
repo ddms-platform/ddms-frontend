@@ -1032,6 +1032,8 @@
       "formatNow": "Format UPPERCASE",
       "invalidCharsWarning": "Vessel name should only contain letters, numbers, and hyphens (-).",
       "type": "Vessel type",
+      "maxPassengers": "Maximum capacity (guests)",
+      "maxPassengersInvalid": "Each vessel must have a capacity of 1 to 1000 guests.",
       "typeFallback": {
         "yacht": "Yacht",
         "catamaran": "Catamaran",

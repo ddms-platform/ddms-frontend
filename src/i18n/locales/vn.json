@@ -1032,6 +1032,8 @@
       "formatNow": "IN HOA chuẩn",
       "invalidCharsWarning": "Tên tàu chỉ nên chứa chữ cái, số và dấu gạch ngang (-).",
       "type": "Loại thuyền",
+      "maxPassengers": "Sức chứa tối đa (khách)",
+      "maxPassengersInvalid": "Sức chứa mỗi thuyền phải từ 1 đến 1000 khách.",
       "typeFallback": {
         "yacht": "Du thuyền cá nhân (Yacht)",
         "catamaran": "Thuyền hai thân (Catamaran)",
