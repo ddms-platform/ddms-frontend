@@ -653,7 +653,11 @@
     "services": {
       "title": "Dịch vụ đi kèm",
       "subtitle": "Chọn thêm các dịch vụ để nâng cấp trải nghiệm chuyến đi (không bắt buộc).",
-      "empty": "Tour này chưa có dịch vụ đi kèm nào."
+      "empty": "Tour này chưa có dịch vụ đi kèm nào.",
+      "selectedTitle": "Dịch vụ đã chọn",
+      "selectedHint": "Bỏ chọn để đưa dịch vụ trở lại danh sách bên dưới.",
+      "availableTitle": "Thêm dịch vụ",
+      "allSelected": "Bạn đã chọn hết dịch vụ của tour này."
     }
   },
   "tourList": {
