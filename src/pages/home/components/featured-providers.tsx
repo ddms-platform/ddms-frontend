@@ -8,6 +8,10 @@ import {
   type FeaturedOwnerResponse,
 } from '@/services/publicOwnerService';
 
+const isUserId = (value?: string) =>
+  !!value &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+
 function ownerToursPath(owner: FeaturedOwnerResponse) {
   const params = new URLSearchParams();
   params.set('ownerId', owner.userId);
@@ -23,7 +27,11 @@ export default function FeaturedProviders() {
   useEffect(() => {
     publicOwnerService
       .getFeatured(3)
-      .then(setOwners)
+      .then((list) =>
+        setOwners(
+          list.filter((owner) => owner.tourCount > 0 && isUserId(owner.userId)),
+        ),
+      )
       .catch((error) => {
         console.error('Failed to fetch featured owners:', error);
         setOwners([]);
@@ -45,6 +53,7 @@ export default function FeaturedProviders() {
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {owners.map((owner) => {
+            if (!isUserId(owner.userId)) return null;
             const cover = owner.boatImages[0];
             return (
               <Link

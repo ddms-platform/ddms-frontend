@@ -25,6 +25,9 @@ import { useAuth } from '@/hooks/use-auth';
  * tam anh nay du API da tra ve tour_images rieng cua tung tour. */
 const TOURS_PER_PAGE = 8;
 
+const OWNER_ID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 const FALLBACK_TOUR_IMAGE =
   'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop';
 
@@ -51,6 +54,7 @@ export default function TourListPage() {
   const initialDate = searchParams.get('date') || '';
   const ownerId = searchParams.get('ownerId') || '';
   const ownerName = searchParams.get('ownerName') || '';
+  const validOwnerId = OWNER_ID_RE.test(ownerId) ? ownerId : '';
 
   const [searchQuery, setSearchQuery] = useState(initialKeyword);
   const debouncedSearch = useDebounce(searchQuery, 500);
@@ -95,7 +99,7 @@ export default function TourListPage() {
           keyword: debouncedSearch || undefined,
           category: activeCategory !== 'all' ? activeCategory : undefined,
           date: selectedDate || undefined,
-          ownerId: ownerId || undefined,
+          ownerId: validOwnerId || undefined,
         });
 
         setTours(res.items || []);
@@ -116,6 +120,7 @@ export default function TourListPage() {
     activeCategory,
     selectedDate,
     ownerId,
+    validOwnerId,
   ]);
 
   useEffect(() => {
@@ -203,14 +208,14 @@ export default function TourListPage() {
           className="text-[28px] font-bold leading-[1.43] text-foreground"
           style={{ letterSpacing: '-0.44px' }}
         >
-          {ownerId && ownerName
+          {validOwnerId && ownerName
             ? t('tourList.ownerFilterTitle', { name: ownerName })
             : t('tourList.title')}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {t('tourList.subtitle', { count: totalRecords })}
         </p>
-        {ownerId && (
+        {validOwnerId && (
           <button
             type="button"
             onClick={clearOwnerFilter}
@@ -410,7 +415,7 @@ export default function TourListPage() {
             <Search size={28} style={{ color: '#ecf0ff' }} />
           </div>
           <h3 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
-            {ownerId
+            {validOwnerId
               ? t('tourList.ownerFilterEmpty')
               : t('tourList.empty.title')}
           </h3>
@@ -423,7 +428,7 @@ export default function TourListPage() {
             onClick={() => {
               handleSearchChange('');
               handleCategoryChange('all');
-              if (ownerId) clearOwnerFilter();
+              if (validOwnerId) clearOwnerFilter();
             }}
             className="mt-6"
           >
