@@ -1308,6 +1308,9 @@
       "createScheduleLocked": "Schedule creation locked",
       "openDetailHint": "Click to open the customer-facing tour page",
       "tourDetailUnavailable": "This schedule is not linked to any tour.",
+      "dayClickHint": "* Click a day to view or create a schedule for that day",
+      "dayCellHint": "Click to view this day's schedules",
+      "moreSchedules": "+{{count}} more",
       "weekdays": {
         "monday": "Mon",
         "tuesday": "Tue",
@@ -1347,7 +1350,23 @@
       "viewPublic": "View public page",
       "notPublic": "Not published yet",
       "notPublicHint": "This tour is awaiting admin approval, so customers cannot see it yet.",
-      "edit": "Edit service"
+      "edit": "Edit service",
+      "loadError": "Could not load your registered tours.",
+      "loadErrorHint": "Reload the page. If it keeps failing, the server may be running an older build."
+    },
+    "dayModal": {
+      "title": "Schedules on {{date}}",
+      "countLabel": "{{count}} trip(s) on this day",
+      "empty": "No schedule on this day yet.",
+      "emptyHint": "Create a schedule so customers can book.",
+      "createBtn": "Create a schedule for this day",
+      "closeBtn": "Close",
+      "scheduleStatus": {
+        "scheduled": "Scheduled",
+        "ongoing": "Ongoing",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
     },
     "recentBookings": {
       "title": "Recent Bookings",

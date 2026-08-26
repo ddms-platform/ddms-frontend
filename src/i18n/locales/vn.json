@@ -1308,6 +1308,9 @@
       "createScheduleLocked": "Tạm khóa tạo lịch trình",
       "openDetailHint": "Bấm để xem trang tour dành cho khách",
       "tourDetailUnavailable": "Lịch trình này chưa gắn với tour nào.",
+      "dayClickHint": "* Bấm vào một ngày để xem hoặc tạo lịch trình cho ngày đó",
+      "dayCellHint": "Bấm để xem lịch trình của ngày này",
+      "moreSchedules": "+{{count}} chuyến nữa",
       "weekdays": {
         "monday": "Thứ 2",
         "tuesday": "Thứ 3",
@@ -1347,7 +1350,23 @@
       "viewPublic": "Xem trang khách",
       "notPublic": "Chưa lên trang khách",
       "notPublicHint": "Tour đang chờ Admin duyệt nên chưa hiển thị với khách.",
-      "edit": "Sửa dịch vụ"
+      "edit": "Sửa dịch vụ",
+      "loadError": "Không tải được danh sách tour đã đăng ký.",
+      "loadErrorHint": "Hãy tải lại trang. Nếu vẫn lỗi, có thể máy chủ đang chạy bản cũ."
+    },
+    "dayModal": {
+      "title": "Lịch trình ngày {{date}}",
+      "countLabel": "{{count}} chuyến trong ngày",
+      "empty": "Ngày này chưa có lịch trình nào.",
+      "emptyHint": "Hãy tạo lịch trình để khách có thể đặt chỗ.",
+      "createBtn": "Tạo lịch trình cho ngày này",
+      "closeBtn": "Đóng",
+      "scheduleStatus": {
+        "scheduled": "Đã lên lịch",
+        "ongoing": "Đang chạy",
+        "completed": "Hoàn thành",
+        "cancelled": "Đã hủy"
+      }
     },
     "recentBookings": {
       "title": "Danh sách Đặt chỗ Gần đây",

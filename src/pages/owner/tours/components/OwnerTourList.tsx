@@ -7,6 +7,8 @@ import type { OwnerTourListItem } from '@/services/tourService';
 
 interface OwnerTourListProps {
   tours: OwnerTourListItem[];
+  /** Phân biệt "chưa có tour" với "gọi API thất bại". */
+  loadFailed?: boolean;
 }
 
 type StatusFilter = 'all' | 'active' | 'pending' | 'other';
@@ -33,7 +35,7 @@ const TourStatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-const OwnerTourList = ({ tours }: OwnerTourListProps) => {
+const OwnerTourList = ({ tours, loadFailed = false }: OwnerTourListProps) => {
   const { t, i18n } = useTranslation();
   const [filter, setFilter] = useState<StatusFilter>('all');
 
@@ -105,7 +107,16 @@ const OwnerTourList = ({ tours }: OwnerTourListProps) => {
         </div>
       </div>
 
-      {visibleTours.length === 0 ? (
+      {loadFailed ? (
+        <div className="rounded-lg border border-dashed border-rose-500/40 bg-rose-500/5 py-10 text-center">
+          <p className="text-sm font-medium text-rose-600 dark:text-rose-400">
+            {t('ownerTours.tourList.loadError')}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {t('ownerTours.tourList.loadErrorHint')}
+          </p>
+        </div>
+      ) : visibleTours.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border py-10 text-center">
           <p className="text-sm text-muted-foreground">
             {tours.length === 0

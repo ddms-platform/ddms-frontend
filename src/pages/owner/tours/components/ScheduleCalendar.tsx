@@ -1,7 +1,11 @@
 import { Calendar, Plus, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { localDateToIso } from '@/lib/date-format';
 
 type ViewMode = 'month' | 'week' | 'day';
+
+/** Số chip tối đa trong một ô ngày; phần còn lại xem trong modal của ngày. */
+const MAX_VISIBLE_CHIPS = 2;
 
 interface ScheduleCalendarProps {
   schedules: any[];
@@ -13,6 +17,8 @@ interface ScheduleCalendarProps {
   onViewModeChange: (mode: ViewMode) => void;
   onCreateClick: () => void;
   onScheduleClick?: (schedule: any) => void;
+  /** Nhận ngày dạng yyyy-MM-dd theo giờ địa phương. */
+  onDayClick?: (dateIso: string) => void;
   onPrev?: () => void;
   onNext?: () => void;
 }
@@ -27,6 +33,7 @@ const ScheduleCalendar = ({
   onViewModeChange,
   onCreateClick,
   onScheduleClick,
+  onDayClick,
   onPrev,
   onNext,
 }: ScheduleCalendarProps) => {
@@ -55,17 +62,31 @@ const ScheduleCalendar = ({
     const todayDay = currentDate.getDate();
 
     for (let i = 1; i <= daysInMonth; i++) {
-      const daySchedules = schedules.filter((s) => {
-        const d = new Date(s.startTime);
-        return d.getDate() === i;
-      });
+      const dateIso = localDateToIso(
+        new Date(currentYear, currentMonth - 1, i),
+      );
+      const daySchedules = schedules.filter(
+        (s) => localDateToIso(new Date(s.startTime)) === dateIso,
+      );
+      const visibleSchedules = daySchedules.slice(0, MAX_VISIBLE_CHIPS);
+      const hiddenCount = daySchedules.length - visibleSchedules.length;
 
       const isToday = i === todayDay;
 
       days.push(
         <div
           key={`day-${i}`}
-          className={`min-h-[120px] p-2 border-r border-b border-border hover:bg-muted/50 transition-colors ${isToday ? 'ring-2 ring-ddms-secondary bg-ddms-secondary/10' : ''}`}
+          role="button"
+          tabIndex={0}
+          title={t('ownerTours.calendar.dayCellHint')}
+          onClick={() => onDayClick?.(dateIso)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onDayClick?.(dateIso);
+            }
+          }}
+          className={`min-h-[120px] p-2 border-r border-b border-border hover:bg-muted/50 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ddms-secondary ${isToday ? 'ring-2 ring-ddms-secondary bg-ddms-secondary/10' : ''}`}
         >
           <div
             className={`text-sm font-semibold mb-2 ${isToday ? 'text-ddms-secondary' : 'text-muted-foreground'}`}
@@ -73,11 +94,15 @@ const ScheduleCalendar = ({
             {i.toString().padStart(2, '0')}
           </div>
           <div className="space-y-1">
-            {daySchedules.map((schedule, idx) => (
+            {visibleSchedules.map((schedule, idx) => (
               <button
                 key={idx}
                 type="button"
-                onClick={() => openSchedule(schedule)}
+                onClick={(e) => {
+                  // Chip nam trong o ngay cung bat click -> chan noi bot.
+                  e.stopPropagation();
+                  openSchedule(schedule);
+                }}
                 className="w-full text-left text-xs px-2 py-1 rounded bg-ddms-secondary/20 text-ddms-secondary border border-ddms-secondary/30 truncate font-semibold cursor-pointer hover:bg-ddms-secondary/35 transition-colors"
                 title={scheduleTitle(schedule)}
               >
@@ -85,6 +110,11 @@ const ScheduleCalendar = ({
                 ({schedule.boatName})
               </button>
             ))}
+            {hiddenCount > 0 && (
+              <div className="text-xs font-semibold text-muted-foreground px-2">
+                {t('ownerTours.calendar.moreSchedules', { count: hiddenCount })}
+              </div>
+            )}
           </div>
         </div>,
       );
@@ -293,6 +323,12 @@ const ScheduleCalendar = ({
           </button>
         </div>
       </div>
+
+      {viewMode === 'month' && (
+        <p className="text-xs text-muted-foreground -mt-3 mb-4">
+          {t('ownerTours.calendar.dayClickHint')}
+        </p>
+      )}
 
       <div className="border border-border rounded-lg overflow-hidden bg-muted/20 min-h-100">
         {viewMode === 'month' && (
