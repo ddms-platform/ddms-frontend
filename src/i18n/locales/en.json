@@ -653,7 +653,11 @@
     "services": {
       "title": "Add-on Services",
       "subtitle": "Choose additional services to upgrade your trip experience (optional).",
-      "empty": "This tour does not have any add-on services yet."
+      "empty": "This tour does not have any add-on services yet.",
+      "selectedTitle": "Selected services",
+      "selectedHint": "Deselect a service to move it back to the list below.",
+      "availableTitle": "Add services",
+      "allSelected": "You have selected every service on this tour."
     }
   },
   "tourList": {
