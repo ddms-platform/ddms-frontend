@@ -54,7 +54,6 @@ export default function TourListPage() {
   const initialDate = searchParams.get('date') || '';
   const ownerId = searchParams.get('ownerId') || '';
   const ownerName = searchParams.get('ownerName') || '';
-  const validOwnerId = OWNER_ID_RE.test(ownerId) ? ownerId : '';
 
   const [searchQuery, setSearchQuery] = useState(initialKeyword);
   const debouncedSearch = useDebounce(searchQuery, 500);
@@ -99,7 +98,7 @@ export default function TourListPage() {
           keyword: debouncedSearch || undefined,
           category: activeCategory !== 'all' ? activeCategory : undefined,
           date: selectedDate || undefined,
-          ownerId: validOwnerId || undefined,
+          ownerId: ownerId || undefined,
         });
 
         setTours(res.items || []);
@@ -120,7 +119,6 @@ export default function TourListPage() {
     activeCategory,
     selectedDate,
     ownerId,
-    validOwnerId,
   ]);
 
   useEffect(() => {
@@ -208,14 +206,14 @@ export default function TourListPage() {
           className="text-[28px] font-bold leading-[1.43] text-foreground"
           style={{ letterSpacing: '-0.44px' }}
         >
-          {validOwnerId && ownerName
+          {ownerId && ownerName
             ? t('tourList.ownerFilterTitle', { name: ownerName })
             : t('tourList.title')}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {t('tourList.subtitle', { count: totalRecords })}
         </p>
-        {validOwnerId && (
+        {ownerId && (
           <button
             type="button"
             onClick={clearOwnerFilter}
@@ -415,7 +413,7 @@ export default function TourListPage() {
             <Search size={28} style={{ color: '#ecf0ff' }} />
           </div>
           <h3 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
-            {validOwnerId
+            {ownerId
               ? t('tourList.ownerFilterEmpty')
               : t('tourList.empty.title')}
           </h3>
@@ -428,7 +426,7 @@ export default function TourListPage() {
             onClick={() => {
               handleSearchChange('');
               handleCategoryChange('all');
-              if (validOwnerId) clearOwnerFilter();
+              if (ownerId) clearOwnerFilter();
             }}
             className="mt-6"
           >
