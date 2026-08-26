@@ -25,6 +25,9 @@ import { useAuth } from '@/hooks/use-auth';
  * tam anh nay du API da tra ve tour_images rieng cua tung tour. */
 const TOURS_PER_PAGE = 8;
 
+const OWNER_ID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 const FALLBACK_TOUR_IMAGE =
   'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&h=400&fit=crop';
 

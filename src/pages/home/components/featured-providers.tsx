@@ -23,7 +23,11 @@ export default function FeaturedProviders() {
   useEffect(() => {
     publicOwnerService
       .getFeatured(3)
-      .then(setOwners)
+      .then((list) =>
+        setOwners(
+          list.filter((owner) => owner.tourCount > 0 && isUserId(owner.userId)),
+        ),
+      )
       .catch((error) => {
         console.error('Failed to fetch featured owners:', error);
         setOwners([]);
