@@ -12,6 +12,7 @@ interface ScheduleCalendarProps {
   isLocked?: boolean;
   onViewModeChange: (mode: ViewMode) => void;
   onCreateClick: () => void;
+  onScheduleClick?: (schedule: any) => void;
   onPrev?: () => void;
   onNext?: () => void;
 }
@@ -25,10 +26,16 @@ const ScheduleCalendar = ({
   isLocked = false,
   onViewModeChange,
   onCreateClick,
+  onScheduleClick,
   onPrev,
   onNext,
 }: ScheduleCalendarProps) => {
   const { t, i18n } = useTranslation();
+
+  const openSchedule = (schedule: any) => onScheduleClick?.(schedule);
+
+  const scheduleTitle = (schedule: any) =>
+    `${schedule.tourName} - ${schedule.boatName}\n${t('ownerTours.calendar.openDetailHint')}`;
 
   const renderCalendarDays = () => {
     const days = [];
@@ -67,14 +74,16 @@ const ScheduleCalendar = ({
           </div>
           <div className="space-y-1">
             {daySchedules.map((schedule, idx) => (
-              <div
+              <button
                 key={idx}
-                className="text-xs px-2 py-1 rounded bg-ddms-secondary/20 text-ddms-secondary border border-ddms-secondary/30 truncate font-semibold"
-                title={`${schedule.tourName} - ${schedule.boatName}`}
+                type="button"
+                onClick={() => openSchedule(schedule)}
+                className="w-full text-left text-xs px-2 py-1 rounded bg-ddms-secondary/20 text-ddms-secondary border border-ddms-secondary/30 truncate font-semibold cursor-pointer hover:bg-ddms-secondary/35 transition-colors"
+                title={scheduleTitle(schedule)}
               >
                 {new Date(schedule.startTime).getHours()}h: {schedule.tourName}{' '}
                 ({schedule.boatName})
-              </div>
+              </button>
             ))}
           </div>
         </div>,
@@ -110,9 +119,12 @@ const ScheduleCalendar = ({
         ) : (
           <div className="grid gap-3">
             {weekSchedules.map((s, idx) => (
-              <div
+              <button
                 key={idx}
-                className="flex items-center gap-4 bg-muted/40 border border-border p-3 rounded-lg"
+                type="button"
+                onClick={() => openSchedule(s)}
+                title={scheduleTitle(s)}
+                className="flex w-full items-center gap-4 bg-muted/40 border border-border p-3 rounded-lg text-left cursor-pointer hover:border-ddms-secondary/50 hover:bg-muted/60 transition-colors"
               >
                 <div className="text-center min-w-20">
                   <div className="text-sm text-muted-foreground">
@@ -143,7 +155,7 @@ const ScheduleCalendar = ({
                     })}
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -176,9 +188,12 @@ const ScheduleCalendar = ({
         ) : (
           <div className="grid gap-3">
             {daySchedules.map((s, idx) => (
-              <div
+              <button
                 key={idx}
-                className="flex items-center gap-4 bg-muted/40 border border-border p-3 rounded-lg border-l-4 border-l-ddms-secondary"
+                type="button"
+                onClick={() => openSchedule(s)}
+                title={scheduleTitle(s)}
+                className="flex w-full items-center gap-4 bg-muted/40 border border-border p-3 rounded-lg border-l-4 border-l-ddms-secondary text-left cursor-pointer hover:bg-muted/60 transition-colors"
               >
                 <div className="text-center min-w-20">
                   <div className="text-lg font-bold text-ddms-secondary">
@@ -198,7 +213,7 @@ const ScheduleCalendar = ({
                     </span>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -273,8 +288,8 @@ const ScheduleCalendar = ({
           >
             {isLocked ? <Lock size={16} /> : <Plus size={18} />}
             {isLocked
-              ? 'Tạm khóa tạo tour'
-              : t('ownerTours.calendar.createTourBtn')}
+              ? t('ownerTours.calendar.createScheduleLocked')
+              : t('ownerTours.calendar.createScheduleBtn')}
           </button>
         </div>
       </div>

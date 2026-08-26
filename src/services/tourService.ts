@@ -126,6 +126,38 @@ export interface FaqItemResponse {
   updatedAt: string;
 }
 
+/** Một lịch trình hiển thị trên lịch của chủ thuyền. */
+export interface OwnerScheduleListItem {
+  id: string;
+  tourId: string;
+  tourName: string;
+  /** Trạng thái duyệt của tour: pending | active | inactive | rejected */
+  tourStatus: string;
+  boatName: string;
+  boatId: string;
+  startTime: string;
+  endTime: string;
+  status: string;
+}
+
+/** Một tour chủ thuyền đã đăng ký, dùng cho bảng "Tour đã đăng ký". */
+export interface OwnerTourListItem {
+  id: string;
+  name: string;
+  status: string;
+  price: number;
+  durationMinutes: number;
+  location?: string | null;
+  serviceType?: string | null;
+  thumbnailUrl?: string | null;
+  boatNames: string[];
+  primaryBoatId?: string | null;
+  scheduleCount: number;
+  upcomingScheduleCount: number;
+  nextScheduleAt?: string | null;
+  createdAt: string;
+}
+
 export interface TourSearchQuery {
   page?: number;
   pageSize?: number;
@@ -189,9 +221,15 @@ export const tourService = {
 
   getToursDashboardSchedules: (month: number, year: number) =>
     api
-      .get<ApiResponse<any[]>>('/owner/tours-dashboard/schedules', {
-        params: { month, year },
-      })
+      .get<
+        ApiResponse<OwnerScheduleListItem[]>
+      >('/owner/tours-dashboard/schedules', { params: { month, year } })
+      .then((r) => r.data),
+
+  /** Danh sách tour chủ thuyền đã đăng ký, kể cả tour chưa được duyệt. */
+  getToursDashboardTours: () =>
+    api
+      .get<ApiResponse<OwnerTourListItem[]>>('/owner/tours-dashboard/tours')
       .then((r) => r.data),
 
   getToursDashboardRecentBookings: () =>
