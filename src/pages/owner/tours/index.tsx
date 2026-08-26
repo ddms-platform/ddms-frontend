@@ -1,9 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Map as MapIcon, Lock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { tourService, type OwnerTourListItem } from '@/services/tourService';
+import {
+  tourService,
+  type OwnerScheduleListItem,
+  type OwnerTourListItem,
+} from '@/services/tourService';
+import { localDateToIso } from '@/lib/date-format';
 import {
   ownerDocumentService,
   type OwnerDocumentsOverviewResponse,
@@ -15,6 +20,7 @@ import RecentBookingsTable from './components/RecentBookingsTable';
 import DashboardCharts from './components/DashboardCharts';
 import ScheduleCalendar from './components/ScheduleCalendar';
 import OwnerTourList from './components/OwnerTourList';
+import DayScheduleModal from './components/DayScheduleModal';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042', '#8884d8'];
@@ -28,6 +34,8 @@ const OwnerToursPage = () => {
   const [stats, setStats] = useState<any[]>([]);
   const [schedules, setSchedules] = useState<any[]>([]);
   const [ownerTours, setOwnerTours] = useState<OwnerTourListItem[]>([]);
+  const [ownerToursFailed, setOwnerToursFailed] = useState(false);
+  const [selectedDateIso, setSelectedDateIso] = useState<string | null>(null);
   const [recentBookings, setRecentBookings] = useState<any[]>([]);
   const [docOverview, setDocOverview] =
     useState<OwnerDocumentsOverviewResponse | null>(null);
@@ -137,6 +145,7 @@ const OwnerToursPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      let toursFailed = false;
       try {
         const [
           statsRes,
@@ -150,9 +159,17 @@ const OwnerToursPage = () => {
           tourService.getToursDashboardSchedules(currentMonth, currentYear),
           tourService.getToursDashboardRecentBookings(),
           tourService.getToursDashboardResources(),
-          tourService.getToursDashboardTours().catch(() => null),
+          // Danh sach tour khong duoc lam sap ca trang, nhung loi phai hien ro
+          // thay vi bao "chua co tour nao".
+          tourService.getToursDashboardTours().catch((err) => {
+            console.error('Failed to load owner tours', err);
+            toursFailed = true;
+            return null;
+          }),
           ownerDocumentService.getOverview().catch(() => null),
         ]);
+
+        setOwnerToursFailed(toursFailed);
 
         setDocOverview(overviewRes);
 
@@ -208,6 +225,26 @@ const OwnerToursPage = () => {
   }, [currentMonth, currentYear, t]);
 
   const isLocked = Boolean(docOverview?.isLocked);
+
+  const selectedDaySchedules = useMemo<OwnerScheduleListItem[]>(() => {
+    if (!selectedDateIso) return [];
+    return schedules.filter(
+      (s) => localDateToIso(new Date(s.startTime)) === selectedDateIso,
+    );
+  }, [schedules, selectedDateIso]);
+
+  /** Mở form tạo lịch với ngày đã chọn sẵn từ ô ngày trên lịch. */
+  const handleCreateForDate = (dateIso: string) => {
+    if (isLocked) {
+      toast.error(t('ownerTours.calendar.createScheduleLocked'));
+      return;
+    }
+
+    setScheduleDate(dateIso);
+    setScheduleEndDate(dateIso);
+    setSelectedDateIso(null);
+    setShowCreateModal(true);
+  };
 
   /**
    * Bấm vào một lịch trình để xem tour hiện ra sao với khách. Tour chưa được
@@ -412,7 +449,7 @@ const OwnerToursPage = () => {
 
           <DashboardCharts stats={stats} />
 
-          <OwnerTourList tours={ownerTours} />
+          <OwnerTourList tours={ownerTours} loadFailed={ownerToursFailed} />
 
           <ScheduleCalendar
             schedules={schedules}
@@ -432,6 +469,7 @@ const OwnerToursPage = () => {
               setShowCreateModal(true);
             }}
             onScheduleClick={handleScheduleClick}
+            onDayClick={setSelectedDateIso}
             onPrev={handlePrevMonth}
             onNext={handleNextMonth}
           />
@@ -448,6 +486,16 @@ const OwnerToursPage = () => {
           />
         </>
       )}
+
+      <DayScheduleModal
+        open={selectedDateIso !== null}
+        dateIso={selectedDateIso}
+        schedules={selectedDaySchedules}
+        isLocked={isLocked}
+        onClose={() => setSelectedDateIso(null)}
+        onCreate={handleCreateForDate}
+        onScheduleClick={handleScheduleClick}
+      />
 
       <CreateScheduleModal
         open={showCreateModal}
