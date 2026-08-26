@@ -446,6 +446,7 @@
       "sectionTitle": "Trusted partners on the Han River",
       "verified": "Verified Partner",
       "viewFleets": "View active fleets",
+      "viewTours": "View tours",
       "specialDeal": "Special Deal",
       "yachtTitle": "Private Yacht Charter",
       "yachtDesc": "Book custom itinerary cruises with verified captains.",
@@ -663,6 +664,9 @@
   "tourList": {
     "title": "Explore Tours",
     "subtitle": "Found {{count}} cruise trips",
+    "ownerFilterTitle": "Tours by {{name}}",
+    "ownerFilterClear": "View all tours",
+    "ownerFilterEmpty": "This operator has no open tours yet.",
     "searchPlaceholder": "Search tours, locations...",
     "filters": "Filters",
     "reviews": "reviews",

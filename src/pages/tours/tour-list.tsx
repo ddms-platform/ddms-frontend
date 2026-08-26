@@ -49,6 +49,8 @@ export default function TourListPage() {
     searchParams.get('keyword') || searchParams.get('location') || '';
   const initialCategory = searchParams.get('category') || 'all';
   const initialDate = searchParams.get('date') || '';
+  const ownerId = searchParams.get('ownerId') || '';
+  const ownerName = searchParams.get('ownerName') || '';
 
   const [searchQuery, setSearchQuery] = useState(initialKeyword);
   const debouncedSearch = useDebounce(searchQuery, 500);
@@ -93,6 +95,7 @@ export default function TourListPage() {
           keyword: debouncedSearch || undefined,
           category: activeCategory !== 'all' ? activeCategory : undefined,
           date: selectedDate || undefined,
+          ownerId: ownerId || undefined,
         });
 
         setTours(res.items || []);
@@ -106,7 +109,14 @@ export default function TourListPage() {
     };
 
     fetchTours();
-  }, [currentPage, debouncedSearch, sortBy, activeCategory, selectedDate]);
+  }, [
+    currentPage,
+    debouncedSearch,
+    sortBy,
+    activeCategory,
+    selectedDate,
+    ownerId,
+  ]);
 
   useEffect(() => {
     if (user) {
@@ -169,6 +179,14 @@ export default function TourListPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const clearOwnerFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('ownerId');
+    params.delete('ownerName');
+    setSearchParams(params, { replace: true });
+    setCurrentPage(1);
+  };
+
   const formatDuration = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
@@ -185,11 +203,23 @@ export default function TourListPage() {
           className="text-[28px] font-bold leading-[1.43] text-foreground"
           style={{ letterSpacing: '-0.44px' }}
         >
-          {t('tourList.title')}
+          {ownerId && ownerName
+            ? t('tourList.ownerFilterTitle', { name: ownerName })
+            : t('tourList.title')}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {t('tourList.subtitle', { count: totalRecords })}
         </p>
+        {ownerId && (
+          <button
+            type="button"
+            onClick={clearOwnerFilter}
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-ddms-secondary"
+          >
+            <X size={14} />
+            {t('tourList.ownerFilterClear')}
+          </button>
+        )}
       </div>
 
       {/* Search + Filter Bar */}
@@ -380,7 +410,9 @@ export default function TourListPage() {
             <Search size={28} style={{ color: '#ecf0ff' }} />
           </div>
           <h3 className="text-lg font-semibold" style={{ color: '#ffffff' }}>
-            {t('tourList.empty.title')}
+            {ownerId
+              ? t('tourList.ownerFilterEmpty')
+              : t('tourList.empty.title')}
           </h3>
           <p className="mt-2 max-w-sm text-sm" style={{ color: '#ecf0ff' }}>
             {t('tourList.empty.description')}
@@ -391,6 +423,7 @@ export default function TourListPage() {
             onClick={() => {
               handleSearchChange('');
               handleCategoryChange('all');
+              if (ownerId) clearOwnerFilter();
             }}
             className="mt-6"
           >
