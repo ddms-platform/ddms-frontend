@@ -1304,6 +1304,10 @@
       "viewWeek": "WEEK",
       "viewDay": "DAY",
       "createTourBtn": "CREATE TOUR",
+      "createScheduleBtn": "CREATE SCHEDULE",
+      "createScheduleLocked": "Schedule creation locked",
+      "openDetailHint": "Click to open the customer-facing tour page",
+      "tourDetailUnavailable": "This schedule is not linked to any tour.",
       "weekdays": {
         "monday": "Mon",
         "tuesday": "Tue",
@@ -1317,6 +1321,33 @@
       "noSchedulesNext7Days": "No schedules in the next week.",
       "todayTitle": "Today's Schedule ({{date}})",
       "noSchedulesToday": "No schedules for today."
+    },
+    "tourList": {
+      "title": "Registered tours",
+      "subtitle": "Every tour you registered, including those awaiting admin approval.",
+      "filters": {
+        "all": "All",
+        "active": "Live",
+        "pending": "Pending",
+        "other": "Other"
+      },
+      "status": {
+        "active": "Live",
+        "pending": "Pending approval",
+        "inactive": "Unlisted",
+        "rejected": "Rejected"
+      },
+      "empty": "You have not registered any tour yet.",
+      "emptyFilter": "No tour in this status.",
+      "registerCta": "Register a tour in Boat Management",
+      "noBoat": "No boat assigned",
+      "noSchedule": "No upcoming schedule",
+      "nextSchedule": "Next: {{date}}",
+      "scheduleCount": "{{upcoming}} upcoming / {{total}} total",
+      "viewPublic": "View public page",
+      "notPublic": "Not published yet",
+      "notPublicHint": "This tour is awaiting admin approval, so customers cannot see it yet.",
+      "edit": "Edit service"
     },
     "recentBookings": {
       "title": "Recent Bookings",

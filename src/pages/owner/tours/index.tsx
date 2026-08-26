@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Map as MapIcon, Lock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { tourService } from '@/services/tourService';
+import { tourService, type OwnerTourListItem } from '@/services/tourService';
 import {
   ownerDocumentService,
   type OwnerDocumentsOverviewResponse,
@@ -14,6 +14,7 @@ import CreateScheduleModal from './components/CreateScheduleModal';
 import RecentBookingsTable from './components/RecentBookingsTable';
 import DashboardCharts from './components/DashboardCharts';
 import ScheduleCalendar from './components/ScheduleCalendar';
+import OwnerTourList from './components/OwnerTourList';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042', '#8884d8'];
@@ -23,8 +24,10 @@ const isSuccessResponse = (res: any) =>
 
 const OwnerToursPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [stats, setStats] = useState<any[]>([]);
   const [schedules, setSchedules] = useState<any[]>([]);
+  const [ownerTours, setOwnerTours] = useState<OwnerTourListItem[]>([]);
   const [recentBookings, setRecentBookings] = useState<any[]>([]);
   const [docOverview, setDocOverview] =
     useState<OwnerDocumentsOverviewResponse | null>(null);
@@ -135,14 +138,21 @@ const OwnerToursPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, schedulesRes, bookingsRes, resourcesRes, overviewRes] =
-          await Promise.all([
-            tourService.getToursDashboardStats(),
-            tourService.getToursDashboardSchedules(currentMonth, currentYear),
-            tourService.getToursDashboardRecentBookings(),
-            tourService.getToursDashboardResources(),
-            ownerDocumentService.getOverview().catch(() => null),
-          ]);
+        const [
+          statsRes,
+          schedulesRes,
+          bookingsRes,
+          resourcesRes,
+          toursRes,
+          overviewRes,
+        ] = await Promise.all([
+          tourService.getToursDashboardStats(),
+          tourService.getToursDashboardSchedules(currentMonth, currentYear),
+          tourService.getToursDashboardRecentBookings(),
+          tourService.getToursDashboardResources(),
+          tourService.getToursDashboardTours().catch(() => null),
+          ownerDocumentService.getOverview().catch(() => null),
+        ]);
 
         setDocOverview(overviewRes);
 
@@ -180,6 +190,9 @@ const OwnerToursPage = () => {
         const schedulesData = extractData(schedulesRes);
         if (Array.isArray(schedulesData)) setSchedules(schedulesData);
 
+        const toursData = extractData(toursRes);
+        if (Array.isArray(toursData)) setOwnerTours(toursData);
+
         const bookingsData = extractData(bookingsRes);
         if (Array.isArray(bookingsData)) setRecentBookings(bookingsData);
       } catch (error) {
@@ -195,6 +208,24 @@ const OwnerToursPage = () => {
   }, [currentMonth, currentYear, t]);
 
   const isLocked = Boolean(docOverview?.isLocked);
+
+  /**
+   * Bấm vào một lịch trình để xem tour hiện ra sao với khách. Tour chưa được
+   * duyệt chưa có trang công khai nên báo rõ thay vì điều hướng vào trang 404.
+   */
+  const handleScheduleClick = (schedule: any) => {
+    if (!schedule?.tourId) {
+      toast.info(t('ownerTours.calendar.tourDetailUnavailable'));
+      return;
+    }
+
+    if ((schedule.tourStatus || '').toLowerCase() !== 'active') {
+      toast.info(t('ownerTours.tourList.notPublicHint'));
+      return;
+    }
+
+    navigate(`/tours/${schedule.tourId}`);
+  };
 
   const handleCreateSchedule = async () => {
     if (isLocked) {
@@ -243,12 +274,15 @@ const OwnerToursPage = () => {
           t('ownerTours.createModal.createSuccess', 'Lịch trình đã được tạo!'),
         );
 
-        // re-fetch schedules
-        const schedulesRes = await tourService.getToursDashboardSchedules(
-          currentMonth,
-          currentYear,
-        );
+        // re-fetch schedules + tour list (so cac chi so lich trinh khong bi cu)
+        const [schedulesRes, toursRes] = await Promise.all([
+          tourService.getToursDashboardSchedules(currentMonth, currentYear),
+          tourService.getToursDashboardTours().catch(() => null),
+        ]);
         if (isSuccessResponse(schedulesRes)) setSchedules(schedulesRes.result);
+        if (toursRes && isSuccessResponse(toursRes)) {
+          setOwnerTours(toursRes.result);
+        }
       } else {
         toast.error(res.message || t('ownerTours.createModal.createError'));
       }
@@ -286,6 +320,19 @@ const OwnerToursPage = () => {
                 <Skeleton className="h-4 w-40 mx-auto" />
                 <Skeleton className="h-60 w-full rounded-xl" />
               </div>
+            </div>
+          </div>
+
+          {/* Registered Tours Card Skeleton */}
+          <div className="bg-ddms-bg-card rounded-xl border border-border p-6 shadow-sm space-y-4">
+            <div className="flex justify-between items-center">
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-8 w-40 rounded-lg" />
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <Skeleton className="h-64 w-full rounded-xl" />
+              <Skeleton className="h-64 w-full rounded-xl" />
+              <Skeleton className="h-64 w-full rounded-xl" />
             </div>
           </div>
 
@@ -365,6 +412,8 @@ const OwnerToursPage = () => {
 
           <DashboardCharts stats={stats} />
 
+          <OwnerTourList tours={ownerTours} />
+
           <ScheduleCalendar
             schedules={schedules}
             currentDate={currentDate}
@@ -382,6 +431,7 @@ const OwnerToursPage = () => {
               }
               setShowCreateModal(true);
             }}
+            onScheduleClick={handleScheduleClick}
             onPrev={handlePrevMonth}
             onNext={handleNextMonth}
           />

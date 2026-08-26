@@ -1304,6 +1304,10 @@
       "viewWeek": "TUẦN",
       "viewDay": "NGÀY",
       "createTourBtn": "TẠO TOUR",
+      "createScheduleBtn": "TẠO LỊCH TRÌNH",
+      "createScheduleLocked": "Tạm khóa tạo lịch trình",
+      "openDetailHint": "Bấm để xem trang tour dành cho khách",
+      "tourDetailUnavailable": "Lịch trình này chưa gắn với tour nào.",
       "weekdays": {
         "monday": "Thứ 2",
         "tuesday": "Thứ 3",
@@ -1317,6 +1321,33 @@
       "noSchedulesNext7Days": "Không có lịch trình nào trong tuần tới.",
       "todayTitle": "Lịch trình Hôm nay ({{date}})",
       "noSchedulesToday": "Không có lịch trình nào trong hôm nay."
+    },
+    "tourList": {
+      "title": "Tour đã đăng ký",
+      "subtitle": "Toàn bộ tour bạn đã đăng ký, kể cả tour đang chờ Admin duyệt.",
+      "filters": {
+        "all": "Tất cả",
+        "active": "Đang bán",
+        "pending": "Chờ duyệt",
+        "other": "Khác"
+      },
+      "status": {
+        "active": "Đang bán",
+        "pending": "Chờ duyệt",
+        "inactive": "Ngừng bán",
+        "rejected": "Bị từ chối"
+      },
+      "empty": "Bạn chưa đăng ký tour nào.",
+      "emptyFilter": "Không có tour nào ở trạng thái này.",
+      "registerCta": "Đăng ký tour tại Quản lý Tàu",
+      "noBoat": "Chưa gắn thuyền nào",
+      "noSchedule": "Chưa có lịch trình sắp tới",
+      "nextSchedule": "Lịch gần nhất: {{date}}",
+      "scheduleCount": "{{upcoming}} lịch sắp tới / {{total}} tổng cộng",
+      "viewPublic": "Xem trang khách",
+      "notPublic": "Chưa lên trang khách",
+      "notPublicHint": "Tour đang chờ Admin duyệt nên chưa hiển thị với khách.",
+      "edit": "Sửa dịch vụ"
     },
     "recentBookings": {
       "title": "Danh sách Đặt chỗ Gần đây",
