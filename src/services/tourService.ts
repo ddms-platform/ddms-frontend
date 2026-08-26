@@ -140,6 +140,7 @@ export interface TourSearchQuery {
   maxDurationMinutes?: number;
   sortBy?: string;
   sortOrder?: string;
+  ownerId?: string;
 }
 
 export const tourService = {

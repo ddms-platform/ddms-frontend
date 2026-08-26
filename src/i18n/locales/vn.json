@@ -446,6 +446,7 @@
       "sectionTitle": "Đối tác uy tín trên sông Hàn",
       "verified": "Đối tác tin cậy",
       "viewFleets": "Xem các tàu hoạt động",
+      "viewTours": "Xem tour",
       "specialDeal": "Ưu đãi đặt sớm",
       "yachtTitle": "Đặt chỗ trực tiếp",
       "yachtDesc": "Liên hệ đặt hải trình riêng tư thiết kế theo sở thích.",
@@ -663,6 +664,9 @@
   "tourList": {
     "title": "Khám phá tour",
     "subtitle": "Tìm thấy {{count}} chuyến du thuyền",
+    "ownerFilterTitle": "Tour của {{name}}",
+    "ownerFilterClear": "Xem tất cả tour",
+    "ownerFilterEmpty": "Nhà cung cấp này chưa có tour đang mở.",
     "searchPlaceholder": "Tìm kiếm tour, địa điểm...",
     "filters": "Bộ lọc",
     "reviews": "đánh giá",
