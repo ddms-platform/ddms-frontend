@@ -325,24 +325,98 @@ const OwnerTourList = ({ tours, loadFailed = false }: OwnerTourListProps) => {
         )}
       </div>
 
-      {rejectedTours.length > 0 && (
-        <div className="bg-ddms-bg-card rounded-xl border border-rose-500/25 p-6 shadow-xl">
-          <div className="flex items-center gap-3 mb-6">
-            <XCircle className="w-5 h-5 text-rose-500" />
-            <div>
-              <h2 className="text-xl font-bold text-foreground">
-                {t('ownerTours.rejectedList.title')}
-              </h2>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {t('ownerTours.rejectedList.subtitle', {
-                  count: rejectedTours.length,
-                })}
-              </p>
-            </div>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {rejectedTours.map((tour) => renderTourCard(tour, true))}
-          </div>
+                <div className="flex flex-1 flex-col gap-3 p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3
+                      className="font-semibold text-foreground leading-snug"
+                      title={tour.name}
+                    >
+                      {tour.name}
+                    </h3>
+                    <TourStatusBadge status={tour.status} />
+                  </div>
+
+                  <div className="text-sm text-ddms-secondary font-bold">
+                    {formatPrice(tour.price)}
+                    <span className="ml-2 text-xs font-medium text-muted-foreground">
+                      {formatDuration(tour.durationMinutes)}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1.5">
+                      <Ship className="w-3.5 h-3.5 shrink-0" />
+                      <span className="truncate">
+                        {tour.boatNames.length > 0
+                          ? tour.boatNames.join(', ')
+                          : t('ownerTours.tourList.noBoat')}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Clock3 className="w-3.5 h-3.5 shrink-0" />
+                      <span>
+                        {tour.nextScheduleAt
+                          ? t('ownerTours.tourList.nextSchedule', {
+                              date: new Date(
+                                tour.nextScheduleAt,
+                              ).toLocaleString(i18n.language, {
+                                day: '2-digit',
+                                month: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              }),
+                            })
+                          : t('ownerTours.tourList.noSchedule')}
+                      </span>
+                    </div>
+                    <div>
+                      {t('ownerTours.tourList.scheduleCount', {
+                        upcoming: tour.upcomingScheduleCount,
+                        total: tour.scheduleCount,
+                      })}
+                    </div>
+                    {tour.upcomingScheduleCount === 0 && (
+                      <p className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[11px] font-medium leading-snug text-amber-700 dark:text-amber-400">
+                        {isActive
+                          ? t('ownerTours.tourList.missingScheduleLive')
+                          : t('ownerTours.tourList.missingSchedule')}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mt-auto flex flex-wrap gap-2 pt-2">
+                    {isActive ? (
+                      <Link
+                        to={`/tours/${tour.id}`}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-ddms-secondary px-3 py-1.5 text-xs font-bold text-white hover:bg-ddms-secondary/90 transition-colors"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        {t('ownerTours.tourList.viewPublic')}
+                      </Link>
+                    ) : (
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-muted/60 px-3 py-1.5 text-xs font-semibold text-muted-foreground"
+                        title={t('ownerTours.tourList.notPublicHint')}
+                      >
+                        <Clock3 className="w-3.5 h-3.5" />
+                        {t('ownerTours.tourList.notPublic')}
+                      </span>
+                    )}
+
+                    {tour.primaryBoatId && (
+                      <Link
+                        to={`/owner/boats/${tour.primaryBoatId}/edit`}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-foreground/5 transition-colors"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                        {t('ownerTours.tourList.edit')}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 

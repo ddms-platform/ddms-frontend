@@ -1352,7 +1352,6 @@
       "notPublicHint": "Tour đang chờ Admin duyệt nên chưa hiển thị với khách.",
       "missingSchedule": "Chưa có lịch trình. Sau khi được duyệt, hãy bấm một ngày trên lịch để khách đặt được.",
       "missingScheduleLive": "Tour đã duyệt nhưng chưa có lịch sắp tới — khách chưa đặt được. Hãy bấm một ngày trên lịch để tạo.",
-      "onScheduleHint": "Đây là các tour đã có ít nhất một chuyến sắp tới trên lịch.",
       "edit": "Sửa dịch vụ",
       "loadError": "Không tải được danh sách tour đã đăng ký.",
       "loadErrorHint": "Hãy tải lại trang. Nếu vẫn lỗi, có thể máy chủ đang chạy bản cũ."
