@@ -1327,12 +1327,12 @@
     },
     "tourList": {
       "title": "Tour đã đăng ký",
-      "subtitle": "Toàn bộ tour bạn đã đăng ký, kể cả tour đang chờ Admin duyệt.",
+      "subtitle": "Tour gắn với tàu của bạn (đang bán hoặc chờ duyệt). Tour bị từ chối nằm ở khu riêng bên dưới.",
       "filters": {
         "all": "Tất cả",
         "active": "Đang bán",
         "pending": "Chờ duyệt",
-        "other": "Khác"
+        "onSchedule": "Đã lên lịch"
       },
       "status": {
         "active": "Đang bán",
@@ -1340,8 +1340,8 @@
         "inactive": "Ngừng bán",
         "rejected": "Bị từ chối"
       },
-      "empty": "Bạn chưa đăng ký tour nào.",
-      "emptyFilter": "Không có tour nào ở trạng thái này.",
+      "empty": "Bạn chưa đăng ký tour nào trên tàu.",
+      "emptyFilter": "Không có tour nào ở bộ lọc này.",
       "registerCta": "Đăng ký tour tại Quản lý Tàu",
       "noBoat": "Chưa gắn thuyền nào",
       "noSchedule": "Chưa có lịch trình sắp tới",
@@ -1352,9 +1352,25 @@
       "notPublicHint": "Tour đang chờ Admin duyệt nên chưa hiển thị với khách.",
       "missingSchedule": "Chưa có lịch trình. Sau khi được duyệt, hãy bấm một ngày trên lịch để khách đặt được.",
       "missingScheduleLive": "Tour đã duyệt nhưng chưa có lịch sắp tới — khách chưa đặt được. Hãy bấm một ngày trên lịch để tạo.",
+      "onScheduleHint": "Đây là các tour đã có ít nhất một chuyến sắp tới trên lịch.",
       "edit": "Sửa dịch vụ",
       "loadError": "Không tải được danh sách tour đã đăng ký.",
       "loadErrorHint": "Hãy tải lại trang. Nếu vẫn lỗi, có thể máy chủ đang chạy bản cũ."
+    },
+    "rejectedList": {
+      "title": "Tour bị từ chối",
+      "subtitle": "{{count}} tour cần chỉnh sửa theo phản hồi của Admin rồi gửi duyệt lại.",
+      "reasonLabel": "Lý do từ Admin",
+      "noReason": "Admin chưa ghi lý do chi tiết. Hãy mở form sửa dịch vụ và kiểm tra lại nội dung/ảnh.",
+      "editAndResubmit": "Sửa & gửi lại"
+    },
+    "rules": {
+      "title": "Quy tắc đăng ký & xếp lịch tour",
+      "item1": "Đăng ký dịch vụ/tour tại Quản lý Tàu — hệ thống không tự tạo lịch.",
+      "item2": "Một thuyền không được xếp hai chuyến trùng giờ; hãy chọn khung trống trên lịch.",
+      "item3": "Tour chờ duyệt chưa hiện với khách; sau khi Admin duyệt bạn phải tạo lịch thì khách mới đặt được.",
+      "item4": "Tour bị từ chối nằm ở khu riêng kèm lý do Admin — sửa rồi gửi duyệt lại.",
+      "item5": "Xoá thuyền sẽ gỡ tour khỏi danh sách đăng ký (trừ tour bị từ chối vẫn hiện để xem feedback)."
     },
     "dayModal": {
       "title": "Lịch trình ngày {{date}}",

@@ -156,6 +156,8 @@ export interface OwnerTourListItem {
   upcomingScheduleCount: number;
   nextScheduleAt?: string | null;
   createdAt: string;
+  /** Lý do Admin từ chối — chỉ có khi status = rejected. */
+  rejectionReason?: string | null;
 }
 
 export interface TourSearchQuery {
