@@ -1353,6 +1353,9 @@
       "missingSchedule": "No schedule yet. After approval, click a day on the calendar so customers can book.",
       "missingScheduleLive": "This tour is live but has no upcoming schedule, so customers cannot book. Click a day on the calendar to create one.",
       "onScheduleHint": "These tours already have at least one upcoming trip on the calendar.",
+      "noScheduleShort": "No schedule",
+      "showMore": "Show {{count}} more",
+      "showLess": "Show less",
       "edit": "Edit service",
       "loadError": "Could not load your registered tours.",
       "loadErrorHint": "Reload the page. If it keeps failing, the server may be running an older build."
@@ -1366,6 +1369,8 @@
     },
     "rules": {
       "title": "Tour registration & scheduling rules",
+      "show": "Show",
+      "hide": "Hide",
       "item1": "Register services/tours in Boat Management — the system does not auto-create schedules.",
       "item2": "One boat cannot run two overlapping trips; pick a free slot on the calendar.",
       "item3": "Pending tours are hidden from customers; after approval you must create a schedule before booking.",
