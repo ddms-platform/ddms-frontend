@@ -205,6 +205,13 @@ const OwnerTourList = ({ tours, loadFailed = false }: OwnerTourListProps) => {
                         total: tour.scheduleCount,
                       })}
                     </div>
+                    {tour.upcomingScheduleCount === 0 && (
+                      <p className="rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[11px] font-medium leading-snug text-amber-700 dark:text-amber-400">
+                        {isActive
+                          ? t('ownerTours.tourList.missingScheduleLive')
+                          : t('ownerTours.tourList.missingSchedule')}
+                      </p>
+                    )}
                   </div>
 
                   <div className="mt-auto flex flex-wrap gap-2 pt-2">
