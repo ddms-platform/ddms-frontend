@@ -1350,6 +1350,8 @@
       "viewPublic": "Xem trang khách",
       "notPublic": "Chưa lên trang khách",
       "notPublicHint": "Tour đang chờ Admin duyệt nên chưa hiển thị với khách.",
+      "missingSchedule": "Chưa có lịch trình. Sau khi được duyệt, hãy bấm một ngày trên lịch để khách đặt được.",
+      "missingScheduleLive": "Tour đã duyệt nhưng chưa có lịch sắp tới — khách chưa đặt được. Hãy bấm một ngày trên lịch để tạo.",
       "edit": "Sửa dịch vụ",
       "loadError": "Không tải được danh sách tour đã đăng ký.",
       "loadErrorHint": "Hãy tải lại trang. Nếu vẫn lỗi, có thể máy chủ đang chạy bản cũ."

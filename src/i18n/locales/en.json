@@ -1350,6 +1350,8 @@
       "viewPublic": "View public page",
       "notPublic": "Not published yet",
       "notPublicHint": "This tour is awaiting admin approval, so customers cannot see it yet.",
+      "missingSchedule": "No schedule yet. After approval, click a day on the calendar so customers can book.",
+      "missingScheduleLive": "This tour is live but has no upcoming schedule, so customers cannot book. Click a day on the calendar to create one.",
       "edit": "Edit service",
       "loadError": "Could not load your registered tours.",
       "loadErrorHint": "Reload the page. If it keeps failing, the server may be running an older build."
