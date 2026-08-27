@@ -1,4 +1,13 @@
-import { Calendar, Plus, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { useState } from 'react';
+import {
+  Calendar,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+  Lock,
+  BookOpen,
+  ChevronDown,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { localDateToIso } from '@/lib/date-format';
 
@@ -38,6 +47,7 @@ const ScheduleCalendar = ({
   onNext,
 }: ScheduleCalendarProps) => {
   const { t, i18n } = useTranslation();
+  const [rulesOpen, setRulesOpen] = useState(false);
 
   const openSchedule = (schedule: any) => onScheduleClick?.(schedule);
 
@@ -324,8 +334,40 @@ const ScheduleCalendar = ({
         </div>
       </div>
 
+      <div className="-mt-2 mb-4 rounded-lg border border-ddms-secondary/20 bg-ddms-secondary/5">
+        <button
+          type="button"
+          onClick={() => setRulesOpen((v) => !v)}
+          className="flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left cursor-pointer"
+        >
+          <span className="inline-flex items-center gap-2 text-xs font-semibold text-foreground">
+            <BookOpen className="w-4 h-4 text-ddms-secondary shrink-0" />
+            {t('ownerTours.rules.title')}
+          </span>
+          <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+            {rulesOpen
+              ? t('ownerTours.rules.hide')
+              : t('ownerTours.rules.show')}
+            <ChevronDown
+              className={`w-3.5 h-3.5 transition-transform ${
+                rulesOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </span>
+        </button>
+        {rulesOpen && (
+          <ul className="border-t border-ddms-secondary/15 px-4 py-2.5 space-y-1 text-xs text-muted-foreground list-disc pl-8">
+            <li>{t('ownerTours.rules.item1')}</li>
+            <li>{t('ownerTours.rules.item2')}</li>
+            <li>{t('ownerTours.rules.item3')}</li>
+            <li>{t('ownerTours.rules.item4')}</li>
+            <li>{t('ownerTours.rules.item5')}</li>
+          </ul>
+        )}
+      </div>
+
       {viewMode === 'month' && (
-        <p className="text-xs text-muted-foreground -mt-3 mb-4">
+        <p className="text-xs text-muted-foreground -mt-1 mb-4">
           {t('ownerTours.calendar.dayClickHint')}
         </p>
       )}

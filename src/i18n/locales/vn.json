@@ -1353,6 +1353,9 @@
       "missingSchedule": "Chưa có lịch trình. Sau khi được duyệt, hãy bấm một ngày trên lịch để khách đặt được.",
       "missingScheduleLive": "Tour đã duyệt nhưng chưa có lịch sắp tới — khách chưa đặt được. Hãy bấm một ngày trên lịch để tạo.",
       "onScheduleHint": "Đây là các tour đã có ít nhất một chuyến sắp tới trên lịch.",
+      "noScheduleShort": "Chưa có lịch",
+      "showMore": "Xem thêm {{count}} tour",
+      "showLess": "Thu gọn",
       "edit": "Sửa dịch vụ",
       "loadError": "Không tải được danh sách tour đã đăng ký.",
       "loadErrorHint": "Hãy tải lại trang. Nếu vẫn lỗi, có thể máy chủ đang chạy bản cũ."
@@ -1366,6 +1369,8 @@
     },
     "rules": {
       "title": "Quy tắc đăng ký & xếp lịch tour",
+      "show": "Xem",
+      "hide": "Ẩn",
       "item1": "Đăng ký dịch vụ/tour tại Quản lý Tàu — hệ thống không tự tạo lịch.",
       "item2": "Một thuyền không được xếp hai chuyến trùng giờ; hãy chọn khung trống trên lịch.",
       "item3": "Tour chờ duyệt chưa hiện với khách; sau khi Admin duyệt bạn phải tạo lịch thì khách mới đặt được.",
