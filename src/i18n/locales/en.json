@@ -1327,12 +1327,12 @@
     },
     "tourList": {
       "title": "Registered tours",
-      "subtitle": "Every tour you registered, including those awaiting admin approval.",
+      "subtitle": "Tours linked to your boats (live or pending). Rejected tours appear in a separate section below.",
       "filters": {
         "all": "All",
         "active": "Live",
         "pending": "Pending",
-        "other": "Other"
+        "onSchedule": "On schedule"
       },
       "status": {
         "active": "Live",
@@ -1340,8 +1340,8 @@
         "inactive": "Unlisted",
         "rejected": "Rejected"
       },
-      "empty": "You have not registered any tour yet.",
-      "emptyFilter": "No tour in this status.",
+      "empty": "You have not registered any tour on a boat yet.",
+      "emptyFilter": "No tour matches this filter.",
       "registerCta": "Register a tour in Boat Management",
       "noBoat": "No boat assigned",
       "noSchedule": "No upcoming schedule",
@@ -1352,9 +1352,25 @@
       "notPublicHint": "This tour is awaiting admin approval, so customers cannot see it yet.",
       "missingSchedule": "No schedule yet. After approval, click a day on the calendar so customers can book.",
       "missingScheduleLive": "This tour is live but has no upcoming schedule, so customers cannot book. Click a day on the calendar to create one.",
+      "onScheduleHint": "These tours already have at least one upcoming trip on the calendar.",
       "edit": "Edit service",
       "loadError": "Could not load your registered tours.",
       "loadErrorHint": "Reload the page. If it keeps failing, the server may be running an older build."
+    },
+    "rejectedList": {
+      "title": "Rejected tours",
+      "subtitle": "{{count}} tour(s) need updates based on admin feedback, then resubmit.",
+      "reasonLabel": "Admin feedback",
+      "noReason": "No detailed reason was saved. Open edit and review content/photos.",
+      "editAndResubmit": "Edit & resubmit"
+    },
+    "rules": {
+      "title": "Tour registration & scheduling rules",
+      "item1": "Register services/tours in Boat Management — the system does not auto-create schedules.",
+      "item2": "One boat cannot run two overlapping trips; pick a free slot on the calendar.",
+      "item3": "Pending tours are hidden from customers; after approval you must create a schedule before booking.",
+      "item4": "Rejected tours appear separately with admin feedback — fix and resubmit.",
+      "item5": "Deleting a boat removes its tours from Registered tours (rejected tours still show for feedback)."
     },
     "dayModal": {
       "title": "Schedules on {{date}}",
