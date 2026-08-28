@@ -1427,7 +1427,7 @@
       "selectBoatPlaceholder": "-- Select your boat --",
       "selectTour": "Select Tour (Approved Tours only)",
       "selectTourPlaceholder": "-- Select Tour --",
-      "noTourWarning": "This boat has no tours approved by Admin yet. Please wait for approval or add more in Boat Management.",
+      "noTourWarning": "This boat has no live (approved) tours yet. Pending tours cannot be scheduled. Wait for Admin approval or add a tour in Boat Management.",
       "startDate": "Start Date",
       "startTime": "Departure Time",
       "endDate": "End Date",

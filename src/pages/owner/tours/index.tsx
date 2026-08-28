@@ -509,7 +509,8 @@ const OwnerToursPage = () => {
         isCreating={isCreating}
         onBoatChange={(id) => {
           setSelectedBoatId(id);
-          setSelectedTourId('');
+          const tours = resources.find((b) => b.id === id)?.tours || [];
+          setSelectedTourId(tours[0]?.id ?? '');
         }}
         onTourChange={setSelectedTourId}
         onScheduleDateChange={setScheduleDate}
