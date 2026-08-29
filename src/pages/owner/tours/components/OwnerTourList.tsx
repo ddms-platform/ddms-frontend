@@ -236,7 +236,7 @@ const OwnerTourList = ({ tours, loadFailed = false }: OwnerTourListProps) => {
 
           {tour.primaryBoatId && (
             <Link
-              to={`/owner/boats/${tour.primaryBoatId}/edit`}
+              to={`/owner/boats/${tour.primaryBoatId}/edit?tab=services&tourId=${tour.id}`}
               className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1.5 text-[11px] font-semibold text-foreground hover:bg-foreground/5"
               title={
                 isRejected

@@ -98,12 +98,14 @@ export const getEmptyService = (): ServiceFormState => ({
 interface ServiceTabProps {
   boatType: string;
   services: ServiceFormState[];
+  highlightServiceId?: string | null;
   onChange: (services: ServiceFormState[]) => void;
 }
 
 export default function ServiceTab({
   boatType,
   services,
+  highlightServiceId,
   onChange,
 }: ServiceTabProps) {
   const importInputRef = useRef<HTMLInputElement>(null);
@@ -436,7 +438,12 @@ export default function ServiceTab({
       {services.map((srv, index) => (
         <div
           key={srv.id}
-          className="relative bg-ddms-bg-card border border-border rounded-xl p-8 mb-8"
+          id={`service-${srv.id}`}
+          className={`relative bg-ddms-bg-card border rounded-xl p-8 mb-8 ${
+            highlightServiceId && srv.id === highlightServiceId
+              ? 'border-ddms-secondary ring-2 ring-ddms-secondary/40'
+              : 'border-border'
+          }`}
         >
           <div className="flex justify-between items-start mb-8 pb-5 border-b border-border">
             <h2 className="text-2xl font-black tracking-wide text-foreground flex items-center gap-3">

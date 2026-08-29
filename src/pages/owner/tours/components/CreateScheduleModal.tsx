@@ -1,10 +1,19 @@
 import { Calendar, X } from 'lucide-react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import DateInput from '@/components/ui/date-input';
+import type { OwnerTourListItem } from '@/services/tourService';
+
+const isLiveOnBoat = (tour: OwnerTourListItem, boatId: string) => {
+  if ((tour.status || '').toLowerCase() !== 'active' || !boatId) return false;
+  if (tour.primaryBoatId === boatId) return true;
+  return (tour.boatIds ?? []).includes(boatId);
+};
 
 interface CreateScheduleModalProps {
   open: boolean;
   boats: any[];
+  ownerTours?: OwnerTourListItem[];
   selectedBoatId: string;
   selectedTourId: string;
   scheduleDate: string;
@@ -25,6 +34,7 @@ interface CreateScheduleModalProps {
 const CreateScheduleModal = ({
   open,
   boats,
+  ownerTours = [],
   selectedBoatId,
   selectedTourId,
   scheduleDate,
@@ -43,10 +53,20 @@ const CreateScheduleModal = ({
 }: CreateScheduleModalProps) => {
   const { t } = useTranslation();
 
-  if (!open) return null;
+  const availableTours = useMemo(() => {
+    const fromResources =
+      boats.find((b) => b.id === selectedBoatId)?.tours || [];
+    const byId = new Map<string, { id: string; name: string }>(
+      fromResources.map((t: { id: string; name: string }) => [t.id, t]),
+    );
+    for (const tour of ownerTours) {
+      if (!isLiveOnBoat(tour, selectedBoatId) || byId.has(tour.id)) continue;
+      byId.set(tour.id, { id: tour.id, name: tour.name });
+    }
+    return [...byId.values()];
+  }, [boats, ownerTours, selectedBoatId]);
 
-  const availableTours =
-    boats.find((b) => b.id === selectedBoatId)?.tours || [];
+  if (!open) return null;
 
   const isSaveDisabled =
     isCreating ||

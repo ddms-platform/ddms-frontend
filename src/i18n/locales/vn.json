@@ -1427,7 +1427,7 @@
       "selectBoatPlaceholder": "-- Chọn tàu của bạn --",
       "selectTour": "Chọn Tour (Chỉ Tour đã được Admin duyệt)",
       "selectTourPlaceholder": "-- Chọn Tour --",
-      "noTourWarning": "Tàu này chưa có Tour nào được Admin duyệt. Hãy đợi duyệt hoặc đăng ký thêm ở Quản lý Tàu.",
+      "noTourWarning": "Thuyền này chưa có tour đang bán (đã duyệt). Tour đang chờ duyệt không tạo được lịch. Hãy đợi Admin duyệt hoặc đăng ký thêm tour.",
       "startDate": "Ngày diễn ra",
       "startTime": "Giờ xuất phát",
       "endDate": "Ngày kết thúc",

@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import {
+  useParams,
+  useNavigate,
+  Link,
+  useSearchParams,
+} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft,
@@ -37,6 +42,82 @@ import { Api } from '@/services/axios';
 
 type Tab = 'basic' | 'services' | 'maintenance' | 'certificates';
 
+const TABS_SET = new Set<Tab>([
+  'basic',
+  'services',
+  'maintenance',
+  'certificates',
+]);
+
+function resolveTab(initialTab?: Tab, tabFromUrl?: string | null): Tab {
+  const raw = (tabFromUrl || initialTab) as Tab | undefined;
+  return raw && TABS_SET.has(raw) ? raw : 'basic';
+}
+
+function mapBoatServicesToForm(
+  items: NonNullable<Boat['services']>,
+): ServiceFormState[] {
+  return items.map((s) => {
+    const empty = getEmptyService();
+    const routes =
+      s.routes && s.routes.length > 0
+        ? s.routes.map((r) => ({
+            name: r.name ?? '',
+            startPoint: r.startPoint ?? '',
+            endPoint: r.endPoint ?? '',
+            description: r.description ?? '',
+          }))
+        : empty.routes;
+    const faqs =
+      s.faqs && s.faqs.length > 0
+        ? s.faqs.map((f) => ({
+            question: f.question ?? '',
+            answer: f.answer ?? '',
+          }))
+        : empty.faqs;
+    const rooms =
+      s.rooms && s.rooms.length > 0
+        ? s.rooms.map((r) => ({
+            name: r.name ?? '',
+            capacity: String(r.capacity ?? ''),
+            price: String(r.price ?? ''),
+            description: r.description ?? '',
+            imageUrl: r.imageUrl ?? '',
+          }))
+        : empty.rooms;
+    const combos =
+      s.combos && s.combos.length > 0
+        ? s.combos.map((c) => ({
+            name: c.name ?? '',
+            price: String(c.price ?? ''),
+            description: c.description ?? '',
+            imageUrl: c.imageUrl ?? '',
+          }))
+        : empty.combos;
+    const tourImageUrls =
+      s.imageUrls && s.imageUrls.length > 0
+        ? s.imageUrls.filter(Boolean)
+        : s.imageUrl
+          ? [s.imageUrl]
+          : [];
+    return {
+      ...empty,
+      id: s.id,
+      name: s.name,
+      basePrice: String(s.price || 0),
+      childPricePercent: String(s.childPricePercent ?? 50),
+      infantPricePercent: String(s.infantPricePercent ?? 0),
+      description: s.description || '',
+      serviceType: s.serviceType || 'cruise',
+      routes,
+      faqs,
+      rooms,
+      combos,
+      tourImageUrls,
+    };
+  });
+}
+
 export default function BoatForm({
   boatIdProp,
   initialTab,
@@ -50,11 +131,15 @@ export default function BoatForm({
 } = {}) {
   const { t } = useTranslation();
   const { boatId: routeBoatId } = useParams();
+  const [searchParams] = useSearchParams();
   const boatId = boatIdProp || routeBoatId;
   const navigate = useNavigate();
   const isEdit = !!boatId;
+  const tourIdFromUrl = searchParams.get('tourId');
 
-  const [activeTab, setActiveTab] = useState<Tab>(initialTab ?? 'basic');
+  const [activeTab, setActiveTab] = useState<Tab>(() =>
+    resolveTab(initialTab, searchParams.get('tab')),
+  );
   const [boat, setBoat] = useState<Boat | null>(null);
   const [docOverview, setDocOverview] =
     useState<OwnerDocumentsOverviewResponse | null>(null);
@@ -140,69 +225,8 @@ export default function BoatForm({
       if (b.images) {
         setBoatImages(b.images);
       }
-      if (b.services && b.services.length > 0) {
-        setServices(
-          b.services.map((s) => {
-            const empty = getEmptyService();
-            const routes =
-              s.routes && s.routes.length > 0
-                ? s.routes.map((r) => ({
-                    name: r.name ?? '',
-                    startPoint: r.startPoint ?? '',
-                    endPoint: r.endPoint ?? '',
-                    description: r.description ?? '',
-                  }))
-                : empty.routes;
-            const faqs =
-              s.faqs && s.faqs.length > 0
-                ? s.faqs.map((f) => ({
-                    question: f.question ?? '',
-                    answer: f.answer ?? '',
-                  }))
-                : empty.faqs;
-            const rooms =
-              s.rooms && s.rooms.length > 0
-                ? s.rooms.map((r) => ({
-                    name: r.name ?? '',
-                    capacity: String(r.capacity ?? ''),
-                    price: String(r.price ?? ''),
-                    description: r.description ?? '',
-                    imageUrl: r.imageUrl ?? '',
-                  }))
-                : empty.rooms;
-            const combos =
-              s.combos && s.combos.length > 0
-                ? s.combos.map((c) => ({
-                    name: c.name ?? '',
-                    price: String(c.price ?? ''),
-                    description: c.description ?? '',
-                    imageUrl: c.imageUrl ?? '',
-                  }))
-                : empty.combos;
-            const tourImageUrls =
-              s.imageUrls && s.imageUrls.length > 0
-                ? s.imageUrls.filter(Boolean)
-                : s.imageUrl
-                  ? [s.imageUrl]
-                  : [];
-            return {
-              ...empty,
-              id: s.id,
-              name: s.name,
-              basePrice: String(s.price || 0),
-              childPricePercent: String(s.childPricePercent ?? 50),
-              infantPricePercent: String(s.infantPricePercent ?? 0),
-              description: s.description || '',
-              serviceType: s.serviceType || 'cruise',
-              routes,
-              faqs,
-              rooms,
-              combos,
-              tourImageUrls,
-            };
-          }),
-        );
-      }
+      const mapped = mapBoatServicesToForm(b.services ?? []);
+      setServices(mapped.length > 0 ? mapped : [getEmptyService()]);
     } catch {
       toast.error('Không thể tải thông tin tàu');
     } finally {
@@ -216,6 +240,12 @@ export default function BoatForm({
     }, 0);
     return () => window.clearTimeout(timer);
   }, [loadBoat]);
+
+  useEffect(() => {
+    if (loadingBoat || activeTab !== 'services' || !tourIdFromUrl) return;
+    const el = document.getElementById(`service-${tourIdFromUrl}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [loadingBoat, activeTab, tourIdFromUrl, services]);
 
   useEffect(() => {
     getBoatTypes()
@@ -419,7 +449,9 @@ export default function BoatForm({
       id: 'services',
       label: 'Dịch vụ của tàu',
       icon: Layers,
-      count: services.length,
+      count: isEdit
+        ? services.filter((s) => !isNewService(s.id)).length
+        : services.length,
     },
     {
       id: 'maintenance',
@@ -597,6 +629,7 @@ export default function BoatForm({
           <ServiceTab
             boatType={type}
             services={services}
+            highlightServiceId={tourIdFromUrl}
             onChange={handleServicesChange}
           />
         )}

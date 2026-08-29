@@ -151,6 +151,7 @@ export interface OwnerTourListItem {
   serviceType?: string | null;
   thumbnailUrl?: string | null;
   boatNames: string[];
+  boatIds?: string[];
   primaryBoatId?: string | null;
   scheduleCount: number;
   upcomingScheduleCount: number;

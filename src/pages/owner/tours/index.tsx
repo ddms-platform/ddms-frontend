@@ -182,17 +182,6 @@ const OwnerToursPage = () => {
           return res;
         };
 
-        const resourcesData = extractData(resourcesRes);
-        if (resourcesData && Array.isArray(resourcesData.boats)) {
-          setResources(resourcesData.boats);
-          if (resourcesData.boats.length > 0) {
-            setSelectedBoatId(resourcesData.boats[0].id);
-            if (resourcesData.boats[0].tours?.length > 0) {
-              setSelectedTourId(resourcesData.boats[0].tours[0].id);
-            }
-          }
-        }
-
         const statsData = extractData(statsRes);
         if (Array.isArray(statsData)) {
           const parsedStats = statsData.map((s: any, index: number) => ({
@@ -209,6 +198,28 @@ const OwnerToursPage = () => {
 
         const toursData = extractData(toursRes);
         if (Array.isArray(toursData)) setOwnerTours(toursData);
+
+        const resourcesData = extractData(resourcesRes);
+        if (resourcesData && Array.isArray(resourcesData.boats)) {
+          setResources(resourcesData.boats);
+          if (resourcesData.boats.length > 0) {
+            const firstBoat = resourcesData.boats[0];
+            setSelectedBoatId(firstBoat.id);
+            const fromResources = firstBoat.tours ?? [];
+            const fromList = Array.isArray(toursData)
+              ? toursData.filter((tour: OwnerTourListItem) => {
+                  if ((tour.status || '').toLowerCase() !== 'active')
+                    return false;
+                  return (
+                    tour.primaryBoatId === firstBoat.id ||
+                    (tour.boatIds ?? []).includes(firstBoat.id)
+                  );
+                })
+              : [];
+            const firstTour = fromResources[0] ?? fromList[0];
+            if (firstTour) setSelectedTourId(firstTour.id);
+          }
+        }
 
         const bookingsData = extractData(bookingsRes);
         if (Array.isArray(bookingsData)) setRecentBookings(bookingsData);
@@ -500,6 +511,7 @@ const OwnerToursPage = () => {
       <CreateScheduleModal
         open={showCreateModal}
         boats={resources}
+        ownerTours={ownerTours}
         selectedBoatId={selectedBoatId}
         selectedTourId={selectedTourId}
         scheduleDate={scheduleDate}
@@ -509,7 +521,14 @@ const OwnerToursPage = () => {
         isCreating={isCreating}
         onBoatChange={(id) => {
           setSelectedBoatId(id);
-          setSelectedTourId('');
+          const fromResources = resources.find((b) => b.id === id)?.tours || [];
+          const fromList = ownerTours.filter((tour) => {
+            if ((tour.status || '').toLowerCase() !== 'active') return false;
+            return (
+              tour.primaryBoatId === id || (tour.boatIds ?? []).includes(id)
+            );
+          });
+          setSelectedTourId(fromResources[0]?.id ?? fromList[0]?.id ?? '');
         }}
         onTourChange={setSelectedTourId}
         onScheduleDateChange={setScheduleDate}
