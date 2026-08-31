@@ -45,6 +45,41 @@ export const AiChatWidget: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
+  const launcherRef = useRef<HTMLDivElement>(null);
+  const [launcherPos, setLauncherPos] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+  const dragRef = useRef({
+    pointerId: -1,
+    startX: 0,
+    startY: 0,
+    origX: 0,
+    origY: 0,
+    moved: false,
+  });
+  const DRAG_THRESHOLD = 8;
+
+  const clampLauncherPos = (x: number, y: number, el: HTMLElement) => {
+    const maxX = window.innerWidth - el.offsetWidth;
+    const maxY = window.innerHeight - el.offsetHeight;
+    return {
+      x: Math.min(Math.max(0, x), Math.max(0, maxX)),
+      y: Math.min(Math.max(0, y), Math.max(0, maxY)),
+    };
+  };
+
+  useEffect(() => {
+    const onResize = () => {
+      const el = launcherRef.current;
+      if (!el || !launcherPos) return;
+      setLauncherPos((prev) =>
+        prev ? clampLauncherPos(prev.x, prev.y, el) : prev,
+      );
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [launcherPos]);
 
   const speechSupported =
     typeof window !== 'undefined' &&
@@ -271,13 +306,56 @@ export const AiChatWidget: React.FC = () => {
     <>
       {/* ── Floating Trigger Button ── */}
       {!isOpen && (
-        <div className="fixed bottom-6 right-6 z-9999">
-          {/* Glowing Aura Ring */}
-          <div className="absolute -inset-1 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 blur-md opacity-75 animate-pulse" />
+        <div
+          ref={launcherRef}
+          className="fixed z-9999 cursor-grab touch-none active:cursor-grabbing"
+          style={
+            launcherPos
+              ? { left: launcherPos.x, top: launcherPos.y }
+              : { right: 24, bottom: 24 }
+          }
+          onPointerDown={(e) => {
+            if (e.button !== 0) return;
+            const el = e.currentTarget;
+            const rect = el.getBoundingClientRect();
+            dragRef.current = {
+              pointerId: e.pointerId,
+              startX: e.clientX,
+              startY: e.clientY,
+              origX: rect.left,
+              origY: rect.top,
+              moved: false,
+            };
+            el.setPointerCapture(e.pointerId);
+          }}
+          onPointerMove={(e) => {
+            const d = dragRef.current;
+            if (d.pointerId !== e.pointerId) return;
+            const dx = e.clientX - d.startX;
+            const dy = e.clientY - d.startY;
+            if (!d.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+            d.moved = true;
+            setLauncherPos(
+              clampLauncherPos(d.origX + dx, d.origY + dy, e.currentTarget),
+            );
+          }}
+          onPointerUp={(e) => {
+            const d = dragRef.current;
+            if (d.pointerId !== e.pointerId) return;
+            d.pointerId = -1;
+            if (!d.moved) setIsOpen(true);
+          }}
+          onPointerCancel={(e) => {
+            const d = dragRef.current;
+            if (d.pointerId !== e.pointerId) return;
+            d.pointerId = -1;
+          }}
+        >
+          <div className="absolute -inset-1 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 blur-md opacity-75 animate-pulse pointer-events-none" />
 
           <button
-            onClick={() => setIsOpen(true)}
-            className="relative flex items-center gap-2.5 bg-linear-to-r from-[#001c38] to-[#003865] hover:from-[#002850] hover:to-[#004b85] text-white px-5 py-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-cyan-400/30 cursor-pointer"
+            type="button"
+            className="relative flex items-center gap-2.5 bg-linear-to-r from-[#001c38] to-[#003865] hover:from-[#002850] hover:to-[#004b85] text-white px-5 py-3.5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border border-cyan-400/30 pointer-events-none"
             aria-label="Open AI Assistant"
           >
             <div className="relative flex items-center justify-center w-7 h-7 rounded-full bg-cyan-400/20 text-cyan-300">
