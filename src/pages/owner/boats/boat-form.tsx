@@ -361,15 +361,14 @@ export default function BoatForm({
             srv.serviceType === 'cruise' || srv.serviceType === 'complex_tour'
               ? srv.routes
               : undefined,
-          combos:
-            srv.serviceType === 'dinner'
-              ? srv.combos.map((c) => ({
-                  name: c.name,
-                  price: parseFloat(c.price || '0'),
-                  description: c.description,
-                  imageUrl: c.imageUrl,
-                }))
-              : undefined,
+          combos: srv.combos
+            .filter((c) => c.name && c.name.trim())
+            .map((c) => ({
+              name: c.name,
+              price: parseFloat(c.price || '0'),
+              description: c.description,
+              imageUrl: c.imageUrl,
+            })),
           rooms:
             srv.serviceType === 'cruise' || srv.serviceType === 'complex_tour'
               ? srv.rooms.map((r) => ({

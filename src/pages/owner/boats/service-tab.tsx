@@ -25,6 +25,7 @@ import {
 } from './service-tab/excel-import';
 import AiContentStudio from './service-tab/AiContentStudio';
 import TourImagesSection from './service-tab/TourImagesSection';
+import AddOnServicesSection from './service-tab/AddOnServicesSection';
 import type { FaqItem } from '@/services/aiService';
 
 export interface ComboForm {
@@ -259,6 +260,23 @@ export default function ServiceTab({
                 { name: '', startPoint: '', endPoint: '', description: '' },
               ],
             };
+        }
+        return s;
+      }),
+    );
+  };
+
+  const handleRemoveDynamicArrayItem = (
+    serviceId: string,
+    arrayName: 'combos' | 'rooms' | 'faqs' | 'routes',
+    index: number,
+  ) => {
+    onChange(
+      services.map((s) => {
+        if (s.id === serviceId) {
+          const arr = [...(s[arrayName] as any[])];
+          arr.splice(index, 1);
+          return { ...s, [arrayName]: arr };
         }
         return s;
       }),
@@ -665,6 +683,20 @@ export default function ServiceTab({
               </Button>
             </div>
           </div>
+
+          <AddOnServicesSection
+            service={srv}
+            onChangeItem={(idx, field, value) =>
+              handleUpdateDynamicArrayItem(srv.id, 'combos', idx, field, value)
+            }
+            onAdd={() => handleAddDynamicArrayItem(srv.id, 'combos')}
+            onRemove={(idx) =>
+              handleRemoveDynamicArrayItem(srv.id, 'combos', idx)
+            }
+            onUploadImage={(idx, file) =>
+              handleUploadImage(srv.id, 'combos', idx, file)
+            }
+          />
         </div>
       ))}
 
