@@ -251,7 +251,7 @@ export default function MaintenanceTab({
         )}
         <p className="text-xs text-muted-foreground mt-4 italic">
           * Nhấn vào dịch vụ để thiết lập ngày sửa chữa. Dịch vụ sẽ được đăng ký
-          khi bạn nhấn "Lưu tất cả" ở góc trên bên phải.
+          khi bạn nhấn "Lưu thông tin tàu" ở góc trên bên phải.
         </p>
       </div>
 

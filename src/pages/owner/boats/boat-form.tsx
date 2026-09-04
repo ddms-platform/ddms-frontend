@@ -38,9 +38,60 @@ import MaintenanceTab from './maintenance-tab';
 import BoatBasicInfoSection from './boat-form/BoatBasicInfoSection';
 import BoatImagesSection from './boat-form/BoatImagesSection';
 import CertificateTab from './boat-form/CertificateTab';
-import { Api } from '@/services/axios';
 
 type Tab = 'basic' | 'services' | 'maintenance' | 'certificates';
+
+function buildServicePayload(srv: ServiceFormState, boatId: string) {
+  return {
+    id: isNewService(srv.id) ? undefined : srv.id,
+    boatId,
+    serviceType: srv.serviceType,
+    name: srv.name,
+    basePrice: parseFloat(srv.basePrice || '0'),
+    childPricePercent:
+      srv.childPricePercent.trim() === ''
+        ? undefined
+        : parseFloat(srv.childPricePercent),
+    infantPricePercent:
+      srv.infantPricePercent.trim() === ''
+        ? undefined
+        : parseFloat(srv.infantPricePercent),
+    maxGuests:
+      srv.maxGuests.trim() === '' ? undefined : parseInt(srv.maxGuests, 10),
+    description: srv.description,
+    route: srv.serviceType === 'cruise' ? srv.route : undefined,
+    routes:
+      srv.serviceType === 'cruise' || srv.serviceType === 'complex_tour'
+        ? srv.routes
+        : undefined,
+    combos:
+      srv.serviceType === 'dinner'
+        ? srv.combos.map((c) => ({
+            name: c.name,
+            price: parseFloat(c.price || '0'),
+            description: c.description,
+            imageUrl: c.imageUrl,
+          }))
+        : undefined,
+    rooms:
+      srv.serviceType === 'cruise' || srv.serviceType === 'complex_tour'
+        ? srv.rooms.map((r) => ({
+            name: r.name,
+            capacity: parseInt(r.capacity || '1'),
+            price: parseFloat(r.price || '0'),
+            description: r.description,
+            imageUrl: r.imageUrl,
+          }))
+        : undefined,
+    faqs: srv.faqs,
+    equipments: srv.serviceType === 'fishing' ? srv.equipments : undefined,
+    pricePerDay:
+      srv.serviceType === 'speedboat' && srv.pricePerDay
+        ? parseFloat(srv.pricePerDay)
+        : undefined,
+    imageUrls: (srv.tourImageUrls ?? []).filter(Boolean),
+  };
+}
 
 const TABS_SET = new Set<Tab>([
   'basic',
@@ -115,6 +166,8 @@ function mapBoatServicesToForm(
       rooms,
       combos,
       tourImageUrls,
+      status: s.status,
+      pendingServiceChange: Boolean(s.pendingServiceChange),
     };
   });
 }
@@ -146,6 +199,7 @@ export default function BoatForm({
     useState<OwnerDocumentsOverviewResponse | null>(null);
   const [loadingBoat, setLoadingBoat] = useState(isEdit);
   const [saving, setSaving] = useState(false);
+  const [savingServiceId, setSavingServiceId] = useState<string | null>(null);
 
   // Basic info state
   const [name, setName] = useState('');
@@ -290,6 +344,96 @@ export default function BoatForm({
 
   const isSavingRef = useRef(false);
 
+  const persistBoat = async () => {
+    const effectiveBoatId = boatId || createdBoatId;
+    const effectiveIsEdit = isEdit || !!createdBoatId;
+    const dto = { name, type, maxPassengers: Number(maxPassengers), status };
+
+    if (effectiveIsEdit && effectiveBoatId) {
+      await boatService.updateByOwner(effectiveBoatId, dto);
+      return effectiveBoatId;
+    }
+
+    const created = await boatService.createByOwner(dto);
+    setCreatedBoatId(created.id);
+    return created.id;
+  };
+
+  const handleSaveService = async (srv: ServiceFormState) => {
+    if (savingServiceId) return;
+    if (isOverdueAndIncomplete) {
+      if (docOverview?.isPendingReview) {
+        toast.warning(
+          'Hồ sơ pháp lý của bạn đang chờ Ban quản trị xét duyệt. Không thể lưu thay đổi lúc này!',
+        );
+      } else {
+        toast.error(
+          'Tài khoản đang bị khóa giấy tờ pháp lý. Không thể lưu dịch vụ!',
+        );
+      }
+      return;
+    }
+    if (!srv.name.trim()) {
+      toast.error('Vui lòng nhập tên dịch vụ / tour.');
+      return;
+    }
+
+    setSavingServiceId(srv.id);
+    try {
+      if (!validate()) {
+        setActiveTab('basic');
+        return;
+      }
+
+      const savedBoatId = await persistBoat();
+      if (!savedBoatId) throw new Error('Không lấy được ID tàu');
+
+      const result = await boatService.registerService(
+        buildServicePayload(srv, savedBoatId),
+      );
+
+      if (result.approvalKind === 'service_change') {
+        toast.success(
+          'Đã gửi chỉnh sửa dịch vụ. Tour đang bán giữ nguyên, chờ admin duyệt bên cột Dịch vụ.',
+        );
+      } else if (result.approvalKind === 'tour_resubmit') {
+        toast.success(
+          'Đã cập nhật tour. Chờ admin duyệt lại ở cột Duyệt tour.',
+        );
+      } else {
+        toast.success('Đã gửi tour mới. Chờ admin duyệt ở cột Duyệt tour.');
+      }
+
+      if (boatId || createdBoatId || savedBoatId) {
+        if (boatId) {
+          await loadBoat();
+        } else {
+          setServices((prev) =>
+            prev.map((item) =>
+              item.id === srv.id
+                ? {
+                    ...item,
+                    id: result.id,
+                    status: result.status,
+                    pendingServiceChange:
+                      result.approvalKind === 'service_change',
+                  }
+                : item,
+            ),
+          );
+        }
+      }
+    } catch (err) {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : 'Lưu dịch vụ thất bại, vui lòng thử lại',
+      );
+    } finally {
+      setSavingServiceId(null);
+    }
+  };
+
   const handleSave = async () => {
     if (isSavingRef.current) return;
     if (isOverdueAndIncomplete) {
@@ -314,22 +458,9 @@ export default function BoatForm({
     isSavingRef.current = true;
     setSaving(true);
     try {
-      const effectiveBoatId = boatId || createdBoatId;
-      const effectiveIsEdit = isEdit || !!createdBoatId;
-      let savedBoatId = effectiveBoatId;
-      const dto = { name, type, maxPassengers: Number(maxPassengers), status };
-
-      if (effectiveIsEdit && effectiveBoatId) {
-        await boatService.updateByOwner(effectiveBoatId, dto);
-      } else {
-        const created = await boatService.createByOwner(dto);
-        savedBoatId = created.id;
-        setCreatedBoatId(created.id);
-      }
-
+      const savedBoatId = await persistBoat();
       if (!savedBoatId) throw new Error('Không lấy được ID tàu');
 
-      // Sync complex services
       if (removedServiceIds.length > 0) {
         await Promise.all(
           removedServiceIds.map((serviceId) =>
@@ -337,72 +468,6 @@ export default function BoatForm({
           ),
         );
         setRemovedServiceIds([]);
-      }
-
-      const activeServices = services.filter((s) => s.name && s.name.trim());
-      if (activeServices.length > 0) {
-        const payloads = activeServices.map((srv) => ({
-          id: isNewService(srv.id) ? undefined : srv.id,
-          boatId: savedBoatId,
-          serviceType: srv.serviceType,
-          name: srv.name,
-          basePrice: parseFloat(srv.basePrice || '0'),
-          // Để trống thì gửi undefined để server giữ nguyên giá trị cũ, không ghi đè thành 0.
-          childPricePercent:
-            srv.childPricePercent.trim() === ''
-              ? undefined
-              : parseFloat(srv.childPricePercent),
-          infantPricePercent:
-            srv.infantPricePercent.trim() === ''
-              ? undefined
-              : parseFloat(srv.infantPricePercent),
-          maxGuests:
-            srv.maxGuests.trim() === ''
-              ? undefined
-              : parseInt(srv.maxGuests, 10),
-          description: srv.description,
-          route: srv.serviceType === 'cruise' ? srv.route : undefined,
-          routes:
-            srv.serviceType === 'cruise' || srv.serviceType === 'complex_tour'
-              ? srv.routes
-              : undefined,
-          combos:
-            srv.serviceType === 'dinner'
-              ? srv.combos.map((c) => ({
-                  name: c.name,
-                  price: parseFloat(c.price || '0'),
-                  description: c.description,
-                  imageUrl: c.imageUrl,
-                }))
-              : undefined,
-          rooms:
-            srv.serviceType === 'cruise' || srv.serviceType === 'complex_tour'
-              ? srv.rooms.map((r) => ({
-                  name: r.name,
-                  capacity: parseInt(r.capacity || '1'),
-                  price: parseFloat(r.price || '0'),
-                  description: r.description,
-                  imageUrl: r.imageUrl,
-                }))
-              : undefined,
-          faqs: srv.faqs,
-          equipments:
-            srv.serviceType === 'fishing' ? srv.equipments : undefined,
-          pricePerDay:
-            srv.serviceType === 'speedboat' && srv.pricePerDay
-              ? parseFloat(srv.pricePerDay)
-              : undefined,
-          imageUrls: (srv.tourImageUrls ?? []).filter(Boolean),
-        }));
-
-        await Promise.all(
-          payloads.map((payload) =>
-            Api.post('/owner/services/register', payload).catch((err) => {
-              console.error(err);
-              throw new Error('Lỗi khi đăng ký/cập nhật dịch vụ');
-            }),
-          ),
-        );
       }
 
       // Save newly selected images
@@ -426,7 +491,7 @@ export default function BoatForm({
       }
 
       toast.success(
-        isEdit ? 'Cập nhật tàu thành công' : 'Tạo tàu & dịch vụ thành công',
+        isEdit ? 'Cập nhật thông tin tàu thành công' : 'Tạo tàu thành công',
       );
       if (onSaved) {
         onSaved();
@@ -549,7 +614,7 @@ export default function BoatForm({
                 : t('ownerBoats.form.createTitle')}
             </h1>
             <p className="text-xs text-muted-foreground">
-              Cập nhật thông tin, hình ảnh và các dịch vụ của tàu
+              Cập nhật thông tin tàu. Mỗi dịch vụ lưu riêng và gửi admin duyệt.
             </p>
           </div>
         </div>
@@ -578,7 +643,7 @@ export default function BoatForm({
             ) : (
               <Save size={16} />
             )}
-            {saving ? 'Đang lưu...' : 'Lưu tất cả'}
+            {saving ? 'Đang lưu...' : 'Lưu thông tin tàu'}
           </Button>
         )}
       </div>
@@ -636,6 +701,9 @@ export default function BoatForm({
             services={services}
             highlightServiceId={tourIdFromUrl}
             onChange={handleServicesChange}
+            onSaveService={handleSaveService}
+            savingServiceId={savingServiceId}
+            saveDisabled={isOverdueAndIncomplete}
           />
         )}
 
