@@ -81,6 +81,10 @@ export interface BoatServiceItem {
   imageUrl?: string;
   imageUrls?: string[];
   serviceType?: string;
+  /** pending | active | rejected | inactive */
+  status?: string;
+  /** Tour đang bán có phiếu sửa chờ admin duyệt. */
+  pendingServiceChange?: boolean;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -237,6 +241,18 @@ export const boatService = {
   deleteServiceByOwner: (boatId: string, serviceId: string) =>
     api
       .delete<ApiResponse<any>>(`/owner/boats/${boatId}/services/${serviceId}`)
+      .then((r) => r.data.result),
+
+  registerService: (payload: Record<string, unknown>) =>
+    api
+      .post<
+        ApiResponse<{
+          id: string;
+          status?: string;
+          approvalKind?: string;
+          changeRequestId?: string;
+        }>
+      >('/owner/services/register', payload)
       .then((r) => r.data.result),
 
   // --- Admin/Owner Management Endpoints (Cabins, Services, Images, Maintenance) ---

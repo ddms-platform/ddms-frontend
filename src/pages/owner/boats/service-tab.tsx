@@ -5,6 +5,8 @@ import {
   MessageCircleQuestion,
   Upload,
   FileDown,
+  Save,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -71,9 +73,51 @@ export interface ServiceFormState {
   equipments: string;
   pricePerDay: string;
   tourImageUrls: string[];
+  status?: string;
+  pendingServiceChange?: boolean;
 }
 
 const NEW_SERVICE_ID_PREFIX = 'new_';
+
+function ServiceStatusBadge({ service }: { service: ServiceFormState }) {
+  if (isNewService(service.id)) {
+    return (
+      <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
+        Chưa lưu
+      </span>
+    );
+  }
+  if (service.pendingServiceChange) {
+    return (
+      <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-600">
+        Chờ duyệt sửa dịch vụ
+      </span>
+    );
+  }
+  const status = (service.status || '').toLowerCase();
+  if (status === 'pending') {
+    return (
+      <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-600">
+        Chờ duyệt tour
+      </span>
+    );
+  }
+  if (status === 'rejected') {
+    return (
+      <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-semibold text-rose-600">
+        Bị từ chối
+      </span>
+    );
+  }
+  if (status === 'active') {
+    return (
+      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-600">
+        Đang bán
+      </span>
+    );
+  }
+  return null;
+}
 
 /** Distinguishes drafts that only exist in the form from services already persisted server-side. */
 export const isNewService = (id: string) =>
@@ -103,6 +147,9 @@ interface ServiceTabProps {
   services: ServiceFormState[];
   highlightServiceId?: string | null;
   onChange: (services: ServiceFormState[]) => void;
+  onSaveService?: (service: ServiceFormState) => Promise<void>;
+  savingServiceId?: string | null;
+  saveDisabled?: boolean;
 }
 
 export default function ServiceTab({
@@ -110,6 +157,9 @@ export default function ServiceTab({
   services,
   highlightServiceId,
   onChange,
+  onSaveService,
+  savingServiceId,
+  saveDisabled,
 }: ServiceTabProps) {
   const importInputRef = useRef<HTMLInputElement>(null);
   const zipInputRef = useRef<HTMLInputElement>(null);
@@ -449,23 +499,43 @@ export default function ServiceTab({
           }`}
         >
           <div className="flex justify-between items-start mb-8 pb-5 border-b border-border">
-            <h2 className="text-2xl font-black tracking-wide text-foreground flex items-center gap-3">
+            <h2 className="text-2xl font-black tracking-wide text-foreground flex items-center gap-3 flex-wrap">
               <span className="bg-ddms-secondary/20 text-ddms-secondary px-3.5 py-1.5 rounded-md text-base border border-ddms-secondary/30">
                 #{index + 1}
               </span>
               CẤU HÌNH DỊCH VỤ
+              <ServiceStatusBadge service={srv} />
             </h2>
-            {services.length > 1 && (
-              <Button
-                type="button"
-                variant="destructive"
-                size="default"
-                onClick={() => handleRemoveService(srv.id)}
-                className="bg-red-500/20 text-red-500 hover:bg-red-500/40 border-none text-sm"
-              >
-                <Trash2 className="w-4 h-4 mr-2" /> Xóa Dịch Vụ Này
-              </Button>
-            )}
+            <div className="flex flex-wrap items-center gap-2">
+              {onSaveService && (
+                <Button
+                  type="button"
+                  variant="cyan"
+                  size="default"
+                  disabled={saveDisabled || savingServiceId === srv.id}
+                  onClick={() => void onSaveService(srv)}
+                  className="text-sm"
+                >
+                  {savingServiceId === srv.id ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4 mr-2" />
+                  )}
+                  Lưu dịch vụ này
+                </Button>
+              )}
+              {services.length > 1 && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="default"
+                  onClick={() => handleRemoveService(srv.id)}
+                  className="bg-red-500/20 text-red-500 hover:bg-red-500/40 border-none text-sm"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" /> Xóa Dịch Vụ Này
+                </Button>
+              )}
+            </div>
           </div>
 
           <div className="mb-8 bg-muted/50 p-5 rounded-xl border border-border">
