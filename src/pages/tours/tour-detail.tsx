@@ -292,8 +292,8 @@ export default function TourDetailPage() {
           <div>
             <TourInfo
               duration={formatDuration(tour.durationMinutes)}
-              maxGuests={tour.classes?.[0]?.capacity || 0} // Fallback as no maxGuests in response
-              boatName={'N/A'} // Fallback as no boatName in response
+              maxGuests={tour.maxGuests}
+              boatName={tour.boatName}
               rating={tour.avgRating}
               reviews={tour.totalReviews}
               description={tour.description || ''}

@@ -77,6 +77,11 @@ export interface TourItemResponse {
   infantPricePercent?: number;
   description?: string;
   durationMinutes: number;
+  /** Số khách tối đa chủ thuyền khai cho tour. Null = chưa khai, sức chứa lấy theo thuyền. */
+  maxGuests?: number | null;
+  /** Thuyền chạy tour này. Null khi tour chưa gắn lịch trình nào. */
+  boatId?: string | null;
+  boatName?: string | null;
   location?: string;
   mapUrl?: string;
   status: string;

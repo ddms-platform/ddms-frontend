@@ -327,8 +327,14 @@ export default function BookingPage() {
     0,
   );
   const totalPrice = tourPrice + roomPrice + servicePrice;
+  // Số khách tối đa cho phép chọn. Ưu tiên sức chứa của chính chuyến, rồi tới số
+  // khách tối đa chủ thuyền khai cho tour — cùng nguồn với check chỗ ngồi phía
+  // server, nếu không thì UI cho chọn quá rồi mới bị từ chối lúc đặt.
   const maxGuests =
-    selectedSchedule?.maxCapacity || tour?.classes?.[0]?.capacity || 50;
+    selectedSchedule?.maxCapacity ??
+    tour?.maxGuests ??
+    tour?.classes?.[0]?.capacity ??
+    50;
 
   // ── Step layout (dynamic) ──
   const stepKeys = useMemo(() => {

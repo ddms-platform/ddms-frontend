@@ -107,6 +107,7 @@ function mapBoatServicesToForm(
       basePrice: String(s.price || 0),
       childPricePercent: String(s.childPricePercent ?? 50),
       infantPricePercent: String(s.infantPricePercent ?? 0),
+      maxGuests: s.maxGuests == null ? '' : String(s.maxGuests),
       description: s.description || '',
       serviceType: s.serviceType || 'cruise',
       routes,
@@ -355,6 +356,10 @@ export default function BoatForm({
             srv.infantPricePercent.trim() === ''
               ? undefined
               : parseFloat(srv.infantPricePercent),
+          maxGuests:
+            srv.maxGuests.trim() === ''
+              ? undefined
+              : parseInt(srv.maxGuests, 10),
           description: srv.description,
           route: srv.serviceType === 'cruise' ? srv.route : undefined,
           routes:

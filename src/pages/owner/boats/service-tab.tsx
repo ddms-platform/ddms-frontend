@@ -60,6 +60,8 @@ export interface ServiceFormState {
   childPricePercent: string;
   /** % giá trẻ dưới 5 tuổi phải trả. */
   infantPricePercent: string;
+  /** Số khách tối đa cho tour. Rỗng = không khai, sức chứa lấy theo thuyền. */
+  maxGuests: string;
   description: string;
   route: string;
   routes: RouteForm[];
@@ -84,6 +86,7 @@ export const getEmptyService = (): ServiceFormState => ({
   basePrice: '',
   childPricePercent: '50',
   infantPricePercent: '0',
+  maxGuests: '',
   description: '',
   route: '',
   routes: [{ name: '', startPoint: '', endPoint: '', description: '' }],
@@ -606,6 +609,25 @@ export default function ServiceTab({
                     updateService(srv.id, 'infantPricePercent', e.target.value)
                   }
                 />
+              </div>
+              <div>
+                <label className="text-base font-medium text-muted-foreground">
+                  Số khách tối đa
+                </label>
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Bỏ trống = theo sức chứa thuyền"
+                  className="h-11 bg-ddms-bg-main border-border mt-1.5 text-sm text-foreground"
+                  value={srv.maxGuests}
+                  onChange={(e) =>
+                    updateService(srv.id, 'maxGuests', e.target.value)
+                  }
+                />
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Hệ thống chặn đặt chỗ theo giá trị nhỏ hơn giữa số này và sức
+                  chứa thuyền.
+                </p>
               </div>
             </div>
             <div>
