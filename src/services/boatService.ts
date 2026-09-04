@@ -75,6 +75,8 @@ export interface BoatServiceItem {
   childPricePercent?: number;
   /** % giá trẻ dưới 5 tuổi phải trả. */
   infantPricePercent?: number;
+  /** Số khách tối đa cho tour. Null = chưa khai, sức chứa lấy theo thuyền. */
+  maxGuests?: number | null;
   description?: string;
   imageUrl?: string;
   imageUrls?: string[];

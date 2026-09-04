@@ -3,8 +3,10 @@ import { Clock, Users, Ship, Star } from 'lucide-react';
 
 interface TourInfoProps {
   duration: string;
-  maxGuests: number;
-  boatName: string;
+  /** Null khi chủ thuyền chưa khai số khách tối đa cho tour. */
+  maxGuests?: number | null;
+  /** Null khi tour chưa gắn lịch trình nào nên chưa biết chạy thuyền nào. */
+  boatName?: string | null;
   rating: number;
   reviews: number;
   description: string;
@@ -25,9 +27,9 @@ export default function TourInfo({
     {
       icon: Users,
       label: t('tour.info.maxGuests'),
-      value: `${maxGuests} ${t('tour.info.people')}`,
+      value: maxGuests ? `${maxGuests} ${t('tour.info.people')}` : '—',
     },
-    { icon: Ship, label: t('tour.info.boat'), value: boatName },
+    { icon: Ship, label: t('tour.info.boat'), value: boatName || '—' },
   ];
 
   return (
