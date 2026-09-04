@@ -1,4 +1,11 @@
-import { Anchor, MapPin, Ship, CalendarDays, Pencil, Trash2 } from 'lucide-react';
+import {
+  Anchor,
+  MapPin,
+  Ship,
+  CalendarDays,
+  Pencil,
+  Trash2,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Dock } from '@/services/dockService';
 
@@ -9,9 +16,18 @@ interface DockCardProps {
   onViewSchedules: (dock: Dock) => void;
 }
 
-export default function DockCard({ dock, onEdit, onDelete, onViewSchedules }: DockCardProps) {
-  const usagePct = dock.maxBoats > 0 ? Math.round((dock.currentBoats / dock.maxBoats) * 100) : 0;
-  const usageColor = usagePct >= 90 ? '#EF4444' : usagePct >= 60 ? '#F59E0B' : '#10B981';
+export default function DockCard({
+  dock,
+  onEdit,
+  onDelete,
+  onViewSchedules,
+}: DockCardProps) {
+  const usagePct =
+    dock.maxBoats > 0
+      ? Math.round((dock.currentBoats / dock.maxBoats) * 100)
+      : 0;
+  const usageColor =
+    usagePct >= 90 ? '#EF4444' : usagePct >= 60 ? '#F59E0B' : '#10B981';
 
   return (
     <div
@@ -36,7 +52,10 @@ export default function DockCard({ dock, onEdit, onDelete, onViewSchedules }: Do
               <Anchor size={20} style={{ color: '#00F0FF' }} />
             </div>
             <div>
-              <h3 className="text-base font-semibold" style={{ color: '#ffffff' }}>
+              <h3
+                className="text-base font-semibold"
+                style={{ color: '#ffffff' }}
+              >
                 {dock.name}
               </h3>
               {dock.location && (
@@ -75,9 +94,14 @@ export default function DockCard({ dock, onEdit, onDelete, onViewSchedules }: Do
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-1">
               <Ship size={13} style={{ color: '#ecf0ff' }} />
-              <span className="text-xs" style={{ color: '#ecf0ff' }}>Sức chứa</span>
+              <span className="text-xs" style={{ color: '#ecf0ff' }}>
+                Sức chứa
+              </span>
             </div>
-            <span className="text-xs font-semibold" style={{ color: usageColor }}>
+            <span
+              className="text-xs font-semibold"
+              style={{ color: usageColor }}
+            >
               {dock.currentBoats}/{dock.maxBoats} tàu ({usagePct}%)
             </span>
           </div>
