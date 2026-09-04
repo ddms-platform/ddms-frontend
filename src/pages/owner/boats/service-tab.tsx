@@ -5,6 +5,8 @@ import {
   MessageCircleQuestion,
   Upload,
   FileDown,
+  Save,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -61,6 +63,8 @@ export interface ServiceFormState {
   childPricePercent: string;
   /** % giá trẻ dưới 5 tuổi phải trả. */
   infantPricePercent: string;
+  /** Số khách tối đa cho tour. Rỗng = không khai, sức chứa lấy theo thuyền. */
+  maxGuests: string;
   description: string;
   route: string;
   routes: RouteForm[];
@@ -70,9 +74,51 @@ export interface ServiceFormState {
   equipments: string;
   pricePerDay: string;
   tourImageUrls: string[];
+  status?: string;
+  pendingServiceChange?: boolean;
 }
 
 const NEW_SERVICE_ID_PREFIX = 'new_';
+
+function ServiceStatusBadge({ service }: { service: ServiceFormState }) {
+  if (isNewService(service.id)) {
+    return (
+      <span className="rounded-full border border-border bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
+        Chưa lưu
+      </span>
+    );
+  }
+  if (service.pendingServiceChange) {
+    return (
+      <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-600">
+        Chờ duyệt sửa dịch vụ
+      </span>
+    );
+  }
+  const status = (service.status || '').toLowerCase();
+  if (status === 'pending') {
+    return (
+      <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-600">
+        Chờ duyệt tour
+      </span>
+    );
+  }
+  if (status === 'rejected') {
+    return (
+      <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-semibold text-rose-600">
+        Bị từ chối
+      </span>
+    );
+  }
+  if (status === 'active') {
+    return (
+      <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-600">
+        Đang bán
+      </span>
+    );
+  }
+  return null;
+}
 
 /** Distinguishes drafts that only exist in the form from services already persisted server-side. */
 export const isNewService = (id: string) =>
@@ -85,6 +131,7 @@ export const getEmptyService = (): ServiceFormState => ({
   basePrice: '',
   childPricePercent: '50',
   infantPricePercent: '0',
+  maxGuests: '',
   description: '',
   route: '',
   routes: [{ name: '', startPoint: '', endPoint: '', description: '' }],
@@ -101,6 +148,9 @@ interface ServiceTabProps {
   services: ServiceFormState[];
   highlightServiceId?: string | null;
   onChange: (services: ServiceFormState[]) => void;
+  onSaveService?: (service: ServiceFormState) => Promise<void>;
+  savingServiceId?: string | null;
+  saveDisabled?: boolean;
 }
 
 export default function ServiceTab({
@@ -108,6 +158,9 @@ export default function ServiceTab({
   services,
   highlightServiceId,
   onChange,
+  onSaveService,
+  savingServiceId,
+  saveDisabled,
 }: ServiceTabProps) {
   const importInputRef = useRef<HTMLInputElement>(null);
   const zipInputRef = useRef<HTMLInputElement>(null);
@@ -464,23 +517,43 @@ export default function ServiceTab({
           }`}
         >
           <div className="flex justify-between items-start mb-8 pb-5 border-b border-border">
-            <h2 className="text-2xl font-black tracking-wide text-foreground flex items-center gap-3">
+            <h2 className="text-2xl font-black tracking-wide text-foreground flex items-center gap-3 flex-wrap">
               <span className="bg-ddms-secondary/20 text-ddms-secondary px-3.5 py-1.5 rounded-md text-base border border-ddms-secondary/30">
                 #{index + 1}
               </span>
               CẤU HÌNH DỊCH VỤ
+              <ServiceStatusBadge service={srv} />
             </h2>
-            {services.length > 1 && (
-              <Button
-                type="button"
-                variant="destructive"
-                size="default"
-                onClick={() => handleRemoveService(srv.id)}
-                className="bg-red-500/20 text-red-500 hover:bg-red-500/40 border-none text-sm"
-              >
-                <Trash2 className="w-4 h-4 mr-2" /> Xóa Dịch Vụ Này
-              </Button>
-            )}
+            <div className="flex flex-wrap items-center gap-2">
+              {onSaveService && (
+                <Button
+                  type="button"
+                  variant="cyan"
+                  size="default"
+                  disabled={saveDisabled || savingServiceId === srv.id}
+                  onClick={() => void onSaveService(srv)}
+                  className="text-sm"
+                >
+                  {savingServiceId === srv.id ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4 mr-2" />
+                  )}
+                  Lưu dịch vụ này
+                </Button>
+              )}
+              {services.length > 1 && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="default"
+                  onClick={() => handleRemoveService(srv.id)}
+                  className="bg-red-500/20 text-red-500 hover:bg-red-500/40 border-none text-sm"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" /> Xóa Dịch Vụ Này
+                </Button>
+              )}
+            </div>
           </div>
 
           <div className="mb-8 bg-muted/50 p-5 rounded-xl border border-border">
@@ -624,6 +697,25 @@ export default function ServiceTab({
                     updateService(srv.id, 'infantPricePercent', e.target.value)
                   }
                 />
+              </div>
+              <div>
+                <label className="text-base font-medium text-muted-foreground">
+                  Số khách tối đa
+                </label>
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="Bỏ trống = theo sức chứa thuyền"
+                  className="h-11 bg-ddms-bg-main border-border mt-1.5 text-sm text-foreground"
+                  value={srv.maxGuests}
+                  onChange={(e) =>
+                    updateService(srv.id, 'maxGuests', e.target.value)
+                  }
+                />
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  Hệ thống chặn đặt chỗ theo giá trị nhỏ hơn giữa số này và sức
+                  chứa thuyền.
+                </p>
               </div>
             </div>
             <div>

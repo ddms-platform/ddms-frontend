@@ -75,10 +75,16 @@ export interface BoatServiceItem {
   childPricePercent?: number;
   /** % giá trẻ dưới 5 tuổi phải trả. */
   infantPricePercent?: number;
+  /** Số khách tối đa cho tour. Null = chưa khai, sức chứa lấy theo thuyền. */
+  maxGuests?: number | null;
   description?: string;
   imageUrl?: string;
   imageUrls?: string[];
   serviceType?: string;
+  /** pending | active | rejected | inactive */
+  status?: string;
+  /** Tour đang bán có phiếu sửa chờ admin duyệt. */
+  pendingServiceChange?: boolean;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -235,6 +241,18 @@ export const boatService = {
   deleteServiceByOwner: (boatId: string, serviceId: string) =>
     api
       .delete<ApiResponse<any>>(`/owner/boats/${boatId}/services/${serviceId}`)
+      .then((r) => r.data.result),
+
+  registerService: (payload: Record<string, unknown>) =>
+    api
+      .post<
+        ApiResponse<{
+          id: string;
+          status?: string;
+          approvalKind?: string;
+          changeRequestId?: string;
+        }>
+      >('/owner/services/register', payload)
       .then((r) => r.data.result),
 
   // --- Admin/Owner Management Endpoints (Cabins, Services, Images, Maintenance) ---
